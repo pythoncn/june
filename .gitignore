@@ -1,0 +1,65 @@
+#################
+# Common ignore #
+#################
+build
+# Test DB
+*.sqlite
+# Test
+test.*
+.hg
+.svn
+CVS
+*~.nib
+*.swp
+*~
+
+
+#################
+# python ignore #
+#################
+*.py[co]
+
+# Packages
+*.egg
+*.egg-info
+dist
+eggs
+parts
+bin
+var
+sdist
+develop-eggs
+.installed.cfg
+
+# Installer logs
+pip-log.txt
+
+# Unit test / coverage reports
+.coverage
+.tox
+
+# Translations
+*.mo
+
+# Mr Developer
+.mr.developer.cfg
+
+
+##############
+# Mac ignore #
+##############
+.DS_Store
+*.mode1
+*.mode1v3
+*.mode2v3
+*.perspective
+*.perspectivev3
+*.pbxuser
+xcuserdata
+*.[oa]
+*(Autosaved).rtfd/
+Backup[ ]of[ ]*.pages/
+Backup[ ]of[ ]*.key/
+Backup[ ]of[ ]*.numbers/
+
+tmp.*
