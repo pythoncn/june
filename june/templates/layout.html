@@ -1,0 +1,15 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>{%block title%}{%block subtitle%}{%end%} | {{context.sitename}}{%end%}</title>
+        <link rel="stylesheet" href="{{static_url('css/site.css')}}" />
+    </head>
+    <body>
+        <div class="container fn-clear">
+            {% block container %}
+            {% end %}
+        </div>
+        {% block footer %}{% end %}
+    </body>
+</html>

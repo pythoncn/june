@@ -1,0 +1,118 @@
+@import "lib";
+
+@bgcolor: #E8ECEC;
+@fgcolor: #808080;
+@linkcolor: #c30;
+@snowcolor: #bcbcbc;
+@bordercolor: #dadada;
+
+@serif: "Georgia", serif;
+@sans: "Lucida Grande", "Luxi Sans", "Helvetica Neue", aria, sans-serif;
+
+.fm {
+    padding: 14px;
+}
+.fm-row {
+    padding: 5px 1px 7px 130px;
+    line-height: 24px;
+    zoom: 1;
+}
+.fm-row:after {
+    display:block;content:"";visibility:hidden;font-size:0;clear:both;height:0;
+}
+.fm-item {
+    padding-bottom: 3px;
+}
+.fm-label {
+    float: left;
+    width: 120px;
+    margin-top: 5px;
+    margin-left: -130px;
+    color: #222;
+    background: none;
+    text-align: right;
+    vertical-align:middle;
+}
+.fm-required .fm-label {
+    font-weight: bold;
+}
+.fm-required .fm-label:after {
+    content: "*";
+    padding-left: 2px;
+    vertical-align:middle;
+    color: @linkcolor;
+}
+.fm-item input.fm-text {
+    width: 300px;
+}
+.fm-item input, .fm-text {
+    float: left;
+    border: 1px solid @bordercolor;
+    padding: 6px;
+    outline: 0 none;
+    font-size: 16px;
+    color: #333;
+    border-radius: 4px;
+    text-shadow: 0 1px 0 #fff;
+}
+#recaptcha_response_field {
+    border: 1px solid @bordercolor !important;
+    padding: 6px;
+    outline: 0 none;
+    font-size: 16px;
+    color: #333;
+    border-radius: 4px;
+    text-shadow: 0 1px 0 #fff;
+}
+.fm-item input:focus, .fm-text:focus, #recaptcha_response_field:focus {
+    border-color: darken(@bordercolor, 10%);
+}
+.fm-item select, select.fm-text {
+    padding: 0 6px;
+    margin-top: 9px;
+    background: #fff;
+}
+.fm-item textarea {
+    width: 360px;
+    height: 3em;
+}
+.fm-item .fm-radio {
+    float: left;
+    margin-right: 14px;
+}
+.fm-radio input {
+    margin: 3px;
+}
+.fm-explain {
+    font-size: 0.7em;
+    color: #999;
+    clear: left;
+}
+.fm-error, .fm-error li {
+    margin: 0;
+    color: #D14747;
+}
+.ui-btn{
+    cursor: pointer;
+    display: inline-block;
+    background-color: #e6e6e6;
+    background-repeat: no-repeat;
+    .vertical-linear-gradient(#ffffff, #e6e6e6);
+    padding: 5px 24px 6px;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+    color: #333;
+    font-weight: bold;
+    font-family: inherit;
+    line-height: normal;
+    border: 1px solid @bordercolor;
+    border-bottom-color: #bbb;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+    .transition(0.1s linear all);
+}
+.ui-btn:hover {
+    background-position:0 -15px;
+    color:#333333;
+    text-decoration:none;
+    cursor:pointer;
+}

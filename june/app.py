@@ -42,7 +42,6 @@ class Application(web.Application):
         Application.db = db.session
         Application.cache = cache
         tornado.locale.load_translations(os.path.join(ROOT, "locale"))
-        tornado.locale.set_default_locale('zh_CN')
 
         for sub_handler in sub_handlers:
             self.add_handlers(sub_handler[0], sub_handler[1])
