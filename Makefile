@@ -2,13 +2,13 @@ server:
 	june/app.py --config=tmp.config
 
 less:
-	if [ ! -d static/css ]; then mkdir static/css; fi
+	if [ ! -d static/css ]; then mkdir -p static/css; fi
 	lessc --compress assets/less/site.less > static/css/site.css
 
 compilejs:
 	if [ ! -d static/js ]; then mkdir static/js; fi
 	uglifyjs -nc assets/js/lib/jquery.js > static/js/lib.js
-	uglifyjs -nc assets/js/app.js >> static/js/lib.js
+	uglifyjs -nc assets/js/lib/jquery.timeago.js >> static/js/lib.js
 
 copystatic:
 	if [ ! -d static/js ]; then mkdir static/js; fi

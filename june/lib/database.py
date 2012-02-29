@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import random
 from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import create_engine
@@ -131,6 +132,7 @@ class DjangoQuery(Query):
 
 class Model(object):
     id = Column(Integer, primary_key=True)  # primary key
+    query = None
 
     @declared_attr
     def __tablename__(cls):
@@ -144,14 +146,18 @@ class Model(object):
         for k, v in kwargs.iteritems():
             setattr(self, k, v)
 
-    query = None
+
+def create_session(engine):
+    if not engine:
+        return None
+    session = sessionmaker(bind=engine, query_cls=DjangoQuery)
+    return scoped_session(session)
 
 
 class SQLAlchemy(object):
     """
     Example::
 
-        db = SQLAlchemy("sqlite:///demo.sqlite", echo=True)
         db = SQLAlchemy("mysql://user:pass@host:port/db", pool_recycle=3600)
 
         from sqlalchemy import Column, String
@@ -160,29 +166,40 @@ class SQLAlchemy(object):
             username = Column(String(16), unique=True, nullable=False)
             password = Column(String(30), nullable=False)
 
-        >>> db.create_db()
         >>> User.query.filter_by(username='yourname')
 
     """
-    def __init__(self, database, **kwargs):
-        self.engine = create_engine(database, **kwargs)
-        self.session = self.create_session()
-        self.Model = self.create_model()
+    def __init__(self, master, slaves=[], **kwargs):
+        self.engine = create_engine(master, **kwargs)
+        self.session = create_session(self.engine)
+        self.slaves = []
+        for slave in  slaves:
+            slave = create_engine(slave, **kwargs)
+            self.slaves.append(create_session(slave))
+
         if 'pool_recycle' in kwargs:
             # ping db, so that mysql won't goaway
-            PeriodicCallback(self._ping_db, kwargs['pool_recycle'] * 1000).start()
+            PeriodicCallback(self._ping_db,
+                             kwargs['pool_recycle'] * 1000).start()
 
-    def create_session(self):
-        session = sessionmaker(bind=self.engine, query_cls=DjangoQuery)
-        return scoped_session(session)
-
-    def create_model(self):
-        base = declarative_base(cls=Model, name='Model')
-        base.query = self.session.query_property()
+    @property
+    def Model(self):
+        if hasattr(self, '_base'):
+            base = self._base
+        else:
+            base = declarative_base(cls=Model, name='Model')
+            self._base = base
+        if self.slaves:
+            slave = random.choice(self.slaves)
+            base.query = slave.query_property()
+        else:
+            base.query = self.session.query_property()
         return base
-
-    def create_db(self):
-        return self.Model.metadata.create_all(self.engine)
 
     def _ping_db(self):
         self.session.execute('show variables')
+        for slave in self.slaves:
+            slave.execute('show variables')
+
+    def create_db(self):
+        self.Model.metadata.create_all(self.engine)

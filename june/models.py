@@ -59,6 +59,19 @@ class Member(db.Model):
         return verify == hsh
 
 
+class MemberMixin(object):
+    def get_user_by_id(self, id):
+        return Member.query.filter_by(id=id).first()
+
+    def get_users(self, id_list):
+        id_list = set(id_list)
+        users = Member.query.filter_by(id__in=id_list).all()
+        dct = {}
+        for user in users:
+            dct[user.id] = user
+        return dct
+
+
 class MemberLog(db.Model):
     user_id = Column(Integer, nullable=False, index=True)
     message = Column(String(100))
@@ -77,6 +90,8 @@ class Node(db.Model):
     sidebar = Column(String(2000))
     footer = Column(String(2000))
     created = Column(DateTime, default=datetime.utcnow)
+    limited = Column(Integer, default=1)
+    topic_count = Column(Integer, default=0)
 
 
 class Topic(db.Model):
@@ -91,6 +106,7 @@ class Topic(db.Model):
     ups = Column(Text)  # e.g.  1,2,3,4
     downs = Column(Text)
     impact = Column(Integer, default=get_current_impact)
+    reply_count = Column(Integer, default=0)
 
     @property
     def up_users(self):

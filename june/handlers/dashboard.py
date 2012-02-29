@@ -56,7 +56,7 @@ class EditNode(BaseHandler, DashMixin):
 
     @require_admin
     def post(self, slug):
-        node = Node.query.filter_by(slug=slug).first()
+        node = self.db.query(Node).filter_by(slug=slug).first()
         if not node:
             self.send_error(404)
             return

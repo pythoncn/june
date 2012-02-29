@@ -1,4 +1,3 @@
-@import "lib";
 @import "base";
 @import "form";
 
@@ -7,6 +6,133 @@
 
 html, body {
     color: @fgcolor;
-    background: #fff;
+    background: #ededed;
     font-family: @sans;
+}
+p {
+    margin: 0 0 1em;
+}
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+}
+#content {
+    float: left;
+    width: 68%;
+    border: 1px solid @bordercolor;
+    border-top: 0 none;
+    border-radius: 0 0 3px 0;
+    background: #fff;
+    nav {
+        .vertical-linear-gradient(#ffffff, #e6e6e6);
+        border-bottom: 1px solid @bordercolor;
+    }
+}
+#sidebar {
+    float: right;
+    width: 30%;
+    border: 1px solid @bordercolor;
+}
+#nav {
+    float: left;
+    margin: 0;
+    li {
+        float: left;
+    }
+    a {
+        display: inline-block;
+        padding: 0.5em 0.6em;
+        border-right: 1px solid @bordercolor;
+        border-left: 1px solid #ffffff;
+        color: #454545;
+        text-shadow: 0 1px 0 #ffffff;
+        text-decoration: none;
+    }
+    a:first-of-type {
+        border-left: 0 none;
+    }
+    a:hover {
+        .vertical-linear-gradient(#efefef, #fefefe);
+    }
+}
+#account {
+    float: right;
+    margin: 0.3em 0.5em;
+    font-size: 0.78em;
+    li {
+        float: left;
+    }
+    a {
+        display: inline-block;
+        padding: 0.4em 0.8em;
+        color: #898989;
+        .vertical-linear-gradient(#f9f9f9, #dadada);
+        border: 1px solid;
+        border-color: #dfdfdf #dadada #ccc #dadada;
+        text-decoration: none;
+        text-shadow: 0 1px 0 #ffffff;
+        box-shadow: 1px 1px 0 #f9f9f9, 0 1px 0 #ffffff inset;
+    }
+    .first {
+        border-radius: 1em 0 0 1em;
+    }
+    .last {
+        border-left: 0 none;
+        border-radius: 0 1em 1em 0;
+    }
+    a:hover {
+        .vertical-linear-gradient(#eeeeee, #ffffff);
+    }
+}
+#main {
+    a {
+        font-weight: bold;
+        color: #333;
+    }
+    .hentry {
+        padding: 1em;
+        border-bottom: 1px solid #dadada;
+    }
+    .entry-meta {
+        color: #999;
+        margin-top: 6px;
+        padding-bottom: 6px;
+        border-bottom: 1px solid #efefef;
+        font-size: small;
+    }
+    .entry-title {
+        color: #333;
+    }
+    .entry-content {
+        margin-top: 1em;
+    }
+    .avatar {
+        border-radius: 3px;
+    }
+}
+.cell {
+    padding: 0.4em 1em;
+    border-bottom: 1px solid #e1e1e1;
+    position: relative;
+    .avatar {
+        float: left;
+        margin-right: 0.8em;
+    }
+    .cell-header {
+        font-size: small;
+        margin-bottom: 0.5em;
+    }
+    .cell-action {
+        position: absolute;
+        top: 0.4em;
+        right: 1em;
+        a {
+            font-weight: normal;
+            color: #999;
+        }
+    }
+}
+.highlight {
+    padding: 0 0.6em;
+    border-left: 3px solid #dadada;
 }

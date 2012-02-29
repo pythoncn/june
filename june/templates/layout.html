@@ -8,8 +8,29 @@
     <body>
         <div class="container fn-clear">
             {% block container %}
+            <div id="content">
+                <nav role="navigation" class="fn-clear">
+                    <ul id="nav" class="fn-clear">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/">Home</a></li>
+                    </ul>
+                    <ul id="account">
+                        <li><a class="first" href="/account/setting">{{ _("Setting") }}</a></li>
+                        <li><a class="last" href="/account/signout">{{ _("Signout") }}</a></li>
+                    </ul>
+                </nav>
+                {% block main %}{% end %}
+            </div>
+            <div id="sidebar">
+                {% block sidebar %}{% end %}
+            </div>
             {% end %}
         </div>
         {% block footer %}{% end %}
+        <script type="text/javascript" src="{{static_url("js/lib.js")}}"></script>
+        <script type="text/javascript">
+            $('time.updated').timeago();
+        </script>
     </body>
 </html>

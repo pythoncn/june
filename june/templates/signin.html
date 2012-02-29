@@ -1,7 +1,9 @@
 {% extends "layout.html" %}
 
+{% block subtitle %}{{ _("Signin") }}{% end %}
+
 {% block container %}
-<form action="/account/signin" method="post" class="fm">
+<form action="" method="post" class="fm">
     {% if message %}
     <div class="fm-row">{{ _(message) }}</div>
     {% end %}
