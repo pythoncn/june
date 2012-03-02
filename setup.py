@@ -12,7 +12,10 @@ setup(
     packages=find_packages(),
     description='June: a forum',
     entry_points={
-        'console_scripts': ['june.server= june.app:run_server'],
+        'console_scripts': [
+            'june.server= june.app:run_server',
+            'june.tools= june.tools:main',
+        ],
     },
     install_requires=[
         'python-memcached',
