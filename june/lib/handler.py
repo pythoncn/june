@@ -1,42 +1,13 @@
 import re
 import datetime
 import logging
-import hashlib
-import markdown
 from tornado.web import RequestHandler
 from tornado.options import options
 from tornado.util import ObjectDict
 from tornado import escape
-from pygments import highlight
-from pygments.formatters import HtmlFormatter
-from pygments.lexers import get_lexer_by_name, TextLexer
 
 from june.models import Member
-
-
-def safe_html(text):
-    text = escape.xhtml_escape(text)
-
-    pattern = re.compile(r'```(\w+)(.+?)```', re.S)
-    formatter = HtmlFormatter(noclasses=True)
-
-    def repl(m):
-        try:
-            name = m.group(1)
-            lexer = get_lexer_by_name(name)
-        except ValueError:
-            name = 'text'
-            lexer = TextLexer()
-        text = m.group(2).replace('&quot;', '"').replace('&amp;', '&')
-        text = text.replace('&lt;', '<').replace('&gt;', '>')
-        #text = m.group(2)
-        code = highlight(text, lexer, formatter)
-        code = code.replace('\n\n', '\n&nbsp;\n').replace('\n', '<br />')
-        tpl = '\n\n<div class="code" data-syntax="%s">%s</div>\n\n'
-        return tpl % (name, code)
-
-    text = pattern.sub(repl, text)
-    return markdown.markdown(text)
+from june.filters import safe_markdown
 
 
 class BaseHandler(RequestHandler):
@@ -131,7 +102,7 @@ class BaseHandler(RequestHandler):
 
     def _prepare_filters(self):
         self._filters = ObjectDict()
-        self._filters.markdown = self.markdown
+        self._filters.markdown = safe_markdown
 
     def set_msg(self, msg):
         expires = datetime.datetime.utcnow() + datetime.timedelta(seconds=10)
@@ -162,13 +133,3 @@ class BaseHandler(RequestHandler):
     @property
     def user_agent(self):
         return self.request.headers.get("User-Agent", "bot")
-
-    def markdown(self, content):
-        key = 'html:%s' % hashlib.md5(escape.utf8(content)).hexdigest()
-        html = self.cache.get(key)
-        if html:
-            return html
-
-        html = safe_html(content)
-        self.cache.set(key, html)
-        return html
