@@ -74,7 +74,7 @@ class TopicHandler(BaseHandler, MemberMixin):
         user_ids.append(topic.user_id)
         users = self.get_users(user_ids)
         html = self.render_string(
-            'snippet_topic.html', topic=topic,
+            'snippet/topic.html', topic=topic,
             node=node, replies=replies, users=users)
         if self.is_ajax():
             self.write(html)

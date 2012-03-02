@@ -1,6 +1,7 @@
 // {{{ pannel behavior
 var _href = location.href;
 $('div.js-snippet').click(function(e){
+    if (e.target.tagName == 'a') return;
     var url = $(this).attr('data-url');
     if (!url) return;
     !!history.pushState && history.pushState(null, '', url);

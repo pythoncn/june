@@ -9,16 +9,16 @@
         <div class="fm-item fm-required">
             <label class="fm-label" for="title">{{ _("Title") }}</label>
             {% if topic %}
-            <input type="text" class="fm-text" name="title" value="{{topic.title or ""}}" />
+            <input type="text" class="fm-text" name="title" value="{{topic.title or ""}}" required/>
             {% else %}
-            <input type="text" class="fm-text" name="title" />
+            <input type="text" class="fm-text" name="title" required/>
             {% end %}
         </div>
     </div>
     <div class="fm-row">
         <div class="fm-item fm-required">
             <label class="fm-label" for="content">{{ _("Content") }}</label>
-            <textarea name="content" class="fm-text">{% if topic %}{{topic.content or ""}}{% end %}</textarea>
+            <textarea name="content" class="fm-text" required>{% if topic %}{{topic.content or ""}}{% end %}</textarea>
         </div>
     </div>
     <div class="fm-row">
