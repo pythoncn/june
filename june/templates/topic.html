@@ -4,55 +4,10 @@
 
 {% block main %}
 <div id="main">
-    <article class="hentry">
-        <header>
-            <h1 class="entry-title">{{topic.title}}</h1>
-            {% set user = users[topic.user_id] %}
-            <div class="entry-meta">
-                By
-                <a href="/member/{{user.username}}" title="{{user.username}}" tabindex="-1"><img class="avatar" src="{{user.get_avatar(16)}}" width="16" height="16" /></a>
-                <a href="/member/{{user.username}}">{{user.username}}</a>
-                •
-                <time class="updated" datetime="{{topic.created.strftime("%Y-%m-%dT%H:%M:%SZ")}}">{{topic.created.strftime("%b %d, %Y")}}</time>
-            </div>
-        </header>
-        <div class="entry-content">
-            {{ markdown(topic.content) }}
-        </div>
-    </article>
-    <div class="replies">
-        {% for reply in replies %}
-        {% set user = users[reply.user_id] %}
-        <div id="reply-{{reply.id}}" class="cell fn-clear">
-            <img class="avatar" src="{{user.get_avatar(36)}}" width="36" height="36" />
-            <div class="fn-wrap">
-                <div class="cell-header">
-                    <a href="/member/{{user.username}}">{{user.username}}</a>
-                    at <time class="updated" datetime="{{reply.created.strftime("%Y-%m-%dT%H:%M:%SZ")}}">{{reply.created.strftime("%b %d, %Y %H:%M")}}</time>
-                    <div class="cell-action">
-                        <a href="#">Love</a> |
-                        <a href="#">Hate</a>
-                    </div>
-                </div>
-                <div class="cell-content">
-                    {{ markdown(reply.content) }}
-                </div>
-            </div>
-        </div>
-        {% end %}
-    </div>
-    <form action="" method="post" class="fm">
-        {{ xsrf_form_html() }}
-        <div class="fm-item fn-clear">
-            <textarea id="reply-content" name="content" class="fm-text"></textarea>
-        </div>
-        <div class="fm-item fn-clear">
-            <button type="submit" class="ui-btn">Post</button>
-        </div>
-    </form>
+    {{html}}
 </div>
 {% end %}
 
 {% block sidebar %}
-sidebar
+
 {% end %}

@@ -84,14 +84,38 @@ class Node(db.Model):
     slug = Column(String(200), nullable=False)
     avatar = Column(String(400))
     description = Column(String(1000))
-    fgcolor = Column(String(20))
-    bgcolor = Column(String(20))
+    fgcolor = Column(String(40))
+    bgcolor = Column(String(40))
     header = Column(String(2000))
     sidebar = Column(String(2000))
     footer = Column(String(2000))
     created = Column(DateTime, default=datetime.utcnow)
-    limited = Column(Integer, default=1)
+    limited = Column(String, default="0 0")  # reputation role
     topic_count = Column(Integer, default=0)
+
+    @property
+    def reputation(self):
+        limits = self.limited.split()
+        try:
+            return int(limits[0])
+        except:
+            return 0
+
+    @property
+    def role(self):
+        limits = self.limited.split()
+        try:
+            return int(limits[1])
+        except:
+            return 0
+
+
+class NodeMixin(object):
+    def get_nodes(self):
+        dct = {}
+        for node in Node.query.all():
+            dct[node.id] = node
+        return dct
 
 
 class Topic(db.Model):

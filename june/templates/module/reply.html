@@ -1,0 +1,16 @@
+<div id="reply-{{reply.id}}" class="cell fn-clear">
+    <img class="avatar" src="{{user.get_avatar(36)}}" width="36" height="36" />
+    <div class="fn-wrap">
+        <div class="cell-header">
+            <a href="/member/{{user.username}}">{{user.username}}</a>
+            at <time class="updated" datetime="{{reply.created.strftime("%Y-%m-%dT%H:%M:%SZ")}}">{{reply.created.strftime("%b %d, %Y %H:%M")}}</time>
+            <div class="cell-action">
+                <a href="#">Love</a> |
+                <a href="#">Hate</a>
+            </div>
+        </div>
+        <div class="cell-content">
+            {{ markdown(reply.content) }}
+        </div>
+    </div>
+</div>

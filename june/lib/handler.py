@@ -17,18 +17,23 @@ from june.models import Member
 def safe_html(text):
     text = escape.xhtml_escape(text)
 
-    pattern = re.compile(
-        r'```(.+?)\n(.+?)```', re.S)
+    pattern = re.compile(r'```(\w+)(.+?)```', re.S)
     formatter = HtmlFormatter(noclasses=True)
 
     def repl(m):
         try:
-            lexer = get_lexer_by_name(m.group(1))
+            name = m.group(1)
+            lexer = get_lexer_by_name(name)
         except ValueError:
+            name = 'text'
             lexer = TextLexer()
-        code = highlight(m.group(2), lexer, formatter)
+        text = m.group(2).replace('&quot;', '"').replace('&amp;', '&')
+        text = text.replace('&lt;', '<').replace('&gt;', '>')
+        #text = m.group(2)
+        code = highlight(text, lexer, formatter)
         code = code.replace('\n\n', '\n&nbsp;\n').replace('\n', '<br />')
-        return '\n\n<div class="code">%s</div>\n\n' % code
+        tpl = '\n\n<div class="code" data-syntax="%s">%s</div>\n\n'
+        return tpl % (name, code)
 
     text = pattern.sub(repl, text)
     return markdown.markdown(text)

@@ -3,14 +3,16 @@ from tornado.escape import utf8
 from june.lib.handler import BaseHandler
 from june.lib.decorators import require_user
 from june.models import Node, Topic, Reply
-from june.models import MemberMixin
+from june.models import MemberMixin, NodeMixin
 
 
-class HomeHandler(BaseHandler):
+class HomeHandler(BaseHandler, MemberMixin, NodeMixin):
     def get(self):
-        self.write(self.user_agent)
-        if self.current_user:
-            self.write(self.current_user.username)
+        topics = Topic.query.order_by('-impact')[:20]
+        user_ids = [topic.user_id for topic in topics]
+        users = self.get_users(user_ids)
+        nodes = self.get_nodes()
+        self.render('home.html', topics=topics, users=users, nodes=nodes)
 
 
 class NodeHandler(BaseHandler):
@@ -71,8 +73,13 @@ class TopicHandler(BaseHandler, MemberMixin):
         user_ids = [o.user_id for o in replies]
         user_ids.append(topic.user_id)
         users = self.get_users(user_ids)
-        self.render('topic.html', topic=topic, node=node, replies=replies,
-                    users=users)
+        html = self.render_string(
+            'snippet_topic.html', topic=topic,
+            node=node, replies=replies, users=users)
+        if self.is_ajax():
+            self.write(html)
+            return
+        self.render('topic.html', topic=topic, html=html)
 
     @require_user
     def post(self, id):
@@ -97,6 +104,7 @@ class TopicHandler(BaseHandler, MemberMixin):
         reply.topic_id = id
         reply.user_id = self.current_user.id
         topic.reply_count += 1
+        topic.impact += self.current_user.reputation
         self.db.add(reply)
         self.db.add(topic)
         self.db.commit()

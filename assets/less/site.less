@@ -6,21 +6,30 @@
 
 html, body {
     color: @fgcolor;
-    background: #ededed;
+    background: url(../img/main_bg.gif);
     font-family: @sans;
 }
 p {
     margin: 0 0 1em;
 }
-.container {
+a {
+    font-weight: bold;
+    color: #333;
+}
+.center-container {
     max-width: 960px;
     margin: 0 auto;
+    #content {
+        border: 1px solid @bordercolor;
+        border-radius: 0 0 3px 3px;
+    }
 }
 #content {
     float: left;
     width: 68%;
     border: 1px solid @bordercolor;
     border-top: 0 none;
+    border-left: 0 none;
     border-radius: 0 0 3px 0;
     background: #fff;
     nav {
@@ -85,40 +94,61 @@ p {
     }
 }
 #main {
-    a {
-        font-weight: bold;
-        color: #333;
-    }
-    .hentry {
-        padding: 1em;
-        border-bottom: 1px solid #dadada;
-    }
-    .entry-meta {
-        color: #999;
-        margin-top: 6px;
-        padding-bottom: 6px;
-        border-bottom: 1px solid #efefef;
-        font-size: small;
-    }
-    .entry-title {
-        color: #333;
-    }
-    .entry-content {
-        margin-top: 1em;
+    .node {
+        color: #fff;
+        background: rgba(0,0,0,0.3);
+        padding: 3px 6px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-size: 80%;
     }
     .avatar {
         border-radius: 3px;
     }
 }
+#pannel {
+    position: fixed;
+    right: -650px;
+    top: 10px;
+    width: 650px;
+    height: 100%;
+    overflow-y: auto;
+    background: #fff;
+    border-radius: 6px 0 0 0;
+    z-index: 100;
+    .transition(all ease 0.2s);
+}
+#overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 99;
+    background: rgba(0,0,0,0.6);
+}
+#reply-form textarea {
+    width: 95%;
+    height: 8em;
+}
 .cell {
     padding: 0.4em 1em;
+    border-top: 1px solid #ffffff;
     border-bottom: 1px solid #e1e1e1;
     position: relative;
+    &:first-of-type {
+        border-top: 0 none;
+    }
+    &:hover {
+        background: #eee;
+        cursor: pointer;
+    }
     .avatar {
         float: left;
         margin-right: 0.8em;
     }
-    .cell-header {
+    .cell-header, .cell-footer {
         font-size: small;
         margin-bottom: 0.5em;
     }
@@ -135,4 +165,21 @@ p {
 .highlight {
     padding: 0 0.6em;
     border-left: 3px solid #dadada;
+}
+.hentry {
+    padding: 1em;
+    border-bottom: 1px solid #dadada;
+}
+.entry-meta {
+    color: #999;
+    margin-top: 6px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #efefef;
+    font-size: small;
+}
+.entry-title {
+    color: #333;
+}
+.entry-content {
+    margin-top: 1em;
 }

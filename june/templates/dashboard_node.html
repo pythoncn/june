@@ -2,7 +2,7 @@
 
 {% block subtitle %}Node{% end %}
 
-{% block container %}
+{% block main %}
 <form action="" method="post" class="fm">
     {{ xsrf_form_html() }}
     <div class="fm-row">
@@ -58,6 +58,22 @@
             <label class="fm-label" for="sidebar">{{ _("Sidebar") }}</label>
             <textarea name="sidebar" class="fm-text">{{node.sidebar or ""}}</textarea>
         </div>
+    </div>
+
+    <div class="fm-row">
+        <div class="fm-item">
+            <label class="fm-label" for="reputation">{{ _("Reputaion") }}</label>
+            <input type="number" class="fm-text" name="reputation" value="{{node.reputation or 0}}" />
+        </div>
+        <div class="fm-explain">{{ _("Only member over this reputation can create a topic in this node") }}</div>
+    </div>
+
+    <div class="fm-row">
+        <div class="fm-item">
+            <label class="fm-label" for="role">{{ _("Role") }}</label>
+            <input type="number" class="fm-text" name="role" value="{{node.role or 0}}" />
+        </div>
+        <div class="fm-explain">{{ _("Only member over this role can create a topic in this node") }}</div>
     </div>
 
     <div class="fm-row">

@@ -1,0 +1,30 @@
+<article class="hentry">
+    <header>
+        <h1 class="entry-title">{{topic.title}}</h1>
+        {% set user = users[topic.user_id] %}
+        <div class="entry-meta">
+            By
+            <a href="/member/{{user.username}}">{{user.username}}</a>
+            •
+            <time class="updated" datetime="{{topic.created.strftime("%Y-%m-%dT%H:%M:%SZ")}}">{{topic.created.strftime("%b %d, %Y")}}</time>
+        </div>
+    </header>
+    <div class="entry-content">
+        {{ markdown(topic.content) }}
+    </div>
+</article>
+<div class="replies">
+    {% for reply in replies %}
+    {% set user = users[reply.user_id] %}
+    {% module Template('module/reply.html', reply=reply, user=user) %}
+    {% end %}
+</div>
+<form action="/topic/{{topic.id}}" method="post" class="fm js-form" id="reply-form" data-target="div.replies">
+    {{ xsrf_form_html() }}
+    <div class="fm-item fn-clear">
+        <textarea id="reply-content" name="content" class="fm-text"></textarea>
+    </div>
+    <div class="fm-item fn-clear">
+        <button type="submit" class="ui-btn">Post</button>
+    </div>
+</form>
