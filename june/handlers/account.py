@@ -1,3 +1,4 @@
+from tornado.web import authenticated
 from june.lib.handler import BaseHandler
 from june.models import Member
 
@@ -34,7 +35,28 @@ class SignoutHandler(BaseHandler):
         self.redirect(self.next_url)
 
 
+class SettingHandler(BaseHandler):
+    @authenticated
+    def get(self):
+        self.render('setting.html')
+
+    @authenticated
+    def post(self):
+        username = self.get_argument('username', None)
+        website = self.get_argument('website', None)
+        if not username:
+            self.render('setting.html')
+            return
+        user = self.db.query(Member).filter_by(id=self.current_user.id).first()
+        user.username = username
+        user.website = website
+        self.db.add(user)
+        self.db.commit()
+        self.redirect('/account/setting')
+
+
 handlers = [
     ('/account/signin', SigninHandler),
     ('/account/signout', SignoutHandler),
+    ('/account/setting', SettingHandler),
 ]

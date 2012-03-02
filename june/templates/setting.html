@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block subtitle %}{{_("Account")}}{% end %}
+
+{% block main %}
+<form action="" method="post" class="fm">
+    {{ xsrf_form_html() }}
+    <div class="fm-row">
+        <div class="fm-item fm-required">
+            <label class="fm-label" for="username">{{ _("Username") }}</label>
+            <input type="text" class="fm-text" name="username" value="{{current_user.username}}"required />
+        </div>
+    </div>
+
+    <div class="fm-row">
+        <div class="fm-item">
+            <label class="fm-label" for="website">{{ _("Website") }}</label>
+            <input type="url" class="fm-text" name="website" value="{{current_user.website or ""}}" />
+        </div>
+    </div>
+
+    <div class="fm-row">
+        <div class="fm-item">
+            <button class="ui-btn">{{_("Save")}}</button>
+        </div>
+    </div>
+</form>
+{% end %}
