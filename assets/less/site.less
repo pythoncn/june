@@ -24,6 +24,9 @@ a {
         border-radius: 0 0 3px 3px;
     }
 }
+.wrapper {
+    padding: 1em;
+}
 #content {
     float: left;
     width: 68%;
@@ -61,7 +64,7 @@ a {
         border-left: 0 none;
     }
     a:hover {
-        .vertical-linear-gradient(#efefef, #fefefe);
+        box-shadow: 0 0 10px #ccc inset;
     }
 }
 #account {
@@ -101,6 +104,9 @@ a {
         border-radius: 4px;
         text-decoration: none;
         font-size: 80%;
+        &:hover {
+            background: rgba(0,0,0,0.5);
+        }
     }
     .avatar {
         border-radius: 3px;

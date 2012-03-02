@@ -1,5 +1,28 @@
 {% extends "layout.html" %}
 
-{% block container %}
-{{node.title}}
+{% block main %}
+<div id="main">
+    {% for topic in topics %}
+    <div class="js-snippet cell" data-url="/topic/{{topic.id}}">
+        {% set user = users[topic.user_id] %}
+        <img class="avatar" src="{{user.get_avatar(48)}}" width="48" height="48" />
+        <div class="fn-wrap">
+            <div class="cell-content">
+                <h2><a href="/topic/{{topic.id}}">{{topic.title}}</a></h2>
+            </div>
+            <div class="cell-footer">
+                <a href="/member/{{user.username}}">{{user.username}}</a>
+                post at <time class="updated" datetime="{{topic.created.strftime("%Y-%m-%dT%H:%M:%SZ")}}">{{topic.created.strftime("%b %d, %Y %H:%M")}}</time>
+                •
+                {{topic.reply_count}} replies
+            </div>
+        </div>
+    </div>
+    {% end %}
+</div>
+{% end %}
+
+{% block afterfooter %}
+<div id="pannel"></div>
+<div id="overlay"></div>
 {% end %}

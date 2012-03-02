@@ -90,31 +90,20 @@ class Node(db.Model):
     sidebar = Column(String(2000))
     footer = Column(String(2000))
     created = Column(DateTime, default=datetime.utcnow)
-    limited = Column(String, default="0 0")  # reputation role
+    updated = Column(DateTime, default=datetime.utcnow,
+                     onupdate=datetime.utcnow)
+    limit_reputation = Column(Integer, default=0)
+    limit_role = Column(Integer, default=0)
     topic_count = Column(Integer, default=0)
-
-    @property
-    def reputation(self):
-        limits = self.limited.split()
-        try:
-            return int(limits[0])
-        except:
-            return 0
-
-    @property
-    def role(self):
-        limits = self.limited.split()
-        try:
-            return int(limits[1])
-        except:
-            return 0
 
 
 class NodeMixin(object):
-    def get_nodes(self):
+    def get_nodes(self, id_list):
         dct = {}
-        for node in Node.query.all():
-            dct[node.id] = node
+        id_list = set(id_list)
+        users = Node.query.filter_by(id__in=id_list).all()
+        for user in users:
+            dct[user.id] = user
         return dct
 
 

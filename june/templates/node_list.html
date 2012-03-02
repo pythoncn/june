@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+
+{% block subtitle %}{{ _("Node") }}{% end %}
+
+{% block main %}
+<div id="main" class="wrapper">
+    {% for node in nodes %}
+    <a class="node" href="/node/{{node.slug}}"{%if node.bgcolor%} style="background:{{node.bgcolor}};color:{{node.fgcolor}}{%end%}">{{node.title}}</a>
+    {% end %}
+</div>
+{% end %}
