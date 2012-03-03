@@ -1,0 +1,8 @@
+## June
+
+June is a forum
+
+
+## How to contribute
+
+Fork and send pull request. All code must be linted by flake8.
