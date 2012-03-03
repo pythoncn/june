@@ -1,4 +1,5 @@
-from tornado.web import authenticated
+import tornado.web
+from tornado.auth import GoogleMixin
 from june.lib.handler import BaseHandler
 from june.models import Member
 
@@ -29,6 +30,32 @@ class SigninHandler(BaseHandler):
         self.render('signin.html', message=message)
 
 
+class GoogleSigninHandler(BaseHandler, GoogleMixin):
+    @tornado.web.asynchronous
+    def get(self):
+        if self.current_user:
+            self.redirect(self.next_url)
+            return
+        if self.get_argument("openid.mode", None):
+            self.get_authenticated_user(self.async_callback(self._on_auth))
+            return
+        self.authenticate_redirect(ax_attrs=["email"])
+
+    def _on_auth(self, user):
+        if not user:
+            raise tornado.web.HTTPError(500, "Google auth failed")
+        email = user["email"].lower()
+        user = Member.query.filter_by(email=email).first()
+        if not user:
+            user = Member(email.split('@')[0], email)
+            user.password = 'google'
+            self.db.add(user)
+            self.db.commit()
+
+        self.set_secure_cookie('user', '%s/%s' % (user.id, user.token))
+        self.redirect(self.next_url)
+
+
 class SignoutHandler(BaseHandler):
     def get(self):
         self.clear_cookie('user')
@@ -36,11 +63,11 @@ class SignoutHandler(BaseHandler):
 
 
 class SettingHandler(BaseHandler):
-    @authenticated
+    @tornado.web.authenticated
     def get(self):
         self.render('setting.html')
 
-    @authenticated
+    @tornado.web.authenticated
     def post(self):
         username = self.get_argument('username', None)
         website = self.get_argument('website', None)
@@ -55,8 +82,19 @@ class SettingHandler(BaseHandler):
         self.redirect('/account/setting')
 
 
+class MemberHandler(BaseHandler):
+    def get(self, name):
+        user = Member.query.filter_by(username=name).first()
+        if not user:
+            self.send_error(404)
+            return
+        self.render('member.html', user=user)
+
+
 handlers = [
     ('/account/signin', SigninHandler),
+    ('/account/signin/google', GoogleSigninHandler),
     ('/account/signout', SignoutHandler),
     ('/account/setting', SettingHandler),
+    ('/member/(\w+)', MemberHandler),
 ]

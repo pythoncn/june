@@ -2,11 +2,11 @@
 @import "form";
 
 @serif: "Georgia", serif;
-@sans: "Lucida Grande", "Luxi Sans", "Helvetica Neue", aria, sans-serif;
+@sans: "Lucida Grande", "Luxi Sans", "Hiragino Sans GB", sans-serif;
 
 html, body {
-    color: @fgcolor;
     background: url(../img/main_bg.gif);
+    color: #454545;
     font-family: @sans;
 }
 p {
@@ -28,22 +28,30 @@ a {
     padding: 1em;
 }
 #content {
-    float: left;
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 68%;
     border: 1px solid @bordercolor;
     border-top: 0 none;
     border-left: 0 none;
     border-radius: 0 0 3px 0;
-    background: #fff;
+    background: #f7f7f7;
+    box-shadow: 1px 0 10px #999;
+    z-index: 2;
     nav {
-        .vertical-linear-gradient(#ffffff, #e6e6e6);
+        .vertical-linear-gradient(#ffffff, #dfdfdf);
         border-bottom: 1px solid @bordercolor;
+        box-shadow: 0 1px 0 #ffffff;
     }
 }
 #sidebar {
-    float: right;
+    position: absolute;
+    top: 0;
+    left: 68%;
     width: 30%;
-    border: 1px solid @bordercolor;
+    background: #efefef;
+    box-shadow: 1px 0 6px #aaa;
 }
 #nav {
     float: left;
@@ -78,18 +86,19 @@ a {
         display: inline-block;
         padding: 0.4em 0.8em;
         color: #898989;
-        .vertical-linear-gradient(#f9f9f9, #dadada);
+        .vertical-linear-gradient(#f9f9f9, #d9d9d9);
         border: 1px solid;
         border-color: #dfdfdf #dadada #ccc #dadada;
+        border-left: 0 none;
         text-decoration: none;
         text-shadow: 0 1px 0 #ffffff;
         box-shadow: 1px 1px 0 #f9f9f9, 0 1px 0 #ffffff inset;
     }
     .first {
+        border-left: 1px solid #dadada;
         border-radius: 1em 0 0 1em;
     }
     .last {
-        border-left: 0 none;
         border-radius: 0 1em 1em 0;
     }
     a:hover {
@@ -147,7 +156,7 @@ a {
         border-top: 0 none;
     }
     &:hover {
-        background: #eee;
+        background: #f1f1f1;
         cursor: pointer;
     }
     .avatar {
@@ -188,4 +197,10 @@ a {
 }
 .entry-content {
     margin-top: 1em;
+}
+
+.widget {
+    padding: 1em 1em 0.4em 1em;
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #fff;
 }

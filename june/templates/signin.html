@@ -2,28 +2,31 @@
 
 {% block subtitle %}{{ _("Signin") }}{% end %}
 
-{% block container %}
-<form action="" method="post" class="fm">
-    {% if message %}
-    <div class="fm-row">{{ _(message) }}</div>
-    {% end %}
-    {{ xsrf_form_html() }}
-    <div class="fm-row">
-        <div class="fm-item fm-required">
-            <label class="fm-label" for="account">{{ _("Account") }}</label>
-            <input type="text" class="fm-text" name="account" />
+{% block main %}
+<div id="main">
+    <form action="" method="post" class="fm">
+        {% if message %}
+        <div class="fm-row">{{ _(message) }}</div>
+        {% end %}
+        {{ xsrf_form_html() }}
+        <div class="fm-row">
+            <div class="fm-item fm-required">
+                <label class="fm-label" for="account">{{ _("Account") }}</label>
+                <input type="text" class="fm-text" name="account" />
+            </div>
         </div>
-    </div>
-    <div class="fm-row">
-        <div class="fm-item fm-required">
-            <label class="fm-label" for="password">{{ _("Password") }}</label>
-            <input type="password" class="fm-text" name="password" />
+        <div class="fm-row">
+            <div class="fm-item fm-required">
+                <label class="fm-label" for="password">{{ _("Password") }}</label>
+                <input type="password" class="fm-text" name="password" />
+            </div>
         </div>
-    </div>
-    <div class="fm-row">
-        <div class="fm-item">
-            <button class="ui-btn">{{_("Signin")}}</button>
+        <div class="fm-row">
+            <div class="fm-item">
+                <button class="ui-btn">{{_("Signin")}}</button>
+                <a href="/account/signin/google" class="ui-btn">Signin With Google</a>
+            </div>
         </div>
-    </div>
-</form>
+    </form>
+</div>
 {% end %}

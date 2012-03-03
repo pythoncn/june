@@ -16,8 +16,14 @@
                         <li><a href="/nodes">{{ _("Node") }}</a></li>
                     </ul>
                     <ul id="account">
-                        <li><a class="first" href="/account/setting">{{ _("Setting") }}</a></li>
+                        {% if current_user %}
+                        <li><a class="first" href="/topic/new">{{ _("New Topic") }}</a></li>
+                        <li><a href="/account/setting">{{ _("Setting") }}</a></li>
                         <li><a class="last" href="/account/signout">{{ _("Signout") }}</a></li>
+                        {% else %}
+                        <li><a class="first" href="/account/singup">{{ _("Signup") }}</a></li>
+                        <li><a class="last" href="/account/signin">{{ _("Signin") }}</a></li>
+                        {% end %}
                     </ul>
                 </nav>
                 {% block main %}{% end %}

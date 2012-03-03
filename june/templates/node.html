@@ -1,5 +1,7 @@
 {% extends "layout.html" %}
 
+{% block subtitle%}{{node.title}}{% end %}
+
 {% block main %}
 <div id="main">
     {% for topic in topics %}
@@ -19,6 +21,25 @@
         </div>
     </div>
     {% end %}
+</div>
+{% end %}
+
+{% block sidebar %}
+<div class="widget">
+    <h3><a href="/node/{{node.slug}}">{{node.title}}</a></h3>
+    <p>{{node.description}}</p>
+    <div>
+        <a href="#" class="j-follow ui-btn">Follow</a>
+    </div>
+</div>
+<div class="widget">
+    demoe
+</div>
+<div class="widget">
+    demoe
+</div>
+<div class="widget">
+    demoe
 </div>
 {% end %}
 

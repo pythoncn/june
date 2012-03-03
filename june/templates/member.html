@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+
+{% block subtitle %}{{user.username}}{% end %}
+{% block afterstyle %}
+{% if user.website %}<link rel="me" href="{{user.website}}" />{% end %}
+{% end %}
+
+{% block main %}
+{{user.username}}
+{% end %}
