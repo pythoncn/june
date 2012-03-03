@@ -34,7 +34,7 @@ class Member(db.Model):
         self.email = email.lower()
         self.token = create_token(16)
         if 'username' not in kwargs:
-            self.username = self.email.split('@')[0]
+            self.username = self.email.split('@')[0].lower()
         for k, v in kwargs.items():
             setattr(self, k, v)
 
@@ -64,6 +64,10 @@ class MemberMixin(object):
     @cache('member', 0)
     def get_user_by_id(self, id):
         return Member.query.filter_by(id=id).first()
+
+    @cache("member", 0)
+    def get_user_by_name(self, name):
+        return Member.query.filter_by(username=name).first()
 
     def get_users(self, id_list):
         if not id_list:
@@ -134,6 +138,12 @@ class Topic(db.Model):
     @property
     def down_users(self):
         return self.downs.split(',')
+
+
+class TopicMixin(object):
+    @cache('topic', 0)
+    def get_topic_by_id(self, id):
+        return Topic.query.filter_by(id=id).first()
 
 
 class Reply(db.Model):

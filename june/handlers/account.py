@@ -1,7 +1,8 @@
 import tornado.web
 from tornado.auth import GoogleMixin
 from june.lib.handler import BaseHandler
-from june.models import Member
+from june.lib import validators
+from june.models import Member, MemberMixin
 
 
 class SigninHandler(BaseHandler):
@@ -47,7 +48,7 @@ class GoogleSigninHandler(BaseHandler, GoogleMixin):
         email = user["email"].lower()
         user = Member.query.filter_by(email=email).first()
         if not user:
-            user = Member(email, username=email.split('@')[0])
+            user = Member(email)
             user.password = '!'
             self.db.add(user)
             self.db.commit()
@@ -67,7 +68,7 @@ class SignupHandler(BaseHandler):
         self.render('signup.html')
 
 
-class SettingHandler(BaseHandler):
+class SettingHandler(BaseHandler, MemberMixin):
     @tornado.web.authenticated
     def get(self):
         self.render('setting.html')
@@ -77,19 +78,32 @@ class SettingHandler(BaseHandler):
         username = self.get_argument('username', None)
         website = self.get_argument('website', None)
         if not username:
+            self._context.message = 'Please fill the required field'
             self.render('setting.html')
             return
+
+        if not validators.username(username):
+            self._context.message = "Don't be evil"
+            self.render('setting.html')
+            return
+
+        if website and not validators.url(website):
+            self._context.message = "Don't be evil"
+            self.render('setting.html')
+            return
+
         user = self.db.query(Member).filter_by(id=self.current_user.id).first()
         user.username = username
         user.website = website
         self.db.add(user)
         self.db.commit()
+        self.cache.delete_multi([user.id, user.username], key_prefix='member:')
         self.redirect('/account/setting')
 
 
-class MemberHandler(BaseHandler):
+class MemberHandler(BaseHandler, MemberMixin):
     def get(self, name):
-        user = Member.query.filter_by(username=name).first()
+        user = self.get_user_by_name(name)
         if not user:
             self.send_error(404)
             return
