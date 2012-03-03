@@ -2,6 +2,7 @@
 "Password", 密码
 "Signin", 登录
 "Signout", 登出
+"Signup", 注册
 "Setting", 设置
 
 "Title", 标题
@@ -12,7 +13,17 @@
 "Header", 头部
 "Footer", 尾部
 "Sidebar", 侧栏
-"Save", 保存
 
+"Save", 保存
+"Post", 发表
+
+"Home", 首页
 "Node", 节点
 "Topic", 话题
+"New Topic", 新话题
+"Topic Creator", 话题发起者
+
+"Follow", 关注
+"Unfollow", 取消
+
+"Reputation", 声誉

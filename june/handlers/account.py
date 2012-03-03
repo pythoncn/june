@@ -48,7 +48,7 @@ class GoogleSigninHandler(BaseHandler, GoogleMixin):
         user = Member.query.filter_by(email=email).first()
         if not user:
             user = Member(email.split('@')[0], email)
-            user.password = 'google'
+            user.password = '!'
             self.db.add(user)
             self.db.commit()
 
@@ -60,6 +60,11 @@ class SignoutHandler(BaseHandler):
     def get(self):
         self.clear_cookie('user')
         self.redirect(self.next_url)
+
+
+class SignupHandler(BaseHandler):
+    def get(self):
+        self.render('signup.html')
 
 
 class SettingHandler(BaseHandler):
@@ -95,6 +100,7 @@ handlers = [
     ('/account/signin', SigninHandler),
     ('/account/signin/google', GoogleSigninHandler),
     ('/account/signout', SignoutHandler),
+    ('/account/signup', SignupHandler),
     ('/account/setting', SettingHandler),
     ('/member/(\w+)', MemberHandler),
 ]

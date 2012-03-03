@@ -12,7 +12,7 @@
             <div id="content">
                 <nav role="navigation" class="fn-clear">
                     <ul id="nav" class="fn-clear">
-                        <li><a href="/">Home</a></li>
+                        <li><a href="/">{{ _("Home") }}</a></li>
                         <li><a href="/nodes">{{ _("Node") }}</a></li>
                     </ul>
                     <ul id="account">
@@ -20,7 +20,7 @@
                         <li><a class="first" href="/account/setting">{{ _("Setting") }}</a></li>
                         <li><a class="last" href="/account/signout">{{ _("Signout") }}</a></li>
                         {% else %}
-                        <li><a class="first" href="/account/singup">{{ _("Signup") }}</a></li>
+                        <li><a class="first" href="/account/signup">{{ _("Signup") }}</a></li>
                         <li><a class="last" href="/account/signin">{{ _("Signin") }}</a></li>
                         {% end %}
                     </ul>

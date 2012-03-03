@@ -10,13 +10,13 @@
 
 {% block sidebar %}
 <div class="widget fn-clear">
-    <h4 class="widget-title">Topic Creator</h4>
+    <h4 class="widget-title">{{ _("Topic Creator") }}</h4>
     {% set user = users[topic.user_id] %}
     <a class="avatar fn-left" href="/member/{{user.username}}" tabindex="-1"><img src="{{user.get_avatar(48)}}" alt="avatar" width="48" height="48" /></a>
     <div class="fn-wrap">
         <a href="/member/{{user.username}}">{{user.username}}</a>
         <div class="meta">
-            Reputation: {{user.reputation}}
+            {{ _("Reputation") }}: {{user.reputation}}
         </div>
     </div>
 </div>
