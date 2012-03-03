@@ -1,5 +1,6 @@
 import hashlib
 import math
+from datetime import datetime
 from tornado.escape import utf8
 from tornado.options import options
 from june.lib.handler import BaseHandler
@@ -119,7 +120,7 @@ class TopicHandler(BaseHandler, MemberMixin, TopicMixin, NodeMixin):
         reply.topic_id = id
         reply.user_id = self.current_user.id
         topic.reply_count += 1
-        topic.impact += self._calc_impact()
+        topic.impact += self._calc_impact(topic)
         self.db.add(reply)
         self.db.add(topic)
         self.db.commit()
@@ -127,11 +128,17 @@ class TopicHandler(BaseHandler, MemberMixin, TopicMixin, NodeMixin):
         self.cache.set(key, url, 100)
         self.redirect(url)
 
-    def _calc_impact(self):
+    def _calc_impact(self, topic):
         if hasattr(options, 'reply_factor_for_topic'):
             factor = int(options.reply_factor_for_topic)
         else:
             factor = 150
+        if hasattr(options, 'reply_time_factor'):
+            time_factor = int(options.reply_time_factor)
+        else:
+            time_factor = 100
+        time = datetime.utcnow() - topic.created
+        factor += time.days * time_factor
         return factor * int(math.log(self.current_user.reputation))
 
 

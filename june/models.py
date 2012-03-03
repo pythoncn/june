@@ -1,3 +1,42 @@
+"""
+Member:
+    only the basic info of a user
+
+    role:
+        staff > 6
+        admin > 9
+        active > 1
+        not verified email = 1
+        deactive < 1
+
+    reputation:
+        reputation means the value of a member, it affects in topic and
+        everything
+
+        1. when user's topic is up voted, reputation increase:
+            + n1 * log(user.reputation)
+
+        2. when user's topic is down voted, reputation decrease:
+            - n2 * log(user.reputation)
+
+
+Topic:
+    topic must be in a node
+
+    impact:
+        for sorting topic
+
+        1. when user reply a topic, impact increase:
+            + (n1 + day_del * n2) * log(user.reputation)
+
+        2. when user up vote a topic, impact increase:
+            + n3 * log(user.reputation)
+
+        3. when user down vote a topic, impact decrease:
+            - n4 * log(user.reputation)
+
+"""
+
 import time
 import hashlib
 from random import choice
