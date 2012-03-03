@@ -6,6 +6,7 @@ from sqlalchemy import Column
 from sqlalchemy import Integer, String, DateTime, Text
 from tornado.options import options
 from june.config import db
+from june.lib.decorators import cache
 
 
 def get_current_impact():
@@ -60,6 +61,7 @@ class Member(db.Model):
 
 
 class MemberMixin(object):
+    @cache('member', 0)
     def get_user_by_id(self, id):
         return Member.query.filter_by(id=id).first()
 

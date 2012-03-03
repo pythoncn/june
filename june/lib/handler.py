@@ -7,11 +7,11 @@ from tornado.util import ObjectDict
 from tornado import escape
 
 import june
-from june.models import Member
+from june.models import MemberMixin
 from june.filters import safe_markdown
 
 
-class BaseHandler(RequestHandler):
+class BaseHandler(RequestHandler, MemberMixin):
     _first_run = True
 
     def initialize(self):
@@ -71,7 +71,7 @@ class BaseHandler(RequestHandler):
         except:
             self.clear_cookie("user")
             return None
-        user = Member.query.filter_by(id=id).first()
+        user = self.get_user_by_id(id)
         if not user:
             return None
         if token == user.token:

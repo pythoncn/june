@@ -1,4 +1,4 @@
-
+import logging
 import functools
 import urlparse
 
@@ -32,3 +32,36 @@ class require_role(object):
 require_user = require_role(2)
 require_staff = require_role(6)
 require_admin = require_role(9)
+
+
+class cache(object):
+    """Cache decorator, an easy way to manage cache.
+    The result key will be like: prefix:arg1-arg2k1#v1k2#v2
+    """
+    def __init__(self, prefix, time=0):
+        self.prefix = prefix
+        self.time = time
+
+    def __call__(self, method):
+        @functools.wraps(method)
+        def wrapper(handler, *args, **kwargs):
+            if not hasattr(handler, 'cache'):
+                # fix for UIModule
+                handler.cache = handler.handler.cache
+            if not handler.cache:
+                return method(handler, *args, **kwargs)
+
+            key = self.prefix + ':' + '-'.join(str(a) for a in args)
+            for k, v in kwargs.items():
+                key += '%s#%s' % (k, v)
+
+            value = handler.cache.get(key)
+            if value is None:
+                value = method(handler, *args, **kwargs)
+                try:
+                    handler.cache.set(key, value, self.time)
+                except:
+                    logging.warn('cache error: %s' % key)
+                    pass
+            return value
+        return wrapper
