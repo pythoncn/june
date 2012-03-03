@@ -149,19 +149,56 @@ class UpTopicHandler(BaseHandler):
         if not topic:
             self.send_error(404)
             return
-        topic.impact += self._calc_impact()
         up_users = topic.up_users
         user_id = str(self.current_user.id)
         if user_id in up_users:
+            up_users.remove(user_id)
+            topic.ups = ','.join(up_users)
             topic.impact -= self._calc_impact()
+            self.db.add(topic)
+            self.db.commit()
+            self.write('')
             return
-        up_users.append(str(self.current_user.id))
+        up_users.append(user_id)
         topic.ups = ','.join(up_users)
-        topic
+        topic.impact += self._calc_impact()
+        self.db.add(topic)
+        self.db.commit()
+        self.write('')
+        return
 
     def _calc_impact(self):
         if hasattr(options, 'up_factor_for_topic'):
             factor = int(options.up_factor_for_topic)
+        else:
+            factor = 600
+        return factor * int(math.log(self.current_user.reputation))
+
+
+class DownTopicHandler(BaseHandler):
+    @require_user
+    def post(self, id):
+        topic = self.db.query(Topic).filter_by(id=id).first()
+        if not topic:
+            self.send_error(404)
+            return
+        down_users = topic.down_users
+        user_id = str(self.current_user.id)
+        if user_id in down_users:
+            # you can't cancel a down vote
+            self.write('')
+            return
+        down_users.append(user_id)
+        topic.downs = ','.join(down_users)
+        topic.impact -= self._calc_impact()
+        self.db.add(topic)
+        self.db.commit()
+        self.write('')
+        return
+
+    def _calc_impact(self):
+        if hasattr(options, 'down_factor_for_topic'):
+            factor = int(options.down_factor_for_topic)
         else:
             factor = 600
         return factor * int(math.log(self.current_user.reputation))
