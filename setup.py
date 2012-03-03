@@ -19,6 +19,8 @@ setup(
     },
     install_requires=[
         'python-memcached',
+        'markdown',
+        'pygments',
         'tornado',
         'SQLAlchemy',
     ],

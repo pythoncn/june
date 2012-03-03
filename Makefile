@@ -10,11 +10,17 @@ compilejs:
 	uglifyjs -nc assets/js/lib/jquery.js > static/js/lib.js
 	uglifyjs -nc assets/js/lib/jquery.timeago.js >> static/js/lib.js
 
-copystatic:
-	if [ ! -d static/js ]; then mkdir static/js; fi
+copyimg:
 	if [ ! -d static/img ]; then mkdir static/img; fi
-	cp -r assets/js/* static/js/
 	cp -r assets/img/* static/img/
+
+copyjs:
+	if [ ! -d static/js ]; then mkdir static/js; fi
+	cp -r assets/js/* static/js/
+
+upload:
+	rsync -av --del static/* linode.lepture.com:/home/lepture/project/assets.lepture.com/june
+	rsync -av --del --exclude=*.pyc june/* linode.lepture.com:/home/lepture/project/june
 
 clean:
 	rm -fr build

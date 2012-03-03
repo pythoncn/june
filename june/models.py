@@ -64,6 +64,8 @@ class MemberMixin(object):
         return Member.query.filter_by(id=id).first()
 
     def get_users(self, id_list):
+        if not id_list:
+            return {}
         id_list = set(id_list)
         users = Member.query.filter_by(id__in=id_list).all()
         dct = {}
@@ -99,6 +101,8 @@ class Node(db.Model):
 
 class NodeMixin(object):
     def get_nodes(self, id_list):
+        if not id_list:
+            return {}
         dct = {}
         id_list = set(id_list)
         users = Node.query.filter_by(id__in=id_list).all()
