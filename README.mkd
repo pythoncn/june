@@ -6,3 +6,45 @@ June is a forum
 ## How to contribute
 
 Fork and send pull request. All code must be linted by flake8.
+
+## How to debug on your own machine
+
+### The easy way:
+
+``python setup.py install``
+
+After installation, type ``june.tools -h`` for help.
+
+1. create a config file: ``june.tools`` , a file called ``config.py`` will be created in your
+current path.
+
+2. edit config file
+
+    * change ``master`` for your database
+    * change ``static_path``
+    * add repatcha key and secret
+
+3. create database: ``june.tools -f config.py createdb``
+
+4. create super user: ``june.tools -f config.py createuser``
+
+5. start server: ``june.server --config=config.py``
+
+### The hard way
+
+1. install all required modules:
+
+    * tornado
+    * SQLAlchemy
+    * markdown
+    * pygments
+    * python-memcached
+
+2. check above, using ``june/tools.py`` to create everything
+
+3. check above using ``june/app.py`` to start server
+
+
+## How to set up a production enironment
+
+You need to know a little of supervisor and nginx, all config files are available in conf/

@@ -36,7 +36,7 @@ def create_superuser():
 config = '''debug = True
 version = 'dev 1.0.0'
 num_processes = 1
-master = "sqlite:////Users/lepture/workspace/tmp/june.sqlite"
+master = "sqlite:////tmp/june.sqlite"
 slaves = ""
 memcache = "127.0.0.1:11211"
 xsrf_cookies = True
@@ -48,6 +48,10 @@ static_url_prefix = "/static/"
 
 sitename = "June"
 ga = ""
+
+recaptcha_key = ''
+recaptcha_secret = ''
+recaptcha_theme = 'clean'
 '''
 
 
