@@ -26,6 +26,7 @@ $('#overlay').click(function(e) {
 });
 // }}}
 // {{{ form behavior
+/*
 $('form.js-form').submit(function(e) {
     var data = $(this).serialize();
     var url = $(this).attr('action');
@@ -35,4 +36,5 @@ $('form.js-form').submit(function(e) {
     });
     return false;
 });
+*/
 // }}}

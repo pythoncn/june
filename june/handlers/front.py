@@ -86,13 +86,12 @@ class TopicHandler(BaseHandler, MemberMixin):
         user_ids = [o.user_id for o in replies]
         user_ids.append(topic.user_id)
         users = self.get_users(user_ids)
-        html = self.render_string(
-            'snippet/topic.html', topic=topic,
-            node=node, replies=replies, users=users)
         if self.is_ajax():
-            self.write(html)
+            self.render('snippet/topic.html', topic=topic, node=node,
+                        replies=replies, users=users)
             return
-        self.render('topic.html', topic=topic, html=html)
+        self.render('topic.html', topic=topic, node=node, replies=replies,
+                    users=users)
 
     @require_user
     def post(self, id):

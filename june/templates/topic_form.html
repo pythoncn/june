@@ -1,30 +1,47 @@
 {% extends "layout.html" %}
 
 {% block subtitle %}{{ _("Topic") }}{% end %}
+{% block afterstyle %}
+<style type="text/css">
+    #main textarea {
+        height: 400px;
+        width: 80%;
+    }
+</style>
+{% end %}
 
-{% block container %}
-<form action="" method="post" class="fm">
-    {{ xsrf_form_html() }}
-    <div class="fm-row">
-        <div class="fm-item fm-required">
-            <label class="fm-label" for="title">{{ _("Title") }}</label>
-            {% if topic %}
-            <input type="text" class="fm-text" name="title" value="{{topic.title or ""}}" required/>
-            {% else %}
-            <input type="text" class="fm-text" name="title" required/>
-            {% end %}
+{% block main %}
+<div id="main">
+    <form action="" method="post" class="fm">
+        {{ xsrf_form_html() }}
+        <div class="fm-row">
+            <div class="fm-item fm-required">
+                <label class="fm-label" for="title">{{ _("Title") }}</label>
+                {% if topic %}
+                <input type="text" class="fm-text" name="title" value="{{topic.title or ""}}" required/>
+                {% else %}
+                <input type="text" class="fm-text" name="title" required/>
+                {% end %}
+            </div>
         </div>
-    </div>
-    <div class="fm-row">
-        <div class="fm-item fm-required">
-            <label class="fm-label" for="content">{{ _("Content") }}</label>
-            <textarea name="content" class="fm-text" required>{% if topic %}{{topic.content or ""}}{% end %}</textarea>
+        <div class="fm-row">
+            <div class="fm-item fm-required">
+                <label class="fm-label" for="content">{{ _("Content") }}</label>
+                <textarea name="content" class="fm-text" required>{% if topic %}{{topic.content or ""}}{% end %}</textarea>
+            </div>
         </div>
-    </div>
-    <div class="fm-row">
-        <div class="fm-item">
-            <button class="ui-btn">{{_("Save")}}</button>
+        <div class="fm-row">
+            <div class="fm-item">
+                <button class="ui-btn">{{_("Save")}}</button>
+            </div>
         </div>
-    </div>
-</form>
+    </form>
+</div>
+{% end %}
+
+{% block sidebar %}
+<div class="widget markdown-help">
+</div>
+<div class="widget" id="markdown-preview">
+</div>
 {% end %}

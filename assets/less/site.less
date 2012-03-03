@@ -9,11 +9,14 @@ html, body {
     color: #454545;
     font-family: @sans;
 }
+h2 {
+    font-size: 1.3em;
+    line-height: 1.3;
+}
 p {
-    margin: 0 0 1em;
+    margin: 0 0 0.2em;
 }
 a {
-    font-weight: bold;
     color: #333;
 }
 .center-container {
@@ -39,6 +42,10 @@ a {
     background: #f7f7f7;
     box-shadow: 1px 0 10px #999;
     z-index: 2;
+    a {
+        font-weight: bold;
+        color: #333;
+    }
     nav {
         .vertical-linear-gradient(#ffffff, #dfdfdf);
         border-bottom: 1px solid @bordercolor;
@@ -117,9 +124,6 @@ a {
             background: rgba(0,0,0,0.5);
         }
     }
-    .avatar {
-        border-radius: 3px;
-    }
 }
 #pannel {
     position: fixed;
@@ -161,7 +165,6 @@ a {
     }
     .avatar {
         float: left;
-        margin-right: 0.8em;
     }
     .cell-header, .cell-footer {
         font-size: small;
@@ -199,8 +202,23 @@ a {
     margin-top: 1em;
 }
 
+.avatar {
+    border-radius: 3px;
+    margin-right: 0.8em;
+}
 .widget {
     padding: 1em 1em 0.4em 1em;
     border-bottom: 1px solid #ccc;
     border-top: 1px solid #fff;
+    .meta {
+        margin-top: .4em;
+        font-size: small;
+        font-family: @serif;
+    }
+}
+.widget-title {
+    margin-bottom: 0.8em;
+    padding-bottom: 0.2em;
+    border-bottom: 3px double #d0d0d0;
+    font-family: @serif;
 }
