@@ -3,6 +3,7 @@
 
 @serif: "Georgia", serif;
 @sans: "Lucida Grande", "Luxi Sans", "Hiragino Sans GB", sans-serif;
+@helvetica: "Helvetica Nenu", Helvetica, aria, sans-serif;
 
 html, body {
     background: url(../img/main_bg.gif);
@@ -146,6 +147,44 @@ a {
     height: 100%;
     z-index: 99;
     background: rgba(0,0,0,0.6);
+}
+#notify {
+    position: fixed;
+    top: 1.2em;
+    left: 50%;
+    width: 400px;
+    margin-left: -200px;
+    z-index: 1000;
+    border-radius: 6px;
+    color: white;
+    .vertical-linear-gradient(rgba(60,60,60,0.8), rgba(10,10,10,0.8));
+    font-size: small;
+    .message {
+        font-family: @helvetica;
+        position: relative;
+        padding: 0.4em 1em;
+        border-top: 1px solid #999;
+        border-bottom: 1px solid #3c3c3c;
+        &:first-of-type {
+            border-top: 0 none;
+        }
+        &:last-of-type {
+            border-bottom: 0 none;
+        }
+        &:hover .j-hide {
+            position: absolute;
+            top: 8px;
+            right: 6px;
+            width: 12px;
+            height: 12px;
+            background: url(../img/icon-close.png) no-repeat;
+            cursor: pointer;
+        }
+    }
+    h3 {
+        font-size: 1.2em;
+        line-height: 1.4;
+    }
 }
 #reply-form textarea {
     width: 95%;

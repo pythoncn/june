@@ -26,7 +26,7 @@ class SigninHandler(BaseHandler):
             self.set_secure_cookie('user', '%s/%s' % (user.id, user.token))
             self.redirect(self.next_url)
             return
-        message = "Invalid Account or Password"
+        message = "Invalid account or password"
         self.render('signin.html', message=message)
 
 

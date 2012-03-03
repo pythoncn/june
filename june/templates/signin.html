@@ -3,28 +3,34 @@
 {% block subtitle %}{{ _("Signin") }}{% end %}
 
 {% block main %}
+{% if message %}
+<div id="notify">
+    <div class="message">
+        <h3>Form Error</h3>
+        <div>{{ _(message) }}</div>
+        <div class="j-hide"></div>
+    </div>
+</div>
+{% end %}
 <div id="main">
     <form action="" method="post" class="fm">
-        {% if message %}
-        <div class="fm-row">{{ _(message) }}</div>
-        {% end %}
         {{ xsrf_form_html() }}
         <div class="fm-row">
             <div class="fm-item fm-required">
                 <label class="fm-label" for="account">{{ _("Account") }}</label>
-                <input type="text" class="fm-text" name="account" />
+                <input type="text" class="fm-text" name="account" required />
             </div>
         </div>
         <div class="fm-row">
             <div class="fm-item fm-required">
                 <label class="fm-label" for="password">{{ _("Password") }}</label>
-                <input type="password" class="fm-text" name="password" />
+                <input type="password" class="fm-text" name="password" required />
             </div>
         </div>
         <div class="fm-row">
             <div class="fm-item">
                 <button class="ui-btn">{{_("Signin")}}</button>
-                <a href="/account/signin/google" class="ui-btn">Signin With Google</a>
+                <a href="/account/signin/google" class="ui-btn">Signin with Google</a>
             </div>
         </div>
     </form>
