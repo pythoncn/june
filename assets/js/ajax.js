@@ -25,7 +25,7 @@ $('#overlay').click(function(e) {
     !!history.pushState && history.pushState(null, '', _href);
 });
 $('#notify .j-hide').click(function(e) {
-    var p = $(this).parent().remove();
+    var p = $(this).parentsUntil($('#notify'), '.message').remove();
 });
 // }}}
 // {{{ form behavior

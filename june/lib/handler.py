@@ -6,12 +6,12 @@ from tornado.options import options
 from tornado import escape
 
 import june
-from june.models import MemberMixin
+from june.models import MemberMixin, NotifyMixin
 from june.filters import safe_markdown
 from june.lib.util import ObjectDict
 
 
-class BaseHandler(RequestHandler, MemberMixin):
+class BaseHandler(RequestHandler, MemberMixin, NotifyMixin):
     _first_run = True
 
     def initialize(self):
@@ -103,9 +103,15 @@ class BaseHandler(RequestHandler, MemberMixin):
         self._context.ga = options.ga
         self._context.message = []
 
+        if self.current_user:
+            self._context.notify = self.get_unread_notify(self.current_user.id)
+        else:
+            self._context.notify = []
+
     def _prepare_filters(self):
         self._filters = ObjectDict()
         self._filters.markdown = safe_markdown
+        self._filters.get_user = self.get_user_by_id
 
     def is_system(self):
         return self.request.remote_ip == '127.0.0.1'

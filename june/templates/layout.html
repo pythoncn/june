@@ -7,13 +7,24 @@
         {% block afterstyle %}{% end %}
     </head>
     <body>
-        {% if context.message %}
+        {% if context.message or context.notify %}
         <div id="notify">
             {% for msg in context.message %}
             <div class="message">
                 <h3>{{ _(msg.header) }}</h3>
                 <div>{{ _(msg.body) }}</div>
                 <div class="j-hide"></div>
+            </div>
+            {% end %}
+            {% for msg in context.notify %}
+            <div class="message">
+                {% set user = get_user(msg.sender) %}
+                <img src="{{ user.get_avatar(36) }}" alt="icon" class="avatar fn-left" width="36" height="36" />
+                <div class="fn-wrap">
+                    <h3><a href="{{msg.link}}">{{ msg.label }}</a></h3>
+                    <div>{{ msg.content[:30] }}...</div>
+                    <div class="j-hide"></div>
+                </div>
             </div>
             {% end %}
         </div>

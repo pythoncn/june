@@ -6,10 +6,10 @@ from tornado.options import options
 from june.lib.handler import BaseHandler
 from june.lib.decorators import require_user
 from june.models import Node, Topic, Reply
-from june.models import MemberMixin, NodeMixin, TopicMixin
+from june.models import NodeMixin, TopicMixin
 
 
-class HomeHandler(BaseHandler, MemberMixin, NodeMixin):
+class HomeHandler(BaseHandler, NodeMixin):
     def get(self):
         topics = Topic.query.order_by('-impact')[:20]
         user_ids = []
@@ -22,7 +22,7 @@ class HomeHandler(BaseHandler, MemberMixin, NodeMixin):
         self.render('home.html', topics=topics, users=users, nodes=nodes)
 
 
-class NodeHandler(BaseHandler, MemberMixin):
+class NodeHandler(BaseHandler):
     def get(self, slug):
         node = Node.query.filter_by(slug=slug).first()
         if not node:
@@ -78,7 +78,7 @@ class CreateTopicHandler(BaseHandler):
         self.redirect(url)
 
 
-class TopicHandler(BaseHandler, MemberMixin, TopicMixin, NodeMixin):
+class TopicHandler(BaseHandler, TopicMixin, NodeMixin):
     def get(self, id):
         topic = self.get_topic_by_id(id)
         if not topic:
@@ -123,6 +123,7 @@ class TopicHandler(BaseHandler, MemberMixin, TopicMixin, NodeMixin):
         topic.impact += self._calc_impact(topic)
         self.db.add(reply)
         self.db.add(topic)
+        self.create_notify(topic.user_id, topic, content)
         self.db.commit()
         url = '/topic/%s' % id
         self.cache.set(key, url, 100)

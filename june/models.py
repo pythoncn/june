@@ -100,11 +100,11 @@ class Member(db.Model):
 
 
 class MemberMixin(object):
-    @cache('member', 0)
+    @cache('member', 600)
     def get_user_by_id(self, id):
         return Member.query.filter_by(id=id).first()
 
-    @cache("member", 0)
+    @cache("member", 600)
     def get_user_by_name(self, name):
         return Member.query.filter_by(username=name).first()
 
@@ -134,6 +134,34 @@ class MemberLog(db.Model):
     message = Column(String(100))
     time = Column(DateTime, default=datetime.utcnow)
     ip = Column(String(100))
+
+
+class Notify(db.Model):
+    sender = Column(Integer, nullable=False)
+    receiver = Column(Integer, nullable=False, index=True)
+    content = Column(String(400))
+    label = Column(String(200))
+    link = Column(String(400))
+    readed = Column(String(1), default='n')
+    type = Column(String(20), default='reply')
+    created = Column(DateTime, default=datetime.utcnow)
+
+
+class NotifyMixin(object):
+    def create_notify(self, receiver, topic, content, type='reply'):
+        if receiver == self.current_user.id:
+            return
+        link = '/topic/%s' % topic.id
+        content = content[:200]
+        notify = Notify(sender=self.current_user.id, receiver=receiver,
+                         label=topic.title, link=link, content=content)
+        notify.type = type
+        self.db.add(notify)
+        return notify
+
+    @cache('notify', 600)
+    def get_unread_notify(self, receiver):
+        return Notify.query.filter_by(receiver=receiver, readed='n').limit(5)
 
 
 class Node(db.Model):
