@@ -1,9 +1,11 @@
 import hashlib
+import math
 from tornado.escape import utf8
+from tornado.options import options
 from june.lib.handler import BaseHandler
 from june.lib.decorators import require_user
 from june.models import Node, Topic, Reply
-from june.models import MemberMixin, NodeMixin
+from june.models import MemberMixin, NodeMixin, TopicMixin
 
 
 class HomeHandler(BaseHandler, MemberMixin, NodeMixin):
@@ -75,13 +77,13 @@ class CreateTopicHandler(BaseHandler):
         self.redirect(url)
 
 
-class TopicHandler(BaseHandler, MemberMixin):
+class TopicHandler(BaseHandler, MemberMixin, TopicMixin, NodeMixin):
     def get(self, id):
-        topic = Topic.query.filter_by(id=id).first()
+        topic = self.get_topic_by_id(id)
         if not topic:
             self.send_error(404)
             return
-        node = Node.query.filter_by(id=id).first()
+        node = self.get_node_by_id(topic.node_id)
         replies = Reply.query.filter_by(topic_id=id).all()
         user_ids = [o.user_id for o in replies]
         user_ids.append(topic.user_id)
@@ -95,6 +97,7 @@ class TopicHandler(BaseHandler, MemberMixin):
 
     @require_user
     def post(self, id):
+        # for topic reply
         content = self.get_argument('content', None)
         if not content:
             self.redirect('/topic/%s' % id)
@@ -116,13 +119,45 @@ class TopicHandler(BaseHandler, MemberMixin):
         reply.topic_id = id
         reply.user_id = self.current_user.id
         topic.reply_count += 1
-        topic.impact += self.current_user.reputation
+        topic.impact += self._calc_impact()
         self.db.add(reply)
         self.db.add(topic)
         self.db.commit()
         url = '/topic/%s' % id
         self.cache.set(key, url, 100)
         self.redirect(url)
+
+    def _calc_impact(self):
+        if hasattr(options, 'reply_factor_for_topic'):
+            factor = int(options.reply_factor_for_topic)
+        else:
+            factor = 150
+        return factor * int(math.log(self.current_user.reputation))
+
+
+class UpTopicHandler(BaseHandler):
+    @require_user
+    def post(self, id):
+        topic = self.db.query(Topic).filter_by(id=id).first()
+        if not topic:
+            self.send_error(404)
+            return
+        topic.impact += self._calc_impact()
+        up_users = topic.up_users
+        user_id = str(self.current_user.id)
+        if user_id in up_users:
+            topic.impact -= self._calc_impact()
+            return
+        up_users.append(str(self.current_user.id))
+        topic.ups = ','.join(up_users)
+        topic
+
+    def _calc_impact(self):
+        if hasattr(options, 'up_factor_for_topic'):
+            factor = int(options.up_factor_for_topic)
+        else:
+            factor = 600
+        return factor * int(math.log(self.current_user.reputation))
 
 
 handlers = [

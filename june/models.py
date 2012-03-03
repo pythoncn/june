@@ -106,6 +106,14 @@ class Node(db.Model):
 
 
 class NodeMixin(object):
+    @cache('node', 600)
+    def get_node_by_id(self, id):
+        return Node.query.filter_by(id=id).first()
+
+    @cache('node', 600)
+    def get_node_by_slug(self, slug):
+        return Node.query.filter_by(slug=slug).first()
+
     def get_nodes(self, id_list):
         if not id_list:
             return {}
@@ -141,7 +149,7 @@ class Topic(db.Model):
 
 
 class TopicMixin(object):
-    @cache('topic', 0)
+    @cache('topic', 600)
     def get_topic_by_id(self, id):
         return Topic.query.filter_by(id=id).first()
 
