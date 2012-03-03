@@ -3,12 +3,12 @@ import datetime
 import logging
 from tornado.web import RequestHandler
 from tornado.options import options
-from tornado.util import ObjectDict
 from tornado import escape
 
 import june
 from june.models import MemberMixin
 from june.filters import safe_markdown
+from june.lib.util import ObjectDict
 
 
 class BaseHandler(RequestHandler, MemberMixin):
@@ -101,7 +101,7 @@ class BaseHandler(RequestHandler, MemberMixin):
             self._context.version = june.__version__
         self._context.debug = options.debug
         self._context.ga = options.ga
-        self._context.message = ''
+        self._context.message = []
 
     def _prepare_filters(self):
         self._filters = ObjectDict()

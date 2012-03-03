@@ -1,4 +1,4 @@
-from tornado.util import ObjectDict
+from june.lib.util import ObjectDict
 from june.lib.handler import BaseHandler
 from june.lib.decorators import require_admin
 from june.models import Node
@@ -11,17 +11,10 @@ class DashMixin(object):
             setattr(model, attr, value)
 
 
-class _Object(dict):
-    def __getattr__(self, key):
-        if key in self:
-            return self[key]
-        return None
-
-
 class CreateNode(BaseHandler):
     @require_admin
     def get(self):
-        node = _Object()
+        node = ObjectDict()
         self.render('dashboard_node.html', node=node)
 
     @require_admin

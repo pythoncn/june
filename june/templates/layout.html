@@ -7,7 +7,19 @@
         {% block afterstyle %}{% end %}
     </head>
     <body>
-        <div class="container center-container fn-clear">
+        {% if context.message %}
+        <div id="notify">
+            {% for msg in context.message %}
+            <div class="message">
+                <h3>{{ _(msg.header) }}</h3>
+                <div>{{ _(msg.body) }}</div>
+                <div class="j-hide"></div>
+            </div>
+            {% end %}
+        </div>
+        {% end %}
+
+        <div class="container center fn-clear">
             {% block container %}
             <div id="content">
                 <nav role="navigation" class="fn-clear">
@@ -32,7 +44,12 @@
             </div>
             {% end %}
         </div>
-        {% block footer %}{% end %}
+        {% block footer %}
+        <div id="footer">
+            <div class="center">
+            </div>
+        </div>
+        {% end %}
         {% block afterfooter %}{% end %}
         <script type="text/javascript" src="{{static_url("js/lib.js")}}"></script>
         <script type="text/javascript" src="{{static_url("js/ajax.js")}}"></script>

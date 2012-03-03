@@ -3,16 +3,6 @@
 {% block subtitle %}{{_("Account")}}{% end %}
 
 {% block main %}
-{% if context.message %}
-<div id="notify">
-    <div class="message">
-        <h3>{{ _("Form Error") }}</h3>
-        <div>{{ _(context.message) }}</div>
-        <div class="j-hide"></div>
-    </div>
-</div>
-{% end %}
-
 <div id="main">
     <form action="" method="post" class="fm">
         {{ xsrf_form_html() }}
