@@ -9,14 +9,14 @@ class SigninHandler(BaseHandler):
         if self.current_user:
             self.redirect(self.next_url)
             return
-        self.render('signin.html', message=None)
+        self.render('signin.html')
 
     def post(self):
         account = self.get_argument('account', None)
         password = self.get_argument('password', None)
         if not (account and password):
-            message = "Please fill the form"
-            self.render('signin.html', message=message)
+            self._context.message = "Please fill the form"
+            self.render('signin.html')
             return
         if '@' in account:
             user = Member.query.filter_by(email=account).first()
@@ -26,8 +26,8 @@ class SigninHandler(BaseHandler):
             self.set_secure_cookie('user', '%s/%s' % (user.id, user.token))
             self.redirect(self.next_url)
             return
-        message = "Invalid account or password"
-        self.render('signin.html', message=message)
+        self._context.message = "Invalid account or password"
+        self.render('signin.html')
 
 
 class GoogleSigninHandler(BaseHandler, GoogleMixin):
@@ -47,7 +47,7 @@ class GoogleSigninHandler(BaseHandler, GoogleMixin):
         email = user["email"].lower()
         user = Member.query.filter_by(email=email).first()
         if not user:
-            user = Member(email.split('@')[0], email)
+            user = Member(email, username=email.split('@')[0])
             user.password = '!'
             self.db.add(user)
             self.db.commit()

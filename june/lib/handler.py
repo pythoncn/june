@@ -6,6 +6,7 @@ from tornado.options import options
 from tornado.util import ObjectDict
 from tornado import escape
 
+import june
 from june.models import Member
 from june.filters import safe_markdown
 
@@ -94,26 +95,17 @@ class BaseHandler(RequestHandler):
         self._context = ObjectDict()
         self._context.now = datetime.datetime.utcnow()
         self._context.sitename = options.sitename
-        self._context.version = options.version
+        if hasattr(options, 'version'):
+            self._context.version = options.version
+        else:
+            self._context.version = june.__version__
         self._context.debug = options.debug
         self._context.ga = options.ga
-
-        self._context.get_msg = self.get_msg
+        self._context.message = ''
 
     def _prepare_filters(self):
         self._filters = ObjectDict()
         self._filters.markdown = safe_markdown
-
-    def set_msg(self, msg):
-        expires = datetime.datetime.utcnow() + datetime.timedelta(seconds=10)
-        self.set_cookie('msg', msg, expires=expires)
-        return msg
-
-    def get_msg(self):
-        msg = self.get_cookie('msg', None)
-        if msg:
-            self.clear_cookie('msg')
-        return msg
 
     def is_system(self):
         return self.request.remote_ip == '127.0.0.1'

@@ -25,6 +25,10 @@ class Application(web.Application):
     def __init__(self):
         from june.config import db, cache  # init db
         from june.urls import handlers, ui_modules, sub_handlers
+        if hasattr(options, 'template_path'):
+            template_path = options.template_path
+        else:
+            template_path = os.path.join(ROOT, "templates")
         settings = dict(
             debug=options.debug,
             autoescape=None,
@@ -32,7 +36,7 @@ class Application(web.Application):
             xsrf_cookies=options.xsrf_cookies,
             login_url=options.login_url,
 
-            template_path=os.path.join(ROOT, "templates"),
+            template_path=template_path,
             static_path=options.static_path,
             static_url_prefix=options.static_url_prefix,
 

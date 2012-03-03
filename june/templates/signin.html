@@ -3,11 +3,11 @@
 {% block subtitle %}{{ _("Signin") }}{% end %}
 
 {% block main %}
-{% if message %}
+{% if context.message %}
 <div id="notify">
     <div class="message">
         <h3>Form Error</h3>
-        <div>{{ _(message) }}</div>
+        <div>{{ _(context.message) }}</div>
         <div class="j-hide"></div>
     </div>
 </div>
