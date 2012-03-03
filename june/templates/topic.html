@@ -20,4 +20,16 @@
         </div>
     </div>
 </div>
+
+<div class="widget fn-clear">
+    <h4 class="widget-title">{{ _("In Node") }}</h4>
+    <div class="fn-wrap">
+        <a class="node" href="/node/{{node.slug}}">{{node.title}}</a>
+        <p>{{node.description}}</p>
+    </div>
+</div>
+
+<div class="widget">
+    <a href="/node/{{node.slug}}/topic" class="ui-btn">{{_("New Topic")}}</a>
+</div>
 {% end %}

@@ -27,6 +27,22 @@
 </div>
 {% end %}
 
+{% block sidebar %}
+{% if current_user %}
+{% set user = current_user %}
+<div class="widget fn-clear">
+    <h4 class="widget-title">{{ _("Welcome") }}</h4>
+    <a class="avatar fn-left" href="/member/{{user.username}}" tabindex="-1"><img src="{{user.get_avatar(48)}}" alt="avatar" width="48" height="48" /></a>
+    <div class="fn-wrap">
+        <a href="/member/{{user.username}}">{{user.username}}</a>
+        <div class="meta">
+            {{ _("Reputation") }}: {{user.reputation}}
+        </div>
+    </div>
+</div>
+{% end %}
+{% end %}
+
 {% block afterfooter %}
 <div id="pannel"></div>
 <div id="overlay"></div>

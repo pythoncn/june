@@ -14,14 +14,18 @@ h1 {
     font-size: 1.6em;
 }
 h2 {
-    font-size: 1.3em;
-    line-height: 1.3;
+    font-size: 1.2em;
+    line-height: 1.6;
 }
 p {
     margin: 0 0 0.2em;
+    font-size: 0.9em;
 }
 a {
     color: #333;
+}
+.container {
+    position: relative;
 }
 .center-container {
     max-width: 960px;
@@ -46,14 +50,13 @@ a {
     background: #f7f7f7;
     box-shadow: 1px 0 10px #999;
     z-index: 2;
-    a {
-        font-weight: bold;
-        color: #333;
-    }
     nav {
         .vertical-linear-gradient(#ffffff, #dfdfdf);
         border-bottom: 1px solid @bordercolor;
         box-shadow: 0 1px 0 #ffffff;
+        a {
+            font-weight: bold;
+        }
     }
 }
 #sidebar {
@@ -221,6 +224,9 @@ a {
             color: #999;
         }
     }
+    p {
+        margin-bottom: 0.8em;
+    }
 }
 .highlight {
     padding: 0 0.6em;
@@ -229,6 +235,9 @@ a {
 .hentry {
     padding: 1em;
     border-bottom: 1px solid #dadada;
+    p {
+        margin-bottom: 0.8em;
+    }
 }
 .entry-meta {
     color: #999;
