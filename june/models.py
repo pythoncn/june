@@ -20,7 +20,7 @@ def create_token(length=16):
 
 class Member(db.Model):
     username = Column(String(100), unique=True, index=True)
-    email = Column(String(200), unique=True, nullable=False)
+    email = Column(String(200), unique=True, nullable=False, index=True)
     password = Column(String(100), nullable=False)
     avatar = Column(String(400))
     website = Column(String(400))
@@ -81,7 +81,7 @@ class MemberLog(db.Model):
 
 class Node(db.Model):
     title = Column(String(200), nullable=False)
-    slug = Column(String(200), nullable=False)
+    slug = Column(String(200), nullable=False, index=True)
     avatar = Column(String(400))
     description = Column(String(1000))
     fgcolor = Column(String(40))

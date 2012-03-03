@@ -15,7 +15,7 @@ class SigninHandler(BaseHandler):
         account = self.get_argument('account', None)
         password = self.get_argument('password', None)
         if not (account and password):
-            self._context.message = "Please fill the form"
+            self._context.message = 'Please fill the required field'
             self.render('signin.html')
             return
         if '@' in account:

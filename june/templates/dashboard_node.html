@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block subtitle %}Node{% end %}
+{% block subtitle %}{{ _("Node") }}{% end %}
 
 {% block main %}
 <form action="" method="post" class="fm">
@@ -62,7 +62,7 @@
 
     <div class="fm-row">
         <div class="fm-item">
-            <label class="fm-label" for="reputation">{{ _("Reputaion") }}</label>
+            <label class="fm-label" for="reputation">{{ _("Reputation") }}</label>
             <input type="number" class="fm-text" name="reputation" value="{{node.limit_reputation or 0}}" />
         </div>
         <div class="fm-explain">{{ _("Only member over this reputation can create a topic in this node") }}</div>
