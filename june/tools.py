@@ -2,9 +2,11 @@
 
 import argparse
 try:
-    from june.app import parse_config_file
+    import june.app
 except ImportError:
-    from app import parse_config_file
+    import app
+
+from june.lib.util import parse_config_file
 
 
 def create_db():

@@ -19,6 +19,7 @@ from tornado.options import define, options
 from tornado.ioloop import IOLoop
 from tornado.httpserver import HTTPServer
 from tornado import web
+from june.lib.util import parse_config_file
 
 
 class Application(web.Application):
@@ -49,16 +50,6 @@ class Application(web.Application):
 
         for sub_handler in sub_handlers:
             self.add_handlers(sub_handler[0], sub_handler[1])
-
-
-def parse_config_file(path):
-    config = {}
-    exec(compile(open(path).read(), path, 'exec'), config, config)
-    for name in config:
-        if name in options:
-            options[name].set(config[name])
-        else:
-            define(name, config[name])
 
 
 def run_server():
