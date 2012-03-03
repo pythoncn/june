@@ -37,14 +37,14 @@ class CreateNode(BaseHandler):
         o.sidebar = self.get_argument('sidebar', None)
         o.footer = self.get_argument('footer', None)
         try:
-            o.limited_reputation = int(self.get_argument('reputation', 0))
+            o.limit_reputation = int(self.get_argument('reputation', 0))
         except:
-            o.limited_reputation = 0
+            o.limit_reputation = 0
 
         try:
-            o.limited_role = int(self.get_argument('role', 0))
+            o.limit_role = int(self.get_argument('role', 0))
         except:
-            o.limited_role = 0
+            o.limit_role = 0
 
         if not (o.slug and o.title and o.description):
             self._context.message = 'Please fill the required field'
