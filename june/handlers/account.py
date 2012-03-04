@@ -6,6 +6,7 @@ from june.lib import validators
 from june.lib.util import ObjectDict
 from june.auth.recaptcha import RecaptchaMixin
 from june.models import Member, MemberLog, Topic, Notify
+from june.models import NodeMixin
 
 
 class SigninHandler(BaseHandler):
@@ -208,14 +209,16 @@ class NotifyHandler(BaseHandler):
         self.render('notify.html', notify=notify)
 
 
-class MemberHandler(BaseHandler):
+class MemberHandler(BaseHandler, NodeMixin):
     def get(self, name):
         user = self.get_user_by_name(name)
         if not user:
             self.send_error(404)
             return
         topics = Topic.query.filter_by(user_id=user.id).order_by('-id')[:20]
-        self.render('member.html', user=user, topics=topics)
+        node_ids = self.get_user_follow_nodes(user.id)
+        nodes = self.get_nodes(node_ids)
+        self.render('member.html', user=user, topics=topics, nodes=nodes)
 
 
 handlers = [

@@ -1,5 +1,6 @@
 from june.lib.handler import BaseHandler
 from june.lib.decorators import require_user
+from june.lib.util import ObjectDict
 from june.models import Node, Topic
 from june.models import NodeMixin
 from june.filters import safe_markdown
@@ -24,6 +25,12 @@ class StreamHandler(BaseHandler, NodeMixin):
             self.redirect('/')
             return
         node_ids = self.get_user_follow_nodes(self.current_user.id)
+        if not node_ids:
+            msg = ObjectDict(header='Notify',
+                             body='You need follow some nodes')
+            self._context.message.append(msg)
+            self.render('home.html', topics=[], users={}, nodes={})
+            return
         nodes = self.get_nodes(node_ids)
         q = Topic.query.filter_by(node_id__in=set(node_ids))
         topics = q.order_by('-impact')[:20]

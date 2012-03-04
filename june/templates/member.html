@@ -29,3 +29,12 @@
     {% end %}
 </div>
 {% end %}
+
+{% block sidebar %}
+<div class="widget">
+    <h4 class="widget-title">{{ _("Interesting") }}</h4>
+    {% for node in nodes.itervalues() %}
+    <a class="node" href="/node/{{node.slug}}"{%if node.bgcolor%} style="background:{{node.bgcolor}};color:{{node.fgcolor}}{%end%}">{{node.title}}</a>
+    {% end %}
+</div>
+{% end %}
