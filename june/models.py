@@ -58,6 +58,23 @@ def create_token(length=16):
     return salt
 
 
+def get_cache_list(cache, model, id_list, key_prefix, time=600):
+    if not id_list:
+        return {}
+    id_list = set(id_list)
+    data = cache.get_multi(id_list, key_prefix=key_prefix)
+    missing = id_list - set(data)
+    if missing:
+        dct = {}
+        for item in model.query.filter_by(id__in=missing).all():
+            dct[item.id] = item
+
+        cache.set_multi(dct, time=time, key_prefix=key_prefix)
+        data.update(dct)
+
+    return data
+
+
 class Member(db.Model):
     username = Column(String(100), unique=True, index=True)
     email = Column(String(200), unique=True, nullable=False, index=True)
@@ -118,20 +135,7 @@ class MemberMixin(object):
         return Member.query.filter_by(username=name).first()
 
     def get_users(self, id_list):
-        if not id_list:
-            return {}
-        id_list = set(id_list)
-        users = self.cache.get_multi(id_list, key_prefix='member:')
-        missing = id_list - set(users)
-        if missing:
-            dct = {}
-            for user in Member.query.filter_by(id__in=missing).all():
-                dct[user.id] = user
-
-            self.cache.set_multi(dct, time=600, key_prefix='member:')
-            users.update(dct)
-
-        return users
+        return get_cache_list(self.cache, Member, id_list, 'member:')
 
     def create_user(self, email):
         username = email.split('@')[0].lower()
@@ -211,14 +215,7 @@ class NodeMixin(object):
         return Node.query.filter_by(slug=slug).first()
 
     def get_nodes(self, id_list):
-        if not id_list:
-            return {}
-        dct = {}
-        id_list = set(id_list)
-        users = Node.query.filter_by(id__in=id_list).all()
-        for user in users:
-            dct[user.id] = user
-        return dct
+        return get_cache_list(self.cache, Node, id_list, 'node:')
 
     def follow_node(self, node_id):
         if not self.current_user:
