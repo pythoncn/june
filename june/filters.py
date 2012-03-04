@@ -10,7 +10,9 @@ def safe_markdown(text):
     text = escape.xhtml_escape(text)
 
     # get link back
-    text = re.sub(r'&lt;(http.*?)&gt;', r'<\1>', text)
+    pattern = (r'(?:&lt;)?(https?://([^/:]+\.[a-z]{2,10}|([0-9]{1,3}\.){3}'
+               '[0-9]{1,3})(:[0-9]+)?(\/.*)?)(?:&gt;)?')
+    text = re.sub(pattern, r'<a href="\1" rel="nofollow">\1</a>', text)
 
     pattern = re.compile(r'```(\w+)(.+?)```', re.S)
     formatter = HtmlFormatter(noclasses=False)
