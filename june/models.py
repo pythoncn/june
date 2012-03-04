@@ -238,6 +238,10 @@ class NodeMixin(object):
             nodes.append(values[0])
         return nodes
 
+    def is_user_follow_node(self, user_id, node_id):
+        # should query again ?
+        return node_id in self.get_user_follow_nodes(user_id)
+
 
 class Topic(db.Model):
     node_id = Column(Integer, nullable=False, index=True)

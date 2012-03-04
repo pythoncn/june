@@ -1,5 +1,5 @@
+import tornado.web
 from june.lib.handler import BaseHandler
-from june.lib.decorators import require_user
 from june.lib.util import ObjectDict
 from june.models import Node, Topic
 from june.models import NodeMixin
@@ -49,11 +49,17 @@ class NodeHandler(BaseHandler, NodeMixin):
         topics = q.order_by('-impact')[:20]
         user_ids = (topic.user_id for topic in topics)
         users = self.get_users(user_ids)
-        self.render('node.html', node=node, topics=topics, users=users)
+        if self.current_user:
+            is_following = self.is_user_follow_node(
+                self.current_user.id, node.id)
+        else:
+            is_following = False
+        self.render('node.html', node=node, topics=topics,
+                    users=users, is_following=is_following)
 
 
 class FollowNodeHandler(BaseHandler, NodeMixin):
-    @require_user
+    @tornado.web.authenticated
     def get(self, slug):
         node = self.get_node_by_slug(slug)
         if not node:
@@ -61,6 +67,21 @@ class FollowNodeHandler(BaseHandler, NodeMixin):
             return
         self.follow_node(node.id)
         self.db.commit()
+        self.redirect('/node/%s' % node.slug)
+
+
+class UnfollowNodeHandler(BaseHandler, NodeMixin):
+    @tornado.web.authenticated
+    def get(self, slug):
+        node = self.get_node_by_slug(slug)
+        if not node:
+            self.send_error(404)
+            return
+        sql = 'delete from follownode where user_id=%s and node_id=%s' % \
+                (self.current_user.id, node.id)
+        self.db.execute(sql)
+        self.db.commit()
+        self.cache.delete('follownode:%s' % self.current_user.id)
         self.redirect('/node/%s' % node.slug)
 
 
@@ -82,5 +103,6 @@ handlers = [
     ('/nodes', NodeListHandler),
     ('/node/(\w+)', NodeHandler),
     ('/node/(\w+)/follow', FollowNodeHandler),
+    ('/node/(\w+)/unfollow', UnfollowNodeHandler),
     ('/preview', PreviewHandler),
 ]
