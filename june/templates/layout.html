@@ -29,13 +29,11 @@
             {% end %}
         </div>
         {% end %}
-
-        <div class="container center fn-clear">
-            {% block container %}
-            <div id="content">
+        <div id="header">
+            <div class="center">
                 <nav role="navigation" class="fn-clear">
                     <ul id="nav" class="fn-clear">
-                        <li><a href="/">{{ _("Home") }}</a></li>
+                        <li><a class="first" href="/">{{ _("Home") }}</a></li>
                         <li><a href="/nodes">{{ _("Node") }}</a></li>
                     </ul>
                     <ul id="account">
@@ -48,24 +46,29 @@
                         {% end %}
                     </ul>
                 </nav>
+            </div>
+        </div>
+        <div id="body" class="center">
+            {% block container %}
+            <div id="content">
                 {% block main %}{% end %}
             </div>
             <div id="sidebar">
                 {% block sidebar %}{% end %}
+                <div id="footer" class="widget">
+                    <div class="copy">
+                        Designed by <a href="http://lepture.com">lepture</a> |
+                        Powered by <a href="#">June</a> {{context.version}}
+                    </div>
+                </div>
             </div>
             {% end %}
         </div>
-        {% block footer %}
-        <div id="footer">
-            <div class="center">
-            </div>
-        </div>
-        {% end %}
-        {% block afterfooter %}{% end %}
         <script type="text/javascript" src="{{static_url("js/lib.js")}}"></script>
         <script type="text/javascript" src="{{static_url("js/ajax.js")}}"></script>
         <script type="text/javascript">
             $('time.updated').timeago();
         </script>
+        {% block afterjs %}{% end %}
     </body>
 </html>

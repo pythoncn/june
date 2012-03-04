@@ -21,7 +21,7 @@ $('div.js-snippet').click(function(e){
 });
 $('#overlay').click(function(e) {
     $(this).hide();
-    $('#pannel').css('right', -650);
+    $('#pannel').css('right', -670);
     !!history.pushState && history.pushState(null, '', _href);
 });
 $('#notify .j-hide').click(function(e) {

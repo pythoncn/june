@@ -23,7 +23,7 @@
 
     {% end %}
 </div>
-<form action="/topic/{{topic.id}}" method="post" class="fm js-form" id="reply-form" data-target="div.replies">
+<form action="/topic/{{topic.id}}" method="post" class="reply-form fm js-form" data-target="div.replies">
     {{ xsrf_form_html() }}
     <div class="fm-item fn-clear">
         <textarea id="reply-content" name="content" class="fm-text"></textarea>
