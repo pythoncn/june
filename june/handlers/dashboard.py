@@ -5,9 +5,11 @@ from june.models import Node
 
 
 class DashMixin(object):
-    def update_model(self, model, attr):
-        value = self.get_argument(attr, None)
-        if value:
+    def update_model(self, model, attr, required=False):
+        value = self.get_argument(attr, '')
+        if required and value:
+            setattr(model, attr, value)
+        elif not required:
             setattr(model, attr, value)
 
 
@@ -64,10 +66,10 @@ class EditNode(BaseHandler, DashMixin):
         if not node:
             self.send_error(404)
             return
-        self.update_model(node, 'title')
-        self.update_model(node, 'slug')
+        self.update_model(node, 'title', True)
+        self.update_model(node, 'slug', True)
         self.update_model(node, 'avatar')
-        self.update_model(node, 'description')
+        self.update_model(node, 'description', True)
         self.update_model(node, 'fgcolor')
         self.update_model(node, 'bgcolor')
         self.update_model(node, 'header')
