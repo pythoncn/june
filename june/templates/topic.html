@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block subtitle %}{{topic.title}}{% end %}
+{% block subtitle %}{{escape(topic.title)}}{% end %}
 
 {% block main %}
 <div id="main">
