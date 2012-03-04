@@ -68,6 +68,8 @@ class Member(db.Model):
     role = Column(Integer, default=2)
     reputation = Column(Integer, default=10)
     token = Column(String(16))
+    created = Column(DateTime, default=datetime.utcnow)
+    last_notify = Column(DateTime, default=datetime.utcnow)
 
     def __init__(self, email, **kwargs):
         self.email = email.lower()
@@ -97,6 +99,13 @@ class Member(db.Model):
         salt, hsh = self.password.split('$')
         verify = hashlib.sha1(salt + raw + options.password_secret).hexdigest()
         return verify == hsh
+
+
+class MemberLog(db.Model):
+    user_id = Column(Integer, nullable=False, index=True)
+    message = Column(String(100))
+    time = Column(DateTime, default=datetime.utcnow)
+    ip = Column(String(100))
 
 
 class MemberMixin(object):
@@ -129,20 +138,12 @@ class MemberMixin(object):
         return user
 
 
-class MemberLog(db.Model):
-    user_id = Column(Integer, nullable=False, index=True)
-    message = Column(String(100))
-    time = Column(DateTime, default=datetime.utcnow)
-    ip = Column(String(100))
-
-
 class Notify(db.Model):
     sender = Column(Integer, nullable=False)
     receiver = Column(Integer, nullable=False, index=True)
     content = Column(String(400))
     label = Column(String(200))
     link = Column(String(400))
-    readed = Column(String(1), default='n')
     type = Column(String(20), default='reply')
     created = Column(DateTime, default=datetime.utcnow)
 
@@ -159,9 +160,15 @@ class NotifyMixin(object):
         self.db.add(notify)
         return notify
 
-    @cache('notify', 600)
-    def get_unread_notify(self, receiver):
-        return Notify.query.filter_by(receiver=receiver, readed='n').limit(5)
+    def get_unread_notify(self, user):
+        key = 'notify:%s' % user.id
+        notify = self.cache.get(key)
+        if notify:
+            return notify
+        q = Notify.query.filter_by(receiver=user.id)
+        notify = q.filter_by(created__gt=user.last_notify).all()
+        self.cache.set(key, notify, 600)
+        return notify
 
 
 class Node(db.Model):

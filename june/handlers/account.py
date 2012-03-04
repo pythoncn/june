@@ -4,7 +4,7 @@ from june.lib.handler import BaseHandler
 from june.lib import validators
 from june.lib.util import ObjectDict
 from june.auth.recaptcha import RecaptchaMixin
-from june.models import Member
+from june.models import Member, MemberLog, Topic
 
 
 class SigninHandler(BaseHandler):
@@ -30,11 +30,18 @@ class SigninHandler(BaseHandler):
         if user and user.check_password(password):
             self.set_secure_cookie('user', '%s/%s' % (user.id, user.token))
             self.redirect(self.next_url)
+            self.create_log(user.id)
             return
         msg = ObjectDict(header='Form Error',
                          body="Invalid account or password")
         self._context.message.append(msg)
         self.render('signin.html')
+
+    def create_log(self, user_id):
+        ip = self.request.remote_ip
+        log = MemberLog(user_id=user_id, ip=ip, message='Signin')
+        self.db.add(log)
+        self.db.commit()
 
 
 class GoogleSigninHandler(BaseHandler, GoogleMixin):
@@ -60,7 +67,14 @@ class GoogleSigninHandler(BaseHandler, GoogleMixin):
             self.db.commit()
 
         self.set_secure_cookie('user', '%s/%s' % (user.id, user.token))
+        self.create_log(user.id)
         self.redirect(self.next_url)
+
+    def create_log(self, user_id):
+        ip = self.request.remote_ip
+        log = MemberLog(user_id=user_id, ip=ip, message='Google signin')
+        self.db.add(log)
+        self.db.commit()
 
 
 class SignoutHandler(BaseHandler):
@@ -169,9 +183,15 @@ class SettingHandler(BaseHandler):
         user.username = username
         user.website = website
         self.db.add(user)
+        self.create_log(user.id)
         self.db.commit()
         self.cache.delete_multi([user.id, user.username], key_prefix='member:')
         self.redirect('/account/setting')
+
+    def create_log(self, user_id):
+        ip = self.request.remote_ip
+        log = MemberLog(user_id=user_id, ip=ip, message='Edit account')
+        self.db.add(log)
 
 
 class MemberHandler(BaseHandler):
@@ -180,7 +200,8 @@ class MemberHandler(BaseHandler):
         if not user:
             self.send_error(404)
             return
-        self.render('member.html', user=user)
+        topics = Topic.query.filter_by(user_id=user.id).order_by('-id')[:20]
+        self.render('member.html', user=user, topics=topics)
 
 
 handlers = [
