@@ -30,6 +30,9 @@
 </div>
 
 <div class="widget">
+    {% if current_user.id == topic.user_id %}
+    <a href="/topic/{{topic.id}}/edit" class="ui-btn">{{_("Edit Topic")}}</a>
+    {% end %}
     <a href="/node/{{node.slug}}/topic" class="ui-btn">{{_("New Topic")}}</a>
 </div>
 
