@@ -4,6 +4,14 @@ $('div.js-snippet').click(function(e){
     if(e.target.tagName.toLowerCase() == 'a') return;
     var url = $(this).attr('data-url');
     if (!url) return;
+    if (!$('#pannel').length) {
+        $('body').append('<div id="pannel"></div><div id="overlay"></div>');
+        $('#overlay').click(function(e) {
+            $(this).hide();
+            $('#pannel').css('right', -670);
+            !!history.pushState && history.pushState(null, '', _href);
+        });
+    }
     !!history.pushState && history.pushState(null, '', url);
     $('#pannel > div[data-snippet]').hide();
     var snippet = $('#pannel > div[data-snippet="' + url + '"]');
@@ -19,15 +27,12 @@ $('div.js-snippet').click(function(e){
         $('#pannel').append(html).css('right', 0);
     });
 });
-$('#overlay').click(function(e) {
-    $(this).hide();
-    $('#pannel').css('right', -670);
-    !!history.pushState && history.pushState(null, '', _href);
-});
+// }}}
 $('#notify .j-hide').click(function(e) {
+    var notify = $(this).attr('data-notify');
+    console.log(notify);
     var p = $(this).parentsUntil($('#notify'), '.message').remove();
 });
-// }}}
 // {{{ form behavior
 /*
 $('form.js-form').submit(function(e) {

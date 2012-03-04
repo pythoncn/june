@@ -23,6 +23,9 @@ h2 {
     font-size: 20px;
     line-height: 1.6;
 }
+h3 {
+    font-size: 18px;
+}
 a {
     color: #333;
 }
@@ -41,6 +44,12 @@ a:hover {
 .wrapper {
     padding: 12px;
 }
+.small {
+    font-size: 12px;
+    font-family: @serif;
+}
+.hsep {margin-right: 14px;}
+.vsep {margin-bottom: 14px;}
 
 /* layout */
 #header {
@@ -137,6 +146,9 @@ a:hover {
     .last {
         border-radius: 0 12px 12px 0;
     }
+    .notify {
+        color: #c60;
+    }
     a:hover {
         .vertical-linear-gradient(#eeeeee, #ffffff);
     }
@@ -159,19 +171,6 @@ a:hover {
     width: 30%;
     background: #efefef;
     box-shadow: 1px 0 6px #aaa;
-}
-#main {
-    .node {
-        color: #fff;
-        background: rgba(0,0,0,0.3);
-        padding: 3px 6px;
-        border-radius: 4px;
-        text-decoration: none;
-        font-size: 80%;
-        &:hover {
-            background: rgba(0,0,0,0.5);
-        }
-    }
 }
 
 /* misc */
@@ -250,6 +249,24 @@ a:hover {
     p {
         margin-bottom: 8px;
     }
+    .node {
+        font-size: 12px;
+        position: absolute;
+        top: 6px;
+        right: 7px;
+    }
+}
+.node {
+    color: #fff;
+    background: rgba(0,0,0,0.3);
+    padding: 2px 8px;
+    border-radius: 3px;
+    text-shadow: 0 0 0 #fff;
+    &:hover {
+        background: rgba(0,0,0,0.5);
+        color: #fff;
+        text-decoration: none;
+    }
 }
 .highlight {
     padding: 0 6px;
@@ -292,4 +309,9 @@ a:hover {
     padding-bottom: 3px;
     border-bottom: 3px double #d0d0d0;
     font-family: @serif;
+}
+
+/* page detail */
+#profile {
+    border-bottom: 1px solid #dadada;
 }

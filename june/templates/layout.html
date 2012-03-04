@@ -18,12 +18,11 @@
             {% end %}
             {% for msg in context.notify %}
             <div class="message">
-                {% set user = get_user(msg.sender) %}
-                <img src="{{ user.get_avatar(36) }}" alt="icon" class="avatar fn-left" width="36" height="36" />
+                <img src="{{ get_user(msg.sender).get_avatar(36) }}" alt="icon" class="avatar fn-left" width="36" height="36" />
                 <div class="fn-wrap">
-                    <h3><a href="{{msg.link}}">{{ msg.label }}</a></h3>
+                    <h3><a href="/account/notify">{{ msg.label }}</a></h3>
                     <div>{{ msg.content[:30] }}...</div>
-                    <div class="j-hide"></div>
+                    <div class="j-hide" data-notify="{{msg.id}}"></div>
                 </div>
             </div>
             {% end %}
@@ -64,6 +63,7 @@
             </div>
             {% end %}
         </div>
+        {% block beforejs %}{% end %}
         <script type="text/javascript" src="{{static_url("js/lib.js")}}"></script>
         <script type="text/javascript" src="{{static_url("js/ajax.js")}}"></script>
         <script type="text/javascript">

@@ -24,7 +24,7 @@
 <div class="widget fn-clear">
     <h4 class="widget-title">{{ _("In Node") }}</h4>
     <div class="fn-wrap">
-        <a class="node" href="/node/{{node.slug}}">{{node.title}}</a>
+        <a class="node" href="/node/{{node.slug}}"{%if node.bgcolor%} style="background:{{node.bgcolor}};color:{{node.fgcolor}}{%end%}">{{node.title}}</a>
         <p>{{node.description}}</p>
     </div>
 </div>
