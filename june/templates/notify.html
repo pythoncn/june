@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block subtitle %}{{ _("Notify") }}{% end %}
+{% block notify %}{% end %}
+
+{% block main %}
+<div id="main">
+    {% for msg in notify %}
+    <div class="cell fn-clear">
+        {% set user = get_user(msg.sender) %}
+        <img class="avatar fn-left" src="{{user.get_avatar(48)}}" alt="avatar" width="48" height="48" />
+        <div class="fn-wrap">
+            <div>
+                <a href="/member/{{user.username}}">{{user.username}}</a> {{msg.type}} on
+                <a href="{{msg.link}}"><strong>{{escape(msg.label)}}</strong></a>
+                <time class="updated" datetime="{{msg.created.strftime("%Y-%m-%dT%H:%M:%SZ")}}">{{msg.created.strftime("%b %d, %Y %H:%M")}}</time>
+            </div>
+            <p>{{escape(msg.content)}}</p>
+        </div>
+    </div>
+    {% end %}
+</div>
+{% end %}

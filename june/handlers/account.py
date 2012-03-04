@@ -1,10 +1,11 @@
 import tornado.web
 from tornado.auth import GoogleMixin
+from datetime import datetime
 from june.lib.handler import BaseHandler
 from june.lib import validators
 from june.lib.util import ObjectDict
 from june.auth.recaptcha import RecaptchaMixin
-from june.models import Member, MemberLog, Topic
+from june.models import Member, MemberLog, Topic, Notify
 
 
 class SigninHandler(BaseHandler):
@@ -194,6 +195,18 @@ class SettingHandler(BaseHandler):
         self.db.add(log)
 
 
+class NotifyHandler(BaseHandler):
+    @tornado.web.authenticated
+    def get(self):
+        user = self.db.query(Member).filter_by(id=self.current_user.id).first()
+        notify = Notify.query.filter_by(receiver=user.id).order_by('-id')[:20]
+        user.last_notify = datetime.utcnow()
+        self.db.add(user)
+        self.db.commit()
+        self.cache.delete('member:%s' % user.id)
+        self.render('notify.html', notify=notify)
+
+
 class MemberHandler(BaseHandler):
     def get(self, name):
         user = self.get_user_by_name(name)
@@ -210,5 +223,6 @@ handlers = [
     ('/account/signout', SignoutHandler),
     ('/account/signup', SignupHandler),
     ('/account/setting', SettingHandler),
+    ('/account/notify', NotifyHandler),
     ('/member/(\w+)', MemberHandler),
 ]
