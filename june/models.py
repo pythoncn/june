@@ -121,11 +121,17 @@ class MemberMixin(object):
         if not id_list:
             return {}
         id_list = set(id_list)
-        users = Member.query.filter_by(id__in=id_list).all()
-        dct = {}
-        for user in users:
-            dct[user.id] = user
-        return dct
+        users = self.cache.get_multi(id_list, key_prefix='member:')
+        missing = id_list - set(users)
+        if missing:
+            dct = {}
+            for user in Member.query.filter_by(id__in=missing).all():
+                dct[user.id] = user
+
+            self.cache.set_multi(dct, time=600, key_prefix='member:')
+            users.update(dct)
+
+        return users
 
     def create_user(self, email):
         username = email.split('@')[0].lower()
