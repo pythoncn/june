@@ -221,7 +221,7 @@ class Topic(db.Model):
     title = Column(String(200))
     content = Column(Text)
     created = Column(DateTime, default=datetime.utcnow)
-    modified = Column(DateTime, default=datetime.utcnow,
+    updated = Column(DateTime, default=datetime.utcnow,
                       onupdate=datetime.utcnow)
     hits = Column(Integer, default=1)
     ups = Column(Text)  # e.g.  1,2,3,4

@@ -9,8 +9,11 @@ from pygments.lexers import get_lexer_by_name, TextLexer
 def safe_markdown(text):
     text = escape.xhtml_escape(text)
 
+    # get link back
+    text = re.sub(r'&lt;(http.*?)&gt;', r'<\1>', text)
+
     pattern = re.compile(r'```(\w+)(.+?)```', re.S)
-    formatter = HtmlFormatter(noclasses=True)
+    formatter = HtmlFormatter(noclasses=False)
 
     def repl(m):
         try:
