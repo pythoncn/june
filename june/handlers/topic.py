@@ -175,22 +175,25 @@ class UpTopicHandler(BaseHandler):
         if not topic:
             self.send_error(404)
             return
-        up_users = topic.up_users
         user_id = str(self.current_user.id)
+        if user_id in topic.down_users:
+            self.write('0')
+            return
+        up_users = topic.up_users
         if user_id in up_users:
             up_users.remove(user_id)
             topic.ups = ','.join(up_users)
             topic.impact -= self._calc_impact()
             self.db.add(topic)
             self.db.commit()
-            self.write('')
+            self.write('1')
             return
         up_users.append(user_id)
         topic.ups = ','.join(up_users)
         topic.impact += self._calc_impact()
         self.db.add(topic)
         self.db.commit()
-        self.write('')
+        self.write('1')
         return
 
     def _calc_impact(self):
@@ -208,18 +211,22 @@ class DownTopicHandler(BaseHandler):
         if not topic:
             self.send_error(404)
             return
-        down_users = topic.down_users
         user_id = str(self.current_user.id)
+        if user_id in topic.up_users:
+            # you can up vote at the same time
+            self.write('0')
+            return
+        down_users = topic.down_users
         if user_id in down_users:
             # you can't cancel a down vote
-            self.write('')
+            self.write('0')
             return
         down_users.append(user_id)
         topic.downs = ','.join(down_users)
         topic.impact -= self._calc_impact()
         self.db.add(topic)
         self.db.commit()
-        self.write('')
+        self.write('1')
         return
 
     def _calc_impact(self):
@@ -234,6 +241,6 @@ handlers = [
     ('/node/(\w+)/topic', CreateTopicHandler),
     ('/topic/(\d+)', TopicHandler),
     ('/topic/(\d+)/up', UpTopicHandler),
-    ('/topic/(\d+)/down', UpTopicHandler),
+    ('/topic/(\d+)/down', DownTopicHandler),
     ('/topic/(\d+)/edit', EditTopicHandler),
 ]

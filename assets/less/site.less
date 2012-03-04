@@ -276,16 +276,45 @@ a:hover {
 .hentry {
     padding: 14px;
     border-bottom: 1px solid #dadada;
+    header {
+        position: relative;
+        border-bottom: 1px solid #efefef;
+    }
+    .entry-vote {
+        position: absolute;
+        top: -2px;
+        right: 6px;
+        .active {
+            background: fadeOut(@blue, 68%);
+        }
+    }
+    .up-vote, .down-vote {
+        padding: 2px 6px;
+        background: rgba(0,0,0,0.08);
+        color: #454545;
+        margin-bottom: 2px;
+        &:hover {
+            cursor: pointer;
+            background: rgba(0,0,0,0.2);
+        }
+    }
+    .up-vote {
+        border-radius: 3px 3px 0 0;
+    }
+    .down-vote {
+        border-radius: 0 0 3px 3px;
+    }
 }
 .entry-meta {
     color: #999;
     margin-top: 6px;
     padding-bottom: 6px;
-    border-bottom: 1px solid #efefef;
     font-size: small;
 }
 .entry-title {
     color: #333;
+    width: 90%;
+    .fn-wrap;
 }
 .entry-content {
     margin-top: 10px;

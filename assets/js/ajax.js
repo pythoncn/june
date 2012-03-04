@@ -48,6 +48,14 @@ $('#notify .j-hide').click(function(e) {
     console.log(notify);
     var p = $(this).parentsUntil($('#notify'), '.message').remove();
 });
+$('div.up-vote, div.down-vote').click(function(e){
+    var that = $(this);
+    var url = that.attr('data-url');
+    if (!url) return;
+    $.sendPost(url, {}, function(data){
+        if(data == "1") that.toggleClass('active');
+    }, 'html');
+});
 // {{{ form behavior
 /*
 $('form.js-form').submit(function(e) {

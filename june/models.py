@@ -225,10 +225,14 @@ class Topic(db.Model):
 
     @property
     def up_users(self):
+        if not self.ups:
+            return []
         return self.ups.split(',')
 
     @property
     def down_users(self):
+        if not self.downs:
+            return []
         return self.downs.split(',')
 
 
@@ -249,8 +253,12 @@ class Reply(db.Model):
 
     @property
     def up_users(self):
+        if not self.ups:
+            return []
         return self.ups.split(',')
 
     @property
     def down_users(self):
+        if not self.downs:
+            return []
         return self.downs.split(',')

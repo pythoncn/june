@@ -1,12 +1,18 @@
 <article class="hentry">
-    <header>
-        <h1 class="entry-title">{{escape(topic.title)}}</h1>
-        {% set user = users[topic.user_id] %}
-        <div class="entry-meta">
-            By
-            <a href="/member/{{escape(user.username)}}">{{escape(user.username)}}</a>
-            •
-            <time class="updated" datetime="{{topic.created.strftime("%Y-%m-%dT%H:%M:%SZ")}}">{{topic.created.strftime("%b %d, %Y")}}</time>
+    <header class="fn-clear">
+        <div class="entry-basic">
+            <h1 class="entry-title">{{escape(topic.title)}}</h1>
+            {% set user = users[topic.user_id] %}
+            <div class="entry-meta">
+                By
+                <a href="/member/{{escape(user.username)}}">{{escape(user.username)}}</a>
+                •
+                <time class="updated" datetime="{{topic.created.strftime("%Y-%m-%dT%H:%M:%SZ")}}">{{topic.created.strftime("%b %d, %Y")}}</time>
+            </div>
+        </div>
+        <div class="entry-vote">
+            <div class="up-vote" data-url="/topic/{{topic.id}}/up">▲</div>
+            <div class="down-vote" data-url="/topic/{{topic.id}}/down">▼</div>
         </div>
     </header>
     <div class="entry-content">
