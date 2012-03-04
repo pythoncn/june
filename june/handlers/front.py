@@ -1,4 +1,5 @@
 from june.lib.handler import BaseHandler
+from june.lib.decorators import require_user
 from june.models import Node, Topic
 from june.models import NodeMixin
 from june.filters import safe_markdown
@@ -17,16 +18,43 @@ class HomeHandler(BaseHandler, NodeMixin):
         self.render('home.html', topics=topics, users=users, nodes=nodes)
 
 
-class NodeHandler(BaseHandler):
+class StreamHandler(BaseHandler, NodeMixin):
+    def get(self):
+        if not self.current_user:
+            self.redirect('/')
+            return
+        node_ids = self.get_user_follow_nodes(self.current_user.id)
+        nodes = self.get_nodes(node_ids)
+        q = Topic.query.filter_by(node_id__in=set(node_ids))
+        topics = q.order_by('-impact')[:20]
+        user_ids = [topic.user_id for topic in topics]
+        users = self.get_users(user_ids)
+        self.render('home.html', topics=topics, users=users, nodes=nodes)
+
+
+class NodeHandler(BaseHandler, NodeMixin):
     def get(self, slug):
-        node = Node.query.filter_by(slug=slug).first()
+        node = self.get_node_by_slug(slug)
         if not node:
             self.send_error(404)
             return
-        topics = Topic.query.order_by('-impact')[:20]
-        user_ids = [topic.user_id for topic in topics]
+        q = Topic.query.filter_by(node_id=node.id)
+        topics = q.order_by('-impact')[:20]
+        user_ids = (topic.user_id for topic in topics)
         users = self.get_users(user_ids)
         self.render('node.html', node=node, topics=topics, users=users)
+
+
+class FollowNodeHandler(BaseHandler, NodeMixin):
+    @require_user
+    def get(self, slug):
+        node = self.get_node_by_slug(slug)
+        if not node:
+            self.send_error(404)
+            return
+        self.follow_node(node.id)
+        self.db.commit()
+        self.redirect('/node/%s' % node.slug)
 
 
 class NodeListHandler(BaseHandler, NodeMixin):
@@ -43,7 +71,9 @@ class PreviewHandler(BaseHandler):
 
 handlers = [
     ('/', HomeHandler),
+    ('/stream', StreamHandler),
     ('/nodes', NodeListHandler),
     ('/node/(\w+)', NodeHandler),
+    ('/node/(\w+)/follow', FollowNodeHandler),
     ('/preview', PreviewHandler),
 ]

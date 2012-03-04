@@ -195,6 +195,12 @@ class Node(db.Model):
     topic_count = Column(Integer, default=0)
 
 
+class FollowNode(db.Model):
+    user_id = Column(Integer, nullable=False, index=True)
+    node_id = Column(Integer, nullable=False, index=True)
+    created = Column(DateTime, default=datetime.utcnow)
+
+
 class NodeMixin(object):
     @cache('node', 600)
     def get_node_by_id(self, id):
@@ -213,6 +219,27 @@ class NodeMixin(object):
         for user in users:
             dct[user.id] = user
         return dct
+
+    def follow_node(self, node_id):
+        if not self.current_user:
+            return 0
+        nodes = self.get_user_follow_nodes(self.current_user.id)
+        if node_id in nodes:
+            return node_id
+        nodes.append(node_id)
+        user = self.current_user
+        self.cache.set('follownode:%s' % user.id, nodes, 6000)
+        f = FollowNode(user_id=user.id, node_id=node_id)
+        self.db.add(f)
+        return node_id
+
+    @cache('follownode', 6000)
+    def get_user_follow_nodes(self, user_id):
+        q = FollowNode.query.filter_by(user_id=user_id).values('node_id')
+        nodes = []
+        for values in q:
+            nodes.append(values[0])
+        return nodes
 
 
 class Topic(db.Model):
