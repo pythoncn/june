@@ -7,6 +7,7 @@ from june.lib.handler import BaseHandler
 from june.lib.decorators import require_user
 from june.models import Node, Topic, Reply
 from june.models import NodeMixin, TopicMixin
+from june.filters import safe_markdown
 
 
 class HomeHandler(BaseHandler, NodeMixin):
@@ -205,10 +206,17 @@ class DownTopicHandler(BaseHandler):
         return factor * int(math.log(self.current_user.reputation))
 
 
+class PreviewHandler(BaseHandler):
+    def post(self):
+        text = self.get_argument('text', '')
+        self.write(safe_markdown(text))
+
+
 handlers = [
     ('/', HomeHandler),
     ('/nodes', NodeListHandler),
     ('/node/(\w+)', NodeHandler),
     ('/node/(\w+)/topic', CreateTopicHandler),
     ('/topic/(\d+)', TopicHandler),
+    ('/preview', PreviewHandler),
 ]

@@ -5,7 +5,7 @@
 <style type="text/css">
     #main textarea {
         height: 400px;
-        width: 80%;
+        width: 96%;
     }
 </style>
 {% end %}
@@ -40,8 +40,18 @@
 {% end %}
 
 {% block sidebar %}
-<div class="widget markdown-help">
-</div>
 <div class="widget" id="markdown-preview">
 </div>
+{% end %}
+
+{% block afterjs %}
+<script type="text/javascript" src="{{static_url('js/lib/showdown.js')}}"></script>
+<script type="text/javascript">
+    var converter = new Showdown.converter()
+    $('#main textarea').keyup(function(){
+        var txt = $(this).val();
+        var html = converter.makeHtml(txt);
+        $('#markdown-preview').html(html);
+    });
+</script>
 {% end %}
