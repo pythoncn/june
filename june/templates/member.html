@@ -11,7 +11,9 @@
         <img src="{{user.get_avatar(48)}}" alt="avatar" class="avatar fn-left" width="48" height="48" />
         <div class="fn-wrap">
             <h3><a href="/member/{{user.username}}">{{user.username}}</a></h3>
-            <p class="small">{{ _("Reputation") }}: {{user.reputation}}<span class="hsep"></span>
+            <p class="small">
+            <span class="hsep">{{ _("Reputation") }}: {{user.reputation}}</span>
+            <span class="hsep">{{ _("Join at") }}: {{user.created.strftime("%Y-%m-%d")}}</span>
             {% if user.website %}<a href="{{user.website}}">{{user.website}}</a>{% end %}
             </p>
         </div>
