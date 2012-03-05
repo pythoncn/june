@@ -103,6 +103,7 @@ class BaseHandler(RequestHandler, MemberMixin, NotifyMixin):
         self._context.ga = options.ga
         self._context.message = []
 
+        self._context.status = self.get_system_status()
         if self.current_user:
             self._context.notify = self.get_unread_notify(self.current_user)
         else:

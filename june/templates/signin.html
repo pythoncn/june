@@ -21,9 +21,14 @@
         <div class="fm-row">
             <div class="fm-item">
                 <button class="ui-btn">{{_("Signin")}}</button>
-                <a href="/account/signin/google" class="ui-btn">Signin with Google</a>
             </div>
         </div>
     </form>
+</div>
+{% end %}
+
+{% block sidebar %}
+<div class="widget">
+    <a href="/account/signin/google" class="ui-btn">Signin with Google</a>
 </div>
 {% end %}

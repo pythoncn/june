@@ -6,7 +6,7 @@ from tornado.options import options
 from june.lib.handler import BaseHandler
 from june.lib.decorators import require_user
 from june.lib.util import ObjectDict
-from june.models import Node, Topic, Reply
+from june.models import Node, Topic, Reply, Member
 from june.models import NodeMixin, TopicMixin
 
 
@@ -160,17 +160,21 @@ class TopicHandler(BaseHandler, TopicMixin, NodeMixin):
         if hasattr(options, 'reply_factor_for_topic'):
             factor = int(options.reply_factor_for_topic)
         else:
-            factor = 150
+            factor = 250
         if hasattr(options, 'reply_time_factor'):
             time_factor = int(options.reply_time_factor)
         else:
-            time_factor = 100
+            time_factor = 150
         time = datetime.utcnow() - topic.created
         factor += time.days * time_factor
         return factor * int(math.log(self.current_user.reputation))
 
 
 class UpTopicHandler(BaseHandler):
+    """Up a topic will increase impact of the topic,
+    and increase reputation of the creator
+    """
+
     @require_user
     def post(self, id):
         topic = self.db.query(Topic).filter_by(id=id).first()
@@ -181,11 +185,14 @@ class UpTopicHandler(BaseHandler):
         if user_id in topic.down_users:
             self.write('0')
             return
+        creator = self.db.query(Member).filter_by(id=topic.user_id).first()
         up_users = list(topic.up_users)
         if user_id in up_users:
             up_users.remove(user_id)
             topic.ups = ','.join(str(i) for i in up_users)
-            topic.impact -= self._calc_impact()
+            topic.impact -= self._calc_topic_impact()
+            creator.reputation -= self._calc_user_impact()
+            self.db.add(creator)
             self.db.add(topic)
             self.db.commit()
             self.write('1')
@@ -198,15 +205,26 @@ class UpTopicHandler(BaseHandler):
         self.write('1')
         return
 
-    def _calc_impact(self):
+    def _calc_topic_impact(self):
         if hasattr(options, 'up_factor_for_topic'):
             factor = int(options.up_factor_for_topic)
         else:
-            factor = 600
+            factor = 1000
+        return factor * int(math.log(self.current_user.reputation))
+
+    def _calc_user_impact(self):
+        if hasattr(options, 'up_factor_for_user'):
+            factor = int(options.up_factor_for_user)
+        else:
+            factor = 6
         return factor * int(math.log(self.current_user.reputation))
 
 
 class DownTopicHandler(BaseHandler):
+    """Down a topic will reduce impact of the topic,
+    and decrease reputation of the creator
+    """
+
     @require_user
     def post(self, id):
         topic = self.db.query(Topic).filter_by(id=id).first()
@@ -223,19 +241,29 @@ class DownTopicHandler(BaseHandler):
             # you can't cancel a down vote
             self.write('0')
             return
+        creator = self.db.query(Member).filter_by(id=topic.user_id).first()
         down_users.append(user_id)
         topic.downs = ','.join(str(i) for i in down_users)
-        topic.impact -= self._calc_impact()
+        topic.impact -= self._calc_topic_impact()
+        creator.reputation -= self._calc_user_impact()
+        self.db.add(creator)
         self.db.add(topic)
         self.db.commit()
         self.write('1')
         return
 
-    def _calc_impact(self):
+    def _calc_topic_impact(self):
         if hasattr(options, 'down_factor_for_topic'):
             factor = int(options.down_factor_for_topic)
         else:
-            factor = 600
+            factor = 800
+        return factor * int(math.log(self.current_user.reputation))
+
+    def _calc_user_impact(self):
+        if hasattr(options, 'down_factor_for_user'):
+            factor = int(options.down_factor_for_user)
+        else:
+            factor = 1
         return factor * int(math.log(self.current_user.reputation))
 
 

@@ -46,6 +46,7 @@ from sqlalchemy import Integer, String, DateTime, Text
 from tornado.options import options
 from june.config import db
 from june.lib.decorators import cache
+from june.lib.util import ObjectDict
 
 
 def get_current_impact():
@@ -163,6 +164,14 @@ class Notify(db.Model):
 
 
 class NotifyMixin(object):
+    @cache('sys', 600)
+    def get_system_status(self):
+        status = ObjectDict()
+        status.member = Member.query.count()
+        status.node = Node.query.count()
+        status.topic = Topic.query.count()
+        return status
+
     def create_notify(self, receiver, topic, content, type='reply'):
         if receiver == self.current_user.id:
             return
