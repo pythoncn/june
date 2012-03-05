@@ -48,7 +48,12 @@
 <script type="text/javascript" src="{{static_url('js/lib/showdown.js')}}"></script>
 <script type="text/javascript">
     var converter = new Showdown.converter()
-    $('#main textarea').keyup(function(){
+    var textarea = $('#main textarea');
+    if (textarea.val()) {
+        var html = converter.makeHtml(textarea.val());
+        $('#markdown-preview').html(html);
+    }
+    textarea.keyup(function(){
         var txt = $(this).val();
         var html = converter.makeHtml(txt);
         $('#markdown-preview').html(html);

@@ -20,23 +20,21 @@ class HomeHandler(BaseHandler, NodeMixin):
 
 
 class StreamHandler(BaseHandler, NodeMixin):
+    @tornado.web.authenticated
     def get(self):
-        if not self.current_user:
-            self.redirect('/')
-            return
         node_ids = self.get_user_follow_nodes(self.current_user.id)
         if not node_ids:
             msg = ObjectDict(header='Notify',
                              body='You need follow some nodes')
             self._context.message.append(msg)
-            self.render('home.html', topics=[], users={}, nodes={})
+            self.render('stream.html', topics=[], users={}, nodes={})
             return
         nodes = self.get_nodes(node_ids)
         q = Topic.query.filter_by(node_id__in=set(node_ids))
         topics = q.order_by('-impact')[:20]
         user_ids = [topic.user_id for topic in topics]
         users = self.get_users(user_ids)
-        self.render('home.html', topics=topics, users=users, nodes=nodes)
+        self.render('stream.html', topics=topics, users=users, nodes=nodes)
 
 
 class NodeHandler(BaseHandler, NodeMixin):

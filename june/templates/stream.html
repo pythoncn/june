@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+
+{% block title %}{{context.sitename}}{% end %}
+
+{% block main %}
+<div id="main">
+    {% for topic in topics %}
+    <div class="js-snippet cell" data-url="/topic/{{topic.id}}">
+        {% set user = users[topic.user_id] %}
+        <img class="avatar" src="{{user.get_avatar(48)}}" width="48" height="48" />
+        <div class="fn-wrap">
+            <div class="cell-content">
+                <h2 class="entry-title"><a href="/topic/{{topic.id}}">{{escape(topic.title)}}</a></h2>
+            </div>
+            <div class="cell-footer">
+                <a href="/member/{{user.username}}">{{user.username}}</a>
+                {% set node = nodes[topic.node_id] %}
+                <a class="node" href="/node/{{node.slug}}" style="{%if node.bgcolor%}background:{{node.bgcolor}};{% end %}{%if node.fgcolor%}color:{{node.fgcolor}}{%end%}">{{escape(node.title)}}</a>
+                •
+                <time class="updated" datetime="{{topic.created.strftime("%Y-%m-%dT%H:%M:%SZ")}}">{{topic.created.strftime("%b %d, %Y %H:%M")}}</time>
+                •
+                {{topic.reply_count}} replies
+            </div>
+        </div>
+    </div>
+    {% end %}
+</div>
+{% end %}
+
+{% block sidebar %}
+{% if current_user %}
+{% set user = current_user %}
+<div class="widget fn-clear">
+    <h4 class="widget-title">{{ _("Welcome") }}</h4>
+    <a class="avatar fn-left" href="/member/{{user.username}}" tabindex="-1"><img src="{{user.get_avatar(48)}}" alt="avatar" width="48" height="48" /></a>
+    <div class="fn-wrap">
+        <a href="/member/{{user.username}}">{{user.username}}</a>
+        <div class="meta">
+            {{ _("Reputation") }}: {{user.reputation}}
+        </div>
+    </div>
+</div>
+{% end %}
+
+<div class="widget">
+    <h4 class="widget-title">{{ _("Following") }}</h4>
+    <div class="fn-wrap">
+        {% for node in nodes.itervalues() %}
+        <a class="node" href="/node/{{node.slug}}" style="{%if node.bgcolor%}background:{{node.bgcolor}};{% end %}{%if node.fgcolor%}color:{{node.fgcolor}}{%end%}">{{escape(node.title)}}</a>
+        {% end %}
+    </div>
+</div>
+{% end %}

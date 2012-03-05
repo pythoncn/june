@@ -38,4 +38,11 @@
     <a href="/node/{{node.slug}}/follow" class="j-follow ui-btn">{{_("Follow")}}</a>
     {% end %}
 </div>
+{% if node.sidebar %}
+{{ node.sidebar }}
+{% end %}
+{% end %}
+
+{% block afterstyle %}
+{{ node.header or '' }}
 {% end %}

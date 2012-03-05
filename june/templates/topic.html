@@ -2,6 +2,12 @@
 
 {% block subtitle %}{{escape(topic.title)}}{% end %}
 
+{% block afterstyle %}
+{% if node.header %}
+{{ node.header }}
+{% end %}
+{% end %}
+
 {% block main %}
 <div id="main">
     {% include "snippet/topic.html" %}
@@ -24,7 +30,9 @@
 <div class="widget fn-clear">
     <h4 class="widget-title">{{ _("In Node") }}</h4>
     <div class="fn-wrap">
-        <a class="node" href="/node/{{node.slug}}" style="{%if node.bgcolor%}background:{{node.bgcolor}};{% end %}{%if node.fgcolor%}color:{{node.fgcolor}}{%end%}">{{escape(node.title)}}</a>
+        <div class="vsep">
+            <a class="node" href="/node/{{node.slug}}" style="{%if node.bgcolor%}background:{{node.bgcolor}};{% end %}{%if node.fgcolor%}color:{{node.fgcolor}}{%end%}">{{escape(node.title)}}</a>
+        </div>
         <p>{{node.description}}</p>
     </div>
 </div>
@@ -36,24 +44,22 @@
     <a href="/node/{{node.slug}}/topic" class="ui-btn">{{_("New Topic")}}</a>
 </div>
 
+{% if node.sidebar %}
+{{ node.sidebar }}
+{% end %}
+
 <div class="widget">
-    <h4 class="widget-title">{{ _("Up Members") }}</h4>
+    <h4 class="widget-title">{{ _("Vote") }}</h4>
     <div class="fn-wrap">
         {% for id in topic.up_users %}
         {% set user = users[id] %}
         <a href="/member/{{user.username}}" class="avatar" title="{{user.username}}"><img src="{{user.get_avatar(24)}}" /></a>
         {% end %}
-    </div>
-</div>
 
-<div class="widget">
-    <h4 class="widget-title">{{ _("Down Members") }}</h4>
-    <div class="fn-wrap">
         {% for id in topic.down_users %}
         {% set user = users[id] %}
         <a href="/member/{{user.username}}" class="avatar" title="{{user.username}}"><img src="{{user.get_avatar(24)}}" /></a>
         {% end %}
     </div>
 </div>
-
 {% end %}
