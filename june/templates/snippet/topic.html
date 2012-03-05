@@ -10,10 +10,20 @@
                 <time class="updated" datetime="{{topic.created.strftime("%Y-%m-%dT%H:%M:%SZ")}}">{{topic.created.strftime("%b %d, %Y")}}</time>
             </div>
         </div>
-        <div class="entry-vote">
+        {% if current_user %}
+        <div class="vote">
+            {% if current_user.id in topic.up_users %}
+            <div class="up-vote active" data-url="/topic/{{topic.id}}/up">▲</div>
+            {% else %}
             <div class="up-vote" data-url="/topic/{{topic.id}}/up">▲</div>
+            {% end %}
+            {% if current_user.id in topic.down_users %}
+            <div class="down-vote active">▼</div>
+            {% else %}
             <div class="down-vote" data-url="/topic/{{topic.id}}/down">▼</div>
+            {% end %}
         </div>
+        {% end %}
     </header>
     <div class="entry-content">
         {{ markdown(topic.content) }}

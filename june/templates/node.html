@@ -27,7 +27,7 @@
 {% block sidebar %}
 <div class="widget">
     <h4 class="widget-title">{{ _("In Node") }}</h4>
-    <h3><a class="node" href="/node/{{node.slug}}"{%if node.bgcolor%} style="background:{{node.bgcolor}};color:{{node.fgcolor}}{%end%}">{{node.title}}</a></h3>
+    <div class="vsep"><a class="node" href="/node/{{node.slug}}" style="{%if node.bgcolor%}background:{{node.bgcolor}};{% end %}{%if node.fgcolor%}color:{{node.fgcolor}}{%end%}">{{escape(node.title)}}</a></div>
     <p>{{node.description}}</p>
 </div>
 <div class="widget">
@@ -38,9 +38,4 @@
     <a href="/node/{{node.slug}}/follow" class="j-follow ui-btn">{{_("Follow")}}</a>
     {% end %}
 </div>
-{% end %}
-
-{% block afterfooter %}
-<div id="pannel"></div>
-<div id="overlay"></div>
 {% end %}

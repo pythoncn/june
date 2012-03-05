@@ -32,9 +32,9 @@
 
 {% block sidebar %}
 <div class="widget">
-    <h4 class="widget-title">{{ _("Interesting") }}</h4>
+    <h4 class="widget-title">{{ _("Following") }}</h4>
     {% for node in nodes.itervalues() %}
-    <a class="node" href="/node/{{node.slug}}"{%if node.bgcolor%} style="background:{{node.bgcolor}};color:{{node.fgcolor}}{%end%}">{{node.title}}</a>
+    <a class="node" href="/node/{{node.slug}}" style="{%if node.bgcolor%}background:{{node.bgcolor}};{% end %}{%if node.fgcolor%}color:{{node.fgcolor}}{%end%}">{{escape(node.title)}}</a>
     {% end %}
 </div>
 {% end %}

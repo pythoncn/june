@@ -15,7 +15,7 @@
             <div class="cell-footer">
                 <a href="/member/{{user.username}}">{{user.username}}</a>
                 {% set node = nodes[topic.node_id] %}
-                <a class="node" href="/node/{{node.slug}}"{%if node.bgcolor%} style="background:{{node.bgcolor}};color:{{node.fgcolor}}{%end%}">{{escape(node.title)}}</a>
+                <a class="node" href="/node/{{node.slug}}" style="{%if node.bgcolor%}background:{{node.bgcolor}};{% end %}{%if node.fgcolor%}color:{{node.fgcolor}}{%end%}">{{escape(node.title)}}</a>
                 •
                 <time class="updated" datetime="{{topic.created.strftime("%Y-%m-%dT%H:%M:%SZ")}}">{{topic.created.strftime("%b %d, %Y %H:%M")}}</time>
                 •
@@ -41,4 +41,13 @@
     </div>
 </div>
 {% end %}
+
+<div class="widget">
+    <h4 class="widget-title">{{ _("Hot Nodes") }}</h4>
+    <div class="fn-wrap">
+        {% for node in nodes.itervalues() %}
+        <a class="node" href="/node/{{node.slug}}" style="{%if node.bgcolor%}background:{{node.bgcolor}};{% end %}{%if node.fgcolor%}color:{{node.fgcolor}}{%end%}">{{escape(node.title)}}</a>
+        {% end %}
+    </div>
+</div>
 {% end %}

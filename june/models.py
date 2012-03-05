@@ -100,11 +100,15 @@ class Member(db.Model):
         if self.avatar:
             return self.avatar
         md5email = hashlib.md5(self.email).hexdigest()
+        url = "http://www.gravatar.com/avatar/%s?s=%s&d=%s"
         if hasattr(options, 'gravatar_secure'):
             url = "https://secure.gravatar.com/avatar/%s?s=%s&d=%s"
-        else:
-            url = "http://www.gravatar.com/avatar/%s?s=%s&d=%s"
-        return url % (md5email, size, '')
+
+        d = ''
+        if hasattr(options, 'default_gravatar'):
+            d = options.default_gravatar
+
+        return url % (md5email, size, d)
 
     @staticmethod
     def create_password(raw):
@@ -261,13 +265,13 @@ class Topic(db.Model):
     def up_users(self):
         if not self.ups:
             return []
-        return self.ups.split(',')
+        return (int(i) for i in self.ups.split(','))
 
     @property
     def down_users(self):
         if not self.downs:
             return []
-        return self.downs.split(',')
+        return (int(i) for i in self.downs.split(','))
 
 
 class TopicMixin(object):
@@ -289,10 +293,10 @@ class Reply(db.Model):
     def up_users(self):
         if not self.ups:
             return []
-        return self.ups.split(',')
+        return (int(i) for i in self.ups.split(','))
 
     @property
     def down_users(self):
         if not self.downs:
             return []
-        return self.downs.split(',')
+        return (int(i) for i in self.downs.split(','))

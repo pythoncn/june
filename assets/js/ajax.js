@@ -48,10 +48,9 @@ $('#notify .j-hide').click(function(e) {
     console.log(notify);
     var p = $(this).parentsUntil($('#notify'), '.message').remove();
 });
-$('div.up-vote, div.down-vote').click(function(e){
+$('div.vote div[data-url]').click(function(){
     var that = $(this);
     var url = that.attr('data-url');
-    if (!url) return;
     $.sendPost(url, {}, function(data){
         if(data == "1") that.toggleClass('active');
     }, 'html');
