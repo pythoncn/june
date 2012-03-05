@@ -8,7 +8,6 @@
     </head>
     <body>
         {% block notify %}
-        {% if context.message or context.notify %}
         <div id="notify">
             {% for msg in context.message %}
             <div class="message">
@@ -17,18 +16,14 @@
                 <div class="j-hide"></div>
             </div>
             {% end %}
-            {% for msg in context.notify %}
+            {% if context.notify %}
             <div class="message">
-                <img src="{{ get_user(msg.sender).get_avatar(36) }}" alt="icon" class="avatar fn-left" width="36" height="36" />
-                <div class="fn-wrap">
-                    <h3><a href="/account/notify">{{ msg.label }}</a></h3>
-                    <div>{{ escape(msg.content[:30]) }}...</div>
-                    <div class="j-hide" data-notify="{{msg.id}}"></div>
-                </div>
+                <h3><a href="/account/notify">{{ _("Notify") }}</a></h3>
+                <div>{{ _("You have %s unread message" % context.notify) }}</div>
+                <div class="j-hide"></div>
             </div>
             {% end %}
         </div>
-        {% end %}
         {% end %}
         <div id="header">
             <div class="center">

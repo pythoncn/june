@@ -106,7 +106,7 @@ class BaseHandler(RequestHandler, MemberMixin, NotifyMixin):
         if self.current_user:
             self._context.notify = self.get_unread_notify(self.current_user)
         else:
-            self._context.notify = []
+            self._context.notify = 0
 
     def _prepare_filters(self):
         self._filters = ObjectDict()

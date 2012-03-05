@@ -2,7 +2,7 @@
 @import "form";
 @import "pygments";
 
-@serif: "Georgia", serif;
+@serif: "Georgia", "Hiragino Sans GB", serif;
 @sans: "Lucida Grande", "Luxi Sans", "Hiragino Sans GB", sans-serif;
 @helvetica: "Helvetica Nenu", Helvetica, aria, sans-serif;
 @blue: #4183C4;
@@ -30,12 +30,15 @@ h3 {
 a {
     color: #333;
 }
+a:hover {
+    color: @blue;
+}
 p {
     margin: 0;
     margin-bottom: 10px;
 }
-a:hover {
-    color: @blue;
+textarea {
+    min-height: 98px;
 }
 /* common class */
 .center {
@@ -324,6 +327,9 @@ a:hover {
 .avatar {
     border-radius: 3px;
     margin-right: 10px;
+    img {
+        border-radius: 4px;
+    }
 }
 .widget {
     padding: 12px 12px 6px 12px;

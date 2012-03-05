@@ -7,7 +7,7 @@
                 By
                 <a href="/member/{{escape(user.username)}}">{{escape(user.username)}}</a>
                 •
-                <time class="updated" datetime="{{topic.created.strftime("%Y-%m-%dT%H:%M:%SZ")}}">{{topic.created.strftime("%b %d, %Y")}}</time>
+                <time class="updated" datetime="{{topic.created.strftime("%Y-%m-%dT%H:%M:%SZ")}}">{{topic.created.strftime("%b %d, %Y %H:%M")}}</time>
             </div>
         </div>
         {% if current_user %}

@@ -85,7 +85,11 @@ class UnfollowNodeHandler(BaseHandler, NodeMixin):
 
 class NodeListHandler(BaseHandler, NodeMixin):
     def get(self):
-        nodes = Node.query.all()
+        nodes = self.cache.get('allnodes')
+        if nodes is None:
+            nodes = Node.query.all()
+            nodes = sorted(nodes, key=lambda o: o.updated, reverse=True)
+            self.cache.set('allnodes', nodes, 600)
         self.render('node_list.html', nodes=nodes)
 
 

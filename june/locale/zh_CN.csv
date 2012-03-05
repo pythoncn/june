@@ -22,12 +22,27 @@
 "Post", 发表
 
 "Home", 首页
+"Stream", 关注
 "Node", 节点
+"Nodes", 节点
+"Hot Nodes", 热门节点
+"Welcome", 欢迎
+"In Node", 所属节点
+"Vote", 投票者
 "Topic", 话题
 "New Topic", 新话题
+"Edit Topic", 编辑
 "Topic Creator", 话题发起者
 
 "Follow", 关注
+"Following", 关注
 "Unfollow", 取消
 
 "Reputation", 声誉
+"Role", 角色
+"Username", 用户名
+"Website", 个人站点
+"Email", 邮箱
+"Confirm", 确认
+"Join at", 加入于
+"Only English characters and digits are accepted.", 只接受英文字符和数字
