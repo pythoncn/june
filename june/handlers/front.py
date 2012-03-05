@@ -1,46 +1,9 @@
 import tornado.web
-from tornado.options import options
 from june.lib.handler import BaseHandler
-from june.lib.util import ObjectDict
+from june.lib.util import ObjectDict, PageMixin
 from june.models import Node, Topic
 from june.models import NodeMixin
 from june.filters import safe_markdown
-
-
-class PageMixin(object):
-    def _get_order(self):
-        order = self.get_argument('o', '0')
-        if order == '1':
-            return '-id'
-        return '-impact'
-
-    def _get_page(self):
-        page = self.get_argument('p', '1')
-        try:
-            return int(page)
-        except:
-            return 1
-
-    def _get_pagination(self, q, count=None):
-        if hasattr(options, 'perpage'):
-            perpage = int(options.perpage)
-        else:
-            perpage = 20
-
-        page = self._get_page()
-        start = (page - 1) * perpage
-        end = page * perpage
-        if not count:
-            count = q.count()
-
-        dct = {}
-        page_number = (count - 1) / perpage + 1  # this algorithm is fabulous
-        dct['page_number'] = page_number
-        dct['datalist'] = q.order_by(self._get_order())[start:end]
-        dct['pagelist'] = range(1, page_number + 1)
-        dct['current_page'] = page
-        dct['item_number'] = count
-        return dct
 
 
 class HomeHandler(BaseHandler, NodeMixin, PageMixin):
@@ -48,8 +11,9 @@ class HomeHandler(BaseHandler, NodeMixin, PageMixin):
         key = 'homepage:%s:%s' % (self._get_order(), self._get_page())
         page = self.cache.get(key)
         if page is None:
-            page = self._get_pagination(Topic.query,
-                                        self._context.status.topic)
+            page = self._get_pagination(
+                Topic.query.order_by(self._get_order()),
+                self._context.status.topic)
             self.cache.set(key, page, 60)
         page = ObjectDict(page)
         user_ids = []
@@ -78,7 +42,7 @@ class StreamHandler(BaseHandler, NodeMixin, PageMixin):
         page = self.cache.get(key)
         if page is None:
             q = Topic.query.filter_by(node_id__in=set(node_ids))
-            page = self._get_pagination(q)
+            page = self._get_pagination(q.order_by(self._get_order()))
             self.cache.set(key, page, 60)
         page = ObjectDict(page)
 
@@ -87,22 +51,30 @@ class StreamHandler(BaseHandler, NodeMixin, PageMixin):
         self.render('stream.html', page=page, users=users, nodes=nodes)
 
 
-class NodeHandler(BaseHandler, NodeMixin):
+class NodeHandler(BaseHandler, NodeMixin, PageMixin):
     def get(self, slug):
         node = self.get_node_by_slug(slug)
         if not node:
             self.send_error(404)
             return
-        q = Topic.query.filter_by(node_id=node.id)
-        topics = q.order_by('-impact')[:20]
-        user_ids = (topic.user_id for topic in topics)
+        key = 'node:%s:%s:%s' % (slug, self._get_order(), self._get_page())
+        key = str(key)
+        page = self.cache.get(key)
+        if page is None:
+            q = Topic.query.filter_by(node_id=node.id)
+            page = self._get_pagination(q.order_by(self._get_order()),
+                                        node.topic_count)
+            self.cache.set(key, page, 60)
+        page = ObjectDict(page)
+
+        user_ids = (topic.user_id for topic in page.datalist)
         users = self.get_users(user_ids)
         if self.current_user:
             is_following = self.is_user_follow_node(
                 self.current_user.id, node.id)
         else:
             is_following = False
-        self.render('node.html', node=node, topics=topics,
+        self.render('node.html', node=node, page=page,
                     users=users, is_following=is_following)
 
 
