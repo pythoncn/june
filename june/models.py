@@ -164,13 +164,15 @@ class Notify(db.Model):
 
 
 class NotifyMixin(object):
-    @cache('sys', 600)
     def get_system_status(self):
-        status = ObjectDict()
-        status.member = Member.query.count()
-        status.node = Node.query.count()
-        status.topic = Topic.query.count()
-        return status
+        status = self.cache.get('status')
+        if status is None:
+            status = {}
+            status['member'] = Member.query.count()
+            status['node'] = Node.query.count()
+            status['topic'] = Topic.query.count()
+            self.cache.set('status', status, 600)
+        return ObjectDict(status)
 
     def create_notify(self, receiver, topic, content, type='reply'):
         if receiver == self.current_user.id:

@@ -4,7 +4,7 @@
 
 {% block main %}
 <div id="main">
-    {% for topic in topics %}
+    {% for topic in page.datalist %}
     <div class="js-snippet cell" data-url="/topic/{{topic.id}}">
         {% set user = users[topic.user_id] %}
         <img class="avatar" src="{{user.get_avatar(48)}}" width="48" height="48" />
@@ -24,6 +24,15 @@
         </div>
     </div>
     {% end %}
+    <footer class="cell pagination">
+        {% for i in page.pagelist %}
+        {% if i == int(page.current_page) %}
+        <span href="?p={{i}}">{{i}}</span>
+        {% else %}
+        <a href="?p={{i}}">{{i}}</a>
+        {% end %}
+        {% end %}
+    </footer>
 </div>
 {% end %}
 

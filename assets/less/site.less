@@ -234,10 +234,6 @@ textarea {
     &:first-of-type {
         border-top: 0 none;
     }
-    &:hover {
-        background: #f1f1f1;
-        cursor: pointer;
-    }
     .avatar {
         float: left;
     }
@@ -259,6 +255,25 @@ textarea {
         top: 6px;
         right: 7px;
     }
+}
+.js-snippet:hover {
+    background: #f1f1f1;
+    cursor: pointer;
+}
+.pagination a, .pagination span {
+    display: inline-block;
+    padding: 1px 6px;
+    border: 1px solid #dadada;
+    border-radius: 3px;
+    color: #9f9f9f;
+    font-size: 12px;
+    .vertical-linear-gradient(#fff, #e0e0e0);
+}
+.pagination a:hover, .pagination span {
+    text-decoration: none;
+    color: #fff;
+    border: 1px solid #578fb2;
+    .vertical-linear-gradient(#80b2cd, #578fb2);
 }
 .node {
     color: #fff;
