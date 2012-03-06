@@ -17,8 +17,9 @@
             {% else %}
             <div class="up-vote" data-url="/topic/{{topic.id}}/up">▲</div>
             {% end %}
+
             {% if current_user.id in topic.down_users %}
-            <div class="down-vote active">▼</div>
+            <div class="down-vote active" data-url="/topic/{{topic.id}}/down">▼</div>
             {% else %}
             <div class="down-vote" data-url="/topic/{{topic.id}}/down">▼</div>
             {% end %}

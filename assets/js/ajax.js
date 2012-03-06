@@ -13,6 +13,7 @@ jQuery.sendPost = function(url, args, callback, dataType) {
     }
 }
 
+_gaq = window._gaq || [];
 // {{{ pannel behavior
 var _href = location.href;
 $('div.js-snippet').click(function(e){
@@ -52,8 +53,20 @@ $('div.vote div[data-url]').click(function(){
     var that = $(this);
     var url = that.attr('data-url');
     $.sendPost(url, {}, function(data){
-        if(data == "1") that.toggleClass('active');
-    }, 'html');
+        if (data.status == 'ok') {
+            that.toggleClass('active');
+            _gaq.push(['_trackEvent', 'vote', data.msg, url]);
+        } else {
+            alert(data.msg);
+            _gaq.push(['_trackEvent', 'vote', 'fail', url]);
+        }
+    }, 'json');
+});
+$('a.j-follow').click(function(e) {
+    _gaq.push(['_trackEvent', 'follow', 'follow', $(this).attr('url')]);
+});
+$('a.j-unfollow').click(function(e) {
+    _gaq.push(['_trackEvent', 'follow', 'unfollow', $(this).attr('url')]);
 });
 // {{{ form behavior
 /*

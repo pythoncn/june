@@ -234,11 +234,13 @@ class UpTopicHandler(BaseHandler):
         user_id = self.current_user.id
         if topic.user_id == user_id:
             # you can't vote your own topic
-            self.write('0')
+            dct = {'status': 'fail', 'msg': 'cannot up vote your own topic'}
+            self.write(dct)
             return
         if user_id in topic.down_users:
             # you can't up and down vote at the same time
-            self.write('0')
+            dct = {'status': 'fail', 'msg': 'cannot up vote your down topic'}
+            self.write(dct)
             return
         creator = self.db.query(Member).filter_by(id=topic.user_id).first()
         up_users = list(topic.up_users)
@@ -250,7 +252,8 @@ class UpTopicHandler(BaseHandler):
             self.db.add(creator)
             self.db.add(topic)
             self.db.commit()
-            self.write('1')
+            dct = {'status': 'ok', 'msg': 'cancel'}
+            self.write(dct)
             return
         up_users.append(user_id)
         topic.ups = ','.join(str(i) for i in up_users)
@@ -258,7 +261,8 @@ class UpTopicHandler(BaseHandler):
         creator.reputation += self._calc_user_impact()
         self.db.add(topic)
         self.db.commit()
-        self.write('1')
+        dct = {'status': 'ok', 'msg': 'active'}
+        self.write(dct)
         return
 
     def _calc_topic_impact(self):
@@ -294,14 +298,16 @@ class DownTopicHandler(BaseHandler):
         user_id = self.current_user.id
         if topic.user_id == user_id:
             # you can't vote your own topic
-            self.write('0')
+            dct = {'status': 'fail', 'msg': "cannot down vote your own topic"}
+            self.write(dct)
             return
         if user_id in topic.up_users:
             # you can't down and up vote at the same time
-            self.write('0')
+            dct = {'status': 'fail', 'msg': "cannot down vote your up topic"}
+            self.write(dct)
             return
-        down_users = list(topic.down_users)
         creator = self.db.query(Member).filter_by(id=topic.user_id).first()
+        down_users = list(topic.down_users)
         if user_id in down_users:
             #TODO: can you cancel a down vote ?
             down_users.remove(user_id)
@@ -311,7 +317,8 @@ class DownTopicHandler(BaseHandler):
             self.db.add(creator)
             self.db.add(topic)
             self.db.commit()
-            self.write('1')
+            dct = {'status': 'ok', 'msg': 'cancel'}
+            self.write(dct)
             return
         down_users.append(user_id)
         topic.downs = ','.join(str(i) for i in down_users)
@@ -320,7 +327,8 @@ class DownTopicHandler(BaseHandler):
         self.db.add(creator)
         self.db.add(topic)
         self.db.commit()
-        self.write('1')
+        dct = {'status': 'ok', 'msg': 'active'}
+        self.write(dct)
         return
 
     def _calc_topic_impact(self):

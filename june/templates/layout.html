@@ -5,6 +5,24 @@
         <title>{%block title%}{%block subtitle%}{%end%} | {{context.sitename}}{%end%}</title>
         <link rel="stylesheet" href="{{static_url('css/site.css')}}" />
         {% block afterstyle %}{% end %}
+        {% if context.ga %}
+        <script type="text/javascript">
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', '{{context.ga}}']);
+            _gaq.push(['_trackPageview']);
+            _gaq.push(['_trackPageLoadTime']);
+            {% if current_user %}
+            _gaq.push(['_setCustomVar', 1, 'UserType', 'Member', 2]);
+            {% else %}
+            _gaq.push(['_setCustomVar', 1, 'UserType', 'Guest', 2]);
+            {% end %}
+            (function() {
+             var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+             ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+             var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+             })();
+        </script>
+        {% end %}
     </head>
     <body>
         {% block notify %}

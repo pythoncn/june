@@ -42,7 +42,7 @@
 <div class="widget">
     <a href="/node/{{node.slug}}/topic" class="ui-btn">{{_("New Topic")}}</a>
     {% if is_following %}
-    <a href="/node/{{node.slug}}/unfollow" class="j-follow ui-btn">{{_("Unfollow")}}</a>
+    <a href="/node/{{node.slug}}/unfollow" class="j-unfollow ui-btn">{{_("Unfollow")}}</a>
     {% else %}
     <a href="/node/{{node.slug}}/follow" class="j-follow ui-btn">{{_("Follow")}}</a>
     {% end %}
