@@ -48,6 +48,8 @@ class CreateTopicHandler(BaseHandler):
         self.db.commit()
         url = '/topic/%d' % topic.id
         self.cache.set(key, url, 100)
+        # if slave database delay, we can get data from cache
+        self.cache.set('topic:%s' % topic.id, topic, 60)
         self.redirect(url)
 
 
@@ -199,7 +201,7 @@ class UpTopicHandler(BaseHandler):
             return
         up_users.append(user_id)
         topic.ups = ','.join(str(i) for i in up_users)
-        topic.impact += self._calc_impact()
+        topic.impact += self._calc_topic_impact()
         self.db.add(topic)
         self.db.commit()
         self.write('1')

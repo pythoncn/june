@@ -51,9 +51,13 @@ class cache(object):
             if not handler.cache:
                 return method(handler, *args, **kwargs)
 
-            key = self.prefix + ':' + '-'.join(str(a) for a in args)
-            for k, v in kwargs.items():
-                key += '%s#%s' % (k, v)
+            if args:
+                key = self.prefix + ':' + '-'.join(str(a) for a in args)
+            else:
+                key = self.prefix
+            if kwargs:
+                for k, v in kwargs.iteritems():
+                    key += '%s#%s' % (k, v)
 
             value = handler.cache.get(key)
             if value is None:

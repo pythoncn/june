@@ -26,7 +26,7 @@ class HomeHandler(BaseHandler, NodeMixin, PageMixin):
         self.render('home.html', page=page, users=users, nodes=nodes)
 
 
-class StreamHandler(BaseHandler, NodeMixin, PageMixin):
+class SubscriptionHandler(BaseHandler, NodeMixin, PageMixin):
     @tornado.web.authenticated
     def get(self):
         node_ids = self.get_user_follow_nodes(self.current_user.id)
@@ -34,10 +34,10 @@ class StreamHandler(BaseHandler, NodeMixin, PageMixin):
             msg = ObjectDict(header='Notify',
                              body='You need follow some nodes')
             self._context.message.append(msg)
-            self.render('stream.html', page=None, users={}, nodes={})
+            self.render('subscription.html', page=None, users={}, nodes={})
             return
         nodes = self.get_nodes(node_ids)
-        key = 'stream:%s:%s:%s' % (self._get_order(), self._get_page(),
+        key = 'subscription:%s:%s:%s' % (self._get_order(), self._get_page(),
                                   self.current_user.id)
         page = self.cache.get(key)
         if page is None:
@@ -48,7 +48,7 @@ class StreamHandler(BaseHandler, NodeMixin, PageMixin):
 
         user_ids = (topic.user_id for topic in page.datalist)
         users = self.get_users(user_ids)
-        self.render('stream.html', page=page, users=users, nodes=nodes)
+        self.render('subscription.html', page=page, users=users, nodes=nodes)
 
 
 class NodeHandler(BaseHandler, NodeMixin, PageMixin):
@@ -123,7 +123,7 @@ class PreviewHandler(BaseHandler):
 
 handlers = [
     ('/', HomeHandler),
-    ('/stream', StreamHandler),
+    ('/subscription', SubscriptionHandler),
     ('/nodes', NodeListHandler),
     ('/node/(\w+)', NodeHandler),
     ('/node/(\w+)/follow', FollowNodeHandler),
