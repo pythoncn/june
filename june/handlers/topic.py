@@ -5,7 +5,7 @@ from tornado.escape import utf8
 from tornado.options import options
 from june.lib.handler import BaseHandler
 from june.lib.decorators import require_user
-from june.lib.util import ObjectDict
+from june.lib.util import ObjectDict, PageMixin
 from june.filters import find_mention
 from june.models import Node, Topic, Reply, Member
 from june.models import NodeMixin, TopicMixin
@@ -141,24 +141,26 @@ class EditTopicHandler(BaseHandler, TopicMixin, NodeMixin):
         return 1
 
 
-class TopicHandler(BaseHandler, TopicMixin, NodeMixin):
+class TopicHandler(BaseHandler, TopicMixin, NodeMixin, PageMixin):
     def get(self, id):
         topic = self.get_topic_by_id(id)
         if not topic:
             self.send_error(404)
             return
         node = self.get_node_by_id(topic.node_id)
-        replies = Reply.query.filter_by(topic_id=id).all()
-        user_ids = [o.user_id for o in replies]
+        page = self._get_pagination(Reply.query.filter_by(topic_id=id),
+                                    perpage=30)
+        page = ObjectDict(page)
+        user_ids = [o.user_id for o in page.datalist]
         user_ids.append(topic.user_id)
         user_ids.extend(topic.up_users)
         user_ids.extend(topic.down_users)
         users = self.get_users(user_ids)
         if self.is_ajax():
             self.render('snippet/topic.html', topic=topic, node=node,
-                        replies=replies, users=users)
+                        page=page, users=users)
             return
-        self.render('topic.html', topic=topic, node=node, replies=replies,
+        self.render('topic.html', topic=topic, node=node, page=page,
                     users=users)
 
     @require_user

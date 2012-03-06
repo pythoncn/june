@@ -24,6 +24,7 @@
         </div>
     </div>
     {% end %}
+    {% if page.page_number > 1 %}
     <footer class="cell pagination">
         {% for i in page.pagelist %}
         {% if i == int(page.current_page) %}
@@ -33,6 +34,7 @@
         {% end %}
         {% end %}
     </footer>
+    {% end %}
 </div>
 {% end %}
 

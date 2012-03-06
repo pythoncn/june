@@ -43,12 +43,7 @@ class PageMixin(object):
         except:
             return 1
 
-    def _get_pagination(self, q, count=None):
-        if hasattr(options, 'perpage'):
-            perpage = int(options.perpage)
-        else:
-            perpage = 20
-
+    def _get_pagination(self, q, count=None, perpage=20):
         page = self._get_page()
         start = (page - 1) * perpage
         end = page * perpage

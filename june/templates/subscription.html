@@ -25,6 +25,7 @@
         </div>
     </div>
     {% end %}
+    {% if page.page_number > 1 %}
     <footer class="cell pagination">
         {% for i in page.pagelist %}
         {% if i == int(page.current_page) %}
@@ -34,6 +35,7 @@
         {% end %}
         {% end %}
     </footer>
+    {% end %}
     {% else %}
     <div class="cell">{{ _("You need follow some nodes") }}</div>
     {% end %}
