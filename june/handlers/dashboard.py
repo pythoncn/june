@@ -1,7 +1,7 @@
 from june.lib.util import ObjectDict
 from june.lib.handler import BaseHandler
 from june.lib.decorators import require_admin
-from june.models import Node
+from june.models import Member, Node, NodeMixin
 
 
 class DashMixin(object):
@@ -48,7 +48,7 @@ class CreateNode(BaseHandler):
         node = Node(**o)
         self.db.add(node)
         self.db.commit()
-        self.redirect('/node/%s' % o.slug)
+        self.redirect('/dashboard')
 
 
 class EditNode(BaseHandler, DashMixin):
@@ -82,7 +82,53 @@ class EditNode(BaseHandler, DashMixin):
         self.redirect('/node/%s' % node.slug)
 
 
+class FlushCache(BaseHandler):
+    @require_admin
+    def get(self):
+        self.cache.flush_all()
+        self.write('done')
+
+
+class EditMember(BaseHandler, DashMixin):
+    @require_admin
+    def get(self, name):
+        user = Member.query.filter_by(username=name).first()
+        if not user:
+            self.send_error(404)
+            return
+        self.render('dashboard_member.html', user=user)
+
+    @require_admin
+    def post(self, name):
+        user = self.db.query(Member).filter_by(username=name).first()
+        if not user:
+            self.send_error(404)
+            return
+        self.update_model(user, 'username', True)
+        self.update_model(user, 'email', True)
+        self.update_model(user, 'role', True)
+        self.update_model(user, 'reputation', True)
+        self.db.add(user)
+        self.db.commit()
+        self.cache.delete('user:%s' % str(user.id))
+        self.redirect('/dashboard')
+
+
+class Dashboard(BaseHandler, NodeMixin):
+    @require_admin
+    def get(self):
+        user = self.get_argument('user', None)
+        if user:
+            self.redirect('/dashboard/member/%s' % user)
+            return
+        nodes = Node.query.all()
+        self.render('dashboard.html', nodes=nodes)
+
+
 handlers = [
+    ('/dashboard', Dashboard),
     ('/dashboard/node', CreateNode),
     ('/dashboard/node/(\w+)', EditNode),
+    ('/dashboard/member/(\w+)', EditMember),
+    ('/dashboard/flushcache', FlushCache),
 ]

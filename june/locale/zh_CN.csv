@@ -41,7 +41,7 @@
 "Unfollow", 取消关注
 
 "Member", 会员
-Reputation", 声誉
+"Reputation", 声誉
 "Role", 角色
 "Username", 用户名
 "Website", 个人站点
@@ -54,3 +54,7 @@ Reputation", 声誉
 "Warning", 警告
 "You have no permission to create a topic in this node", 对不起，你不能在这里新建一个话题
 "You can't edit this topic now", 你现在不能再编辑这个话题了
+
+"New Node", 新建节点
+"Flush Cache", 清空缓存
+"Member Manage", 会员管理

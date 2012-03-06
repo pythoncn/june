@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block subtitle %}{{ _("Dashboard") }}{% end %}
+
+{% block main %}
+<div id="main">
+    <div class="cell">
+        <a href="/dashboard/node" class="ui-btn">{{ _("New Node") }}</a>
+        <a href="/dashboard/flushcache" class="ui-btn">{{ _("Flush Cache") }}</a>
+    </div>
+    <div class="cell fn-clear">
+        <form action="" class="fm">
+            <input type="text" name="user" class="fm-text hsep" />
+            <button type="submit" class="ui-btn">{{ _("Member Manage") }}</button>
+        </form>
+    </div>
+    <div class="wrapper">
+        {% for node in nodes %}
+        <a class="node" href="/dashboard/node/{{node.slug}}"{%if node.bgcolor%} style="background:{{node.bgcolor}};color:{{node.fgcolor}}{%end%}">{{node.title}}</a>
+        {% end %}
+    </div>
+</div>
+{% end %}
