@@ -232,7 +232,12 @@ class UpTopicHandler(BaseHandler):
             self.send_error(404)
             return
         user_id = self.current_user.id
+        if topic.user_id == user_id:
+            # you can't vote your own topic
+            self.write('0')
+            return
         if user_id in topic.down_users:
+            # you can't up and down vote at the same time
             self.write('0')
             return
         creator = self.db.query(Member).filter_by(id=topic.user_id).first()
@@ -250,6 +255,7 @@ class UpTopicHandler(BaseHandler):
         up_users.append(user_id)
         topic.ups = ','.join(str(i) for i in up_users)
         topic.impact += self._calc_topic_impact()
+        creator.reputation += self._calc_user_impact()
         self.db.add(topic)
         self.db.commit()
         self.write('1')
@@ -286,16 +292,27 @@ class DownTopicHandler(BaseHandler):
             self.send_error(404)
             return
         user_id = self.current_user.id
+        if topic.user_id == user_id:
+            # you can't vote your own topic
+            self.write('0')
+            return
         if user_id in topic.up_users:
-            # you can up vote at the same time
+            # you can't down and up vote at the same time
             self.write('0')
             return
         down_users = list(topic.down_users)
-        if user_id in down_users:
-            # you can't cancel a down vote
-            self.write('0')
-            return
         creator = self.db.query(Member).filter_by(id=topic.user_id).first()
+        if user_id in down_users:
+            #TODO: can you cancel a down vote ?
+            down_users.remove(user_id)
+            topic.downs = ','.join(str(i) for i in down_users)
+            topic.impact += self._calc_topic_impact()
+            creator.reputation += self._calc_user_impact()
+            self.db.add(creator)
+            self.db.add(topic)
+            self.db.commit()
+            self.write('1')
+            return
         down_users.append(user_id)
         topic.downs = ','.join(str(i) for i in down_users)
         topic.impact -= self._calc_topic_impact()
