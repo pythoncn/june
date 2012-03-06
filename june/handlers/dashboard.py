@@ -48,6 +48,7 @@ class CreateNode(BaseHandler):
         node = Node(**o)
         self.db.add(node)
         self.db.commit()
+        self.cache.delete('allnodes')
         self.redirect('/dashboard')
 
 

@@ -1,7 +1,7 @@
 import tornado.web
 from june.lib.handler import BaseHandler
 from june.lib.util import ObjectDict, PageMixin
-from june.models import Node, Topic
+from june.models import Node, Topic, Member
 from june.models import NodeMixin
 from june.filters import safe_markdown
 
@@ -23,7 +23,10 @@ class HomeHandler(BaseHandler, NodeMixin, PageMixin):
             node_ids.append(topic.node_id)
         users = self.get_users(user_ids)
         nodes = self.get_nodes(node_ids)
-        self.render('home.html', page=page, users=users, nodes=nodes)
+        # recent join
+        members = Member.query.order_by('-id')[:10]
+        self.render('home.html', page=page, users=users,
+                    members=members, nodes=nodes)
 
 
 class SubscriptionHandler(BaseHandler, NodeMixin, PageMixin):

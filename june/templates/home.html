@@ -58,10 +58,18 @@
 </div>
 
 <div class="widget">
-    <h4 class="widget-title">{{ _("Recent Nodes") }}</h4>
+    <h4 class="widget-title">{{ _("Mentioned Nodes") }}</h4>
     <div class="fn-wrap">
         {% for node in nodes.itervalues() %}
         <a class="node" href="/node/{{node.slug}}" style="{%if node.bgcolor%}background:{{node.bgcolor}};{% end %}{%if node.fgcolor%}color:{{node.fgcolor}}{%end%}">{{escape(node.title)}}</a>
+        {% end %}
+    </div>
+</div>
+<div class="widget">
+    <h4 class="widget-title">{{ _("Recent Join") }}</h4>
+    <div class="fn-wrap">
+        {% for member in members %}
+        <a class="avatar fn-left" href="/member/{{member.username}}" title="{{member.username}}"><img src="{{member.get_avatar(36)}}" alt="avatar" width="36" height="36" /></a>
         {% end %}
     </div>
 </div>

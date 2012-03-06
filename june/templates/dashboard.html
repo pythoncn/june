@@ -16,7 +16,7 @@
     </div>
     <div class="wrapper">
         {% for node in nodes %}
-        <a class="node" href="/dashboard/node/{{node.slug}}"{%if node.bgcolor%} style="background:{{node.bgcolor}};color:{{node.fgcolor}}{%end%}">{{node.title}}</a>
+        <a class="node" href="/dashboard/node/{{node.slug}}"{%if node.bgcolor%} style="background:{{node.bgcolor}};color:{{node.fgcolor}}{%end%}" title="{{node.id}}">{{node.title}}</a>
         {% end %}
     </div>
 </div>
