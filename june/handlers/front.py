@@ -24,7 +24,7 @@ class HomeHandler(BaseHandler, NodeMixin, PageMixin):
         users = self.get_users(user_ids)
         nodes = self.get_nodes(node_ids)
         # recent join
-        members = Member.query.order_by('-id')[:10]
+        members = Member.query.order_by('-id')[:5]
         self.render('home.html', page=page, users=users,
                     members=members, nodes=nodes)
 

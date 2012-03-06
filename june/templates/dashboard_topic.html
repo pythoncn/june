@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block main %}
+<form action="" method="post" class="fm">
+    {{ xsrf_form_html() }}
+    <div class="fm-row">
+        <div class="fm-item">
+            <label class="fm-label" for="impact">{{ _("Impact") }}</label>
+            <input type="number" class="fm-text" name="impact" value="{{topic.impact}}" />
+        </div>
+    </div>
+
+    <div class="fm-row">
+        <div class="fm-item">
+            <label class="fm-label" for="node">{{ _("Node") }}</label>
+            <input type="number" class="fm-text" name="node" value="{{topic.node_id}}" />
+        </div>
+    </div>
+
+    <div class="fm-row">
+        <div class="fm-item">
+            <button class="ui-btn">{{_("Save")}}</button>
+        </div>
+    </div>
+</form>
+{% end %}

@@ -1,7 +1,7 @@
 from june.lib.util import ObjectDict
 from june.lib.handler import BaseHandler
 from june.lib.decorators import require_admin
-from june.models import Member, Node, NodeMixin
+from june.models import Topic, Member, Node, NodeMixin, TopicMixin
 
 
 class DashMixin(object):
@@ -126,6 +126,37 @@ class EditMember(BaseHandler, DashMixin):
         self.redirect('/dashboard')
 
 
+class EditTopic(BaseHandler, TopicMixin):
+    @require_admin
+    def get(self, id):
+        topic = self.get_topic_by_id(id)
+        if not topic:
+            self.send_error(404)
+            return
+        self.render('dashboard_topic.html', topic=topic)
+
+    @require_admin
+    def post(self, id):
+        topic = self.db.query(Topic).filter_by(id=id).first()
+        if not topic:
+            self.send_error(404)
+            return
+        impact = self.get_argument('impact', None)
+        node = self.get_argument('node', None)
+        try:
+            topic.impact = int(impact)
+        except:
+            pass
+        try:
+            topic.node_id = int(node)
+        except:
+            pass
+        self.db.add(topic)
+        self.db.commit()
+        self.cache.delete('topic:%s' % topic.id)
+        self.redirect('/topic/%d' % topic.id)
+
+
 class Dashboard(BaseHandler, NodeMixin):
     @require_admin
     def get(self):
@@ -142,5 +173,6 @@ handlers = [
     ('/dashboard/node', CreateNode),
     ('/dashboard/node/(\w+)', EditNode),
     ('/dashboard/member/(\w+)', EditMember),
+    ('/dashboard/topic/(\d+)', EditTopic),
     ('/dashboard/flushcache', FlushCache),
 ]
