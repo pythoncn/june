@@ -34,7 +34,7 @@ class CreateTopicHandler(BaseHandler, NodeMixin):
                 header='Warning',
                 body="You have no permission to create a topic in this node")
             self._context.message.append(msg)
-            self.render('topic_form.html')
+            self.render('topic_form.html', topic=None, node=node)
             return
         self.render('topic_form.html', topic=None, node=node)
 
@@ -50,14 +50,14 @@ class CreateTopicHandler(BaseHandler, NodeMixin):
             msg = ObjectDict(header='Form Error',
                              body='Please fill the required field')
             self._context.message.append(msg)
-            self.render('topic_form.html')
+            self.render('topic_form.html', topic=None, node=node)
             return
         if not self._check_permission(node):
             msg = ObjectDict(
                 header='Warning',
                 body="You have no permission to create a topic in this node")
             self._context.message.append(msg)
-            self.render('topic_form.html')
+            self.render('topic_form.html', topic=None, node=node)
             return
 
         key = hashlib.md5(utf8(content)).hexdigest()
@@ -75,8 +75,7 @@ class CreateTopicHandler(BaseHandler, NodeMixin):
         self.db.commit()
         url = '/topic/%d' % topic.id
         self.cache.set(key, url, 100)
-        # if slave database delay, we can get data from cache
-        self.cache.set('topic:%s' % topic.id, topic, 60)
+        self.cache.delete('homepage:-impact:1')
         self.redirect(url)
 
     def _check_permission(self, node):
@@ -123,6 +122,7 @@ class EditTopicHandler(BaseHandler, TopicMixin, NodeMixin):
         topic.content = content
         self.db.add(topic)
         self.db.commit()
+        self.cache.delete('topic:%s' % topic.id)
         self.redirect('/topic/%d' % topic.id)
 
     def _check_permission(self, topic):
@@ -132,7 +132,7 @@ class EditTopicHandler(BaseHandler, TopicMixin, NodeMixin):
             self.send_error(403)
             return 0
         timedel = datetime.utcnow() - topic.created
-        if timedel.seconds > 1200:
+        if timedel.days or timedel.seconds > 1200:
             # user can only edit a topic in 10 minutes
             msg = ObjectDict(header='Warning',
                              body="You can't edit this topic now")
@@ -200,7 +200,7 @@ class TopicHandler(BaseHandler, TopicMixin, NodeMixin):
             self.create_mention(username, topic, content)
 
         self.db.commit()
-        url = '/topic/%s' % id
+        url = '/topic/%s' % str(id)
         self.cache.set(key, url, 100)
         self.redirect(url)
 
@@ -210,11 +210,11 @@ class TopicHandler(BaseHandler, TopicMixin, NodeMixin):
         if hasattr(options, 'reply_factor_for_topic'):
             factor = int(options.reply_factor_for_topic)
         else:
-            factor = 250
+            factor = 300
         if hasattr(options, 'reply_time_factor'):
             time_factor = int(options.reply_time_factor)
         else:
-            time_factor = 150
+            time_factor = 200
         time = datetime.utcnow() - topic.created
         factor += time.days * time_factor
         return factor * int(math.log(self.current_user.reputation))
@@ -347,7 +347,7 @@ class DownTopicHandler(BaseHandler):
             factor = int(options.down_factor_for_user)
         else:
             factor = 1
-        return int(factor * math.log(self.current_user.reputation) / 2)
+        return factor * int(math.log(self.current_user.reputation))
 
 
 handlers = [

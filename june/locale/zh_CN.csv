@@ -20,6 +20,7 @@
 
 "Save", 保存
 "Post", 发表
+"Cancel", 取消
 
 "Home", 首页
 "Subscription", 订阅
@@ -37,7 +38,7 @@
 
 "Follow", 关注
 "Following", 关注
-"Unfollow", 取消
+"Unfollow", 取消关注
 
 "Member", 会员
 Reputation", 声誉
@@ -50,3 +51,6 @@ Reputation", 声誉
 "Only English characters and digits are accepted.", 只接受英文字符和数字
 "You need follow some nodes", 去注几个节点吧
 "This topic is in", 这个话题位于
+"Warning", 警告
+"You have no permission to create a topic in this node", 对不起，你不能在这里新建一个话题
+"You can't edit this topic now", 你现在不能再编辑这个话题了

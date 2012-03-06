@@ -77,6 +77,8 @@ class EditNode(BaseHandler, DashMixin):
         self.update_model(node, 'footer')
         self.db.add(node)
         self.db.commit()
+
+        self.cache.delete('node:%s' % str(slug))
         self.redirect('/node/%s' % node.slug)
 
 
