@@ -31,6 +31,8 @@ class CreateNode(BaseHandler):
         o.header = self.get_argument('header', None)
         o.sidebar = self.get_argument('sidebar', None)
         o.footer = self.get_argument('footer', None)
+        o.footer = self.get_argument('limit_reputation', 0)
+        o.footer = self.get_argument('limit_role', 0)
         try:
             o.limit_reputation = int(self.get_argument('reputation', 0))
         except:
@@ -75,6 +77,8 @@ class EditNode(BaseHandler, DashMixin):
         self.update_model(node, 'header')
         self.update_model(node, 'sidebar')
         self.update_model(node, 'footer')
+        self.update_model(node, 'limit_reputation')
+        self.update_model(node, 'limit_role')
         self.db.add(node)
         self.db.commit()
 

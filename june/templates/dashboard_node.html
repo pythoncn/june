@@ -63,7 +63,7 @@
     <div class="fm-row">
         <div class="fm-item">
             <label class="fm-label" for="reputation">{{ _("Reputation") }}</label>
-            <input type="number" class="fm-text" name="reputation" value="{{node.limit_reputation or 0}}" />
+            <input type="number" class="fm-text" name="limit_reputation" value="{{node.limit_reputation or 0}}" />
         </div>
         <div class="fm-explain">{{ _("Only member over this reputation can create a topic in this node") }}</div>
     </div>
@@ -71,7 +71,7 @@
     <div class="fm-row">
         <div class="fm-item">
             <label class="fm-label" for="role">{{ _("Role") }}</label>
-            <input type="number" class="fm-text" name="role" value="{{node.limit_role or 0}}" />
+            <input type="number" class="fm-text" name="limit_role" value="{{node.limit_role or 0}}" />
         </div>
         <div class="fm-explain">{{ _("Only member over this role can create a topic in this node") }}</div>
     </div>
