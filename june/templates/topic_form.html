@@ -12,6 +12,9 @@
 
 {% block main %}
 <div id="main">
+    <div class="cell">
+        {{ _("This topic is in") }}: <a href="/node/{{node.slug}}"><strong>{{node.title}}</strong></a>
+    </div>
     <form action="" method="post" class="fm">
         {{ xsrf_form_html() }}
         <div class="fm-row">
@@ -33,6 +36,7 @@
         <div class="fm-row">
             <div class="fm-item">
                 <button class="ui-btn">{{_("Save")}}</button>
+                {% if topic %}<a class="ui-btn" href="/topic/{{topic.id}}">{{ _("Cancel") }}</a>{% end %}
             </div>
         </div>
     </form>

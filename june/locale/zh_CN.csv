@@ -25,7 +25,7 @@
 "Subscription", 订阅
 "Node", 节点
 "Nodes", 节点
-"Hot Nodes", 热门节点
+"Recent Nodes", 热门节点
 "Welcome", 欢迎
 "In Node", 所属节点
 "Vote", 投票者
@@ -33,6 +33,7 @@
 "New Topic", 新话题
 "Edit Topic", 编辑
 "Topic Creator", 话题发起者
+"Choose a node", 选择一个节点
 
 "Follow", 关注
 "Following", 关注
@@ -48,3 +49,4 @@ Reputation", 声誉
 "Join at", 加入于
 "Only English characters and digits are accepted.", 只接受英文字符和数字
 "You need follow some nodes", 去注几个节点吧
+"This topic is in", 这个话题位于

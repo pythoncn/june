@@ -10,14 +10,31 @@ from june.models import Node, Topic, Reply, Member
 from june.models import NodeMixin, TopicMixin
 
 
-class CreateTopicHandler(BaseHandler):
+class NewTopicHandler(BaseHandler, NodeMixin):
+    def get(self):
+        nodes = self.cache.get('allnodes')
+        if nodes is None:
+            nodes = Node.query.all()
+            nodes = sorted(nodes, key=lambda o: o.updated, reverse=True)
+            self.cache.set('allnodes', nodes, 600)
+        self.render("new_topic.html", nodes=nodes)
+
+
+class CreateTopicHandler(BaseHandler, NodeMixin):
     @require_user
     def get(self, slug):
-        node = Node.query.filter_by(slug=slug).first()
+        node = self.get_node_by_slug(slug)
         if not node:
             self.send_error(404)
             return
-        self.render('topic_form.html', topic=None)
+        if not self._check_permission(node):
+            msg = ObjectDict(
+                header='Warning',
+                body="You have no permission to create a topic in this node")
+            self._context.message.append(msg)
+            self.render('topic_form.html')
+            return
+        self.render('topic_form.html', topic=None, node=node)
 
     @require_user
     def post(self, slug):
@@ -33,6 +50,14 @@ class CreateTopicHandler(BaseHandler):
             self._context.message.append(msg)
             self.render('topic_form.html')
             return
+        if not self._check_permission(node):
+            msg = ObjectDict(
+                header='Warning',
+                body="You have no permission to create a topic in this node")
+            self._context.message.append(msg)
+            self.render('topic_form.html')
+            return
+
         key = hashlib.md5(utf8(content)).hexdigest()
         url = self.cache.get(key)
         # avoid double submit
@@ -52,18 +77,27 @@ class CreateTopicHandler(BaseHandler):
         self.cache.set('topic:%s' % topic.id, topic, 60)
         self.redirect(url)
 
+    def _check_permission(self, node):
+        if self.current_user.role > 9:
+            return True
+        if self.current_user.reputation < node.limit_reputation:
+            return False
+        if self.current_user.role < node.limit_role:
+            return False
 
-class EditTopicHandler(BaseHandler, TopicMixin):
+
+class EditTopicHandler(BaseHandler, TopicMixin, NodeMixin):
     @require_user
     def get(self, id):
         topic = self.get_topic_by_id(id)
         if not topic:
             self.send_error(404)
             return
-        if not self._has_permission(topic):
+        if not self._check_permission(topic):
             self.send_error(403)
             return
-        self.render('topic_form.html', topic=topic)
+        node = self.get_node_by_id(topic.node_id)
+        self.render('topic_form.html', topic=topic, node=node)
 
     @require_user
     def post(self, id):
@@ -71,7 +105,7 @@ class EditTopicHandler(BaseHandler, TopicMixin):
         if not topic:
             self.send_error(404)
             return
-        if self._has_permission(topic) != 1:
+        if self._check_permission(topic) != 1:
             self.redirect('/topic/%d' % id)
             return
 
@@ -89,7 +123,7 @@ class EditTopicHandler(BaseHandler, TopicMixin):
         self.db.commit()
         self.redirect('/topic/%d' % topic.id)
 
-    def _has_permission(self, topic):
+    def _check_permission(self, topic):
         if self.current_user.role > 9:
             return 1
         if not self.is_owner_of(topic):
@@ -159,6 +193,8 @@ class TopicHandler(BaseHandler, TopicMixin, NodeMixin):
         self.redirect(url)
 
     def _calc_impact(self, topic):
+        if self.current_user.reputation < 2:
+            return 0
         if hasattr(options, 'reply_factor_for_topic'):
             factor = int(options.reply_factor_for_topic)
         else:
@@ -208,6 +244,8 @@ class UpTopicHandler(BaseHandler):
         return
 
     def _calc_topic_impact(self):
+        if self.current_user.reputation < 2:
+            return 0
         if hasattr(options, 'up_factor_for_topic'):
             factor = int(options.up_factor_for_topic)
         else:
@@ -215,6 +253,8 @@ class UpTopicHandler(BaseHandler):
         return factor * int(math.log(self.current_user.reputation))
 
     def _calc_user_impact(self):
+        if self.current_user.reputation < 2:
+            return 0
         if hasattr(options, 'up_factor_for_user'):
             factor = int(options.up_factor_for_user)
         else:
@@ -255,6 +295,8 @@ class DownTopicHandler(BaseHandler):
         return
 
     def _calc_topic_impact(self):
+        if self.current_user.reputation < 2:
+            return 0
         if hasattr(options, 'down_factor_for_topic'):
             factor = int(options.down_factor_for_topic)
         else:
@@ -262,15 +304,18 @@ class DownTopicHandler(BaseHandler):
         return factor * int(math.log(self.current_user.reputation))
 
     def _calc_user_impact(self):
+        if self.current_user.reputation < 2:
+            return 0
         if hasattr(options, 'down_factor_for_user'):
             factor = int(options.down_factor_for_user)
         else:
             factor = 1
-        return factor * int(math.log(self.current_user.reputation))
+        return int(factor * math.log(self.current_user.reputation) / 2)
 
 
 handlers = [
     ('/node/(\w+)/topic', CreateTopicHandler),
+    ('/topic', NewTopicHandler),
     ('/topic/(\d+)', TopicHandler),
     ('/topic/(\d+)/up', UpTopicHandler),
     ('/topic/(\d+)/down', DownTopicHandler),

@@ -52,7 +52,11 @@
 {% end %}
 
 <div class="widget">
-    <h4 class="widget-title">{{ _("Hot Nodes") }}</h4>
+    <a href="/topic" class="ui-btn">{{ _("New Topic") }}</a>
+</div>
+
+<div class="widget">
+    <h4 class="widget-title">{{ _("Recent Nodes") }}</h4>
     <div class="fn-wrap">
         {% for node in nodes.itervalues() %}
         <a class="node" href="/node/{{node.slug}}" style="{%if node.bgcolor%}background:{{node.bgcolor}};{% end %}{%if node.fgcolor%}color:{{node.fgcolor}}{%end%}">{{escape(node.title)}}</a>
