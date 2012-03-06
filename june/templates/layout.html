@@ -31,14 +31,14 @@
             <div class="message">
                 <h3>{{ _(msg.header) }}</h3>
                 <div>{{ _(msg.body) }}</div>
-                <div class="j-hide"></div>
+                <div class="js-hide"></div>
             </div>
             {% end %}
             {% if context.notify %}
             <div class="message">
                 <h3><a href="/account/notify">{{ _("Notify") }}</a></h3>
                 <div>{{ _("You have %s unread message" % context.notify) }}</div>
-                <div class="j-hide"></div>
+                <div class="js-hide"></div>
             </div>
             {% end %}
         </div>
@@ -87,9 +87,6 @@
         {% block beforejs %}{% end %}
         <script type="text/javascript" src="{{static_url("js/lib.js")}}"></script>
         <script type="text/javascript" src="{{static_url("js/ajax.js")}}"></script>
-        <script type="text/javascript">
-            $('time.updated').timeago();
-        </script>
         {% block afterjs %}{% end %}
     </body>
 </html>

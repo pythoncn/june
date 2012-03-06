@@ -21,6 +21,7 @@
 "Save", 保存
 "Post", 发表
 "Cancel", 取消
+"Preview", 预览
 
 "Home", 首页
 "Subscription", 订阅
@@ -58,3 +59,5 @@
 "New Node", 新建节点
 "Flush Cache", 清空缓存
 "Member Manage", 会员管理
+
+"You have %s unread message", 你有%s条未读消息

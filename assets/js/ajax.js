@@ -12,7 +12,7 @@ jQuery.sendPost = function(url, args, callback, dataType) {
         location.assign(href);
     }
 }
-
+$('time.updated').timeago();
 _gaq = window._gaq || [];
 // {{{ pannel behavior
 var _href = location.href;
@@ -44,7 +44,7 @@ $('div.js-snippet').click(function(e){
     });
 });
 // }}}
-$('#notify .j-hide').click(function(e) {
+$('#notify .js-hide').click(function(e) {
     var notify = $(this).attr('data-notify');
     console.log(notify);
     var p = $(this).parentsUntil($('#notify'), '.message').remove();
@@ -62,11 +62,26 @@ $('div.vote div[data-url]').click(function(){
         }
     }, 'json');
 });
-$('a.j-follow').click(function(e) {
+$('a.js-follow').click(function(e) {
     _gaq.push(['_trackEvent', 'follow', 'follow', $(this).attr('url')]);
 });
-$('a.j-unfollow').click(function(e) {
+$('a.js-unfollow').click(function(e) {
     _gaq.push(['_trackEvent', 'follow', 'unfollow', $(this).attr('url')]);
+});
+$('a.js-preview').click(function(e) {
+    if (!$('#pannel').length) {
+        $('body').append('<div id="pannel"></div><div id="overlay"></div>');
+        $('#overlay').click(function(e) {
+            $(this).hide();
+            $('#pannel').css('right', -670);
+        });
+    }
+    $.sendPost('/preview', {'text': $('form textarea').val()}, function(data){
+        $('#overlay').show();
+        var html = '<div class="wrapper">' + data + '</div>';
+        $('#pannel').html(html).css('right', 0);
+    }, 'html');
+    return false;
 });
 // {{{ form behavior
 /*

@@ -201,7 +201,7 @@ textarea {
         &:last-of-type {
             border-bottom: 0 none;
         }
-        &:hover .j-hide {
+        &:hover .js-hide {
             position: absolute;
             top: 8px;
             right: 6px;
@@ -276,11 +276,13 @@ textarea {
     .vertical-linear-gradient(#80b2cd, #578fb2);
 }
 .node {
+    display: inline-block;
     color: #fff;
     background: rgba(0,0,0,0.3);
-    padding: 2px 8px;
+    padding: 1px 8px;
     border-radius: 3px;
     text-shadow: 0 0 0 #fff;
+    margin-bottom: 8px;
     &:hover {
         background: rgba(0,0,0,0.5);
         .opacity(0.8);
