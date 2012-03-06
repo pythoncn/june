@@ -193,6 +193,9 @@ class NotifyMixin(object):
 
         if user.id == self.current_user.id:
             return
+        if user.id == topic.user_id:
+            #avoid double notify
+            return
 
         link = '/topic/%s' % topic.id
         content = content[:200]
