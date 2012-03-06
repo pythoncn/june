@@ -6,11 +6,13 @@ from tornado.options import options
 from june.lib.handler import BaseHandler
 from june.lib.decorators import require_user
 from june.lib.util import ObjectDict
+from june.filters import find_mention
 from june.models import Node, Topic, Reply, Member
 from june.models import NodeMixin, TopicMixin
 
 
 class NewTopicHandler(BaseHandler, NodeMixin):
+    @require_user
     def get(self):
         nodes = self.cache.get('allnodes')
         if nodes is None:
@@ -182,11 +184,21 @@ class TopicHandler(BaseHandler, TopicMixin, NodeMixin):
         reply = Reply(content=content)
         reply.topic_id = id
         reply.user_id = self.current_user.id
+
+        # impact on topic
         topic.reply_count += 1
         topic.impact += self._calc_impact(topic)
+
+        #TODO impact on creator
+
         self.db.add(reply)
         self.db.add(topic)
+
+        # notifications
         self.create_notify(topic.user_id, topic, content)
+        for username in set(find_mention(content)):
+            self.create_mention(username, topic, content)
+
         self.db.commit()
         url = '/topic/%s' % id
         self.cache.set(key, url, 100)

@@ -53,4 +53,11 @@ def safe_markdown(text):
         return tpl % (name, code)
 
     text = pattern.sub(repl, text)
+    pattern = re.compile(r'@(\w+)')
+    text = pattern.sub(r'<a href="/member/\1">@\1</a>', text)
     return markdown.markdown(text)
+
+
+def find_mention(text):
+    regex = r'@(\w+)'
+    return re.findall(regex, text)

@@ -185,6 +185,24 @@ class NotifyMixin(object):
         self.db.add(notify)
         return notify
 
+    def create_mention(self, username, topic, content):
+        user = self.cache.get('member:%s' % str(username))
+        if user is None:
+            user = Member.query.filter_by(username=username).first()
+            self.cache.set('member:%s' % str(username), user, 600)
+
+        if user.id == self.current_user.id:
+            return
+
+        link = '/topic/%s' % topic.id
+        content = content[:200]
+        notify = Notify(
+            sender=self.current_user.id, receiver=user.id,
+            label=topic.title, link=link, content=content)
+        notify.type = 'mention'
+        self.db.add(notify)
+        return notify
+
     def get_unread_notify(self, user):
         key = 'notify:%s' % user.id
         notify = self.cache.get(key)
