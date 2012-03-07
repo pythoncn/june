@@ -45,9 +45,7 @@
     <p>{{node.description}}</p>
 </div>
 <div class="widget">
-    {% if current_user and current_user.reputation > node.limit_reputation and current_user.role > node.limit_role %}
     <a href="/node/{{node.slug}}/topic" class="ui-btn">{{_("New Topic")}}</a>
-    {% end %}
     {% if is_following %}
     <a href="/node/{{node.slug}}/unfollow" class="js-unfollow ui-btn">{{_("Unfollow")}}</a>
     {% else %}
