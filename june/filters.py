@@ -49,8 +49,7 @@ def safe_markdown(text, noclasses=False):
         #text = m.group(2)
         code = highlight(text, lexer, formatter)
         code = code.replace('\n\n', '\n&nbsp;\n').replace('\n', '<br />')
-        tpl = '\n\n<div class="code" data-syntax="%s">%s</div>\n\n'
-        return tpl % (name, code)
+        return '\n\n<div class="code">%s</div>\n\n' % code
 
     text = pattern.sub(repl, text)
     pattern = re.compile(r'@(\w+)')

@@ -10,6 +10,9 @@ from june.models import NodeMixin
 
 
 class SigninHandler(BaseHandler):
+    def head(self):
+        pass
+
     def get(self):
         if self.current_user:
             self.redirect(self.next_url)
@@ -87,6 +90,9 @@ class SignoutHandler(BaseHandler):
 
 
 class SignupHandler(BaseHandler, RecaptchaMixin):
+    def head(self):
+        pass
+
     def get(self):
         if self.current_user:
             return self.redirect(self.next_url)
@@ -220,6 +226,9 @@ class NotifyHandler(BaseHandler):
 
 
 class MemberHandler(BaseHandler, NodeMixin):
+    def head(self, name):
+        pass
+
     def get(self, name):
         user = self.get_user_by_name(name)
         if not user:

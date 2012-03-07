@@ -151,8 +151,17 @@ class TopicHandler(BaseHandler, TopicMixin, NodeMixin, PageMixin):
             self.send_error(404)
             return
         node = self.get_node_by_id(topic.node_id)
-        page = self._get_pagination(Reply.query.filter_by(topic_id=id),
-                                    perpage=30)
+        if self._get_page() == 1:
+            page = self.cache.get('reply-of-topic:%s' % str(id))
+            if page is None:
+                page = self._get_pagination(
+                    Reply.query.filter_by(topic_id=id),
+                    perpage=30)
+                self.cache.set('reply-of-topic:%s' % str(id), page, 600)
+        else:
+            page = self._get_pagination(
+                Reply.query.filter_by(topic_id=id),
+                perpage=30)
         page = ObjectDict(page)
         user_ids = [o.user_id for o in page.datalist]
         user_ids.append(topic.user_id)
@@ -207,6 +216,7 @@ class TopicHandler(BaseHandler, TopicMixin, NodeMixin, PageMixin):
         self.db.commit()
         url = '/topic/%s' % str(id)
         self.cache.set(key, url, 100)
+        self.cache.delete('reply-of-topic:%s' % str(id))
         self.redirect(url)
 
     def _calc_impact(self, topic):

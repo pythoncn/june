@@ -4,7 +4,7 @@
     <link href="{{ context.siteurl }}/{%if node%}{{node.slug}}/{%end%}feed" rel="self" />
     <link href="{{ context.siteurl }}{%if node%}/{{node.slug}}{%end%}" />
     <updated>{{xmldatetime(now)}}</updated>
-    <id>{{ context.siteurl }}</id>
+    <id>{{ context.siteurl }}/</id>
     {% for topic in topics %}
     <entry>
         <title type="html"><![CDATA[{{ topic.title }}]]></title>
@@ -13,7 +13,7 @@
         <link href="{{context.siteurl}}/topic/{{topic.id}}"/>
         <updated>{{ xmldatetime(topic.updated) }}</updated>
         <published>{{ xmldatetime(topic.created) }}</published>
-        <id>{{topic.id}}</id>
+        <id>{{context.siteurl}}/topic/{{topic.id}}</id>
         {% if node %}
         <category scheme="{{context.siteurl}}/node/{{node.slug}}" term="{{node.slug}}" label="{{ node.title}}" />
         {% end %}
