@@ -118,6 +118,8 @@ class Member(db.Model):
         return "%s$%s" % (salt, hsh)
 
     def check_password(self, raw):
+        if '$' not in self.password:
+            return False
         salt, hsh = self.password.split('$')
         verify = hashlib.sha1(salt + raw + options.password_secret).hexdigest()
         return verify == hsh
