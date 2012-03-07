@@ -75,7 +75,7 @@ class CreateTopicHandler(BaseHandler, NodeMixin):
         self.db.commit()
         url = '/topic/%d' % topic.id
         self.cache.set(key, url, 100)
-        self.cache.delete('homepage:-impact:1')
+        self.cache.delete_multi(['status', 'homepage:-impact:1'])
         self.redirect(url)
 
     def _check_permission(self, node):

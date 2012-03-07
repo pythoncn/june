@@ -63,10 +63,11 @@ class GoogleSigninHandler(BaseHandler, GoogleMixin):
         email = user["email"].lower()
         user = Member.query.filter_by(email=email).first()
         if not user:
-            user = Member(email)
+            user = self.create_user(email)
             user.password = '!'
             self.db.add(user)
             self.db.commit()
+            self.cache.delete('status')
 
         self.set_secure_cookie('user', '%s/%s' % (user.id, user.token))
         self.create_log(user.id)
@@ -146,7 +147,9 @@ class SignupHandler(BaseHandler, RecaptchaMixin):
         user.password = user.create_password(password)
         self.db.add(user)
         self.db.commit()
-        return self.redirect('/account/signin')
+        self.cache.delete('status')
+        self.set_secure_cookie('user', '%s/%s' % (user.id, user.token))
+        return self.redirect(self.next_url)
 
 
 class SettingHandler(BaseHandler):
@@ -175,6 +178,13 @@ class SettingHandler(BaseHandler):
             validate = False
             msg = ObjectDict(header='Website Error',
                              body="Website not valid, don't be evil")
+            self._context.message.append(msg)
+
+        user = self.get_user_by_name(username)
+        if user and user.id != self.current_user.id:
+            validate = False
+            msg = ObjectDict(header='Username Error',
+                             body="Username is registered by other member")
             self._context.message.append(msg)
 
         if not validate:
