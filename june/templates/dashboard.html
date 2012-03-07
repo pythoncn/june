@@ -4,15 +4,15 @@
 
 {% block main %}
 <div id="main">
-    <div class="cell">
-        <a href="/dashboard/node" class="ui-btn">{{ _("New Node") }}</a>
-        <a href="/dashboard/flushcache" class="ui-btn">{{ _("Flush Cache") }}</a>
-    </div>
     <div class="cell fn-clear">
         <form action="" class="fm">
             <input type="text" name="user" class="fm-text hsep" />
             <button type="submit" class="ui-btn">{{ _("Member Manage") }}</button>
         </form>
+    </div>
+    <div class="cell">
+        <a href="/dashboard/node" class="ui-btn">{{ _("New Node") }}</a>
+        <a href="/dashboard/flushcache" class="ui-btn">{{ _("Flush Cache") }}</a>
     </div>
     <div class="wrapper">
         {% for node in nodes %}

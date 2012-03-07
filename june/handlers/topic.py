@@ -107,7 +107,7 @@ class EditTopicHandler(BaseHandler, TopicMixin, NodeMixin):
             self.send_error(404)
             return
         if self._check_permission(topic) != 1:
-            self.redirect('/topic/%d' % id)
+            self.redirect('/topic/%s' % id)
             return
 
         title = self.get_argument('title', None)
@@ -123,7 +123,7 @@ class EditTopicHandler(BaseHandler, TopicMixin, NodeMixin):
         self.db.add(topic)
         self.db.commit()
         self.cache.delete('topic:%s' % topic.id)
-        self.redirect('/topic/%d' % topic.id)
+        self.redirect('/topic/%s' % topic.id)
 
     def _check_permission(self, topic):
         if self.current_user.role > 9:
@@ -132,7 +132,7 @@ class EditTopicHandler(BaseHandler, TopicMixin, NodeMixin):
             self.send_error(403)
             return 0
         timedel = datetime.utcnow() - topic.created
-        if timedel.days or timedel.seconds > 1200:
+        if timedel.days:
             # user can only edit a topic in 10 minutes
             msg = ObjectDict(header='Warning',
                              body="You can't edit this topic now")

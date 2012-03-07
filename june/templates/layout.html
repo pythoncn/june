@@ -50,6 +50,9 @@
                         <li><a class="first" href="/">{{ _("Home") }}</a></li>
                         <li><a href="/subscription">{{ _("Subscription") }}</a></li>
                         <li><a href="/nodes">{{ _("Nodes") }}</a></li>
+                        {% if current_user and current_user.role > 9 %}
+                        <li><a href="/dashboard">{{ _("Dashboard") }}</a></li>
+                        {% end %}
                     </ul>
                     <ul id="account">
                         {% if current_user %}
