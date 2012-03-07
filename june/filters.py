@@ -7,7 +7,7 @@ from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name, TextLexer
 
 
-def safe_markdown(text):
+def safe_markdown(text, noclasses=False):
     text = escape.xhtml_escape(text)
 
     # get link back
@@ -35,7 +35,7 @@ def safe_markdown(text):
     text = pattern.sub(make_link, text)
 
     pattern = re.compile(r'```(\w+)(.+?)```', re.S)
-    formatter = HtmlFormatter(noclasses=False)
+    formatter = HtmlFormatter(noclasses=noclasses)
 
     def repl(m):
         try:
@@ -61,3 +61,7 @@ def safe_markdown(text):
 def find_mention(text):
     regex = r'@(\w+)'
     return re.findall(regex, text)
+
+
+def xmldatetime(value):
+    return value.strftime('%Y-%m-%dT%H:%M:%SZ')

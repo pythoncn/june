@@ -4,6 +4,7 @@
 
 {% block afterstyle %}
 <meta name="description" content="{{node.description}}" />
+<link rel="alternate" type="application/atom+xml" href="/node/{{node.slug}}/feed" title="{{context.sitename}}:{{node.title}}" />
 {{ node.header or '' }}
 {% end %}
 
@@ -26,6 +27,7 @@
         </div>
     </div>
     {% end %}
+    {% if page.page_number > 1 %}
     <footer class="cell pagination">
         {% for i in page.pagelist %}
         {% if i == int(page.current_page) %}
@@ -35,6 +37,7 @@
         {% end %}
         {% end %}
     </footer>
+    {% end %}
 </div>
 {% end %}
 

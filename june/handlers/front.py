@@ -1,3 +1,4 @@
+import datetime
 import tornado.web
 from june.lib.handler import BaseHandler
 from june.lib.util import ObjectDict, PageMixin
@@ -57,6 +58,23 @@ class SubscriptionHandler(BaseHandler, NodeMixin, PageMixin):
         self.render('subscription.html', page=page, users=users, nodes=nodes)
 
 
+class SiteFeedHandler(BaseHandler):
+    def get(self):
+        self.set_header('Content-Type', 'text/xml; charset=utf-8')
+        html = self.cache.get('sitefeed')
+        if html is not None:
+            self.write(html)
+            return
+        topics = Topic.query.order_by('-id')[:20]
+        user_ids = (topic.user_id for topic in topics)
+        users = self.get_users(user_ids)
+        now = datetime.datetime.utcnow()
+        html = self.render_string('feed.xml', topics=topics, users=users,
+                                  node=None, now=now)
+        self.cache.set('sitefeed', html, 600)
+        self.write(html)
+
+
 class PreviewHandler(BaseHandler):
     def post(self):
         text = self.get_argument('text', '')
@@ -67,4 +85,5 @@ handlers = [
     ('/', HomeHandler),
     ('/subscription', SubscriptionHandler),
     ('/preview', PreviewHandler),
+    ('/feed', SiteFeedHandler),
 ]

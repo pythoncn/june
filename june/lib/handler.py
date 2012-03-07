@@ -7,7 +7,7 @@ from tornado import escape
 
 import june
 from june.models import MemberMixin, NotifyMixin
-from june.filters import safe_markdown
+from june.filters import safe_markdown, xmldatetime
 from june.lib.util import ObjectDict
 
 
@@ -95,6 +95,7 @@ class BaseHandler(RequestHandler, MemberMixin, NotifyMixin):
         self._context = ObjectDict()
         self._context.now = datetime.datetime.utcnow()
         self._context.sitename = options.sitename
+        self._context.siteurl = options.siteurl
         if hasattr(options, 'version'):
             self._context.version = options.version
         else:
@@ -112,6 +113,7 @@ class BaseHandler(RequestHandler, MemberMixin, NotifyMixin):
     def _prepare_filters(self):
         self._filters = ObjectDict()
         self._filters.markdown = safe_markdown
+        self._filters.xmldatetime = xmldatetime
         self._filters.get_user = self.get_user_by_id
 
     def is_system(self):

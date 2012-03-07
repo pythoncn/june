@@ -17,7 +17,7 @@
                 {% set node = nodes[topic.node_id] %}
                 <a class="node" href="/node/{{node.slug}}" style="{%if node.bgcolor%}background:{{node.bgcolor}};{% end %}{%if node.fgcolor%}color:{{node.fgcolor}}{%end%}">{{escape(node.title)}}</a>
                 •
-                <time class="updated" datetime="{{topic.created.strftime("%Y-%m-%dT%H:%M:%SZ")}}">{{topic.created.strftime("%b %d, %Y %H:%M")}}</time>
+                <time class="updated" datetime="{{xmldatetime(topic.created)}}">{{topic.created.strftime("%b %d, %Y %H:%M")}}</time>
                 •
                 {{topic.reply_count}} replies
             </div>

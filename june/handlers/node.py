@@ -1,3 +1,4 @@
+import datetime
 import tornado.web
 from june.lib.handler import BaseHandler
 from june.lib.util import ObjectDict, PageMixin
@@ -75,9 +76,31 @@ class NodeListHandler(BaseHandler, NodeMixin):
         self.render('node_list.html', nodes=nodes)
 
 
+class NodeFeedHandler(BaseHandler, NodeMixin):
+    def get(self, slug):
+        self.set_header('Content-Type', 'text/xml; charset=utf-8')
+        node = self.get_node_by_slug(slug)
+        if not node:
+            self.send_error(404)
+            return
+        html = self.cache.get('nodefeed:%s' % str(slug))
+        if html is not None:
+            self.write(html)
+            return
+        topics = Topic.query.filter_by(node_id=node.id).order_by('-id')[:20]
+        user_ids = (topic.user_id for topic in topics)
+        users = self.get_users(user_ids)
+        now = datetime.datetime.utcnow()
+        html = self.render_string('feed.xml', topics=topics, users=users,
+                                  node=node, now=now)
+        self.cache.set('nodefeed:%s' % str(slug), html, 600)
+        self.write(html)
+
+
 handlers = [
     ('/nodes', NodeListHandler),
     ('/node/(\w+)', NodeHandler),
     ('/node/(\w+)/follow', FollowNodeHandler),
     ('/node/(\w+)/unfollow', UnfollowNodeHandler),
+    ('/node/(\w+)/feed', NodeFeedHandler),
 ]
