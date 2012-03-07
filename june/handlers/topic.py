@@ -85,6 +85,7 @@ class CreateTopicHandler(BaseHandler, NodeMixin):
             return False
         if self.current_user.role < node.limit_role:
             return False
+        return True
 
 
 class EditTopicHandler(BaseHandler, TopicMixin, NodeMixin):
@@ -142,6 +143,9 @@ class EditTopicHandler(BaseHandler, TopicMixin, NodeMixin):
 
 
 class TopicHandler(BaseHandler, TopicMixin, NodeMixin, PageMixin):
+    def head(self, id):
+        pass
+
     def get(self, id):
         topic = self.get_topic_by_id(id)
         if not topic:

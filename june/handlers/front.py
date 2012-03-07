@@ -7,6 +7,9 @@ from june.filters import safe_markdown
 
 
 class HomeHandler(BaseHandler, NodeMixin, PageMixin):
+    def head(self):
+        pass
+
     def get(self):
         key = 'homepage:%s:%s' % (self._get_order(), self._get_page())
         page = self.cache.get(key)
@@ -55,6 +58,9 @@ class SubscriptionHandler(BaseHandler, NodeMixin, PageMixin):
 
 
 class NodeHandler(BaseHandler, NodeMixin, PageMixin):
+    def head(self, slug):
+        pass
+
     def get(self, slug):
         node = self.get_node_by_slug(slug)
         if not node:
@@ -109,6 +115,9 @@ class UnfollowNodeHandler(BaseHandler, NodeMixin):
 
 
 class NodeListHandler(BaseHandler, NodeMixin):
+    def head(self):
+        pass
+
     def get(self):
         nodes = self.cache.get('allnodes')
         if nodes is None:
