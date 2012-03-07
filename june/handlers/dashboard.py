@@ -172,7 +172,7 @@ handlers = [
     ('/dashboard', Dashboard),
     ('/dashboard/node', CreateNode),
     ('/dashboard/node/(\w+)', EditNode),
-    ('/dashboard/member/(\w+)', EditMember),
+    ('/dashboard/member/(.*)', EditMember),
     ('/dashboard/topic/(\d+)', EditTopic),
     ('/dashboard/flushcache', FlushCache),
 ]

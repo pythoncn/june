@@ -79,13 +79,12 @@ class CreateTopicHandler(BaseHandler, NodeMixin):
         self.redirect(url)
 
     def _check_permission(self, node):
-        if self.current_user.role > 9:
+        user = self.current_user
+        if user.role > 9:
             return True
-        if self.current_user.reputation < node.limit_reputation:
+        if user.reputation < node.limit_reputation:
             return False
-        if self.current_user.role < node.limit_role:
-            return False
-        return True
+        return user.role >= node.limit_role
 
 
 class EditTopicHandler(BaseHandler, TopicMixin, NodeMixin):

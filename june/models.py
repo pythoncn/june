@@ -144,6 +144,7 @@ class MemberMixin(object):
 
     def create_user(self, email):
         username = email.split('@')[0].lower()
+        username = username.replace('.', '').replace('-', '')
         member = self.get_user_by_name(username)
         if member:
             username = username + create_token(5)
