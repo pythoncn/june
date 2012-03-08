@@ -76,7 +76,9 @@ class CreateTopicHandler(BaseHandler, NodeMixin):
         self.db.commit()
         url = '/topic/%d' % topic.id
         self.cache.set(key, url, 100)
-        self.cache.delete_multi(['status', 'homepage:-impact:1'])
+        key1 = 'ui$topiclist:0:1:-impact'
+        key2 = 'ui$nodetopics:%s:1:-impact' % node.id
+        self.cache.delete_multi(['status', key1, key2])
         self.redirect(url)
 
     def _check_permission(self, node):
@@ -385,6 +387,70 @@ class ReplyModule(UIModule, PageMixin, MemberMixin):
                                   page=page, users=users)
 
 
+class TopicListModule(UIModule, MemberMixin, NodeMixin, PageMixin):
+    def render(self, user_id=0):
+        order = self._get_order()
+        p = self._get_page()
+        key = 'ui$topiclist:%s:%s:%s' % (user_id, p, order)
+        html = self.handler.cache.get(key)
+        if html is not None:
+            return html
+
+        if user_id:
+            node_ids = self.get_user_follow_nodes(self.current_user.id)
+            if not node_ids:
+                msg = self.handler.locale.translate(
+                    "You need follow some nodes")
+                return '<div class="cell">%s</div>' % msg
+
+            if len(node_ids) == 1:
+                # for better performance
+                q = Topic.query.filter_by(node_id=node_ids[0]).order_by(order)
+            else:
+                q = Topic.query.filter_by(node_id__in=set(node_ids))\
+                        .order_by(order)
+        else:
+            q = Topic.query.order_by(self._get_order())
+
+        page = ObjectDict(self._get_pagination(q))
+
+        user_ids = []
+        node_ids = []
+        for topic in page.datalist:
+            user_ids.append(topic.user_id)
+            node_ids.append(topic.node_id)
+        users = self.get_users(user_ids)
+        nodes = self.get_nodes(node_ids)
+        html = self.render_string('module/topic_list.html', page=page,
+                                  users=users, nodes=nodes)
+        self.handler.cache.set(key, html, 60)
+        return html
+
+
+class NodeTopicsModule(UIModule, MemberMixin, PageMixin):
+    def render(self, node_id):
+        order = self._get_order()
+        p = self._get_page()
+        key = 'ui$nodetopics:%s:%s:%s' % (node_id, p, order)
+        html = self.handler.cache.get(key)
+        if html is not None:
+            return html
+
+        q = Topic.query.filter_by(node_id=node_id).order_by(order)
+        page = ObjectDict(self._get_pagination(q))
+
+        user_ids = []
+        for topic in page.datalist:
+            user_ids.append(topic.user_id)
+        users = self.get_users(user_ids)
+        html = self.render_string('module/topic_list.html', page=page,
+                                  users=users, nodes=None)
+        self.handler.cache.set(key, html, 600)
+        return html
+
+
 ui_modules = {
     'ReplyModule': ReplyModule,
+    'TopicListModule': TopicListModule,
+    'NodeTopicsModule': NodeTopicsModule,
 }

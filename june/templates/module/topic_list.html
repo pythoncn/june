@@ -1,0 +1,34 @@
+{% for topic in page.datalist %}
+<div class="js-snippet cell" data-url="/topic/{{topic.id}}">
+    {% set user = users[topic.user_id] %}
+    <img class="avatar" src="{{user.get_avatar(48)}}" width="48" height="48" />
+    <div class="fn-wrap">
+        <div class="cell-content">
+            <h2 class="entry-title"><a href="/topic/{{topic.id}}">{{escape(topic.title)}}</a></h2>
+        </div>
+        <div class="cell-footer">
+            <a href="/member/{{user.username}}">{{user.username}}</a>
+            {% if nodes %}
+            {% set node = nodes[topic.node_id] %}
+            <a class="node" href="/node/{{node.slug}}" style="{%if node.bgcolor%}background:{{node.bgcolor}};{% end %}{%if node.fgcolor%}color:{{node.fgcolor}}{%end%}">{{escape(node.title)}}</a>
+            •
+            {% end %}
+            <time class="updated" datetime="{{xmldatetime(topic.created)}}">{{topic.created.strftime("%b %d, %Y %H:%M")}}</time>
+            •
+            {{topic.reply_count}} replies
+        </div>
+    </div>
+</div>
+{% end %}
+{% if page.page_number > 1 %}
+<footer class="cell pagination">
+    {% for i in page.pagelist %}
+    {% if i == int(page.current_page) %}
+    <span href="?p={{i}}">{{i}}</span>
+    {% else %}
+    <a href="?p={{i}}">{{i}}</a>
+    {% end %}
+    {% end %}
+</footer>
+{% end %}
+

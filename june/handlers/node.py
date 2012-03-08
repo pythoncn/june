@@ -1,7 +1,7 @@
 import datetime
 import tornado.web
 from june.lib.handler import BaseHandler
-from june.lib.util import ObjectDict, PageMixin
+from june.lib.util import PageMixin
 from june.models import NodeMixin
 from june.models import Node, Topic
 
@@ -15,25 +15,13 @@ class NodeHandler(BaseHandler, NodeMixin, PageMixin):
         if not node:
             self.send_error(404)
             return
-        key = 'node:%s:%s:%s' % (slug, self._get_order(), self._get_page())
-        key = str(key)
-        page = self.cache.get(key)
-        if page is None:
-            q = Topic.query.filter_by(node_id=node.id)
-            page = self._get_pagination(q.order_by(self._get_order()),
-                                        node.topic_count)
-            self.cache.set(key, page, 60)
-        page = ObjectDict(page)
 
-        user_ids = (topic.user_id for topic in page.datalist)
-        users = self.get_users(user_ids)
         if self.current_user:
             is_following = self.is_user_follow_node(
                 self.current_user.id, node.id)
         else:
             is_following = False
-        self.render('node.html', node=node, page=page,
-                    users=users, is_following=is_following)
+        self.render('node.html', node=node, is_following=is_following)
 
 
 class FollowNodeHandler(BaseHandler, NodeMixin):
@@ -45,6 +33,9 @@ class FollowNodeHandler(BaseHandler, NodeMixin):
             return
         self.follow_node(node.id)
         self.db.commit()
+        key1 = 'ui$topiclist:%s:1:-impact' % self.current_user.id
+        key2 = 'follownode:%s' % self.current_user.id
+        self.cache.delete_multi([key1, key2])
         self.redirect('/node/%s' % node.slug)
 
 
@@ -59,7 +50,9 @@ class UnfollowNodeHandler(BaseHandler, NodeMixin):
                 (self.current_user.id, node.id)
         self.db.execute(sql)
         self.db.commit()
-        self.cache.delete('follownode:%s' % self.current_user.id)
+        key1 = 'ui$topiclist:%s:1:-impact' % self.current_user.id
+        key2 = 'follownode:%s' % self.current_user.id
+        self.cache.delete_multi([key1, key2])
         self.redirect('/node/%s' % node.slug)
 
 
