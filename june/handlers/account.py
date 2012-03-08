@@ -235,9 +235,7 @@ class MemberHandler(BaseHandler, NodeMixin):
             self.send_error(404)
             return
         topics = Topic.query.filter_by(user_id=user.id).order_by('-id')[:20]
-        node_ids = self.get_user_follow_nodes(user.id)
-        nodes = self.get_nodes(node_ids)
-        self.render('member.html', user=user, topics=topics, nodes=nodes)
+        self.render('member.html', user=user, topics=topics)
 
 
 handlers = [

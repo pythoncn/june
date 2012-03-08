@@ -19,16 +19,11 @@
         </div>
     </div>
 </div>
-{% end %}
 
-{#
 <div class="widget">
     <h4 class="widget-title">{{ _("Following") }}</h4>
     <div class="fn-wrap">
-        {% for node in nodes.itervalues() %}
-        <a class="node" href="/node/{{node.slug}}" style="{%if node.bgcolor%}background:{{node.bgcolor}};{% end %}{%if node.fgcolor%}color:{{node.fgcolor}}{%end%}">{{escape(node.title)}}</a>
-        {% end %}
+        {% module FollowedNodesModule(current_user.id) %}
     </div>
 </div>
 {% end %}
-#}

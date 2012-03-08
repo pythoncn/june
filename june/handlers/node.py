@@ -35,7 +35,8 @@ class FollowNodeHandler(BaseHandler, NodeMixin):
         self.db.commit()
         key1 = 'ui$topiclist:%s:1:-impact' % self.current_user.id
         key2 = 'follownode:%s' % self.current_user.id
-        self.cache.delete_multi([key1, key2])
+        key3 = 'ui$follownode:%s' % self.current_user.id
+        self.cache.delete_multi([key1, key2, key3])
         self.redirect('/node/%s' % node.slug)
 
 
@@ -52,7 +53,8 @@ class UnfollowNodeHandler(BaseHandler, NodeMixin):
         self.db.commit()
         key1 = 'ui$topiclist:%s:1:-impact' % self.current_user.id
         key2 = 'follownode:%s' % self.current_user.id
-        self.cache.delete_multi([key1, key2])
+        key3 = 'ui$follownode:%s' % self.current_user.id
+        self.cache.delete_multi([key1, key2, key3])
         self.redirect('/node/%s' % node.slug)
 
 
@@ -97,3 +99,26 @@ handlers = [
     ('/node/(\w+)/unfollow', UnfollowNodeHandler),
     ('/node/(\w+)/feed', NodeFeedHandler),
 ]
+
+
+class FollowedNodesModule(tornado.web.UIModule, NodeMixin):
+    def render(self, user_id):
+        key = 'ui$follownode:%s' % str(user_id)
+        html = self.handler.cache.get(key)
+        if html is not None:
+            return html
+        node_ids = self.get_user_follow_nodes(user_id)
+        if not node_ids:
+            return ''
+        nodes = self.get_nodes(node_ids)
+        html = ''
+        for node in nodes.itervalues():
+            html += self.render_string('module/node.html', node=node)
+
+        self.handler.cache.set(key, html, 600)
+        return html
+
+
+ui_modules = {
+    'FollowedNodesModule': FollowedNodesModule,
+}
