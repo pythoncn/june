@@ -3,12 +3,13 @@ import math
 from datetime import datetime
 from tornado.escape import utf8
 from tornado.options import options
+from tornado.web import UIModule
 from june.lib.handler import BaseHandler
 from june.lib.decorators import require_user
 from june.lib.util import ObjectDict, PageMixin
 from june.filters import find_mention
 from june.models import Node, Topic, Reply, Member
-from june.models import NodeMixin, TopicMixin
+from june.models import NodeMixin, TopicMixin, MemberMixin
 
 
 class NewTopicHandler(BaseHandler, NodeMixin):
@@ -151,29 +152,15 @@ class TopicHandler(BaseHandler, TopicMixin, NodeMixin, PageMixin):
             self.send_error(404)
             return
         node = self.get_node_by_id(topic.node_id)
-        if self._get_page() == 1:
-            page = self.cache.get('reply-of-topic:%s' % str(id))
-            if page is None:
-                page = self._get_pagination(
-                    Reply.query.filter_by(topic_id=id),
-                    perpage=30)
-                self.cache.set('reply-of-topic:%s' % str(id), page, 600)
-        else:
-            page = self._get_pagination(
-                Reply.query.filter_by(topic_id=id),
-                perpage=30)
-        page = ObjectDict(page)
-        user_ids = [o.user_id for o in page.datalist]
-        user_ids.append(topic.user_id)
-        user_ids.extend(topic.up_users)
+        user_ids = list(topic.up_users)
         user_ids.extend(topic.down_users)
+        user_ids.append(topic.user_id)
         users = self.get_users(user_ids)
         if self.is_ajax():
             self.render('snippet/topic.html', topic=topic, node=node,
-                        page=page, users=users)
+                        users=users)
             return
-        self.render('topic.html', topic=topic, node=node, page=page,
-                    users=users)
+        self.render('topic.html', topic=topic, node=node, users=users)
 
     @require_user
     def post(self, id):
@@ -216,7 +203,7 @@ class TopicHandler(BaseHandler, TopicMixin, NodeMixin, PageMixin):
         self.db.commit()
         url = '/topic/%s' % str(id)
         self.cache.set(key, url, 100)
-        self.cache.delete('reply-of-topic:%s' % str(id))
+        self.cache.delete('ui$reply:%s' % str(id))
         self.redirect(url)
 
     def _calc_impact(self, topic):
@@ -373,3 +360,31 @@ handlers = [
     ('/topic/(\d+)/down', DownTopicHandler),
     ('/topic/(\d+)/edit', EditTopicHandler),
 ]
+
+
+class ReplyModule(UIModule, PageMixin, MemberMixin):
+    def render(self, topic):
+        if self._get_page() == 1:
+            key = 'ui$reply:%s' % topic.id
+            html = self.handler.cache.get(key)
+            if html is not None:
+                return html
+            html = self._render_html(topic.id)
+            self.handler.cache.set(key, html, 600)
+            return html
+        return self._render_html(topic.id)
+
+    def _render_html(self, topic_id):
+        page = self._get_pagination(
+            Reply.query.filter_by(topic_id=topic_id),
+            perpage=30)
+        page = ObjectDict(page)
+        user_ids = [o.user_id for o in page.datalist]
+        users = self.get_users(user_ids)
+        return self.render_string('module/reply_list.html',
+                                  page=page, users=users)
+
+
+ui_modules = {
+    'ReplyModule': ReplyModule,
+}

@@ -31,12 +31,16 @@ def delay_call(func, *arg, **kwargs):
 
 class PageMixin(object):
     def _get_order(self):
+        if not hasattr(self, 'get_argument'):
+            self.get_argument = self.handler.get_argument
         order = self.get_argument('o', '0')
         if order == '1':
             return '-id'
         return '-impact'
 
     def _get_page(self):
+        if not hasattr(self, 'get_argument'):
+            self.get_argument = self.handler.get_argument
         page = self.get_argument('p', '1')
         try:
             return int(page)

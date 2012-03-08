@@ -1,0 +1,32 @@
+<div class="replies">
+    {% for reply in page.datalist %}
+
+    {% if reply.user_id in users %}
+    {% set user = users[reply.user_id] %}
+    <div id="reply-{{reply.id}}" class="cell fn-clear">
+        <img class="avatar" src="{{user.get_avatar(36)}}" width="36" height="36" />
+        <div class="fn-wrap">
+            <div class="cell-header">
+                <a href="/member/{{escape(user.username)}}">{{escape(user.username)}}</a>
+                at <time class="updated" datetime="{{reply.created.strftime("%Y-%m-%dT%H:%M:%SZ")}}">{{reply.created.strftime("%b %d, %Y %H:%M")}}</time>
+            </div>
+            <div class="cell-content">
+                {{ markdown(reply.content) }}
+            </div>
+        </div>
+    </div>
+    {% end %}
+    {% end %}
+
+    {% if page.page_number > 1 %}
+    <footer class="cell pagination">
+        {% for i in page.pagelist %}
+        {% if i == int(page.current_page) %}
+        <span href="?p={{i}}">{{i}}</span>
+        {% else %}
+        <a href="?p={{i}}">{{i}}</a>
+        {% end %}
+        {% end %}
+    </footer>
+    {% end %}
+</div>

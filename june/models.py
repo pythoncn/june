@@ -59,7 +59,11 @@ def create_token(length=16):
     return salt
 
 
-def get_cache_list(cache, model, id_list, key_prefix, time=600):
+def get_cache_list(handler, model, id_list, key_prefix, time=600):
+    if hasattr(handler, 'cache'):
+        cache = handler.cache
+    else:
+        cache = handler.handler.cache
     if not id_list:
         return {}
     id_list = set(id_list)
@@ -142,7 +146,7 @@ class MemberMixin(object):
         return Member.query.filter_by(username=name).first()
 
     def get_users(self, id_list):
-        return get_cache_list(self.cache, Member, id_list, 'member:')
+        return get_cache_list(self, Member, id_list, 'member:')
 
     def create_user(self, email):
         username = email.split('@')[0].lower()
@@ -254,7 +258,7 @@ class NodeMixin(object):
         return Node.query.filter_by(slug=slug).first()
 
     def get_nodes(self, id_list):
-        return get_cache_list(self.cache, Node, id_list, 'node:')
+        return get_cache_list(self, Node, id_list, 'node:')
 
     def follow_node(self, node_id):
         if not self.current_user:
