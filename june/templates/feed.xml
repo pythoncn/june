@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title><![CDATA[{{ context.sitename }}{%if node%}:{{node.title}}{%end%}]]></title>
-    <link href="{{ context.siteurl }}/{%if node%}{{node.slug}}/{%end%}feed" rel="self" />
-    <link href="{{ context.siteurl }}{%if node%}/{{node.slug}}{%end%}" />
+    <link href="{{ context.siteurl }}/{%if node%}node/{{node.slug}}/{%end%}feed" rel="self" />
+    <link href="{{ context.siteurl }}{%if node%}/node/{{node.slug}}{%end%}" />
     <updated>{{xmldatetime(now)}}</updated>
     <id>{{ context.siteurl }}/</id>
     {% for topic in topics %}
