@@ -1,5 +1,14 @@
+# Makefile for June Project
+#
+# Project Owner: lepture
+#
+
+CONFIG = tmp.config
+ProjectServer = linode.lepture.com:/home/lepture/project/assets.lepture.com/june
+StaticServer = linode.lepture.com:/home/lepture/project/june
+
 server:
-	june/app.py --config=tmp.config
+	june/app.py --config=$(CONFIG)
 
 less:
 	if [ ! -d static/css ]; then mkdir -p static/css; fi
@@ -16,11 +25,15 @@ copyimg:
 
 copyjs:
 	if [ ! -d static/js ]; then mkdir static/js; fi
-	cp -r assets/js/* static/js/
+	cp -r assets/js/*.js static/js/
 
-upload:
-	rsync -av --del static/* linode.lepture.com:/home/lepture/project/assets.lepture.com/june
-	rsync -av --del --exclude=*.pyc june/* linode.lepture.com:/home/lepture/project/june
+upload_static:
+	rsync -av --del static/* $(ProjectServer)
+
+upload_py:
+	rsync -av --del --exclude=*.pyc june/* $(StaticServer)
+
+upload: upload_static upload_py
 
 clean:
 	rm -fr build
