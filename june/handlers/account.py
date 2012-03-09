@@ -6,7 +6,7 @@ from june.lib import validators
 from june.lib.util import ObjectDict
 from june.auth.recaptcha import RecaptchaMixin
 from june.models import Member, MemberLog, Topic, Notify
-from june.models import NodeMixin
+from june.models import NodeMixin, MemberMixin
 
 
 class SigninHandler(BaseHandler):
@@ -247,3 +247,21 @@ handlers = [
     ('/account/notify', NotifyHandler),
     ('/member/(\w+)', MemberHandler),
 ]
+
+
+class MemberModule(tornado.web.UIModule, MemberMixin):
+    def render(self, user):
+        key = 'notify:%s' % user.id
+        notify = self.handler.cache.get(key)
+        if notify is None:
+            q = Notify.query.filter_by(receiver=user.id)
+            notify = q.filter_by(created__gt=user.last_notify).count()
+            self.handler.cache.set(key, notify, 600)
+        html = self.render_string('module/member.html',
+                                  user=user, notify=notify)
+        return html
+
+
+ui_modules = {
+    'MemberModule': MemberModule,
+}

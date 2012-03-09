@@ -16,3 +16,4 @@ ui_modules = {}
 ui_modules.update(topic.ui_modules)
 ui_modules.update(node.ui_modules)
 ui_modules.update(front.ui_modules)
+ui_modules.update(account.ui_modules)

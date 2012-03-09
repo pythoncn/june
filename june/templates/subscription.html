@@ -9,17 +9,7 @@
 {% end %}
 
 {% block sidebar %}
-<div class="widget fn-clear">
-    <h4 class="widget-title">{{ _("Welcome") }}</h4>
-    <a class="avatar fn-left" href="/member/{{current_user.username}}" tabindex="-1"><img src="{{current_user.get_avatar(48)}}" alt="avatar" width="48" height="48" /></a>
-    <div class="fn-wrap">
-        <a href="/member/{{current_user.username}}">{{current_user.username}}</a>
-        <div class="meta">
-            {{ _("Reputation") }}: {{current_user.reputation}}
-        </div>
-    </div>
-</div>
-
+{% module MemberModule(current_user) %}
 <div class="widget">
     <h4 class="widget-title">{{ _("Following") }}</h4>
     <div class="fn-wrap">

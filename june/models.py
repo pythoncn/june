@@ -200,16 +200,6 @@ class NotifyMixin(object):
         self.db.add(notify)
         return notify
 
-    def get_unread_notify(self, user):
-        key = 'notify:%s' % user.id
-        notify = self.cache.get(key)
-        if notify:
-            return notify
-        q = Notify.query.filter_by(receiver=user.id)
-        notify = q.filter_by(created__gt=user.last_notify).count()
-        self.cache.set(key, notify, 600)
-        return notify
-
 
 class Node(db.Model):
     title = Column(String(200), nullable=False)
