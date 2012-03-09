@@ -99,11 +99,13 @@ class SignupHandler(BaseHandler, RecaptchaMixin):
         email = self.get_argument('email', None)
         password1 = self.get_argument('password1', None)
         password2 = self.get_argument('password2', None)
-        validate = True
         if not (email and password1 and password2):
-            validate = False
             self.create_message('Form Error', 'Please fill the required field')
+            recaptcha = self.recaptcha_render()
+            self.render('signup.html', email=email, recaptcha=recaptcha)
+            return
 
+        validate = True
         if not validators.email(email):
             validate = False
             self.create_message('Form Error', 'Not a valid email address')
