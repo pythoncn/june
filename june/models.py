@@ -154,9 +154,7 @@ class MemberMixin(object):
         member = self.get_user_by_name(username)
         if member:
             username = username + create_token(5)
-            user = Member(email, username=username)
-        else:
-            user = Member(email)
+        user = Member(email, username=username)
         return user
 
 
