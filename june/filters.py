@@ -34,7 +34,8 @@ def safe_markdown(text, noclasses=False):
 
     text = pattern.sub(make_link, text)
 
-    pattern = re.compile(r'```(\w+)(.+?)```', re.S)
+    pattern = re.compile(r'^```(\w+)(?:\n|\r\n|\r)(.*?)(?:\n|\r\n|\r)```',
+                         re.S | re.M)
     formatter = HtmlFormatter(noclasses=noclasses)
 
     def repl(m):
