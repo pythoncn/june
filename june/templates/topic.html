@@ -111,3 +111,9 @@
     </div>
 </div>
 {% end %}
+
+{% block afterjs %}
+{% if node.footer %}
+{{ node.footer }}
+{% end %}
+{% end %}
