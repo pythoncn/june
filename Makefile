@@ -17,6 +17,8 @@ less:
 compilejs:
 	if [ ! -d static/js ]; then mkdir static/js; fi
 	uglifyjs -nc assets/js/lib/jquery.js > static/js/lib.js
+	uglifyjs -nc assets/js/lib/jquery.caret.js >> static/js/lib.js
+	uglifyjs -nc assets/js/lib/jquery.atwho.js >> static/js/lib.js
 	uglifyjs -nc assets/js/lib/jquery.timeago.js >> static/js/lib.js
 
 copyimg:

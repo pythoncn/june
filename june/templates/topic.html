@@ -113,6 +113,14 @@
 {% end %}
 
 {% block afterjs %}
+<script type="text/javascript">
+    var names = [];
+    $('#main div.cell-header>a').each(function(i, o){
+        var name = $(o).text();
+        if (names.indexOf(name) == -1) names.push(name);
+    });
+    $('textarea').atWho({data:names})
+</script>
 {% if node.footer %}
 {{ node.footer }}
 {% end %}
