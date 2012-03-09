@@ -62,11 +62,12 @@ def hello():
     var converter = new Showdown.converter()
     var textarea = $('#main textarea');
     if (textarea.val()) {
-        var html = converter.makeHtml(textarea.val());
+        var txt = textarea.val().replace('<', '&lt;').replace('>', '&gt;');
+        var html = converter.makeHtml(txt);
         $('#markdown-preview').html(html);
     }
     textarea.keyup(function(){
-        var txt = $(this).val();
+        var txt = $(this).val().replace('<', '&lt;').replace('>', '&gt;');
         var html = converter.makeHtml(txt);
         $('#markdown-preview').html(html);
     });

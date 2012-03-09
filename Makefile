@@ -21,6 +21,9 @@ compilejs:
 	uglifyjs -nc assets/js/lib/jquery.atwho.js >> static/js/lib.js
 	uglifyjs -nc assets/js/lib/jquery.timeago.js >> static/js/lib.js
 
+compileshowdown:
+	uglifyjs -nc assets/js/lib/showdown.js > static/js/lib/showdown.js
+
 copyimg:
 	if [ ! -d static/img ]; then mkdir static/img; fi
 	cp -r assets/img/* static/img/

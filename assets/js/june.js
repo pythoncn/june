@@ -13,6 +13,7 @@ jQuery.sendPost = function(url, args, callback, dataType) {
     }
 }
 $('time.updated').timeago();
+$('#body').height($(document).height());
 _gaq = window._gaq || [];
 // {{{ pannel behavior
 var _href = location.href;
