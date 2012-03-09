@@ -20,7 +20,10 @@
                     <a href="/member/{{escape(user.username)}}">{{escape(user.username)}}</a>
                     •
                     <time class="updated" datetime="{{xmldatetime(topic.created)}}">{{topic.created.strftime("%b %d, %Y %H:%M")}}</time>
+                    • {{topic.hits }} {{_("Hits")}}
+                    {% if current_user and current_user.role > 9 %}
                     • {{topic.impact}}
+                    {% end %}
                 </div>
             </div>
             {% if current_user %}

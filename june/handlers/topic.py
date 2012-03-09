@@ -149,7 +149,7 @@ class TopicHandler(BaseHandler, TopicMixin, NodeMixin, PageMixin):
         pass
 
     def get(self, id):
-        topic = self.get_topic_by_id(id)
+        topic = self._hit_topic(id)
         if not topic:
             self.send_error(404)
             return
@@ -163,6 +163,29 @@ class TopicHandler(BaseHandler, TopicMixin, NodeMixin, PageMixin):
                         users=users)
             return
         self.render('topic.html', topic=topic, node=node, users=users)
+
+    def _hit_topic(self, id):
+        key = 'hit$topic:%s' % str(id)
+        count = self.cache.get(key)
+        if count is None:
+            count = 1
+            self.cache.set(key, 1)
+        else:
+            self.cache.incr(key)
+        if count > 10:
+            topic = self.db.query(Topic).filter_by(id=id).first()
+            if not topic:
+                return None
+            self.cache.set(key, 1)
+            topic.hits += 10
+            topic.impact += 10
+            self.db.add(topic)
+            self.db.commit()
+            self.cache.delete('topic:%s' % str(id))
+        else:
+            topic = self.get_topic_by_id(id)
+            topic.hits = topic.hits + count
+        return topic
 
     @require_user
     def post(self, id):
