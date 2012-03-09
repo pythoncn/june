@@ -100,6 +100,10 @@ class BaseHandler(RequestHandler, MemberMixin):
             self._context.version = options.version
         else:
             self._context.version = june.__version__
+        if hasattr(options, 'sitefeed'):
+            self._context.sitefeed = options.sitefeed
+        else:
+            self._context.sitefeed = '/feed'
         self._context.debug = options.debug
         self._context.ga = options.ga
         self._context.message = []

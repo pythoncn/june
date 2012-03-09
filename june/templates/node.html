@@ -4,8 +4,8 @@
 
 {% block afterstyle %}
 <meta name="description" content="{{node.description}}" />
-<link rel="alternate" type="application/atom+xml" href="/node/{{node.slug}}/feed" title="{{context.sitename}}:{{node.title}}" />
 {{ node.header or '' }}
+<link rel="alternate" type="application/atom+xml" href="/node/{{node.slug}}/feed" title="{{context.sitename}}:{{node.title}}" />
 {% end %}
 
 {% block main %}
@@ -28,13 +28,9 @@
     <a href="/node/{{node.slug}}/follow" class="js-follow ui-btn">{{_("Follow")}}</a>
     {% end %}
 </div>
-{% if node.sidebar %}
-{{ node.sidebar }}
-{% end %}
+{{ node.sidebar or '' }}
 {% end %}
 
 {% block afterjs %}
-{% if node.footer %}
-{{ node.footer }}
-{% end %}
+{{ node.footer or '' }}
 {% end %}

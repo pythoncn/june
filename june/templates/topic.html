@@ -121,7 +121,5 @@
     });
     $('textarea').atWho({data:names})
 </script>
-{% if node.footer %}
-{{ node.footer }}
-{% end %}
+{{ node.footer or '' }}
 {% end %}
