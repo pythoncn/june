@@ -9,7 +9,7 @@ from june.lib.decorators import require_user
 from june.lib.util import ObjectDict, PageMixin
 from june.filters import find_mention
 from june.models import Node, Topic, Reply, Member
-from june.models import NodeMixin, TopicMixin, MemberMixin
+from june.models import NodeMixin, TopicMixin, MemberMixin, NotifyMixin
 
 
 class NewTopicHandler(BaseHandler, NodeMixin):
@@ -31,10 +31,9 @@ class CreateTopicHandler(BaseHandler, NodeMixin):
             self.send_error(404)
             return
         if not self._check_permission(node):
-            msg = ObjectDict(
-                header='Warning',
-                body="You have no permission to create a topic in this node")
-            self._context.message.append(msg)
+            self.create_message(
+                'Warning',
+                "You have no permission to create a topic in this node")
             self.render('topic_form.html', topic=None, node=node)
             return
         self.render('topic_form.html', topic=None, node=node)
@@ -48,16 +47,13 @@ class CreateTopicHandler(BaseHandler, NodeMixin):
         title = self.get_argument('title', None)
         content = self.get_argument('content', None)
         if not (title and content):
-            msg = ObjectDict(header='Form Error',
-                             body='Please fill the required field')
-            self._context.message.append(msg)
+            self.create_message('Form Error', 'Please fill the required field')
             self.render('topic_form.html', topic=None, node=node)
             return
         if not self._check_permission(node):
-            msg = ObjectDict(
-                header='Warning',
-                body="You have no permission to create a topic in this node")
-            self._context.message.append(msg)
+            self.create_message(
+                'Warning',
+                "You have no permission to create a topic in this node")
             self.render('topic_form.html', topic=None, node=node)
             return
 
@@ -116,9 +112,7 @@ class EditTopicHandler(BaseHandler, TopicMixin, NodeMixin):
         title = self.get_argument('title', None)
         content = self.get_argument('content', None)
         if not (title and content):
-            msg = ObjectDict(header='Form Error',
-                             body='Please fill the required field')
-            self._context.message.append(msg)
+            self.create_message('Form Error', 'Please fill the required field')
             self.render('topic_form.html')
             return
         topic.title = title
@@ -137,14 +131,12 @@ class EditTopicHandler(BaseHandler, TopicMixin, NodeMixin):
         timedel = datetime.utcnow() - topic.created
         if timedel.days:
             # user can only edit a topic in 10 minutes
-            msg = ObjectDict(header='Warning',
-                             body="You can't edit this topic now")
-            self._context.message.append(msg)
+            self.create_message('Warning', "You can't edit this topic now")
             return 2
         return 1
 
 
-class TopicHandler(BaseHandler, TopicMixin, NodeMixin, PageMixin):
+class TopicHandler(BaseHandler, TopicMixin, NodeMixin, PageMixin, NotifyMixin):
     def head(self, id):
         pass
 

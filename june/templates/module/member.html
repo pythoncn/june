@@ -12,4 +12,17 @@
 <div class="widget notify">
     <a href="/account/notify">{{notify}} {{_("unread messages")}}</a>
 </div>
+<script type="text/javascript">
+    var title = document.title;
+    var replace = '(' + {{notify}} + ') ' + document.title
+    var blink = function() {
+        if (document.title == title) {
+            document.title = replace;
+        }else{
+            document.title = title;
+        }
+        setTimeout(blink, 1500);
+    }
+    blink();
+</script>
 {% end %}

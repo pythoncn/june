@@ -42,7 +42,7 @@ class CreateNode(BaseHandler):
             o.limit_role = 0
 
         if not (o.slug and o.title and o.description):
-            self._context.message = 'Please fill the required field'
+            self.create_message('Form Error', 'Please fill the required field')
             self.render('dashboard/node.html', node=o)
             return
         node = Node(**o)

@@ -110,6 +110,10 @@ class BaseHandler(RequestHandler, MemberMixin):
         self._filters.xmldatetime = xmldatetime
         self._filters.get_user = self.get_user_by_id
 
+    def create_message(self, header, body):
+        msg = ObjectDict(header=header, body=body)
+        self._context.message.append(msg)
+
     def is_system(self):
         return self.request.remote_ip == '127.0.0.1'
 

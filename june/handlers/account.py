@@ -3,7 +3,6 @@ from tornado.auth import GoogleMixin
 from datetime import datetime
 from june.lib.handler import BaseHandler
 from june.lib import validators
-from june.lib.util import ObjectDict
 from june.auth.recaptcha import RecaptchaMixin
 from june.models import Member, MemberLog, Topic, Notify
 from june.models import NodeMixin, MemberMixin
@@ -23,9 +22,7 @@ class SigninHandler(BaseHandler):
         account = self.get_argument('account', None)
         password = self.get_argument('password', None)
         if not (account and password):
-            msg = ObjectDict(header='Form Error',
-                             body='Please fill the required field')
-            self._context.message.append(msg)
+            self.create_message('Form Error', 'Please fill the required field')
             self.render('signin.html')
             return
         if '@' in account:
@@ -37,9 +34,7 @@ class SigninHandler(BaseHandler):
             self.redirect(self.next_url)
             self.create_log(user.id)
             return
-        msg = ObjectDict(header='Form Error',
-                         body="Invalid account or password")
-        self._context.message.append(msg)
+        self.create_message('Form Error', "Invalid account or password")
         self.render('signin.html')
 
     def create_log(self, user_id):
@@ -107,21 +102,15 @@ class SignupHandler(BaseHandler, RecaptchaMixin):
         validate = True
         if not (email and password1 and password2):
             validate = False
-            msg = ObjectDict(header='Form Error',
-                             body='Please fill the required field')
-            self._context.message.append(msg)
+            self.create_message('Form Error', 'Please fill the required field')
 
         if not validators.email(email):
             validate = False
-            msg = ObjectDict(header='Email Error',
-                             body='Not a valid email address')
-            self._context.message.append(msg)
+            self.create_message('Form Error', 'Not a valid email address')
 
         if password1 != password2:
             validate = False
-            msg = ObjectDict(header='Password Error',
-                             body="Password doesn't match")
-            self._context.message.append(msg)
+            self.create_message('Form Error', "Password doesn't match")
 
         if not validate:
             recaptcha = self.recaptcha_render()
@@ -130,9 +119,8 @@ class SignupHandler(BaseHandler, RecaptchaMixin):
 
         member = Member.query.filter_by(email=email).first()
         if member:
-            msg = ObjectDict(header='Form Error',
-                             body="This email is already registered")
-            self._context.message.append(msg)
+            self.create_message('Form Error',
+                                "This email is already registered")
             recaptcha = self.recaptcha_render()
             self.render('signup.html', email=email, recaptcha=recaptcha)
             return
@@ -143,9 +131,7 @@ class SignupHandler(BaseHandler, RecaptchaMixin):
         email = self.get_argument('email', None)
         password = self.get_argument('password1', None)
         if not response:
-            msg = ObjectDict(header='Captcha Error',
-                             body='Captcha not valid')
-            self._context.message.append(msg)
+            self.create_message('Form Error', 'Captcha not valid')
             recaptcha = self.recaptcha_render()
             self.render('signup.html', email=email, recaptcha=recaptcha)
             return
@@ -170,28 +156,23 @@ class SettingHandler(BaseHandler):
         validate = True
         if not username:
             validate = False
-            msg = ObjectDict(header='Form Error',
-                             body='Please fill the required field')
-            self._context.message.append(msg)
+            self.create_message('Form Error', 'Please fill the required field')
 
         if not validators.username(username):
             validate = False
-            msg = ObjectDict(header='Username Error',
-                             body="Username not valid, don't be evil")
-            self._context.message.append(msg)
+            self.create_message('Form Error',
+                                "Username not valid, don't be evil")
 
         if website and not validators.url(website):
             validate = False
-            msg = ObjectDict(header='Website Error',
-                             body="Website not valid, don't be evil")
-            self._context.message.append(msg)
+            self.create_message('Form Error',
+                                "Website not valid, don't be evil")
 
         user = self.get_user_by_name(username)
         if user and user.id != self.current_user.id:
             validate = False
-            msg = ObjectDict(header='Username Error',
-                             body="Username is registered by other member")
-            self._context.message.append(msg)
+            self.create_message('Form Error',
+                                "Username is registered by other member")
 
         if not validate:
             self.render('setting.html')
