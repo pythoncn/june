@@ -76,9 +76,7 @@
                 {% block sidebar %}{% end %}
                 <div id="footer">
                     <div class="widget status">
-                        {{_("Node")}}: {{context.status.node}}
-                        {{_("Topic")}}: {{context.status.topic}}
-                        {{_("Member")}}: {{context.status.member}}
+                        {% module SystemStatusModule() %}
                     </div>
                     <div class="widget copyright">
                         Designed by <a href="http://lepture.com">lepture</a> |

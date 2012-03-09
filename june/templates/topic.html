@@ -101,12 +101,12 @@
     <div class="fn-wrap">
         {% for id in topic.up_users %}
         {% set user = users[id] %}
-        <a href="/member/{{user.username}}" title="{{user.username}}"><img src="{{user.get_avatar(24)}}" /></a>
+        <a href="/member/{{user.username}}" title="{{user.username}}"><img src="{{user.get_avatar(24)}}" width="24" height="24" /></a>
         {% end %}
 
         {% for id in topic.down_users %}
         {% set user = users[id] %}
-        <a href="/member/{{user.username}}" title="{{user.username}}"><img src="{{user.get_avatar(24)}}" /></a>
+        <a href="/member/{{user.username}}" title="{{user.username}}"><img src="{{user.get_avatar(24)}}" width="24" height="24" /></a>
         {% end %}
     </div>
 </div>

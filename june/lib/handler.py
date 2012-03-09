@@ -6,12 +6,12 @@ from tornado.options import options
 from tornado import escape
 
 import june
-from june.models import MemberMixin, NotifyMixin
+from june.models import MemberMixin
 from june.filters import safe_markdown, xmldatetime
 from june.lib.util import ObjectDict
 
 
-class BaseHandler(RequestHandler, MemberMixin, NotifyMixin):
+class BaseHandler(RequestHandler, MemberMixin):
     _first_run = True
 
     def initialize(self):
@@ -103,12 +103,6 @@ class BaseHandler(RequestHandler, MemberMixin, NotifyMixin):
         self._context.debug = options.debug
         self._context.ga = options.ga
         self._context.message = []
-
-        self._context.status = self.get_system_status()
-        if self.current_user:
-            self._context.notify = self.get_unread_notify(self.current_user)
-        else:
-            self._context.notify = 0
 
     def _prepare_filters(self):
         self._filters = ObjectDict()
