@@ -17,7 +17,7 @@ class CreateNode(BaseHandler):
     @require_admin
     def get(self):
         node = ObjectDict()
-        self.render('dashboard_node.html', node=node)
+        self.render('dashboard/node.html', node=node)
 
     @require_admin
     def post(self):
@@ -43,7 +43,7 @@ class CreateNode(BaseHandler):
 
         if not (o.slug and o.title and o.description):
             self._context.message = 'Please fill the required field'
-            self.render('dashboard_node.html', node=o)
+            self.render('dashboard/node.html', node=o)
             return
         node = Node(**o)
         self.db.add(node)
@@ -59,7 +59,7 @@ class EditNode(BaseHandler, DashMixin):
         if not node:
             self.send_error(404)
             return
-        self.render('dashboard_node.html', node=node)
+        self.render('dashboard/node.html', node=node)
 
     @require_admin
     def post(self, slug):
@@ -108,7 +108,7 @@ class EditMember(BaseHandler, DashMixin):
         if not user:
             self.send_error(404)
             return
-        self.render('dashboard_member.html', user=user)
+        self.render('dashboard/member.html', user=user)
 
     @require_admin
     def post(self, name):
@@ -133,7 +133,7 @@ class EditTopic(BaseHandler, TopicMixin):
         if not topic:
             self.send_error(404)
             return
-        self.render('dashboard_topic.html', topic=topic)
+        self.render('dashboard/topic.html', topic=topic)
 
     @require_admin
     def post(self, id):
@@ -165,7 +165,7 @@ class Dashboard(BaseHandler, NodeMixin):
             self.redirect('/dashboard/member/%s' % user)
             return
         nodes = Node.query.all()
-        self.render('dashboard.html', nodes=nodes)
+        self.render('dashboard/index.html', nodes=nodes)
 
 
 handlers = [
