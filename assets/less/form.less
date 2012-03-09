@@ -1,13 +1,4 @@
-@import "lib";
-
-@bgcolor: #E8ECEC;
-@fgcolor: #696969;
-@linkcolor: #c30;
-@snowcolor: #bcbcbc;
-@bordercolor: #dadada;
-
-@serif: "Georgia", serif;
-@sans: "Lucida Grande", "Luxi Sans", "Helvetica Neue", aria, sans-serif;
+@import "lib/function";
 
 .fm {
     padding: 14px;
@@ -40,14 +31,14 @@
     content: "*";
     padding-left: 2px;
     vertical-align:middle;
-    color: @linkcolor;
+    color: #c30;
 }
 .fm-item input.fm-text {
     width: 300px;
 }
 .fm-item input, .fm-text {
     float: left;
-    border: 1px solid @bordercolor;
+    border: 1px solid #dadada;
     padding: 6px;
     outline: 0 none;
     font-size: 16px;
@@ -56,7 +47,7 @@
     text-shadow: 0 1px 0 #fff;
 }
 #recaptcha_response_field {
-    border: 1px solid @bordercolor !important;
+    border: 1px solid #dadada !important;
     padding: 6px;
     outline: 0 none;
     font-size: 16px;
@@ -65,7 +56,7 @@
     text-shadow: 0 1px 0 #fff;
 }
 .fm-item input:focus, .fm-text:focus, #recaptcha_response_field:focus {
-    border-color: darken(@bordercolor, 10%);
+    border-color: darken(#dadada, 10%);
 }
 .fm-item select, select.fm-text {
     padding: 0 6px;
@@ -104,7 +95,7 @@
     font-weight: bold;
     font-family: inherit;
     line-height: normal;
-    border: 1px solid @bordercolor;
+    border: 1px solid #dadada;
     border-bottom-color: #bbb;
     border-radius: 4px;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
