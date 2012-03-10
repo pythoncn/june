@@ -88,7 +88,7 @@ class NodeFeedHandler(BaseHandler, NodeMixin):
         now = datetime.datetime.utcnow()
         html = self.render_string('feed.xml', topics=topics, users=users,
                                   node=node, now=now)
-        self.cache.set('nodefeed:%s' % str(slug), html, 600)
+        self.cache.set('nodefeed:%s' % str(slug), html, 3600)
         self.write(html)
 
 

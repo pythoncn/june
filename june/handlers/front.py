@@ -35,7 +35,7 @@ class SiteFeedHandler(BaseHandler):
         now = datetime.datetime.utcnow()
         html = self.render_string('feed.xml', topics=topics, users=users,
                                   node=None, now=now)
-        self.cache.set('sitefeed', html, 600)
+        self.cache.set('sitefeed', html, 1800)
         self.write(html)
 
 
