@@ -4,6 +4,7 @@
         <meta charset="UTF-8" />
         <title>{%block title%}{%block subtitle%}{%end%} | {{context.sitename}}{%end%}</title>
         <link rel="stylesheet" href="{{static_url('css/site.css')}}" />
+        {% block afterstyle %}{% end %}
     </head>
     <body>
         {% block notify %}

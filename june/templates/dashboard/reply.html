@@ -2,35 +2,35 @@
 
 {% block subtitle %} {{ _("Dashboard") }}{% end %}
 
+{% block afterstyle %}
+<style type="text/css">
+    .fm-row .fm-item textarea { width: 96%; }
+</style>
+{% end %}
+
 {% block main %}
 <form action="" method="post" class="fm">
     {{ xsrf_form_html() }}
     <div class="fm-row">
         <div class="fm-item">
-            <label class="fm-label" for="impact">{{ _("Impact") }}</label>
-            <input type="number" class="fm-text" name="impact" value="{{topic.impact}}" />
-        </div>
-    </div>
-
-    <div class="fm-row">
-        <div class="fm-item">
-            <label class="fm-label" for="node">{{ _("Node") }}</label>
-            <input type="number" class="fm-text" name="node" value="{{topic.node_id}}" />
+            <label class="fm-label" for="content">{{ _("Content") }}</label>
+            <textarea name="content" rows="10" class="fm-text" cols="30">{{reply.content}}</textarea>
         </div>
     </div>
 
     <div class="fm-row">
         <div class="fm-item">
             <label class="fm-label">up votes</label>
-            <input type="text" class="fm-text" value="{{topic.ups or ''}}" disabled/>
+            <input type="text" class="fm-text" value="{{reply.ups or ''}}" disabled/>
         </div>
     </div>
     <div class="fm-row">
         <div class="fm-item">
             <label class="fm-label">down votes</label>
-            <input type="text" class="fm-text" value="{{topic.downs or ''}}" disabled/>
+            <input type="text" class="fm-text" value="{{reply.downs or ''}}" disabled/>
         </div>
     </div>
+
 
     <div class="fm-row">
         <div class="fm-item">
