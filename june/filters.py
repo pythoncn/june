@@ -2,9 +2,26 @@
 import re
 import markdown
 from tornado import escape
+from tornado.options import options
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name, TextLexer
+
+
+def emoji(text):
+    if not hasattr(options, 'emoji_url'):
+        return text
+
+    pattern = re.compile(':(\w+):')
+
+    def make_emoji(m):
+        name = m.group(1)
+        tpl = ('<img class="emoji" title="%(name)s" alt="%(name)s" height="20"'
+               ' width="20" src="%(url)s%(name)s.png" align="top">')
+        return tpl % {'name': name, 'url': options.emoji_url}
+
+    text = pattern.sub(make_emoji, text)
+    return text
 
 
 def safe_markdown(text, noclasses=False):
@@ -55,7 +72,7 @@ def safe_markdown(text, noclasses=False):
     text = pattern.sub(repl, text)
     pattern = re.compile(r'@(\w+)')
     text = pattern.sub(r'<a href="/member/\1">@\1</a>', text)
-    return markdown.markdown(text)
+    return emoji(markdown.markdown(text))
 
 
 def find_mention(text):
