@@ -10,10 +10,10 @@
     <linearGradient
       id="red">
       <stop
-        style="stop-color:#bf0000;stop-opacity:1"
+        style="stop-color:#ff2525;stop-opacity:1"
         offset="0" />
       <stop
-        style="stop-color:#e00000;stop-opacity:1"
+        style="stop-color:#d71f1f;stop-opacity:1"
         offset="1" />
     </linearGradient>
     <linearGradient
