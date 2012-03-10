@@ -12,6 +12,109 @@ from june.models import Node, Topic, Reply, Member
 from june.models import NodeMixin, TopicMixin, MemberMixin, NotifyMixin
 
 
+class TopicHandler(BaseHandler, TopicMixin, NodeMixin, PageMixin, NotifyMixin):
+    def head(self, id):
+        pass
+
+    def get(self, id):
+        topic = self._hit_topic(id)
+        if not topic:
+            self.send_error(404)
+            return
+        node = self.get_node_by_id(topic.node_id)
+        user_ids = list(topic.up_users)
+        user_ids.extend(topic.down_users)
+        user_ids.append(topic.user_id)
+        users = self.get_users(user_ids)
+        if self.is_ajax():
+            self.render('snippet/topic.html', topic=topic, node=node,
+                        users=users)
+            return
+        self.render('topic.html', topic=topic, node=node, users=users)
+
+    def _hit_topic(self, id):
+        key = 'hit$topic:%s' % str(id)
+        count = self.cache.get(key)
+        if count is None:
+            count = 1
+            self.cache.set(key, 1)
+        else:
+            self.cache.incr(key)
+        if count > 10:
+            topic = self.db.query(Topic).filter_by(id=id).first()
+            if not topic:
+                return None
+            self.cache.set(key, 1)
+            topic.hits += 10
+            topic.impact += 10
+            self.db.add(topic)
+            self.db.commit()
+            self.cache.delete('topic:%s' % str(id))
+        else:
+            topic = self.get_topic_by_id(id)
+            topic.hits = topic.hits + count
+        return topic
+
+    @require_user
+    def post(self, id):
+        # for topic reply
+        content = self.get_argument('content', None)
+        if not content:
+            self.redirect('/topic/%s' % id)
+            return
+
+        topic = self.db.query(Topic).filter_by(id=id).first()
+        if not topic:
+            self.send_error(404)
+            return
+
+        key = hashlib.md5(utf8(content)).hexdigest()
+        url = self.cache.get(key)
+        # avoid double submit
+        if url:
+            self.redirect(url)
+            return
+
+        reply = Reply(content=content)
+        reply.topic_id = id
+        reply.user_id = self.current_user.id
+
+        # impact on topic
+        topic.reply_count += 1
+        topic.impact += self._calc_impact(topic)
+
+        #TODO impact on creator
+
+        self.db.add(reply)
+        self.db.add(topic)
+
+        # notifications
+        self.create_notify(topic.user_id, topic, content)
+        for username in set(find_mention(content)):
+            self.create_mention(username, topic, content)
+
+        self.db.commit()
+        url = '/topic/%s' % str(id)
+        self.cache.set(key, url, 100)
+        self.cache.delete('ui$reply:%s' % str(id))
+        self.redirect(url)
+
+    def _calc_impact(self, topic):
+        if self.current_user.reputation < 2:
+            return 0
+        if hasattr(options, 'reply_factor_for_topic'):
+            factor = int(options.reply_factor_for_topic)
+        else:
+            factor = 300
+        if hasattr(options, 'reply_time_factor'):
+            time_factor = int(options.reply_time_factor)
+        else:
+            time_factor = 200
+        time = datetime.utcnow() - topic.created
+        factor += time.days * time_factor
+        return factor * int(math.log(self.current_user.reputation))
+
+
 class NewTopicHandler(BaseHandler, NodeMixin):
     @require_user
     def get(self):
@@ -136,109 +239,6 @@ class EditTopicHandler(BaseHandler, TopicMixin, NodeMixin):
         return 1
 
 
-class TopicHandler(BaseHandler, TopicMixin, NodeMixin, PageMixin, NotifyMixin):
-    def head(self, id):
-        pass
-
-    def get(self, id):
-        topic = self._hit_topic(id)
-        if not topic:
-            self.send_error(404)
-            return
-        node = self.get_node_by_id(topic.node_id)
-        user_ids = list(topic.up_users)
-        user_ids.extend(topic.down_users)
-        user_ids.append(topic.user_id)
-        users = self.get_users(user_ids)
-        if self.is_ajax():
-            self.render('snippet/topic.html', topic=topic, node=node,
-                        users=users)
-            return
-        self.render('topic.html', topic=topic, node=node, users=users)
-
-    def _hit_topic(self, id):
-        key = 'hit$topic:%s' % str(id)
-        count = self.cache.get(key)
-        if count is None:
-            count = 1
-            self.cache.set(key, 1)
-        else:
-            self.cache.incr(key)
-        if count > 10:
-            topic = self.db.query(Topic).filter_by(id=id).first()
-            if not topic:
-                return None
-            self.cache.set(key, 1)
-            topic.hits += 10
-            topic.impact += 10
-            self.db.add(topic)
-            self.db.commit()
-            self.cache.delete('topic:%s' % str(id))
-        else:
-            topic = self.get_topic_by_id(id)
-            topic.hits = topic.hits + count
-        return topic
-
-    @require_user
-    def post(self, id):
-        # for topic reply
-        content = self.get_argument('content', None)
-        if not content:
-            self.redirect('/topic/%s' % id)
-            return
-
-        topic = self.db.query(Topic).filter_by(id=id).first()
-        if not topic:
-            self.send_error(404)
-            return
-
-        key = hashlib.md5(utf8(content)).hexdigest()
-        url = self.cache.get(key)
-        # avoid double submit
-        if url:
-            self.redirect(url)
-            return
-
-        reply = Reply(content=content)
-        reply.topic_id = id
-        reply.user_id = self.current_user.id
-
-        # impact on topic
-        topic.reply_count += 1
-        topic.impact += self._calc_impact(topic)
-
-        #TODO impact on creator
-
-        self.db.add(reply)
-        self.db.add(topic)
-
-        # notifications
-        self.create_notify(topic.user_id, topic, content)
-        for username in set(find_mention(content)):
-            self.create_mention(username, topic, content)
-
-        self.db.commit()
-        url = '/topic/%s' % str(id)
-        self.cache.set(key, url, 100)
-        self.cache.delete('ui$reply:%s' % str(id))
-        self.redirect(url)
-
-    def _calc_impact(self, topic):
-        if self.current_user.reputation < 2:
-            return 0
-        if hasattr(options, 'reply_factor_for_topic'):
-            factor = int(options.reply_factor_for_topic)
-        else:
-            factor = 300
-        if hasattr(options, 'reply_time_factor'):
-            time_factor = int(options.reply_time_factor)
-        else:
-            time_factor = 200
-        time = datetime.utcnow() - topic.created
-        factor += time.days * time_factor
-        return factor * int(math.log(self.current_user.reputation))
-
-
 class UpTopicHandler(BaseHandler):
     """Up a topic will increase impact of the topic,
     and increase reputation of the creator
@@ -279,6 +279,7 @@ class UpTopicHandler(BaseHandler):
         topic.impact += self._calc_topic_impact()
         creator.reputation += self._calc_user_impact()
         self.db.add(topic)
+        self.db.add(creator)
         self.db.commit()
         dct = {'status': 'ok', 'msg': 'active'}
         self.write(dct)
@@ -369,12 +370,147 @@ class DownTopicHandler(BaseHandler):
         return factor * int(math.log(self.current_user.reputation))
 
 
+class VoteReplyHandler(BaseHandler):
+    """Vote for a reply will affect the topic impact and reply user's
+    reputation
+    """
+
+    def _is_exist(self, topic_id, reply_id):
+        reply = self.db.query(Reply).filter_by(id=reply_id).first()
+        if not reply or reply.topic_id != int(topic_id):
+            return False
+        topic = self.db.query(Topic).filter_by(id=topic_id).first()
+        if not topic:
+            return False
+        return reply, topic
+
+    def _calc_topic_impact(self):
+        if self.current_user.reputation < 2:
+            return 0
+        if hasattr(options, 'vote_reply_factor_for_topic'):
+            factor = int(options.vote_reply_factor_for_topic)
+        else:
+            factor = 500
+        return factor * int(math.log(self.current_user.reputation))
+
+    def _calc_user_impact(self):
+        if self.current_user.reputation < 2:
+            return 0
+        if hasattr(options, 'vote_reply_factor_for_user'):
+            factor = int(options.vote_reply_factor_for_user)
+        else:
+            factor = 6
+        return factor * int(math.log(self.current_user.reputation))
+
+
+class UpReplyHandler(VoteReplyHandler):
+    @require_user
+    def post(self, topic_id, reply_id):
+        reply_topic = self._is_exist(topic_id, reply_id)
+        if not reply_topic:
+            self.send_error(404)
+            return
+
+        reply, topic = reply_topic
+        user_id = self.current_user.id
+        if user_id == reply.user_id:
+            dct = {'status': 'fail', 'msg': 'cannot vote your own reply'}
+            self.write(dct)
+            return
+
+        if user_id in reply.down_users:
+            # you can't up and down vote at the same time
+            dct = {'status': 'fail', 'msg': "cannot up vote your down reply"}
+            self.write(dct)
+            return
+
+        creator = self.db.query(Member).filter_by(id=reply.user_id).first()
+        up_users = list(reply.up_users)
+        if user_id in up_users:
+            up_users.remove(user_id)
+            reply.ups = ','.join(str(i) for i in up_users)
+            creator.reputation -= self._calc_user_impact()
+            self.db.add(creator)
+            self.db.add(reply)
+            self.db.commit()
+            dct = {'status': 'ok', 'msg': 'cancel'}
+            self.write(dct)
+            return
+
+        if user_id != topic.user_id:
+            # when topic creator vote a reply, topic impact will not change
+            topic.impact += self._calc_topic_impact()
+            self.db.add(topic)
+
+        up_users.append(user_id)
+        reply.ups = ','.join(str(i) for i in up_users)
+        creator.reputation += self._calc_user_impact()
+        self.db.add(reply)
+        self.db.add(creator)
+        self.db.commit()
+        dct = {'status': 'ok', 'msg': 'active'}
+        self.write(dct)
+        return
+
+
+class DownReplyHandler(VoteReplyHandler):
+    @require_user
+    def post(self, topic_id, reply_id):
+        reply_topic = self._is_exist(topic_id, reply_id)
+        if not reply_topic:
+            self.send_error(404)
+            return
+
+        reply, topic = reply_topic
+        user_id = self.current_user.id
+        if user_id == reply.user_id:
+            dct = {'status': 'fail', 'msg': 'cannot vote your own reply'}
+            self.write(dct)
+            return
+
+        if user_id in reply.up_users:
+            # you can't down and up vote at the same time
+            dct = {'status': 'fail', 'msg': "cannot down vote your up reply"}
+            self.write(dct)
+            return
+
+        creator = self.db.query(Member).filter_by(id=reply.user_id).first()
+        down_users = list(reply.down_users)
+        if user_id in down_users:
+            down_users.remove(user_id)
+            reply.downs = ','.join(str(i) for i in down_users)
+            creator.reputation += self._calc_user_impact()
+            self.db.add(creator)
+            self.db.add(reply)
+            self.db.commit()
+            dct = {'status': 'ok', 'msg': 'cancel'}
+            self.write(dct)
+            return
+
+        if user_id != topic.user_id:
+            # when topic creator vote a reply, topic impact will not change
+            topic.impact += self._calc_topic_impact()
+            self.db.add(topic)
+
+        down_users.append(user_id)
+        reply.downs = ','.join(str(i) for i in down_users)
+        creator.reputation -= self._calc_user_impact()
+        self.db.add(reply)
+        self.db.add(creator)
+        self.db.commit()
+        dct = {'status': 'ok', 'msg': 'active'}
+        self.write(dct)
+        return
+
+
 handlers = [
     ('/node/(\w+)/topic', CreateTopicHandler),
     ('/topic', NewTopicHandler),
     ('/topic/(\d+)', TopicHandler),
     ('/topic/(\d+)/up', UpTopicHandler),
     ('/topic/(\d+)/down', DownTopicHandler),
+    ('/topic/(\d+)/(\d+)/up', UpReplyHandler),
+    ('/topic/(\d+)/(\d+)/down', DownReplyHandler),
     ('/topic/(\d+)/edit', EditTopicHandler),
 ]
 

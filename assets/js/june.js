@@ -50,19 +50,45 @@ $('#notify .js-hide').click(function(e) {
     console.log(notify);
     var p = $(this).parentsUntil($('#notify'), '.message').remove();
 });
-$('div.vote div[data-url]').click(function(){
-    var that = $(this);
-    var url = that.attr('data-url');
-    $.sendPost(url, {}, function(data){
-        if (data.status == 'ok') {
-            that.toggleClass('active');
-            _gaq.push(['_trackEvent', 'vote', data.msg, url]);
-        } else {
-            alert(data.msg);
-            _gaq.push(['_trackEvent', 'vote', 'fail', url]);
-        }
-    }, 'json');
-});
+// {{{ vote
+// vote for topic
+if(user.id != 0) {
+    var vote = function(url, that) {
+        $.sendPost(url, {}, function(data){
+            if (data.status == 'ok') {
+                that.toggleClass('active');
+                _gaq.push(['_trackEvent', 'vote', data.msg, url]);
+            } else {
+                alert(data.msg);
+                _gaq.push(['_trackEvent', 'vote', 'fail', url]);
+            }
+        }, 'json');
+    }
+    $('div.vote div[data-url]').click(function(){
+        var that = $(this);
+        var url = that.attr('data-url');
+        vote(url, that);
+    });
+    // vote for reply
+    $('div.replies .cell').hover(function(e){
+        var tpl = '<div class="vote"><a href="#" class="up-vote">▲</a> <a href="#" class="down-vote">▼</a></div>'
+        $(this).append(tpl);
+        var id = $(this).attr('id').replace('reply-', '');
+        $(this).find('.up-vote').click(function(){
+            var url = _href + '/' + id + '/up';
+            vote(url, $(this));
+            return false;
+        });
+        $(this).find('.down-vote').click(function(){
+            var url = _href + '/' + id + '/down';
+            vote(url, $(this));
+            return false;
+        });
+    }, function(e){
+        $(this).find('.vote').remove();
+    });
+}
+// }}}
 $('a.js-follow').click(function(e) {
     _gaq.push(['_trackEvent', 'follow', 'follow', $(this).attr('url')]);
 });
@@ -84,16 +110,3 @@ $('a.js-preview').click(function(e) {
     }, 'html');
     return false;
 });
-// {{{ form behavior
-/*
-$('form.js-form').submit(function(e) {
-    var data = $(this).serialize();
-    var url = $(this).attr('action');
-    console.log(data);
-    $.post(url, data, function(data) {
-        console.log(data);
-    });
-    return false;
-});
-*/
-// }}}

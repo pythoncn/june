@@ -3,7 +3,7 @@
 
     {% if reply.user_id in users %}
     {% set user = users[reply.user_id] %}
-    <div id="reply-{{reply.id}}" class="cell fn-clear">
+    <div id="reply-{{reply.id}}" class="cell fn-clear" data-ups="{{ reply.ups or '' }}" data-downs="{{ reply.downs or '' }}">
         <img class="avatar" src="{{user.get_avatar(36)}}" width="36" height="36" />
         <div class="fn-wrap">
             <div class="cell-header">

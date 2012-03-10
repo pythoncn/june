@@ -5,24 +5,25 @@
         <title>{%block title%}{%block subtitle%}{%end%} | {{context.sitename}}{%end%}</title>
         <link rel="stylesheet" href="{{static_url('css/site.css')}}" />
         {% block afterstyle %}{% end %}
-        {% if context.ga %}
         <script type="text/javascript">
+            {% if current_user %}
+            var user = {id: {{current_user.id}}, username: "{{current_user.username}}", avatar: "{{current_user.get_avatar(48)}}"};
+            {% else %}
+            var user = {id: 0};
+            {% end %}
+            {% if context.ga %}
             var _gaq = _gaq || [];
             _gaq.push(['_setAccount', '{{context.ga}}']);
             _gaq.push(['_trackPageview']);
             _gaq.push(['_trackPageLoadTime']);
-            {% if current_user %}
-            _gaq.push(['_setCustomVar', 1, 'UserType', 'Member', 2]);
-            {% else %}
-            _gaq.push(['_setCustomVar', 1, 'UserType', 'Guest', 2]);
-            {% end %}
+            _gaq.push(['_setCustomVar', 1, 'UserType', {%if current_user%}'Member'{%else%}'Guest'{%end%}, 2]);
             (function() {
              var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
              ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
              var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
              })();
+            {% end %}
         </script>
-        {% end %}
         <link rel="alternate" type="application/atom+xml" href="{{context.sitefeed}}" title="{{context.sitename}}" />
     </head>
     <body>

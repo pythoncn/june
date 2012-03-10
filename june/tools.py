@@ -49,6 +49,7 @@ static_path = "/Users/lepture/workspace/june/static"
 static_url_prefix = "/static/"
 
 sitename = "June"
+siteurl = "http://python-china.org"
 ga = ""
 
 recaptcha_key = ''
