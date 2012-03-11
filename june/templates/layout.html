@@ -3,7 +3,12 @@
     <head>
         <meta charset="UTF-8" />
         <title>{%block title%}{%block subtitle%}{%end%} | {{context.sitename}}{%end%}</title>
+        {% if is_mobile() %}
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0" />
+        <link rel="stylesheet" href="{{static_url('css/mobile.css')}}" />
+        {% else %}
         <link rel="stylesheet" href="{{static_url('css/site.css')}}" />
+        {% end %}
         {% block afterstyle %}{% end %}
         <script type="text/javascript">
             {% if current_user %}
@@ -46,7 +51,7 @@
                         <li><a href="/subscription">{{ _("Subscription") }}</a></li>
                         <li><a href="/nodes">{{ _("Nodes") }}</a></li>
                         {% if current_user and current_user.role > 9 %}
-                        <li><a href="/dashboard">{{ _("Dashboard") }}</a></li>
+                        <li class="dashboard"><a href="/dashboard">{{ _("Dashboard") }}</a></li>
                         {% end %}
                     </ul>
                     <ul id="account">

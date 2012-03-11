@@ -4,6 +4,22 @@
 @import "basic";
 @import "form";
 
+/* fix form.less */
+.fm-row {
+    padding: 5px 1px 7px 100px;
+}
+.fm-label {
+    width: 90px;
+    margin-left: -100px;
+}
+.fm-item input.fm-text {
+    width: 160px;
+}
+.fm-item textarea {
+    width: 96%;
+    height: 3em;
+}
+
 /* layout */
 #header {
     .vertical-linear-gradient(#ffffff, #dfdfdf);
@@ -14,8 +30,7 @@
     }
 }
 #body {
-    position: relative;
-    top: 16px;
+    margin-top: 16px;
 }
 #footer {
     font-size: 10px;
@@ -28,13 +43,14 @@
 /* header */
 #nav {
     float: left;
+    font-size: 12px;
     margin: 0;
     li {
         float: left;
     }
     a {
         display: inline-block;
-        padding: 6px 8px;
+        padding: 8px 8px 7px;
         border-right: 1px solid #cacaca;
         border-left: 1px solid #ffffff;
         color: #454545;
@@ -48,6 +64,7 @@
         box-shadow: 0 0 10px #ccc inset;
         color: @blue;
     }
+    .dashboard { display: none; }
 }
 #account {
     float: right;
@@ -84,109 +101,22 @@
 }
 
 #content {
-    position: absolute;
-    top: -4px;
-    left: 0;
-    width: 68%;
     background: #f7f7f7;
     box-shadow: 1px 0 10px #999;
     z-index: 2;
 }
 #sidebar {
-    position: absolute;
-    top: 0;
-    left: 68%;
-    width: 30%;
+    margin-top: 10px;
     background: #efefef;
     box-shadow: 1px 0 6px #aaa;
 }
 
-.reply-form {
-    margin-bottom: 14px;
-}
-.reply-form textarea {
-    width: 95%;
-    height: 98px;
-}
-.replies {
-    .vote {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        a {
-            background: rgba(0,0,0,0.08);
-            padding: 2px 6px;
-            cursor: pointer;
-            color: #454545;
-            text-decoration: none;
-            &:hover {
-                cursor: pointer;
-                background: rgba(0,0,0,0.2);
-            }
-        }
-        .active {
-            background: fadeOut(@blue, 68%);
-        }
-    }
-}
-.js-snippet:hover {
-    background: #f1f1f1;
-    cursor: pointer;
-}
-.pagination a, .pagination span {
-    display: inline-block;
-    padding: 1px 6px;
-    border: 1px solid #dadada;
-    border-radius: 3px;
-    color: #9f9f9f;
-    font-size: 12px;
-    .vertical-linear-gradient(#fff, #e0e0e0);
-}
-.pagination a:hover, .pagination span {
-    text-decoration: none;
-    color: #fff;
-    border: 1px solid #578fb2;
-    .vertical-linear-gradient(#80b2cd, #578fb2);
-}
-.highlight {
-    padding: 0 6px;
-    border-left: 3px solid #dadada;
-}
-#editor-preview {
-    display: none;
-    margin: 12px 0;
-}
-#editor-pannel {
-    font-size: 12px;
-}
-#editor-pannel a {
-    display: inline-block;
-    margin: 0 2px 2px 0;
-    &.current {
-        color: @blue;
-    }
-    &:hover {
-        text-decoration: none;
-    }
-}
-/* page detail */
-#profile {
-    border-bottom: 1px solid #dadada;
-}
-
-#markdown-explain {
-    font-size: 12px;
-    pre {
-        margin: 2px;
-    }
-}
-/* misc */
 #notify {
     position: fixed;
-    top: 16px;
+    top: 10px;
     left: 50%;
-    width: 400px;
-    margin-left: -200px;
+    width: 300px;
+    margin-left: -150px;
     z-index: 1000;
     border-radius: 6px;
     color: white;

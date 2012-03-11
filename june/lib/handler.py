@@ -113,6 +113,7 @@ class BaseHandler(RequestHandler, MemberMixin):
         self._filters.markdown = safe_markdown
         self._filters.xmldatetime = xmldatetime
         self._filters.get_user = self.get_user_by_id
+        self._filters.is_mobile = self.is_mobile
 
     def create_message(self, header, body):
         msg = ObjectDict(header=header, body=body)
@@ -122,12 +123,12 @@ class BaseHandler(RequestHandler, MemberMixin):
         return self.request.remote_ip == '127.0.0.1'
 
     def is_mobile(self):
-        _mobile = ('ipod|iphone|android|blackberry|palm|nokia|symbian|',
-                   'samsung|psp|kindle|phone|mobile|ucweb|opera mini|fennec')
+        _mobile = (r'ipod|iphone|android|blackberry|palm|nokia|symbian|'
+                   r'samsung|psp|kindle|phone|mobile|ucweb|opera mini|fennec')
         return True if re.search(_mobile, self.user_agent.lower()) else False
 
     def is_spider(self):
-        _spider = 'bot|crawl|spider|slurp|search|lycos|robozilla|fetcher'
+        _spider = r'bot|crawl|spider|slurp|search|lycos|robozilla|fetcher'
         return True if re.search(_spider, self.user_agent.lower()) else False
 
     def is_ajax(self):
