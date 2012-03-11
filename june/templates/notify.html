@@ -1,12 +1,19 @@
 {% extends "layout.html" %}
 
 {% block subtitle %}{{ _("Notify") }}{% end %}
+{% block afterstyle %}
+<style type="text/css">
+    #main .active {
+        background: #f4f3de;
+    }
+</style>
+{% end %}
 {% block notify %}{% end %}
 
 {% block main %}
 <div id="main">
     {% for msg in notify %}
-    <div class="cell fn-clear">
+    <div class="cell fn-clear{% if msg.created > current_user.last_notify %} active{%end%}">
         {% set user = get_user(msg.sender) %}
         <img class="avatar fn-left" src="{{user.get_avatar(48)}}" alt="avatar" width="48" height="48" />
         <div class="fn-wrap">

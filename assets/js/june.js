@@ -16,6 +16,7 @@ $('time.updated').timeago();
 $('#body').height($(document).height());
 _gaq = window._gaq || [];
 // {{{ pannel behavior
+/*
 var _href = location.href;
 $('div.js-snippet').click(function(e){
     if(e.target.tagName.toLowerCase() == 'a') return;
@@ -44,6 +45,7 @@ $('div.js-snippet').click(function(e){
         $('#pannel').append(html).css('right', 0);
     });
 });
+*/
 // }}}
 $('#notify .js-hide').click(function(e) {
     var notify = $(this).attr('data-notify');

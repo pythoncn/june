@@ -203,8 +203,9 @@ class NotifyHandler(BaseHandler):
         user.last_notify = datetime.utcnow()
         self.db.add(user)
         self.db.commit()
-        self.cache.set('member:%s' % user.id, user, 600)
-        self.cache.delete('notify:%s' % user.id)
+        key1 = 'notify:%s' % user.id
+        key2 = 'member:%s' % user.id
+        self.cache.delete_multi([key1, key2])
         self.render('notify.html', notify=notify)
 
 

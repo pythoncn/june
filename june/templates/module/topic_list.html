@@ -1,5 +1,5 @@
 {% for topic in page.datalist %}
-<div class="js-snippet cell" data-url="/topic/{{topic.id}}">
+<div class="cell">
     {% set user = users[topic.user_id] %}
     <img class="avatar" src="{{user.get_avatar(48)}}" width="48" height="48" />
     <div class="fn-wrap">
