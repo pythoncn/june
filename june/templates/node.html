@@ -20,6 +20,7 @@
     <div class="vsep"><a class="node" href="/node/{{node.slug}}" style="{%if node.bgcolor%}background:{{node.bgcolor}};{% end %}{%if node.fgcolor%}color:{{node.fgcolor}}{%end%}">{{escape(node.title)}}</a></div>
     <p>{{node.description}}</p>
 </div>
+{% if current_user %}
 <div class="widget">
     <a href="/node/{{node.slug}}/topic" class="ui-btn">{{_("New Topic")}}</a>
     {% if is_following %}
@@ -28,6 +29,7 @@
     <a href="/node/{{node.slug}}/follow" class="js-follow ui-btn">{{_("Follow")}}</a>
     {% end %}
 </div>
+{% end %}
 {{ node.sidebar or '' }}
 {% end %}
 

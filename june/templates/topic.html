@@ -85,12 +85,14 @@
     </div>
 </div>
 
+{% if current_user %}
 <div class="widget">
-    {% if current_user and current_user.id == topic.user_id %}
+    {% if current_user.id == topic.user_id %}
     <a href="/topic/{{topic.id}}/edit" class="ui-btn">{{_("Edit Topic")}}</a>
     {% end %}
     <a href="/node/{{node.slug}}/topic" class="ui-btn">{{_("New Topic")}}</a>
 </div>
+{% end %}
 
 {% if node.sidebar %}
 {{ node.sidebar }}

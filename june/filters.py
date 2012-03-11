@@ -96,7 +96,7 @@ def emoji(text):
     if not hasattr(options, 'emoji_url'):
         return text
 
-    pattern = re.compile(':([a-z1-9\+\-]+):')
+    pattern = re.compile(':([a-z0-9\+\-_]+):')
 
     def make_emoji(m):
         name = m.group(1)
