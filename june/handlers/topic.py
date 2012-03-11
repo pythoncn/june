@@ -300,7 +300,7 @@ class UpTopicHandler(BaseHandler):
         if hasattr(options, 'up_factor_for_user'):
             factor = int(options.up_factor_for_user)
         else:
-            factor = 6
+            factor = 2
         return factor * int(math.log(self.current_user.reputation))
 
 
@@ -399,7 +399,7 @@ class VoteReplyHandler(BaseHandler):
         if hasattr(options, 'vote_reply_factor_for_user'):
             factor = int(options.vote_reply_factor_for_user)
         else:
-            factor = 6
+            factor = 2
         return factor * int(math.log(self.current_user.reputation))
 
 
