@@ -51,8 +51,13 @@
     {% if current_user %}
     <form action="/topic/{{topic.id}}" method="post" class="reply-form fm js-form" data-target="div.replies">
         {{ xsrf_form_html() }}
-        <div class="fm-item fn-clear">
+        <div id="editor" class="fm-item fn-clear">
+            <div id="editor-pannel">
+                <a href="#" class="js-write current">{{ _("Write") }}</a>
+                <a href="#" class="js-preview">{{ _("Preview") }}</a>
+            </div>
             <textarea id="reply-content" name="content" class="fm-text"></textarea>
+            <div id="editor-preview"></div>
         </div>
         <div class="fm-item fn-clear">
             <button type="submit" class="ui-btn">{{ _("Post") }}</button>

@@ -26,10 +26,6 @@ class TopicHandler(BaseHandler, TopicMixin, NodeMixin, PageMixin, NotifyMixin):
         user_ids.extend(topic.down_users)
         user_ids.append(topic.user_id)
         users = self.get_users(user_ids)
-        if self.is_ajax():
-            self.render('snippet/topic.html', topic=topic, node=node,
-                        users=users)
-            return
         self.render('topic.html', topic=topic, node=node, users=users)
 
     def _hit_topic(self, id):

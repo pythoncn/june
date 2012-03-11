@@ -27,16 +27,20 @@
                 {% end %}
             </div>
         </div>
-        <div class="fm-row">
-            <div class="fm-item fm-required">
-                <label class="fm-label" for="content">{{ _("Content") }}</label>
+        <div class="fm-row fm-required">
+            <label class="fm-label" for="content">{{ _("Content") }}</label>
+            <div id="editor" class="fm-item fn-clear">
+                <div id="editor-pannel">
+                    <a href="#" class="js-write current">{{ _("Write") }}</a>
+                    <a href="#" class="js-preview">{{ _("Preview") }}</a>
+                </div>
                 <textarea name="content" class="fm-text" required>{% if topic %}{{topic.content or ""}}{% end %}</textarea>
+                <div id="editor-preview"></div>
             </div>
         </div>
         <div class="fm-row">
             <div class="fm-item">
                 <button type="submit" class="ui-btn">{{_("Save")}}</button>
-                <a href="#" class="ui-btn js-preview">{{_("Preview")}}</a>
                 {% if topic %}<a class="ui-btn" href="/topic/{{topic.id}}">{{ _("Cancel") }}</a>{% end %}
             </div>
         </div>

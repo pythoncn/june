@@ -134,7 +134,23 @@
         border-radius: 4px;
     }
 }
-
+#editor-preview {
+    display: none;
+    margin: 12px 0;
+}
+#editor-pannel {
+    font-size: 12px;
+}
+#editor-pannel a {
+    display: inline-block;
+    margin: 0 2px 2px 0;
+    &.current {
+        color: @blue;
+    }
+    &:hover {
+        text-decoration: none;
+    }
+}
 /* page detail */
 #profile {
     border-bottom: 1px solid #dadada;

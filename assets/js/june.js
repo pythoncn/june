@@ -97,18 +97,22 @@ $('a.js-follow').click(function(e) {
 $('a.js-unfollow').click(function(e) {
     _gaq.push(['_trackEvent', 'follow', 'unfollow', $(this).attr('url')]);
 });
-$('a.js-preview').click(function(e) {
-    if (!$('#pannel').length) {
-        $('body').append('<div id="pannel"></div><div id="overlay"></div>');
-        $('#overlay').click(function(e) {
-            $(this).hide();
-            $('#pannel').css('right', -670);
-        });
-    }
-    $.sendPost('/preview', {'text': $('form textarea').val()}, function(data){
-        $('#overlay').show();
-        var html = '<div class="wrapper">' + data + '</div>';
-        $('#pannel').html(html).css('right', 0);
+$('#editor .js-preview').click(function(e) {
+    if ($(this).hasClass('current')) return false;
+    var text = $('form textarea').val();
+    if (!text) return false;
+    $('#editor .js-write').removeClass('current');
+    $('#editor .js-preview').addClass('current');
+    $.sendPost('/preview', {'text': text}, function(data){
+        $('form textarea').hide();
+        $('#editor-preview').html(data).show();
     }, 'html');
+    return false;
+});
+$('#editor .js-write').click(function(e) {
+    $('#editor .js-preview').removeClass('current');
+    $('#editor .js-write').addClass('current');
+    $('form textarea').show();
+    $('#editor-preview').hide();
     return false;
 });
