@@ -14,7 +14,7 @@
             <p class="small">
             <span class="hsep">{{ _("Reputation") }}: {{user.reputation}}</span>
             <span class="hsep">{{ _("Join at") }}: {{user.created.strftime("%Y-%m-%d")}}</span>
-            {% if user.website %}{{ _("Website") }}: <a href="{{user.website}}">{{user.website}}</a>{% end %}
+            {% if user.website %}{{ _("Website") }}: <a href="{{user.website}}">{{escape(user.website)}}</a>{% end %}
             </p>
         </div>
     </div>
