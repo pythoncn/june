@@ -5,7 +5,7 @@ from june.lib.handler import BaseHandler
 from june.lib import validators
 from june.auth.recaptcha import RecaptchaMixin
 from june.models import Member, MemberLog, Topic, Notify
-from june.models import NodeMixin, MemberMixin
+from june.models import NodeMixin, MemberMixin, create_token
 
 
 class SigninHandler(BaseHandler):
@@ -81,6 +81,17 @@ class GoogleSigninHandler(BaseHandler, GoogleMixin):
 class SignoutHandler(BaseHandler):
     def get(self):
         self.clear_cookie('user')
+        self.redirect(self.next_url)
+
+
+class SignoutEverywhereHandler(BaseHandler):
+    @tornado.web.authenticated
+    def get(self):
+        user = self.db.query(Member).get(self.current_user.id)
+        user.token = create_token(16)
+        self.db.add(user)
+        self.db.commit()
+        self.cache.delete('member:%s' % user.id)
         self.redirect(self.next_url)
 
 
@@ -226,6 +237,7 @@ handlers = [
     ('/account/signin', SigninHandler),
     ('/account/signin/google', GoogleSigninHandler),
     ('/account/signout', SignoutHandler),
+    ('/account/signout/everywhere', SignoutEverywhereHandler),
     ('/account/signup', SignupHandler),
     ('/account/setting', SettingHandler),
     ('/account/notify', NotifyHandler),
