@@ -4,6 +4,7 @@
 
 {% block afterstyle %}
 <meta name="description" content="{{node.description}}" />
+<link rel="canonical" href="{{context.siteurl}}/node/{{node.slug}}" />
 {{ node.header or '' }}
 <link rel="alternate" type="application/atom+xml" href="/node/{{node.slug}}/feed" title="{{context.sitename}}:{{node.title}}" />
 {% end %}
@@ -15,6 +16,11 @@
 {% end %}
 
 {% block sidebar %}
+
+{% if current_user %}
+{% module MemberModule(current_user) %}
+{% end %}
+
 <div class="widget">
     <h4 class="widget-title">{{ _("In Node") }}</h4>
     <div class="vsep"><a class="node" href="/node/{{node.slug}}" style="{%if node.bgcolor%}background:{{node.bgcolor}};{% end %}{%if node.fgcolor%}color:{{node.fgcolor}}{%end%}">{{escape(node.title)}}</a></div>

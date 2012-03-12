@@ -3,9 +3,8 @@
 {% block subtitle %}{{escape(topic.title)}}{% end %}
 
 {% block afterstyle %}
-{% if node.header %}
-{{ node.header }}
-{% end %}
+<link rel="canonical" href="{{context.siteurl}}/topic/{{topic.id}}" />
+{{ node.header or '' }}
 {% end %}
 
 {% block main %}

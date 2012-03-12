@@ -2,6 +2,10 @@
 
 {% block subtitle %}{{ _("Signup") }}{% end %}
 
+{% block afterstyle %}
+<link rel="canonical" href="{{context.siteurl}}/account/signup" />
+{% end %}
+
 {% block main %}
 <div id="main" class="wrapper">
     <form action="" method="post" class="fm">

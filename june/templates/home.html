@@ -2,6 +2,10 @@
 
 {% block title %}{{context.sitename}}{% end %}
 
+{% block afterstyle %}
+<link rel="canonical" href="{{context.siteurl}}" />
+{% end %}
+
 {% block main %}
 <div id="main">
     {% module TopicListModule(0) %}
