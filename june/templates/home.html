@@ -23,9 +23,7 @@
 <div class="widget">
     <h4 class="widget-title">{{ _("Recent Join") }}</h4>
     <div class="fn-wrap">
-        {% for member in members %}
-        <a class="avatar fn-left" href="/member/{{member.username}}" title="{{member.username}}"><img src="{{member.get_avatar(36)}}" alt="avatar" width="36" height="36" /></a>
-        {% end %}
+        {% module MemberListModule() %}
     </div>
 </div>
 {% end %}

@@ -209,7 +209,7 @@ class SettingHandler(BaseHandler):
 class NotifyHandler(BaseHandler):
     @tornado.web.authenticated
     def get(self):
-        user = self.db.query(Member).filter_by(id=self.current_user.id).first()
+        user = self.db.query(Member).get(self.current_user.id)
         notify = Notify.query.filter_by(receiver=user.id).order_by('-id')[:20]
         user.last_notify = datetime.utcnow()
         self.db.add(user)

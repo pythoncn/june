@@ -9,26 +9,14 @@ from june.lib.decorators import require_user
 from june.lib.util import ObjectDict, PageMixin
 from june.lib.filters import find_mention
 from june.models import Node, Topic, Reply, Member
-from june.models import NodeMixin, TopicMixin, MemberMixin, NotifyMixin
+from june.models import NodeMixin, TopicMixin, MemberMixin
 
 
-class TopicHandler(BaseHandler, TopicMixin, NodeMixin, PageMixin, NotifyMixin):
+class TopicHandler(BaseHandler, TopicMixin, NodeMixin, PageMixin):
     def head(self, id):
         pass
 
     def get(self, id):
-        topic = self._hit_topic(id)
-        if not topic:
-            self.send_error(404)
-            return
-        node = self.get_node_by_id(topic.node_id)
-        user_ids = list(topic.up_users)
-        user_ids.extend(topic.down_users)
-        user_ids.append(topic.user_id)
-        users = self.get_users(user_ids)
-        self.render('topic.html', topic=topic, node=node, users=users)
-
-    def _hit_topic(self, id):
         key = 'hit$topic:%s' % str(id)
         count = self.cache.get(key)
         if count is None:
@@ -39,17 +27,24 @@ class TopicHandler(BaseHandler, TopicMixin, NodeMixin, PageMixin, NotifyMixin):
         if count > 10:
             topic = self.db.query(Topic).filter_by(id=id).first()
             if not topic:
-                return None
-            self.cache.set(key, 1)
+                self.send_error(404)
+                return
             topic.hits += 10
-            topic.impact += 10
+            topic.impact += 1000
             self.db.add(topic)
             self.db.commit()
             self.cache.delete('topic:%s' % str(id))
         else:
             topic = self.get_topic_by_id(id)
-            topic.hits = topic.hits + count
-        return topic
+            # topic.hits = topic.hits + count
+            # don't change hits, server answer 304, reduce bandwidth
+            if not topic:
+                self.send_error(404)
+                return
+
+        node = self.get_node_by_id(topic.node_id)
+        topic.creator = self.get_user_by_id(topic.user_id)
+        self.render('topic.html', topic=topic, node=node)
 
     @require_user
     def post(self, id):
@@ -71,9 +66,8 @@ class TopicHandler(BaseHandler, TopicMixin, NodeMixin, PageMixin, NotifyMixin):
             self.redirect(url)
             return
 
-        reply = Reply(content=content)
-        reply.topic_id = id
-        reply.user_id = self.current_user.id
+        reply = Reply(topic_id=id, user_id=self.current_user.id,
+                      content=content)
 
         # impact on topic
         topic.reply_count += 1
@@ -102,11 +96,11 @@ class TopicHandler(BaseHandler, TopicMixin, NodeMixin, PageMixin, NotifyMixin):
         if hasattr(options, 'reply_factor_for_topic'):
             factor = int(options.reply_factor_for_topic)
         else:
-            factor = 300
+            factor = 800
         if hasattr(options, 'reply_time_factor'):
             time_factor = int(options.reply_time_factor)
         else:
-            time_factor = 200
+            time_factor = 400
         time = datetime.utcnow() - topic.created
         factor += time.days * time_factor
         return factor * int(math.log(self.current_user.reputation))

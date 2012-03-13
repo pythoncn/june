@@ -2,8 +2,8 @@ import datetime
 import tornado.web
 from june.lib.handler import BaseHandler
 from june.lib.util import PageMixin
-from june.models import NodeMixin
-from june.models import Node, Topic
+from june.models import NodeMixin, MemberMixin
+from june.models import Node, Topic, FollowNode
 
 
 class NodeHandler(BaseHandler, NodeMixin, PageMixin):
@@ -33,9 +33,9 @@ class FollowNodeHandler(BaseHandler, NodeMixin):
             return
         self.follow_node(node.id)
         self.db.commit()
-        key1 = 'ui$topiclist:%s:1:-impact' % self.current_user.id
+        key1 = 'TopicListModule:%s:1:-impact' % self.current_user.id
         key2 = 'follownode:%s' % self.current_user.id
-        key3 = 'ui$follownode:%s' % self.current_user.id
+        key3 = 'FollowedNodesModule:%s' % self.current_user.id
         self.cache.delete_multi([key1, key2, key3])
         self.redirect('/node/%s' % node.slug)
 
@@ -51,9 +51,9 @@ class UnfollowNodeHandler(BaseHandler, NodeMixin):
                 (self.current_user.id, node.id)
         self.db.execute(sql)
         self.db.commit()
-        key1 = 'ui$topiclist:%s:1:-impact' % self.current_user.id
+        key1 = 'TopicListModule:%s:1:-impact' % self.current_user.id
         key2 = 'follownode:%s' % self.current_user.id
-        key3 = 'ui$follownode:%s' % self.current_user.id
+        key3 = 'FollowedNodesModule:%s' % self.current_user.id
         self.cache.delete_multi([key1, key2, key3])
         self.redirect('/node/%s' % node.slug)
 
@@ -103,7 +103,8 @@ handlers = [
 
 class FollowedNodesModule(tornado.web.UIModule, NodeMixin):
     def render(self, user_id, tpl="module/node.html"):
-        key = 'ui$follownode:%s' % str(user_id)
+        #TODO: node_list tpl
+        key = 'FollowedNodesModule:%s' % str(user_id)
         html = self.handler.cache.get(key)
         if html is not None:
             return html
@@ -119,6 +120,23 @@ class FollowedNodesModule(tornado.web.UIModule, NodeMixin):
         return html
 
 
+class NodeFollowersModule(tornado.web.UIModule, MemberMixin):
+    def render(self, node_id, tpl='module/member_list.html'):
+        key = 'NodeFollowersModule:%s' % node_id
+        html = self.handler.cache.get(key)
+        if html is not None:
+            return html
+        q = FollowNode.query.filter_by(node_id=node_id).limit(5)\
+                .values('user_id')
+        #TODO limit number
+        user_ids = (values[0] for values in q)
+        users = self.get_users(user_ids)
+        html = self.render_string(tpl, users=users.itervalues())
+        self.handler.cache.set(key, html, 600)
+        return html
+
+
 ui_modules = {
     'FollowedNodesModule': FollowedNodesModule,
+    'NodeFollowersModule': NodeFollowersModule,
 }

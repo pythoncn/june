@@ -1,0 +1,3 @@
+{% for user in users %}
+<a class="avatar fn-left" href="/member/{{user.username}}" title="{{user.username}}"><img src="{{user.get_avatar(36)}}" alt="avatar" width="36" height="36" /></a>
+{% end %}

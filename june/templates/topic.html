@@ -13,7 +13,7 @@
         <header class="fn-clear">
             <div class="entry-basic">
                 <h1 class="entry-title">{{escape(topic.title)}}</h1>
-                {% set user = users[topic.user_id] %}
+                {% set user = topic.creator %}
                 <div class="entry-meta">
                     By
                     <a href="/member/{{escape(user.username)}}">{{escape(user.username)}}</a>
@@ -69,7 +69,7 @@
 {% block sidebar %}
 <div class="widget fn-clear">
     <h4 class="widget-title">{{ _("Topic Creator") }}</h4>
-    {% set user = users[topic.user_id] %}
+    {% set user = topic.creator %}
     <a class="avatar fn-left" href="/member/{{user.username}}" tabindex="-1"><img src="{{user.get_avatar(48)}}" alt="avatar" width="48" height="48" /></a>
     <div class="fn-wrap">
         <a href="/member/{{user.username}}">{{user.username}}</a>
@@ -104,15 +104,8 @@
 
 <div class="widget">
     <div class="fn-wrap">
-        {% for id in topic.up_users %}
-        {% set user = users[id] %}
-        <a href="/member/{{user.username}}" title="{{user.username}}"><img src="{{user.get_avatar(24)}}" width="24" height="24" /></a>
-        {% end %}
-
-        {% for id in topic.down_users %}
-        {% set user = users[id] %}
-        <a href="/member/{{user.username}}" title="{{user.username}}"><img src="{{user.get_avatar(24)}}" width="24" height="24" /></a>
-        {% end %}
+        {{len(list(topic.up_users))}} up votes
+        {{len(list(topic.down_users))}} down votes
     </div>
 </div>
 {% end %}
