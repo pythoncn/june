@@ -9,10 +9,10 @@ from june.lib.decorators import require_user
 from june.lib.util import ObjectDict, PageMixin
 from june.lib.filters import find_mention
 from june.models import Node, Topic, Reply, Member
-from june.models import NodeMixin, TopicMixin, MemberMixin
+from june.models import NodeMixin, TopicMixin, MemberMixin, NotifyMixin
 
 
-class TopicHandler(BaseHandler, TopicMixin, NodeMixin, PageMixin):
+class TopicHandler(BaseHandler, TopicMixin, NodeMixin, PageMixin, NotifyMixin):
     def head(self, id):
         pass
 
