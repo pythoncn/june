@@ -4,7 +4,7 @@ from datetime import datetime
 from june.lib.handler import BaseHandler
 from june.lib import validators
 from june.auth.recaptcha import RecaptchaMixin
-from june.models import Member, MemberLog, Topic, Notify
+from june.models import Member, MemberLog, Notify
 from june.models import NodeMixin, MemberMixin, create_token
 
 
@@ -229,8 +229,7 @@ class MemberHandler(BaseHandler, NodeMixin):
         if not user:
             self.send_error(404)
             return
-        topics = Topic.query.filter_by(user_id=user.id).order_by('-id')[:20]
-        self.render('member.html', user=user, topics=topics)
+        self.render('member.html', user=user)
 
 
 handlers = [

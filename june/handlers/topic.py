@@ -168,7 +168,8 @@ class CreateTopicHandler(BaseHandler, NodeMixin):
         self.cache.set(key, url, 100)
         key1 = 'TopicListModule:0:1:-impact'
         key2 = 'NodeTopicsModule:%s:1:-impact' % node.id
-        self.cache.delete_multi(['status', key1, key2])
+        key3 = 'UserTopicsModule:%s:1:-impact' % self.current_user.id
+        self.cache.delete_multi(['status', key1, key2, key3])
         self.redirect(url)
 
     def _check_permission(self, node):
@@ -584,8 +585,26 @@ class NodeTopicsModule(UIModule, MemberMixin, PageMixin):
         return html
 
 
+class UserTopicsModule(UIModule, NodeMixin, PageMixin):
+    def render(self, user_id, tpl='module/user_topic_list.html'):
+        order = self._get_order()
+        p = self._get_page()
+        key = 'UserTopicsModule:%s:%s:%s' % (user_id, p, order)
+        html = self.handler.cache.get(key)
+        if html is not None:
+            return html
+
+        q = Topic.query.filter_by(user_id=user_id).order_by(order)
+        page = ObjectDict(self._get_pagination(q))
+        nodes = self.get_nodes((topic.node_id for topic in page.datalist))
+        html = self.render_string(tpl, page=page, nodes=nodes)
+        self.handler.cache.set(key, html, 600)
+        return html
+
+
 ui_modules = {
     'ReplyListModule': ReplyListModule,
     'TopicListModule': TopicListModule,
     'NodeTopicsModule': NodeTopicsModule,
+    'UserTopicsModule': UserTopicsModule,
 }
