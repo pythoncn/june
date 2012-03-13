@@ -102,7 +102,7 @@ handlers = [
 
 
 class FollowedNodesModule(tornado.web.UIModule, NodeMixin):
-    def render(self, user_id):
+    def render(self, user_id, tpl="module/node.html"):
         key = 'ui$follownode:%s' % str(user_id)
         html = self.handler.cache.get(key)
         if html is not None:
@@ -113,7 +113,7 @@ class FollowedNodesModule(tornado.web.UIModule, NodeMixin):
         nodes = self.get_nodes(node_ids)
         html = ''
         for node in nodes.itervalues():
-            html += self.render_string('module/node.html', node=node)
+            html += self.render_string(tpl, node=node)
 
         self.handler.cache.set(key, html, 600)
         return html

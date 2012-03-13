@@ -246,18 +246,31 @@ handlers = [
 
 
 class MemberModule(tornado.web.UIModule, MemberMixin):
-    def render(self, user):
+    def render(self, user, tpl='module/member.html'):
         key = 'notify:%s' % user.id
         notify = self.handler.cache.get(key)
         if notify is None:
             q = Notify.query.filter_by(receiver=user.id)
             notify = q.filter_by(created__gt=user.last_notify).count()
             self.handler.cache.set(key, notify, 600)
-        html = self.render_string('module/member.html',
-                                  user=user, notify=notify)
+        html = self.render_string(tpl, user=user, notify=notify)
+        return html
+
+
+class MemberListModule(tornado.web.UIModule):
+    def render(self, order='-id', count=5, tpl='module/member_list.html'):
+        #TODO pagination available
+        key = 'MemberListModule:%s:%s' % (order, count)
+        html = self.handler.cache.get(key)
+        if html is not None:
+            return html
+        users = Member.query.order_by(order).all()[:count]
+        html = self.render_string(tpl, users=users)
+        self.handler.cache.set(key, html, 600)
         return html
 
 
 ui_modules = {
     'MemberModule': MemberModule,
+    'MemberListModule': MemberListModule,
 }
