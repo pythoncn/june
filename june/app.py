@@ -4,13 +4,14 @@ import os
 os.environ['TZ'] = 'UTC'
 os.environ["PYTHON_EGG_CACHE"] = "/tmp/egg"
 
-ROOT = os.path.abspath(os.path.dirname(__file__))
+PROJDIR = os.path.abspath(os.path.dirname(__file__))
+ROOTDIR = os.path.split(PROJDIR)[0]
 try:
     import june
     print('Start june version: %s' % june.__version__)
 except ImportError:
     import site
-    site.addsitedir(os.path.split(ROOT)[0])
+    site.addsitedir(ROOTDIR)
     print('Development of june')
 
 import tornado.options
@@ -25,11 +26,11 @@ from june.lib.util import parse_config_file
 class Application(web.Application):
     def __init__(self):
         from june.config import db, cache  # init db
-        from june.urls import handlers, ui_modules, sub_handlers
-        if hasattr(options, 'template_path'):
+        from june.urls import handlers, ui_modules
+        if hasattr(options, 'template_path') and options.template_path:
             template_path = options.template_path
         else:
-            template_path = os.path.join(ROOT, "templates")
+            template_path = os.path.join(PROJDIR, "templates")
         settings = dict(
             debug=options.debug,
             autoescape=None,
@@ -46,10 +47,11 @@ class Application(web.Application):
         super(Application, self).__init__(handlers, **settings)
         Application.db = db.session
         Application.cache = cache
-        tornado.locale.load_translations(os.path.join(ROOT, "locale"))
-
-        for sub_handler in sub_handlers:
-            self.add_handlers(sub_handler[0], sub_handler[1])
+        if hasattr(options, 'locale_path') and options.locale_path:
+            locale_path = options.locale_path
+        else:
+            locale_path = os.path.join(PROJDIR, 'locale')
+        tornado.locale.load_translations(locale_path)
 
 
 def run_server():

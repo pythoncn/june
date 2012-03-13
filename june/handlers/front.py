@@ -1,9 +1,9 @@
 import datetime
 import tornado.web
 from june.lib.handler import BaseHandler
+from june.lib.filters import safe_markdown
 from june.models import Topic, Member, Node
 from june.models import NodeMixin
-from june.filters import safe_markdown
 
 
 class HomeHandler(BaseHandler, NodeMixin):
@@ -55,13 +55,13 @@ handlers = [
 
 class SystemStatusModule(tornado.web.UIModule):
     def render(self):
-        status = self.handler.cache.get('ui$status')
+        status = self.handler.cache.get('status')
         if status is None:
             status = {}
             status['node'] = Node.query.count()
             status['topic'] = Topic.query.count()
             status['member'] = Member.query.count()
-            self.handler.cache.set('ui$status', status, 600)
+            self.handler.cache.set('status', status, 600)
         _ = self.handler.locale.translate
         html = '%s:%s %s:%s %s:%s' % (
             _("Node"), status['node'], _("Topic"), status['topic'],

@@ -45,7 +45,7 @@
             {{ markdown(topic.content) }}
         </div>
     </article>
-    {% module ReplyModule(topic) %}
+    {% module ReplyListModule(topic) %}
 
     {% if current_user %}
     <form action="/topic/{{topic.id}}" method="post" class="reply-form fm js-form" data-target="div.replies">

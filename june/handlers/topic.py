@@ -7,7 +7,7 @@ from tornado.web import UIModule
 from june.lib.handler import BaseHandler
 from june.lib.decorators import require_user
 from june.lib.util import ObjectDict, PageMixin
-from june.filters import find_mention
+from june.lib.filters import find_mention
 from june.models import Node, Topic, Reply, Member
 from june.models import NodeMixin, TopicMixin, MemberMixin, NotifyMixin
 
@@ -92,7 +92,8 @@ class TopicHandler(BaseHandler, TopicMixin, NodeMixin, PageMixin, NotifyMixin):
         self.db.commit()
         url = '/topic/%s' % str(id)
         self.cache.set(key, url, 100)
-        self.cache.delete('ui$reply:%s' % str(id))
+        #TODO calculate page, delete the right cache
+        self.cache.delete('ReplyListModule:%s:1' % str(id))
         self.redirect(url)
 
     def _calc_impact(self, topic):
@@ -171,8 +172,8 @@ class CreateTopicHandler(BaseHandler, NodeMixin):
         self.db.commit()
         url = '/topic/%d' % topic.id
         self.cache.set(key, url, 100)
-        key1 = 'ui$topiclist:0:1:-impact'
-        key2 = 'ui$nodetopics:%s:1:-impact' % node.id
+        key1 = 'TopicListModule:0:1:-impact'
+        key2 = 'NodeTopicsModule:%s:1:-impact' % node.id
         self.cache.delete_multi(['status', key1, key2])
         self.redirect(url)
 
@@ -511,34 +512,29 @@ handlers = [
 ]
 
 
-class ReplyModule(UIModule, PageMixin, MemberMixin):
-    def render(self, topic):
-        if self._get_page() == 1:
-            key = 'ui$reply:%s' % topic.id
-            html = self.handler.cache.get(key)
-            if html is not None:
-                return html
-            html = self._render_html(topic.id)
-            self.handler.cache.set(key, html, 600)
+class ReplyListModule(UIModule, PageMixin, MemberMixin):
+    def render(self, topic, tpl='module/reply_list.html'):
+        p = self._get_page()
+        key = 'ReplyListModule:%s:%s' % (topic.id, p)
+        html = self.handler.cache.get(key)
+        if html is not None:
             return html
-        return self._render_html(topic.id)
-
-    def _render_html(self, topic_id):
         page = self._get_pagination(
-            Reply.query.filter_by(topic_id=topic_id),
+            Reply.query.filter_by(topic_id=topic.id),
             perpage=30)
         page = ObjectDict(page)
         user_ids = [o.user_id for o in page.datalist]
         users = self.get_users(user_ids)
-        return self.render_string('module/reply_list.html',
-                                  page=page, users=users)
+        html = self.render_string(tpl, page=page, users=users)
+        self.handler.cache.set(key, html, 600)
+        return html
 
 
 class TopicListModule(UIModule, MemberMixin, NodeMixin, PageMixin):
-    def render(self, user_id=0):
+    def render(self, user_id=0, tpl='module/topic_list.html'):
         order = self._get_order()
         p = self._get_page()
-        key = 'ui$topiclist:%s:%s:%s' % (user_id, p, order)
+        key = 'TopicListModule:%s:%s:%s' % (user_id, p, order)
         html = self.handler.cache.get(key)
         if html is not None:
             return html
@@ -568,17 +564,16 @@ class TopicListModule(UIModule, MemberMixin, NodeMixin, PageMixin):
             node_ids.append(topic.node_id)
         users = self.get_users(user_ids)
         nodes = self.get_nodes(node_ids)
-        html = self.render_string('module/topic_list.html', page=page,
-                                  users=users, nodes=nodes)
+        html = self.render_string(tpl, page=page, users=users, nodes=nodes)
         self.handler.cache.set(key, html, 60)
         return html
 
 
 class NodeTopicsModule(UIModule, MemberMixin, PageMixin):
-    def render(self, node_id):
+    def render(self, node_id, tpl='module/topic_list.html'):
         order = self._get_order()
         p = self._get_page()
-        key = 'ui$nodetopics:%s:%s:%s' % (node_id, p, order)
+        key = 'NodeTopicsModule:%s:%s:%s' % (node_id, p, order)
         html = self.handler.cache.get(key)
         if html is not None:
             return html
@@ -590,14 +585,13 @@ class NodeTopicsModule(UIModule, MemberMixin, PageMixin):
         for topic in page.datalist:
             user_ids.append(topic.user_id)
         users = self.get_users(user_ids)
-        html = self.render_string('module/topic_list.html', page=page,
-                                  users=users, nodes=None)
+        html = self.render_string(tpl, page=page, users=users, nodes=None)
         self.handler.cache.set(key, html, 600)
         return html
 
 
 ui_modules = {
-    'ReplyModule': ReplyModule,
+    'ReplyListModule': ReplyListModule,
     'TopicListModule': TopicListModule,
     'NodeTopicsModule': NodeTopicsModule,
 }

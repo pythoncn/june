@@ -7,7 +7,7 @@ from tornado import escape
 
 import june
 from june.models import MemberMixin
-from june.filters import safe_markdown, xmldatetime
+from june.lib.filters import safe_markdown, xmldatetime
 from june.lib.util import ObjectDict
 
 
