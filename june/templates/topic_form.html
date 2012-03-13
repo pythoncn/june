@@ -31,8 +31,8 @@
             <label class="fm-label" for="content">{{ _("Content") }}</label>
             <div id="editor" class="fm-item fn-clear">
                 <div id="editor-pannel">
-                    <a href="#" class="js-write current">{{ _("Write") }}</a>
-                    <a href="#" class="js-preview">{{ _("Preview") }}</a>
+                    <a href="#" class="js-write current" tabindex="-1">{{ _("Write") }}</a>
+                    <a href="#" class="js-preview" tabindex="-1">{{ _("Preview") }}</a>
                 </div>
                 <textarea name="content" class="fm-text" required>{% if topic %}{{topic.content or ""}}{% end %}</textarea>
                 <div id="editor-preview"></div>
