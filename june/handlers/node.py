@@ -3,7 +3,7 @@ import tornado.web
 from june.lib.handler import BaseHandler
 from june.lib.util import PageMixin
 from june.models import NodeMixin, MemberMixin
-from june.models import Node, Topic, FollowNode
+from june.models import Topic, FollowNode
 
 
 class NodeHandler(BaseHandler, NodeMixin, PageMixin):
@@ -63,11 +63,7 @@ class NodeListHandler(BaseHandler, NodeMixin):
         pass
 
     def get(self):
-        nodes = self.cache.get('allnodes')
-        if nodes is None:
-            nodes = Node.query.all()
-            nodes = sorted(nodes, key=lambda o: o.updated, reverse=True)
-            self.cache.set('allnodes', nodes, 600)
+        nodes = self.get_all_nodes()
         self.render('node_list.html', nodes=nodes)
 
 
@@ -102,7 +98,7 @@ handlers = [
 
 
 class FollowedNodesModule(tornado.web.UIModule, NodeMixin):
-    def render(self, user_id, tpl="module/node.html"):
+    def render(self, user_id, tpl="module/node_list.html"):
         #TODO: node_list tpl
         key = 'FollowedNodesModule:%s' % str(user_id)
         html = self.handler.cache.get(key)
@@ -112,10 +108,7 @@ class FollowedNodesModule(tornado.web.UIModule, NodeMixin):
         if not node_ids:
             return ''
         nodes = self.get_nodes(node_ids)
-        html = ''
-        for node in nodes.itervalues():
-            html += self.render_string(tpl, node=node)
-
+        html = self.render_string(tpl, nodes=nodes.itervalues())
         self.handler.cache.set(key, html, 600)
         return html
 

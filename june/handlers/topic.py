@@ -109,11 +109,7 @@ class TopicHandler(BaseHandler, TopicMixin, NodeMixin, PageMixin):
 class NewTopicHandler(BaseHandler, NodeMixin):
     @require_user
     def get(self):
-        nodes = self.cache.get('allnodes')
-        if nodes is None:
-            nodes = Node.query.all()
-            nodes = sorted(nodes, key=lambda o: o.updated, reverse=True)
-            self.cache.set('allnodes', nodes, 600)
+        nodes = self.get_all_nodes()
         self.render("new_topic.html", nodes=nodes)
 
 
