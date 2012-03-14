@@ -5,9 +5,31 @@
 {% block main %}
 <div id="main">
     <div class="cell fn-clear">
-        <form action="" class="fm">
-            <input type="text" name="user" class="fm-text hsep" />
-            <button type="submit" class="ui-btn">{{ _("Member Manage") }}</button>
+        <form action="/dashboard/storage" method="post" class="fm">
+            {{ xsrf_form_html() }}
+            <div class="fm-row">
+                <div class="fm-item fm-required">
+                    <label class="fm-label">{{ _("Header") }}</label>
+                    <textarea name="header" class="fm-text">{{context.header or ''}}</textarea>
+                </div>
+            </div>
+            <div class="fm-row">
+                <div class="fm-item fm-required">
+                    <label class="fm-label">{{ _("Sidebar") }}</label>
+                    <textarea name="sidebar" class="fm-text">{{context.sidebar or ''}}</textarea>
+                </div>
+            </div>
+            <div class="fm-row">
+                <div class="fm-item fm-required">
+                    <label class="fm-label">{{ _("Footer") }}</label>
+                    <textarea name="footer" class="fm-text">{{context.footer or ''}}</textarea>
+                </div>
+            </div>
+            <div class="fm-row">
+                <div class="fm-item">
+                    <button class="ui-btn">{{_("Save")}}</button>
+                </div>
+            </div>
         </form>
     </div>
     <div class="wrapper">
@@ -16,4 +38,16 @@
         {% end %}
     </div>
 </div>
+{% end %}
+
+{% block sidebar %}
+<form action="" class="fm widget">
+    <input type="text" name="user" class="fm-text vsep" />
+    <button type="submit" class="ui-btn">{{ _("Member Manage") }}</button>
+</form>
+
+<form action="" class="fm widget">
+    <input type="text" name="cache" class="fm-text vsep" />
+    <button type="submit" class="ui-btn">{{ _("Delete Cache") }}</button>
+</form>
 {% end %}

@@ -322,3 +322,28 @@ class Reply(db.Model):
         if not self.downs:
             return []
         return (int(i) for i in self.downs.split(','))
+
+
+class Storage(db.Model):
+    """A key-value storage"""
+    key = Column(String(100), nullable=False, index=True)
+    value = Column(String(2000))
+
+
+class StorageMixin(object):
+    @cache('storage', 0)
+    def get_storage(self, key):
+        data = Storage.query.filter_by(key=key).first()
+        if data:
+            return data.value
+        return None
+
+    def set_storage(self, key, value):
+        data = self.db.query(Storage).filter_by(key=key).first()
+        if not data:
+            data = Storage(key=key, value=value)
+        else:
+            data.value = value
+            self.cache.delete('storage:%s' % key)
+        self.db.add(data)
+        return data

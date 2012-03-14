@@ -3,6 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <title>{%block title%}{%block subtitle%}{%end%} | {{context.sitename}}{%end%}</title>
+        {{ context.header or '' }}
         {% if is_mobile() %}
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0" />
         <link rel="stylesheet" href="{{static_url('css/mobile.css')}}" />
@@ -73,10 +74,12 @@
             </div>
             <div id="sidebar">
                 {% block sidebar %}{% end %}
+                {{ context.sidebar or '' }}
                 <div id="footer">
                     <div class="widget status">
                         {% module SystemStatusModule() %}
                     </div>
+                    {{ context.footer or '' }}
                     <div class="widget copyright">
                         Designed by <a href="http://lepture.com">lepture</a> |
                         Powered by <a href="https://github.com/lepture/june">June</a> {{context.version}}

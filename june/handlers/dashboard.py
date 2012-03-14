@@ -14,6 +14,16 @@ class DashMixin(object):
             setattr(model, attr, value)
 
 
+class EditStorage(BaseHandler):
+    @require_admin
+    def post(self):
+        self.set_storage('header', self.get_argument('header', ''))
+        self.set_storage('sidebar', self.get_argument('sidebar', ''))
+        self.set_storage('footer', self.get_argument('footer', ''))
+        self.db.commit()
+        self.redirect('/dashboard')
+
+
 class CreateNode(BaseHandler):
     @require_admin
     def get(self):
@@ -187,12 +197,18 @@ class Dashboard(BaseHandler, NodeMixin):
         if user:
             self.redirect('/dashboard/member/%s' % user)
             return
+        cache = self.get_argument('cache', None)
+        if cache:
+            self.cache.delete(str(cache))
+            self.redirect('/dashboard')
+            return
         nodes = Node.query.all()
         self.render('dashboard/index.html', nodes=nodes)
 
 
 handlers = [
     ('/dashboard', Dashboard),
+    ('/dashboard/storage', EditStorage),
     ('/dashboard/node', CreateNode),
     ('/dashboard/node/(\w+)', EditNode),
     ('/dashboard/member/(.*)', EditMember),

@@ -6,12 +6,12 @@ from tornado.options import options
 from tornado import escape
 
 import june
-from june.models import MemberMixin
+from june.models import MemberMixin, StorageMixin
 from june.lib.filters import safe_markdown, xmldatetime
 from june.lib.util import ObjectDict
 
 
-class BaseHandler(RequestHandler, MemberMixin):
+class BaseHandler(RequestHandler, MemberMixin, StorageMixin):
     _first_run = True
 
     def initialize(self):
@@ -96,10 +96,10 @@ class BaseHandler(RequestHandler, MemberMixin):
         self._context.now = datetime.datetime.utcnow()
         self._context.sitename = options.sitename
         self._context.siteurl = options.siteurl
-        if hasattr(options, 'version'):
-            self._context.version = options.version
-        else:
-            self._context.version = june.__version__
+        self._context.sidebar = self.get_storage('sidebar')
+        self._context.footer = self.get_storage('footer')
+        self._context.header = self.get_storage('header')
+        self._context.version = june.__version__
         if hasattr(options, 'sitefeed'):
             self._context.sitefeed = options.sitefeed
         else:
