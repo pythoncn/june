@@ -17,13 +17,9 @@ class DashMixin(object):
 class EditStorage(BaseHandler):
     @require_admin
     def post(self):
-        self.set_storage('sitename', self.get_argument('sitename', ''))
-        self.set_storage('siteurl', self.get_argument('siteurl', ''))
-        self.set_storage('sitefeed', self.get_argument('sitefeed', ''))
         self.set_storage('header', self.get_argument('header', ''))
         self.set_storage('sidebar', self.get_argument('sidebar', ''))
         self.set_storage('footer', self.get_argument('footer', ''))
-        self.set_storage('ga', self.get_argument('ga', ''))
         self.db.commit()
         self.redirect('/dashboard')
 

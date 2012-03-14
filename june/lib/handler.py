@@ -95,13 +95,16 @@ class BaseHandler(RequestHandler, MemberMixin, StorageMixin):
         self._context = ObjectDict()
         self._context.now = datetime.datetime.utcnow()
         self._context.version = june.__version__
-        self._context.sitename = self.get_storage('sitename') or 'June'
-        self._context.siteurl = self.get_storage('siteurl')
+        self._context.sitename = options.sitename
+        self._context.siteurl = options.siteurl
         self._context.sidebar = self.get_storage('sidebar')
         self._context.footer = self.get_storage('footer')
         self._context.header = self.get_storage('header')
-        self._context.sitefeed = self.get_storage('sitefeed') or '/feed'
-        self._context.ga = self.get_storage('ga')
+        if hasattr(options, 'sitefeed'):
+            self._context.sitefeed = options.sitefeed
+        else:
+            self._context.sitefeed = '/feed'
+        self._context.ga = options.ga
         self._context.debug = options.debug
         self._context.message = []
 
