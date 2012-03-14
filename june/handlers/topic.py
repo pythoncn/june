@@ -33,6 +33,7 @@ class TopicHandler(BaseHandler, TopicMixin, NodeMixin, PageMixin, NotifyMixin):
             topic.impact += 1000
             self.db.add(topic)
             self.db.commit()
+            self.cache.set(key, 1)
             self.cache.delete('topic:%s' % str(id))
         else:
             topic = self.get_topic_by_id(id)
