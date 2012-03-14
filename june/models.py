@@ -177,6 +177,9 @@ class NotifyMixin(object):
                          label=topic.title, link=link, content=content)
         notify.type = type
         self.db.add(notify)
+        if not hasattr(self, 'cache'):
+            self.cache = self.handler.cache
+        self.cache.delete('notify:%s' % receiver)
         return notify
 
     def create_mention(self, username, topic, content):
@@ -198,6 +201,10 @@ class NotifyMixin(object):
             label=topic.title, link=link, content=content)
         notify.type = 'mention'
         self.db.add(notify)
+
+        if not hasattr(self, 'cache'):
+            self.cache = self.handler.cache
+        self.cache.delete('notify:%s' % user.id)
         return notify
 
 

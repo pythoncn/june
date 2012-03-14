@@ -211,13 +211,14 @@ class NotifyHandler(BaseHandler):
     def get(self):
         user = self.db.query(Member).get(self.current_user.id)
         notify = Notify.query.filter_by(receiver=user.id).order_by('-id')[:20]
-        user.last_notify = datetime.utcnow()
-        self.db.add(user)
-        self.db.commit()
+        self.render('notify.html', notify=notify)
+
         key1 = 'notify:%s' % user.id
         key2 = 'member:%s' % user.id
         self.cache.delete_multi([key1, key2])
-        self.render('notify.html', notify=notify)
+        user.last_notify = datetime.utcnow()
+        self.db.add(user)
+        self.db.commit()
 
 
 class MemberHandler(BaseHandler, NodeMixin):
