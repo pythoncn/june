@@ -234,7 +234,7 @@ class NodeMixin(object):
     def get_node_by_slug(self, slug):
         return Node.query.filter_by(slug=slug).first()
 
-    @cache('allnode', 600)
+    @cache('allnodes', 600)
     def get_all_nodes(self):
         nodes = Node.query.all()
         nodes = sorted(nodes, key=lambda o: o.updated, reverse=True)
