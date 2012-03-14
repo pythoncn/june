@@ -9,20 +9,44 @@
             {{ xsrf_form_html() }}
             <div class="fm-row">
                 <div class="fm-item fm-required">
+                    <label class="fm-label">{{ _("Sitename") }}</label>
+                    <input type="text" class="fm-text" name="sitename" value="{{context.sitename or ''}}" />
+                </div>
+            </div>
+            <div class="fm-row">
+                <div class="fm-item fm-required">
+                    <label class="fm-label">{{ _("Siteurl") }}</label>
+                    <input type="url" class="fm-text" name="siteurl" value="{{context.siteurl or ''}}" />
+                </div>
+            </div>
+            <div class="fm-row">
+                <div class="fm-item">
+                    <label class="fm-label">{{ _("Sitefeed") }}</label>
+                    <input type="text" class="fm-text" name="sitefeed" value="{{context.sitefeed or ''}}" />
+                </div>
+            </div>
+            <div class="fm-row">
+                <div class="fm-item">
                     <label class="fm-label">{{ _("Header") }}</label>
                     <textarea name="header" class="fm-text">{{context.header or ''}}</textarea>
                 </div>
             </div>
             <div class="fm-row">
-                <div class="fm-item fm-required">
+                <div class="fm-item">
                     <label class="fm-label">{{ _("Sidebar") }}</label>
                     <textarea name="sidebar" class="fm-text">{{context.sidebar or ''}}</textarea>
                 </div>
             </div>
             <div class="fm-row">
-                <div class="fm-item fm-required">
+                <div class="fm-item">
                     <label class="fm-label">{{ _("Footer") }}</label>
                     <textarea name="footer" class="fm-text">{{context.footer or ''}}</textarea>
+                </div>
+            </div>
+            <div class="fm-row">
+                <div class="fm-item">
+                    <label class="fm-label">{{ _("Google Analytics") }}</label>
+                    <input type="text" class="fm-text" name="ga" value="{{context.ga or ''}}" />
                 </div>
             </div>
             <div class="fm-row">
