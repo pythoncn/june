@@ -1,8 +1,10 @@
+import os.path
 from june.lib.util import ObjectDict
 from june.lib.handler import BaseHandler
 from june.lib.decorators import require_admin
 from june.models import Topic, Member, Node, Reply
 from june.models import NodeMixin, TopicMixin
+from june.app import PROJDIR
 
 
 class DashMixin(object):
@@ -14,7 +16,12 @@ class DashMixin(object):
             setattr(model, attr, value)
 
 
-class EditStorage(BaseHandler):
+class DashHandler(BaseHandler):
+    def get_template_path(self):
+        return os.path.join(PROJDIR, 'templates')
+
+
+class EditStorage(DashHandler):
     @require_admin
     def post(self):
         self.set_storage('header', self.get_argument('header', ''))
@@ -24,7 +31,7 @@ class EditStorage(BaseHandler):
         self.redirect('/dashboard')
 
 
-class CreateNode(BaseHandler):
+class CreateNode(DashHandler):
     @require_admin
     def get(self):
         node = ObjectDict()
@@ -63,7 +70,7 @@ class CreateNode(BaseHandler):
         self.redirect('/dashboard')
 
 
-class EditNode(BaseHandler, DashMixin):
+class EditNode(DashHandler, DashMixin):
     @require_admin
     def get(self, slug):
         node = Node.query.filter_by(slug=slug).first()
@@ -105,14 +112,14 @@ class EditNode(BaseHandler, DashMixin):
         self.redirect('/node/%s' % node.slug)
 
 
-class FlushCache(BaseHandler):
+class FlushCache(DashHandler):
     @require_admin
     def get(self):
         self.cache.flush_all()
         self.write('done')
 
 
-class EditMember(BaseHandler, DashMixin):
+class EditMember(DashHandler, DashMixin):
     @require_admin
     def get(self, name):
         user = Member.query.filter_by(username=name).first()
@@ -137,7 +144,7 @@ class EditMember(BaseHandler, DashMixin):
         self.redirect('/dashboard')
 
 
-class EditTopic(BaseHandler, TopicMixin):
+class EditTopic(DashHandler, TopicMixin):
     @require_admin
     def get(self, id):
         topic = self.get_topic_by_id(id)
@@ -168,7 +175,7 @@ class EditTopic(BaseHandler, TopicMixin):
         self.redirect('/topic/%d' % topic.id)
 
 
-class EditReply(BaseHandler):
+class EditReply(DashHandler):
     @require_admin
     def get(self, id):
         reply = self.db.query(Reply).filter_by(id=id).first()
@@ -190,7 +197,7 @@ class EditReply(BaseHandler):
         self.redirect('/dashboard')
 
 
-class Dashboard(BaseHandler, NodeMixin):
+class Dashboard(DashHandler, NodeMixin):
     @require_admin
     def get(self):
         user = self.get_argument('user', None)

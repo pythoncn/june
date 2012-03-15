@@ -14,6 +14,7 @@ less:
 	if [ ! -d static/css ]; then mkdir -p static/css; fi
 	lessc --compress assets/less/site.less > static/css/site.css
 	lessc --compress assets/less/mobile.less > static/css/mobile.css
+	lessc --compress assets/less/dashboard.less > static/css/dashboard.css
 
 compilejs:
 	if [ ! -d static/js ]; then mkdir static/js; fi
