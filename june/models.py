@@ -188,8 +188,12 @@ class NotifyMixin(object):
             user = Member.query.filter_by(username=username).first()
             self.cache.set('member:%s' % str(username), user, 600)
 
+        if not user:
+            return
+
         if user.id == self.current_user.id:
             return
+
         if user.id == topic.user_id:
             #avoid double notify
             return
