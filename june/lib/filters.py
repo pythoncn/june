@@ -93,7 +93,7 @@ emoji_list = [
 
 
 def emoji(text):
-    if not hasattr(options, 'emoji_url'):
+    if not options.emoji_url:
         return text
 
     pattern = re.compile(':([a-z0-9\+\-_]+):')

@@ -94,14 +94,8 @@ class TopicHandler(BaseHandler, TopicMixin, NodeMixin, PageMixin, NotifyMixin):
     def _calc_impact(self, topic):
         if self.current_user.reputation < 2:
             return 0
-        if hasattr(options, 'reply_factor_for_topic'):
-            factor = int(options.reply_factor_for_topic)
-        else:
-            factor = 800
-        if hasattr(options, 'reply_time_factor'):
-            time_factor = int(options.reply_time_factor)
-        else:
-            time_factor = 400
+        factor = int(options.reply_factor_for_topic)
+        time_factor = int(options.reply_time_factor)
         time = datetime.utcnow() - topic.created
         factor += time.days * time_factor
         return factor * int(math.log(self.current_user.reputation))
@@ -277,19 +271,13 @@ class UpTopicHandler(BaseHandler):
     def _calc_topic_impact(self):
         if self.current_user.reputation < 2:
             return 0
-        if hasattr(options, 'up_factor_for_topic'):
-            factor = int(options.up_factor_for_topic)
-        else:
-            factor = 1000
+        factor = int(options.up_factor_for_topic)
         return factor * int(math.log(self.current_user.reputation))
 
     def _calc_user_impact(self):
         if self.current_user.reputation < 2:
             return 0
-        if hasattr(options, 'up_factor_for_user'):
-            factor = int(options.up_factor_for_user)
-        else:
-            factor = 2
+        factor = int(options.up_factor_for_user)
         return factor * int(math.log(self.current_user.reputation))
 
 
@@ -343,19 +331,13 @@ class DownTopicHandler(BaseHandler):
     def _calc_topic_impact(self):
         if self.current_user.reputation < 2:
             return 0
-        if hasattr(options, 'down_factor_for_topic'):
-            factor = int(options.down_factor_for_topic)
-        else:
-            factor = 800
+        factor = int(options.down_factor_for_topic)
         return factor * int(math.log(self.current_user.reputation))
 
     def _calc_user_impact(self):
         if self.current_user.reputation < 2:
             return 0
-        if hasattr(options, 'down_factor_for_user'):
-            factor = int(options.down_factor_for_user)
-        else:
-            factor = 1
+        factor = int(options.down_factor_for_user)
         return factor * int(math.log(self.current_user.reputation))
 
 
@@ -376,19 +358,13 @@ class VoteReplyHandler(BaseHandler):
     def _calc_topic_impact(self):
         if self.current_user.reputation < 2:
             return 0
-        if hasattr(options, 'vote_reply_factor_for_topic'):
-            factor = int(options.vote_reply_factor_for_topic)
-        else:
-            factor = 500
+        factor = int(options.vote_reply_factor_for_topic)
         return factor * int(math.log(self.current_user.reputation))
 
     def _calc_user_impact(self):
         if self.current_user.reputation < 2:
             return 0
-        if hasattr(options, 'vote_reply_factor_for_user'):
-            factor = int(options.vote_reply_factor_for_user)
-        else:
-            factor = 2
+        factor = int(options.vote_reply_factor_for_user)
         return factor * int(math.log(self.current_user.reputation))
 
 

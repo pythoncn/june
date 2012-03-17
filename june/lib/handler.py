@@ -40,7 +40,6 @@ class BaseHandler(RequestHandler, MemberMixin, StorageMixin):
     def prepare(self):
         self._prepare_context()
         self._prepare_filters()
-        options.tforms_locale = self.locale
 
     def render_string(self, template_name, **kwargs):
         kwargs.update(self._filters)
@@ -97,13 +96,10 @@ class BaseHandler(RequestHandler, MemberMixin, StorageMixin):
         self._context.version = june.__version__
         self._context.sitename = options.sitename
         self._context.siteurl = options.siteurl
+        self._context.sitefeed = options.sitefeed
         self._context.sidebar = self.get_storage('sidebar')
         self._context.footer = self.get_storage('footer')
         self._context.header = self.get_storage('header')
-        if hasattr(options, 'sitefeed'):
-            self._context.sitefeed = options.sitefeed
-        else:
-            self._context.sitefeed = '/feed'
         self._context.ga = options.ga
         self._context.debug = options.debug
         self._context.message = []

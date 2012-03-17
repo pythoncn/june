@@ -1,10 +1,9 @@
-import os.path
+from tornado.options import options
 from june.lib.util import ObjectDict
 from june.lib.handler import BaseHandler
 from june.lib.decorators import require_admin
 from june.models import Topic, Member, Node, Reply
 from june.models import NodeMixin, TopicMixin
-from june.app import PROJDIR
 
 
 class DashMixin(object):
@@ -18,7 +17,7 @@ class DashMixin(object):
 
 class DashHandler(BaseHandler):
     def get_template_path(self):
-        return os.path.join(PROJDIR, 'templates')
+        return options.dashboard_template_path
 
 
 class EditStorage(DashHandler):
@@ -35,7 +34,7 @@ class CreateNode(DashHandler):
     @require_admin
     def get(self):
         node = ObjectDict()
-        self.render('dashboard/node.html', node=node)
+        self.render('node.html', node=node)
 
     @require_admin
     def post(self):
@@ -61,7 +60,7 @@ class CreateNode(DashHandler):
 
         if not (o.slug and o.title and o.description):
             self.create_message('Form Error', 'Please fill the required field')
-            self.render('dashboard/node.html', node=o)
+            self.render('node.html', node=o)
             return
         node = Node(**o)
         self.db.add(node)
@@ -77,7 +76,7 @@ class EditNode(DashHandler, DashMixin):
         if not node:
             self.send_error(404)
             return
-        self.render('dashboard/node.html', node=node)
+        self.render('node.html', node=node)
 
     @require_admin
     def post(self, slug):
@@ -126,7 +125,7 @@ class EditMember(DashHandler, DashMixin):
         if not user:
             self.send_error(404)
             return
-        self.render('dashboard/member.html', user=user)
+        self.render('member.html', user=user)
 
     @require_admin
     def post(self, name):
@@ -151,7 +150,7 @@ class EditTopic(DashHandler, TopicMixin):
         if not topic:
             self.send_error(404)
             return
-        self.render('dashboard/topic.html', topic=topic)
+        self.render('topic.html', topic=topic)
 
     @require_admin
     def post(self, id):
@@ -182,7 +181,7 @@ class EditReply(DashHandler):
         if not reply:
             self.send_error(404)
             return
-        self.render('dashboard/reply.html', reply=reply)
+        self.render('reply.html', reply=reply)
 
     @require_admin
     def post(self, id):
@@ -210,7 +209,7 @@ class Dashboard(DashHandler, NodeMixin):
             self.redirect('/dashboard')
             return
         nodes = Node.query.all()
-        self.render('dashboard/index.html', nodes=nodes)
+        self.render('index.html', nodes=nodes)
 
 
 handlers = [

@@ -104,15 +104,8 @@ class Member(db.Model):
         if self.avatar:
             return self.avatar
         md5email = hashlib.md5(self.email).hexdigest()
-        url = "http://www.gravatar.com/avatar/%s?s=%s&d=%s"
-        if hasattr(options, 'gravatar_secure'):
-            url = "https://secure.gravatar.com/avatar/%s?s=%s&d=%s"
-
-        d = ''
-        if hasattr(options, 'default_gravatar'):
-            d = options.default_gravatar
-
-        return url % (md5email, size, d)
+        query = "%s?s=%s&d=%s" % (md5email, size, options.default_gravatar)
+        return options.gravatar_base_url + query
 
     @staticmethod
     def create_password(raw):
