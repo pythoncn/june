@@ -10,7 +10,7 @@
 {% block main %}
 <article class="hentry">
     {% set user = topic.creator %}
-    <a href="/member/{{user.username}}" class="avatar" tabindex="-1"><img src="{{user.get_avatar(36)}}" width="36" height="36" /></a>
+    <a href="/member/{{user.username}}" class="avatar" tabindex="-1" title="{{user.username}}"><img src="{{user.get_avatar(36)}}" width="36" height="36" /></a>
     <h1 class="entry-title"><a href="/topic/{{topic.id}}">{{escape(topic.title)}}</a></h1>
     <div class="meta vcard">
         <a class="url fn" href="/member/{{user.username}}">{{user.username}}</a> posted

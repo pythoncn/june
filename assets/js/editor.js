@@ -10,3 +10,4 @@ textarea.keyup(function(){
     var html = converter.makeHtml(txt);
     $('#markdown-preview').html(html);
 });
+$('body').addClass('expanded');
