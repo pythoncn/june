@@ -4,11 +4,10 @@
         <meta charset="UTF-8" />
         <title>{%block title%}{%block subtitle%}{%end%} | {{context.sitename}}{%end%}</title>
         {{ context.header or '' }}
-        {% if is_mobile() %}
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0" />
-        <link rel="stylesheet" href="{{static_url('css/mobile.css')}}" />
-        {% else %}
         <link rel="stylesheet" href="{{static_url('css/site.css')}}" />
+        {% if is_mobile() %}
+        <link rel="stylesheet" href="{{static_url('css/mobile.css')}}" />
         {% end %}
         {% block afterstyle %}{% end %}
         <script type="text/javascript">

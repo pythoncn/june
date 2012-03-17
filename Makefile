@@ -4,8 +4,8 @@
 #
 
 CONFIG = tmp.config
-ProjectServer = linode.lepture.com:/home/lepture/project/assets.lepture.com/june
-StaticServer = linode.lepture.com:/home/lepture/project/june
+STATICSERVER = linode.lepture.com:/home/lepture/project/assets.lepture.com/pears
+PROJSERVER = linode.lepture.com:/home/lepture/project/pears
 
 server:
 	june/app.py --config=$(CONFIG)
@@ -13,7 +13,7 @@ server:
 less:
 	if [ ! -d june/static/css ]; then mkdir -p june/static/css; fi
 	lessc --compress assets/less/site.less > june/static/css/site.css
-	#lessc --compress assets/less/mobile.less > static/css/mobile.css
+	lessc --compress assets/less/mobile.less > june/static/css/mobile.css
 	lessc --compress assets/less/dashboard.less > june/static/css/dashboard.css
 
 libjs:
@@ -37,10 +37,10 @@ js:
 	cp assets/js/pears.js june/static/js/
 
 upload_static:
-	rsync -av --del june/static/* $(ProjectServer)
+	rsync -av --del june/static/* $(STATICSERVER)
 
 upload_py:
-	rsync -av --del --exclude=*.pyc june/* $(StaticServer)
+	rsync -av --del --exclude=*.pyc june/* $(PROJSERVER)
 
 upload: upload_static upload_py
 
