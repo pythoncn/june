@@ -35,26 +35,18 @@ def create_superuser():
     return user
 
 
-config = '''debug = True
-version = 'dev 1.0.0'
+config = '''debug = False
 num_processes = 1
 master = "sqlite:////tmp/june.sqlite"
-slaves = ""
 memcache = "127.0.0.1:11211"
-xsrf_cookies = True
 cookie_secret = "cookiesecret"
 password_secret = "passwordsecret"
-login_url = "/account/signin"
-static_path = "/Users/lepture/workspace/june/static"
-static_url_prefix = "/static/"
 
 sitename = "June"
 siteurl = "http://python-china.org"
-ga = ""
 
 recaptcha_key = ''
 recaptcha_secret = ''
-recaptcha_theme = 'clean'
 '''
 
 
