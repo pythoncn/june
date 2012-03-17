@@ -1,4 +1,6 @@
 recursive-include june/templates *.*
+recursive-include june/dashboard/templates *.*
 recursive-include june/locale *.*
+recursive-include june/static *.*
 include README.mkd
 include License
