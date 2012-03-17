@@ -1,3 +1,3 @@
 {% for node in nodes %}
-<a class="node vsep" href="/node/{{node.slug}}" style="{%if node.bgcolor%}background:{{node.bgcolor}};{% end %}{%if node.fgcolor%}color:{{node.fgcolor}}{%end%}">{{escape(node.title)}}</a>
+<a class="node" href="/node/{{node.slug}}" style="{%if node.bgcolor%}background-color:{{node.bgcolor}};{% end %}{%if node.fgcolor%}color:{{node.fgcolor}}{%end%}">{{escape(node.title)}}</a>
 {% end %}

@@ -39,7 +39,7 @@ define('static_url_prefix', "/static/")
 define('login_url', "/account/signin")
 define('template_path', os.path.join(PROJDIR, "templates"))
 define('dashboard_template_path',
-       os.path.join(PROJDIR, "templates", "dashboard"))
+       os.path.join(PROJDIR, "dashboard", "templates"))
 define('locale_path', os.path.join(PROJDIR, 'locale'))
 define('default_locale', 'en_US')
 define('xsrf_cookies', True)

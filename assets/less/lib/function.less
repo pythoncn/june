@@ -137,7 +137,10 @@
     background-image: linear-gradient(~"@{arguments}");
 }
 .vertical-linear-gradient(@startColor, @endColor) {
-    .linear-gradient("270deg, @{startColor} 0, @{endColor} 100%");
+    background-image: -webkit-linear-gradient(@startColor, @endColor);
+    background-image: -moz-linear-gradient(@startColor, @endColor);
+    background-image: -ms-linear-gradient(@startColor, @endColor);
+    background-image: -o-linear-gradient(@startColor, @endColor);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@{startColor}', endColorstr='@{endColor}', GradientType=0);
 }
 .horizontal-linear-gradient(@startColor, @endColor) {

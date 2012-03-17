@@ -6,24 +6,24 @@
 {% end %}
 
 {% block main %}
-<div id="main">
-    <div id="profile" class="wrapper fn-clear">
-        <a class="avatar fn-left" href="/member/{{user.username}}" tabindex="-1"><img src="{{user.get_avatar(48)}}" alt="avatar" width="48" height="48" /></a>
-        <div class="fn-wrap">
-            <h3><a href="/member/{{user.username}}">{{user.username}}</a></h3>
-            <p class="small">
-            <span class="hsep">{{ _("Reputation") }}: {{user.reputation}}</span>
-            <span class="hsep">{{ _("Join at") }}: {{user.created.strftime("%Y-%m-%d")}}</span>
+<article class="hentry profile">
+    <a class="avatar" href="/member/{{user.username}}" tabindex="-1"><img src="{{user.get_avatar(36)}}" alt="avatar" width="36" height="36" /></a>
+    <div class="content">
+        <h3 class="entry-title"><a href="/member/{{user.username}}">{{user.username}}</a></h3>
+        <div class="meta">
+            <span>{{ _("Reputation") }}: {{user.reputation}}</span>
+            <span>{{ _("Join at") }}: {{user.created.strftime("%Y-%m-%d")}}</span>
             {% if user.website %}{{ _("Website") }}: <a href="{{user.website}}">{{escape(user.website)}}</a>{% end %}
-            </p>
         </div>
     </div>
-
-    {% module UserTopicsModule(user.id) %}
-</div>
+</article>
+{% module UserTopicsModule(user.id) %}
 {% end %}
 
 {% block sidebar %}
+{% if current_user %}
+{% module MemberModule(current_user) %}
+{% end %}
 <div class="widget">
     <h4 class="widget-title">{{ _("Following") }}</h4>
     <div class="fn-wrap">

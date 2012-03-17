@@ -1,32 +1,37 @@
-<div class="replies">
+<ol class="line replies">
+    {% set index = 1 %}
+
     {% for reply in page.datalist %}
 
     {% if reply.user_id in users %}
+
+    <li id="reply-{{index}}">
     {% set user = users[reply.user_id] %}
-    <div id="reply-{{reply.id}}" class="cell fn-clear" data-ups="{{ reply.ups or '' }}" data-downs="{{ reply.downs or '' }}">
-        <img class="avatar" src="{{user.get_avatar(36)}}" width="36" height="36" />
-        <div class="fn-wrap">
-            <div class="cell-header">
-                <a href="/member/{{escape(user.username)}}">{{escape(user.username)}}</a>
-                at <time class="updated" datetime="{{reply.created.strftime("%Y-%m-%dT%H:%M:%SZ")}}">{{reply.created.strftime("%b %d, %Y %H:%M")}}</time>
-            </div>
-            <div class="cell-content">
-                {{ markdown(reply.content) }}
-            </div>
+    <a class="avatar" href="/member/{{user.username}}" tabindex="-1" title="{{user.username}}"><img src="{{user.get_avatar(36)}}" width="36" height="36" /></a>
+    <div class="content">
+        <article>
+            {{ markdown(reply.content) }}
+        </article>
+        <div class="meta">
+            #{{index}}
+            <a href="/member/{{user.username}}">{{user.username}}</a> posted
+            at <time class="updated" datetime="{{xmldatetime(reply.created)}}">{{reply.created.strftime("%b %d, %Y %H:%M")}}</time>
         </div>
     </div>
+    {% set index += 1 %}
     {% end %}
-    {% end %}
+    </li>
 
-    {% if page.page_number > 1 %}
-    <footer class="cell pagination">
-        {% for i in page.pagelist %}
-        {% if i == int(page.current_page) %}
-        <span href="?p={{i}}">{{i}}</span>
-        {% else %}
-        <a href="?p={{i}}">{{i}}</a>
-        {% end %}
-        {% end %}
-    </footer>
     {% end %}
-</div>
+</ol>
+{% if page.page_number > 1 %}
+<footer class="pagination">
+    {% for i in page.pagelist %}
+    {% if i == int(page.current_page) %}
+    <span href="?p={{i}}">{{i}}</span>
+    {% else %}
+    <a href="?p={{i}}">{{i}}</a>
+    {% end %}
+    {% end %}
+</footer>
+{% end %}

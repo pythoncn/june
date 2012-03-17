@@ -4,44 +4,49 @@
 
 {% block afterstyle %}
 <link rel="canonical" href="{{context.siteurl}}/account/signup" />
+<style type="text/css">
+    #recaptcha_div {
+        margin-left: 205px;
+    }
+    #recaptcha_table {
+        background: #fff;
+    }
+    #recaptcha_response_field {
+        border-color: #dadada !important;
+    }
+</style>
 {% end %}
 
 {% block main %}
-<div id="main" class="wrapper">
-    <form action="" method="post" class="fm">
-        {{ xsrf_form_html() }}
-        <div class="fm-row">
-            <div class="fm-item fm-required">
-                <label for="email" class="fm-label">{{ _("Email") }}</label>
-                <input type="email" class="fm-text" name="email" maxlength="100" value="{{email}}" required/>
-            </div>
-        </div>
-        <div class="fm-row">
-            <div class="fm-item fm-required">
-                <label for="password1" class="fm-label">{{ _("Password") }}</label>
-                <input type="password" class="fm-text" name="password1" required/>
-            </div>
-        </div>
-        <div class="fm-row">
-            <div class="fm-item fm-required">
-                <label for="password2" class="fm-label">{{ _("Confirm") }}</label>
-                <input type="password" class="fm-text" name="password2" required/>
-            </div>
-        </div>
-        <div class="fm-row">
-            {{recaptcha}}
-        </div>
-        <div class="fm-row">
-            <div class="fm-item">
-                <button class="ui-btn">{{_("Signup")}}</button>
-            </div>
-        </div>
-    </form>
-</div>
+<form action="" method="post">
+    {{ xsrf_form_html() }}
+    <div class="fm-item fm-required">
+        <label for="email" class="fm-label">{{ _("Email") }}</label>
+        <input type="email" class="fm-text" name="email" maxlength="100" value="{{email}}" required/>
+    </div>
+    <div class="fm-item fm-required">
+        <label for="password1" class="fm-label">{{ _("Password") }}</label>
+        <input type="password" class="fm-text" name="password1" required/>
+    </div>
+    <div class="fm-item fm-required">
+        <label for="password2" class="fm-label">{{ _("Confirm") }}</label>
+        <input type="password" class="fm-text" name="password2" required/>
+    </div>
+    <div class="fm-item">
+        {{recaptcha}}
+    </div>
+    <div class="fm-item">
+        <button class="ui-btn">{{_("Signup")}}</button>
+        <a href="/account/signin/google" class="ui-btn">Signin with Google</a>
+    </div>
+</form>
 {% end %}
 
 {% block sidebar %}
 <div class="widget">
-    <a href="/account/signin/google" class="ui-btn">Signin with Google</a>
+    <h4 class="widget-title">{{ _("Recent Join") }}</h4>
+    <div class="fn-wrap">
+        {% module MemberListModule() %}
+    </div>
 </div>
 {% end %}

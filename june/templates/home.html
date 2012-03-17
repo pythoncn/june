@@ -7,23 +7,11 @@
 {% end %}
 
 {% block main %}
-<div id="main">
-    {% module TopicListModule(0) %}
-</div>
+{% module TopicListModule(0) %}
 {% end %}
 
 {% block sidebar %}
 {% if current_user %}
 {% module MemberModule(current_user) %}
-<div class="widget">
-    <a href="/topic" class="ui-btn">{{ _("New Topic") }}</a>
-</div>
 {% end %}
-
-<div class="widget">
-    <h4 class="widget-title">{{ _("Recent Join") }}</h4>
-    <div class="fn-wrap">
-        {% module MemberListModule() %}
-    </div>
-</div>
 {% end %}

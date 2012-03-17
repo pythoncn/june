@@ -3,9 +3,7 @@
 {% block subtitle %}{{_("Subscription")}}{% end %}
 
 {% block main %}
-<div id="main">
-    {% module TopicListModule(current_user.id) %}
-</div>
+{% module TopicListModule(current_user.id) %}
 {% end %}
 
 {% block sidebar %}

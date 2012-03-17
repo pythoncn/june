@@ -1,25 +1,28 @@
-{% for topic in page.datalist %}
-<div class="cell">
+<ol class="line">
+    {% for topic in page.datalist %}
+
+    {% if nodes %}
+    {% set node = nodes[topic.node_id] %}
+    {% else %}
+    {% set node = None %}
+    {% end %}
+    <li style="{%if node and node.bgcolor%}border-color:{{node.bgcolor}}{% end %}">
     {% set user = users[topic.user_id] %}
-    <img class="avatar" src="{{user.get_avatar(48)}}" width="48" height="48" />
-    <div class="fn-wrap">
-        <div class="cell-content">
-            <h2 class="entry-title"><a href="/topic/{{topic.id}}">{{escape(topic.title)}}</a></h2>
-        </div>
-        <div class="cell-footer">
-            <a href="/member/{{user.username}}">{{user.username}}</a>
-            {% if nodes %}
-            {% set node = nodes[topic.node_id] %}
-            <a class="node" href="/node/{{node.slug}}" style="{%if node.bgcolor%}background:{{node.bgcolor}};{% end %}{%if node.fgcolor%}color:{{node.fgcolor}}{%end%}">{{escape(node.title)}}</a>
-            •
-            {% end %}
-            <time class="updated" datetime="{{xmldatetime(topic.created)}}">{{topic.created.strftime("%b %d, %Y %H:%M")}}</time>
-            •
-            {{topic.reply_count}} replies
+    <a href="/topic/{{topic.id}}#reply-{{topic.reply_count}}" class="count" title="{{topic.reply_count}} replies">{{topic.reply_count}}</a>
+    <div class="content">
+        <a class="avatar" href="/member/{{user.username}}" title="{{user.username}}"><img src="{{user.get_avatar(36)}}" width="36" height="36" /></a>
+        <div class="fn-wrap">
+            <h2 class="title"><a href="/topic/{{topic.id}}#reply-{{topic.reply_count}}">{{escape(topic.title)}}</a></h2>
+            <div class="meta">
+                <a href="/member/{{user.username}}">{{user.username}}</a> posted
+                {%if node%}in <a href="/node/{{node.slug}}" rel="category">{{node.title}}</a>{%end%}
+                at <time class="updated" datetime="{{xmldatetime(topic.created)}}">{{topic.created.strftime("%b %d, %Y %H:%M")}}</time>
+            </div>
         </div>
     </div>
-</div>
-{% end %}
+    </li>
+    {% end %}
+</ol>
 {% if page.page_number > 1 %}
 <footer class="cell pagination">
     {% for i in page.pagelist %}
@@ -31,4 +34,3 @@
     {% end %}
 </footer>
 {% end %}
-

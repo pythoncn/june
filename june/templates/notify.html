@@ -11,22 +11,23 @@
 {% block notify %}{% end %}
 
 {% block main %}
-<div id="main">
+<ol class="line replies">
     {% for msg in notify %}
-    <div class="cell fn-clear{% if msg.created > current_user.last_notify %} active{%end%}">
-        {% set user = get_user(msg.sender) %}
-        <img class="avatar fn-left" src="{{user.get_avatar(48)}}" alt="avatar" width="48" height="48" />
+    <li{% if msg.created > current_user.last_notify %} class="active"{%end%}>
+    {% set user = get_user(msg.sender) %}
+    <a class="avatar" href="/member/{{user.username}}" tabindex="-1" title="{{user.username}}"><img src="{{user.get_avatar(36)}}" width="36" height="36" /></a>
+    <div class="content">
         <div class="fn-wrap">
-            <div>
+            <p>{{escape(msg.content)}}</p>
+            <div class="meta">
                 <a href="/member/{{user.username}}">{{user.username}}</a> {{msg.type}} on
                 <a href="{{msg.link}}"><strong>{{escape(msg.label)}}</strong></a>
                 <time class="updated" datetime="{{msg.created.strftime("%Y-%m-%dT%H:%M:%SZ")}}">{{msg.created.strftime("%b %d, %Y %H:%M")}}</time>
             </div>
-            <p>{{escape(msg.content)}}</p>
         </div>
     </div>
     {% end %}
-</div>
+</ol>
 {% end %}
 
 {% block sidebar %}

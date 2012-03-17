@@ -11,31 +11,33 @@ server:
 	june/app.py --config=$(CONFIG)
 
 less:
-	if [ ! -d static/css ]; then mkdir -p static/css; fi
-	lessc --compress assets/less/site.less > static/css/site.css
-	lessc --compress assets/less/mobile.less > static/css/mobile.css
-	lessc --compress assets/less/dashboard.less > static/css/dashboard.css
+	if [ ! -d june/static/css ]; then mkdir -p june/static/css; fi
+	lessc --compress assets/less/site.less > june/static/css/site.css
+	#lessc --compress assets/less/mobile.less > static/css/mobile.css
+	lessc --compress assets/less/dashboard.less > june/static/css/dashboard.css
 
-compilejs:
-	if [ ! -d static/js ]; then mkdir static/js; fi
-	uglifyjs -nc assets/js/lib/jquery.js > static/js/lib.js
-	uglifyjs -nc assets/js/lib/jquery.caret.js >> static/js/lib.js
-	uglifyjs -nc assets/js/lib/jquery.atwho.js >> static/js/lib.js
-	uglifyjs -nc assets/js/lib/jquery.timeago.js >> static/js/lib.js
+libjs:
+	if [ ! -d june/static/js ]; then mkdir -p june/static/js; fi
+	uglifyjs -nc assets/js/lib/jquery.js > june/static/js/lib.js
+	uglifyjs -nc assets/js/lib/jquery.caret.js >> june/static/js/lib.js
+	uglifyjs -nc assets/js/lib/jquery.atwho.js >> june/static/js/lib.js
+	uglifyjs -nc assets/js/lib/jquery.timeago.js >> june/static/js/lib.js
+	uglifyjs -nc assets/js/lib/jquery.tipsy.js >> june/static/js/lib.js
 
-compileshowdown:
-	uglifyjs -nc assets/js/lib/showdown.js > static/js/lib/showdown.js
+editorjs:
+	uglifyjs -nc assets/js/lib/showdown.js > june/static/js/editor.js
+	uglifyjs -nc assets/js/editor.js >> june/static/js/editor.js
 
-copyimg:
-	if [ ! -d static/img ]; then mkdir static/img; fi
-	cp -r assets/img/* static/img/
+image:
+	if [ ! -d june/static/img ]; then mkdir june/static/img; fi
+	cp -r assets/img/* june/static/img/
 
-copyjs:
-	if [ ! -d static/js ]; then mkdir static/js; fi
-	cp -r assets/js/*.js static/js/
+js:
+	if [ ! -d june/static/js ]; then mkdir -p june/static/js; fi
+	cp assets/js/pears.js june/static/js/
 
 upload_static:
-	rsync -av --del static/* $(ProjectServer)
+	rsync -av --del june/static/* $(ProjectServer)
 
 upload_py:
 	rsync -av --del --exclude=*.pyc june/* $(StaticServer)

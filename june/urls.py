@@ -2,8 +2,8 @@ from june.handlers import front
 from june.handlers import node
 from june.handlers import topic
 from june.handlers import account
-from june.handlers import dashboard
 from june.handlers import api
+from june.dashboard import handler as dashboard
 
 handlers = []
 handlers.extend(account.handlers)

@@ -10,31 +10,27 @@
 {% end %}
 
 {% block main %}
-<div id="main">
-    {% module NodeTopicsModule(node.id) %}
-</div>
-{% end %}
-
-{% block sidebar %}
-
-{% if current_user %}
-{% module MemberModule(current_user) %}
-{% end %}
-
-<div class="widget">
-    <h4 class="widget-title">{{ _("In Node") }}</h4>
-    <div class="vsep"><a class="node" href="/node/{{node.slug}}" style="{%if node.bgcolor%}background:{{node.bgcolor}};{% end %}{%if node.fgcolor%}color:{{node.fgcolor}}{%end%}">{{escape(node.title)}}</a></div>
-    <p>{{node.description}}</p>
-</div>
-{% if current_user %}
-<div class="widget">
+<article class="hentry line">
+    <a title="{{node.topic_count}} topics" href="/node/{{node.slug}}" class="count" style="{%if node.bgcolor%}background-color:{{node.bgcolor}}{%end%}{%if node.fgcolor%};color:{{node.fgcolor}}{%end%}">{{node.topic_count}}</a>
+    <h1 class="entry-title"><a href="/node/{{node.slug}}">{{escape(node.title)}}</a></h1>
+    <p class="meta">
+        {{ node.description }}
+    </p>
+    {% if current_user %}
     <a href="/node/{{node.slug}}/topic" class="ui-btn">{{_("New Topic")}}</a>
     {% if is_following %}
     <a href="/node/{{node.slug}}/unfollow" class="js-unfollow ui-btn">{{_("Unfollow")}}</a>
     {% else %}
     <a href="/node/{{node.slug}}/follow" class="js-follow ui-btn">{{_("Follow")}}</a>
     {% end %}
-</div>
+    {% end %}
+</article>
+{% module NodeTopicsModule(node.id) %}
+{% end %}
+
+{% block sidebar %}
+{% if current_user %}
+{% module MemberModule(current_user) %}
 {% end %}
 {{ node.sidebar or '' }}
 {% end %}

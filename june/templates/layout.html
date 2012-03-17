@@ -44,53 +44,72 @@
             {% end %}
         </div>
         {% end %}
-        <div id="header">
-            <div class="center">
-                <nav role="navigation" class="fn-clear">
-                    <ul id="nav" class="fn-clear">
-                        <li><a class="first" href="/">{{ _("Home") }}</a></li>
-                        <li><a href="/subscription">{{ _("Subscription") }}</a></li>
-                        <li><a href="/nodes">{{ _("Nodes") }}</a></li>
-                        {% if current_user and current_user.role > 9 %}
-                        <li class="dashboard"><a href="/dashboard">{{ _("Dashboard") }}</a></li>
-                        {% end %}
-                    </ul>
-                    <ul id="account">
-                        {% if current_user %}
-                        <li><a class="first" href="/account/setting">{{ _("Setting") }}</a></li>
-                        <li><a class="last" href="/account/signout">{{ _("Signout") }}</a></li>
-                        {% else %}
-                        <li><a class="first" href="/account/signup">{{ _("Signup") }}</a></li>
-                        <li><a class="last" href="/account/signin">{{ _("Signin") }}</a></li>
-                        {% end %}
-                    </ul>
-                </nav>
-            </div>
-        </div>
-        <div id="body" class="center">
-            {% block container %}
-            <div id="content">
-                {% block main %}{% end %}
-            </div>
-            <div id="sidebar">
-                {% block sidebar %}{% end %}
-                {{ context.sidebar or '' }}
-                <div id="footer">
-                    <div class="widget status">
-                        {% module SystemStatusModule() %}
+        <header id="header" role="banner">
+            <h1><a href="{{context.siteurl}}">{{context.sitename}}</a></h1>
+        </header>
+        <div class="wrap">
+            <div class="inner-wrap fn-clear">
+                {% block side %}
+                <aside id="side">
+                    <nav role="navigation" class="fn-clear">
+                        <a id="nav-toggle" href="#">hide</a>
+                        <ul id="nav">
+                            <li><a href="/">{{ _("Home") }}</a></li>
+                            <li><a href="/nodes">{{ _("Nodes") }}</a></li>
+                            {% if current_user %}
+                            <li><a href="/subscription">{{ _("Subscription") }}</a></li>
+                            <li><a href="/topic">{{_("New Topic")}}</a></li>
+                            {% end %}
+                            {% if current_user and current_user.role > 9 %}
+                            <li><a href="/dashboard">{{ _("Dashboard") }}</a></li>
+                            {% end %}
+                        </ul>
+                        <h2>{{ _("Account") }}</h2>
+                        <ul id="account">
+                            {% if current_user %}
+                            <li><a href="/member/{{current_user.username}}">{{current_user.username}}</a></li>
+                            <li><a href="/account/setting">{{ _("Setting") }}</a></li>
+                            <li><a href="/account/signout">{{ _("Signout") }}</a></li>
+                            {% else %}
+                            <li><a href="/account/signup">{{ _("Signup") }}</a></li>
+                            <li><a href="/account/signin">{{ _("Signin") }}</a></li>
+                            {% end %}
+                        </ul>
+                    </nav>
+                </aside>
+                {% end %}
+                <div id="content" class="fn-clear">
+                    {% block content %}
+                    <div id="main">
+                        {% block main %}{% end %}
                     </div>
-                    {{ context.footer or '' }}
-                    <div class="widget copyright">
-                        Designed by <a href="http://lepture.com">lepture</a> |
-                        Powered by <a href="https://github.com/lepture/june">June</a> {{context.version}}
+                    <div id="sidebar">
+                        {% block sidebar %}{% end %}
+                        <div class="widget">
+                            <h4 class="widget-title">{{_("Analytics")}}</h4>
+                            {% module SystemStatusModule() %}
+                        </div>
                     </div>
+                    {% end %}
                 </div>
             </div>
-            {% end %}
         </div>
+        <footer id="footer">
+            <div class="footer-inner">
+                <p>
+                Copyright &copy; {{context.sitename}}. All articles &copy; their respective owners.
+                </p>
+                <p class="copyright">
+                Designed by <a href="http://lepture.com">lepture</a>.
+                Powered by <a href="https://github.com/lepture/june">June</a> {{context.version}}.
+                Hosted by <a href="http://www.linode.com/?r=b9e3629fcf78988ff7cc8f6c4ef59c5a2c626b8a">Linode</a>
+                </p>
+                {{ context.footer or '' }}
+            </div>
+        </footer>
         {% block beforejs %}{% end %}
-        <script type="text/javascript" src="{{static_url("js/lib.js")}}"></script>
-        <script type="text/javascript" src="{{static_url("js/june.js")}}"></script>
+        <script type="text/javascript" src="{{static_url('js/lib.js')}}"></script>
+        <script type="text/javascript" src="{{static_url('js/pears.js')}}"></script>
         {% block afterjs %}{% end %}
     </body>
 </html>
