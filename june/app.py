@@ -94,8 +94,7 @@ def run_server():
     tornado.options.parse_command_line()
     parse_config_file(options.config)
     server = HTTPServer(Application(), xheaders=True)
-    server.bind(int(options.port))
-    server.start(int(options.num_processes))
+    server.listen(int(options.port))
     IOLoop.instance().start()
 
 

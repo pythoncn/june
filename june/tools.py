@@ -36,7 +36,6 @@ def create_superuser():
 
 
 config = '''debug = False
-num_processes = 1
 master = "sqlite:////tmp/june.sqlite"
 memcache = "127.0.0.1:11211"
 cookie_secret = "cookiesecret"
