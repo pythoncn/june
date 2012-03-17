@@ -160,7 +160,9 @@ class SignupHandler(BaseHandler, RecaptchaMixin):
 class SettingHandler(BaseHandler):
     @tornado.web.authenticated
     def get(self):
-        self.render('setting.html')
+        q = MemberLog.query.filter_by(user_id=self.current_user.id)
+        logs = q.order_by('-id').limit(5)
+        self.render('setting.html', logs=logs)
 
     @tornado.web.authenticated
     def post(self):

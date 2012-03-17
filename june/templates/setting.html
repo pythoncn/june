@@ -1,6 +1,13 @@
 {% extends "layout.html" %}
 
 {% block subtitle %}{{_("Account")}}{% end %}
+{% block afterstyle %}
+<style type="text/css">
+    .line {
+        margin-top: 40px;
+    }
+</style>
+{% end %}
 
 {% block main %}
 <form action="" method="post" class="fm">
@@ -20,6 +27,18 @@
         <button class="ui-btn">{{_("Save")}}</button>
     </div>
 </form>
+<ol class="line">
+    {% for log in logs %}
+    <li>
+    <div class="content">
+        <strong>{{log.message}}</strong>
+        <div class="meta">
+            <time class="updated" datetime="{{xmldatetime(log.time)}}">{{log.time.strftime("%b %d, %Y %H:%M")}}</time> at {{log.ip}}
+        </div>
+    </div>
+    </li>
+    {% end %}
+</ol>
 {% end %}
 
 {% block sidebar %}
