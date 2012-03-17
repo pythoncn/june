@@ -21,9 +21,6 @@
 {% end %}
 
 {% block sidebar %}
-{% if current_user %}
-{% module MemberModule(current_user) %}
-{% end %}
 <div class="widget">
     <h4 class="widget-title">{{ _("Following") }}</h4>
     <div class="fn-wrap">
