@@ -62,9 +62,8 @@
     {% end %}
     <a href="/node/{{node.slug}}/topic" class="ui-btn">{{_("New Topic")}}</a>
 </div>
-{% end %}
-
 {% module MemberModule(current_user) %}
+{% end %}
 
 {{ node.sidebar or '' }}
 {% end %}

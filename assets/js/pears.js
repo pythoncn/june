@@ -16,6 +16,9 @@ $("a[href*='http://']:not([href*='"+location.hostname+"'])").attr("target","_bla
 $('a[title]').tipsy({gravity: $.fn.tipsy.autoNS});
 $('time.updated').timeago();
 $('#nav-toggle').click(function(e){$('body').toggleClass('expanded'); return false;});
+$('#notify .js-hide').click(function(e) {
+    $(this).parentsUntil($('#notify'), '.message').remove();
+});
 /*------ footer --------*/
 if($(window).height() >= $(document).height())$('#footer').addClass('show');
 $(window).scroll(function(){

@@ -106,6 +106,9 @@ html body .ui-btn {
         .vertical-linear-gradient(@btn-color, darken(@btn-color, 20%));
     }
 }
+html body button.ui-btn {
+    padding: 4px 12px 5px;
+}
 
 /* layout */
 #header {
@@ -114,6 +117,9 @@ html body .ui-btn {
     a {
         color: #3e4549;
     }
+}
+.expanded #header {
+    margin-left: 60px;
 }
 .wrap {
     position: relative;
@@ -146,16 +152,16 @@ html body .ui-btn {
     font-size: 12px;
     margin: 0 20px 15px 0;
     padding: 0 0 10px 0;
-    a {
-        display: block;
-        padding: 5px 8px 5px 20px;
-        color: rgba(255,255,255,0.5);
-        border-radius: 0 4px 4px 0;
-        text-decoration: none;
-        &:hover {
-            color: rgba(255,255,255,.8);
-            background: rgba(255,255,255,.1);
-        }
+}
+#side ul a {
+    display: block;
+    padding: 5px 8px 5px 20px;
+    color: rgba(255,255,255,0.5);
+    border-radius: 0 4px 4px 0;
+    text-decoration: none;
+    &:hover {
+        color: rgba(255,255,255,.8);
+        background: rgba(255,255,255,.1);
     }
 }
 #side h2 {
@@ -163,7 +169,6 @@ html body .ui-btn {
     font-size: 12px;
     font-weight: normal;
     text-transform: uppercase;
-    letter-spacing: 2px;
     color: #fff;
 }
 #nav-toggle {
@@ -175,6 +180,7 @@ html body .ui-btn {
     height: 100%;
     opacity: .3;
     text-indent: -99999em;
+    outline: none;
     background: url(../img/min.png) no-repeat 6px 50%;
     &:hover {
         background-color: rgba(255,255,255,0.4);

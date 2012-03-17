@@ -87,7 +87,9 @@
                         {% block sidebar %}{% end %}
                         <div class="widget">
                             <h4 class="widget-title">{{_("Analytics")}}</h4>
-                            {% module SystemStatusModule() %}
+                            <div class="meta">
+                                {% module SystemStatusModule() %}
+                            </div>
                         </div>
                     </div>
                     {% end %}
