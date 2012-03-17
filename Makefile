@@ -4,8 +4,7 @@
 #
 
 CONFIG = tmp.config
-STATICSERVER = linode.lepture.com:/home/lepture/project/assets.lepture.com/pears
-PROJSERVER = linode.lepture.com:/home/lepture/project/pears
+PROJSERVER = linode.lepture.com:/home/lepture/project/june
 
 server:
 	june/app.py --config=$(CONFIG)
@@ -36,13 +35,8 @@ js:
 	if [ ! -d june/static/js ]; then mkdir -p june/static/js; fi
 	cp assets/js/pears.js june/static/js/
 
-upload_static:
-	rsync -av --del june/static/* $(STATICSERVER)
-
-upload_py:
+upload:
 	rsync -av --del --exclude=*.pyc june/* $(PROJSERVER)
-
-upload: upload_static upload_py
 
 clean:
 	rm -fr build

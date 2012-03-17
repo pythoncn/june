@@ -164,7 +164,7 @@ class NotifyMixin(object):
     def create_notify(self, receiver, topic, content, type='reply'):
         if receiver == self.current_user.id:
             return
-        link = '/topic/%s' % topic.id
+        link = '/topic/%s#reply-%s' % (topic.id, topic.reply_count)
         content = content[:200]
         notify = Notify(sender=self.current_user.id, receiver=receiver,
                          label=topic.title, link=link, content=content)
@@ -191,7 +191,7 @@ class NotifyMixin(object):
             #avoid double notify
             return
 
-        link = '/topic/%s' % topic.id
+        link = '/topic/%s#reply-%s' % (topic.id, topic.reply_count)
         content = content[:200]
         notify = Notify(
             sender=self.current_user.id, receiver=user.id,
