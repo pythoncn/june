@@ -38,6 +38,9 @@ a:hover {
     color: darken(@link-color, 10%);
     text-decoration: none;
 }
+img {
+    max-width: 96%;
+}
 /*-------- Common Class ---------*/
 .avatar {
     display: inline-block;
@@ -239,7 +242,7 @@ html body button.ui-btn {
 /*-------- UIModule -----------*/
 
 /*-------- topic list ---------*/
-.line li {
+.line > li {
     position: relative;
     list-style-type: none;
     margin-right: 10px;
@@ -329,6 +332,9 @@ html body button.ui-btn {
 .hentry .entry-title {
     font-size: 18px;
     font-weight: bold;
+}
+.hentry .entry-content {
+    margin-top: 12px;
 }
 .hentry .meta {
     font: 12px/1.2 @font-sans;

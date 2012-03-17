@@ -49,6 +49,9 @@
 {% end %}
 
 {% block sidebar %}
+{% if current_user %}
+{% module MemberModule(current_user) %}
+{% end %}
 <div class="widget">
     <h4 class="widget-title">{{ _("In Node") }}</h4>
     <a class="node" href="/node/{{node.slug}}" style="{%if node.bgcolor%}background-color:{{node.bgcolor}}{% end %}{%if node.fgcolor%};color:{{node.fgcolor}}{%end%}">{{escape(node.title)}}</a>
@@ -62,7 +65,6 @@
     {% end %}
     <a href="/node/{{node.slug}}/topic" class="ui-btn">{{_("New Topic")}}</a>
 </div>
-{% module MemberModule(current_user) %}
 {% end %}
 
 {{ node.sidebar or '' }}
