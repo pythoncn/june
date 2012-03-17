@@ -181,6 +181,14 @@ class EditReply(DashHandler):
         if not reply:
             self.send_error(404)
             return
+        if self.get_argument('delete', 'false') == 'true':
+            topic = self.db.query(Topic).filter_by(id=reply.topic_id).first()
+            topic.reply_count -= 1
+            self.db.add(topic)
+            self.db.delete(reply)
+            self.db.commit()
+            self.redirect('/dashboard')
+            return
         self.render('reply.html', reply=reply)
 
     @require_admin
