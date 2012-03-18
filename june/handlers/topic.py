@@ -8,6 +8,7 @@ from june.lib.handler import BaseHandler
 from june.lib.decorators import require_user
 from june.lib.util import ObjectDict, PageMixin
 from june.lib.filters import find_mention
+from june.handlers.social import register_service
 from june.models import Node, Topic, Reply
 from june.models import NodeMixin, TopicMixin, MemberMixin, NotifyMixin
 
@@ -90,6 +91,9 @@ class TopicHandler(BaseHandler, TopicMixin, NodeMixin, PageMixin, NotifyMixin):
         #TODO calculate page, delete the right cache
         self.cache.delete('ReplyListModule:%s:1' % str(id))
         self.redirect("%s#reply-%s" % (url, topic.reply_count))
+
+        # register social service
+        register_service('twitter', self.current_user.id, content)
 
     def _calc_impact(self, topic):
         if self.current_user.reputation < 2:

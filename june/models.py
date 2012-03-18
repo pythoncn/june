@@ -128,6 +128,12 @@ class MemberLog(db.Model):
     ip = Column(String(100))
 
 
+class Social(db.Model):
+    user_id = Column(Integer, nullable=False, index=True)
+    service = Column(String(100))  # twitter, douban etc.
+    token = Column(Text)  # use json string
+
+
 class MemberMixin(object):
     @cache('member', 600)
     def get_user_by_id(self, id):
@@ -148,6 +154,13 @@ class MemberMixin(object):
             username = username + create_token(5)
         user = Member(email, username=username)
         return user
+
+    @cache('social', 600)
+    def get_user_social(self, user_id):
+        dct = {}
+        for net in Social.query.filter_by(user_id=user_id):
+            dct[net.service] = net.token
+        return dct
 
 
 class Notify(db.Model):

@@ -115,9 +115,6 @@ class BaseHandler(RequestHandler, MemberMixin, StorageMixin):
         msg = ObjectDict(header=header, body=body)
         self._context.message.append(msg)
 
-    def is_system(self):
-        return self.request.remote_ip == '127.0.0.1'
-
     def is_mobile(self):
         _mobile = (r'ipod|iphone|android|blackberry|palm|nokia|symbian|'
                    r'samsung|psp|kindle|phone|mobile|ucweb|opera mini|fennec')

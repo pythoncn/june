@@ -69,3 +69,13 @@ class cache(object):
                     pass
             return value
         return wrapper
+
+
+def require_system(method):
+    @functools.wraps(method)
+    def wrapper(self, *args, **kwargs):
+        if self.request.remote_ip != '127.0.0.1':
+            self.send_error(403)
+            return
+        return method(self, *args, **kwargs)
+    return wrapper
