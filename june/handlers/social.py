@@ -28,7 +28,17 @@ class TwitterHandler(BaseHandler, TweetMixin):
     @asynchronous
     def get(self):
         if 'twitter' in self.get_user_social(self.current_user.id):
-            self.finish('registered')
+            enabled = self.get_argument('enabled', 'a')
+            if enabled not in ('y', 'n'):
+                self.redirect('/account/setting')
+                return
+            q = self.db.query(Social).filter_by(service='twitter')
+            t = q.filter_by(user_id=self.current_user.id).first()
+            t.enabled = enabled
+            self.db.add(t)
+            self.db.commit()
+            self.cache.delete('social:%s' % self.current_user.id)
+            self.redirect('/account/setting')
             return
         if self.get_argument('oauth_token', None):
             self.get_authenticated_user(self._on_auth)
@@ -45,6 +55,7 @@ class TwitterHandler(BaseHandler, TweetMixin):
                          token=access_token)
         self.db.add(network)
         self.db.commit()
+        self.cache.delete('social:%s' % self.current_user.id)
         self.redirect('/account/setting')
 
     def check_xsrf_cookie(self):
@@ -63,7 +74,11 @@ class TwitterHandler(BaseHandler, TweetMixin):
         if 'twitter' not in networks:
             self.finish('deny')
             return
-        token = escape.json_decode(networks['twitter'])
+        twitter = networks['twitter']
+        if twitter['enabled'] != 'y':
+            self.finish('deny')
+            return
+        token = escape.json_decode(twitter['token'])
         status = escape.utf8(content)
         self.twitter_request(
             '/statuses/update',

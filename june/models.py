@@ -130,6 +130,7 @@ class MemberLog(db.Model):
 
 class Social(db.Model):
     user_id = Column(Integer, nullable=False, index=True)
+    enabled = Column(String(1), default='y')
     service = Column(String(100))  # twitter, douban etc.
     token = Column(Text)  # use json string
 
@@ -155,11 +156,11 @@ class MemberMixin(object):
         user = Member(email, username=username)
         return user
 
-    @cache('social', 600)
+    @cache('social', 6000)
     def get_user_social(self, user_id):
         dct = {}
         for net in Social.query.filter_by(user_id=user_id):
-            dct[net.service] = net.token
+            dct[net.service] = {'token': net.token, 'enabled': net.enabled}
         return dct
 
 

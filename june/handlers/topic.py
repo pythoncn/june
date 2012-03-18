@@ -92,12 +92,13 @@ class TopicHandler(BaseHandler, TopicMixin, NodeMixin, PageMixin, NotifyMixin):
         self.cache.delete('ReplyListModule:%s:1' % str(id))
         self.redirect("%s#reply-%s" % (url, topic.reply_count))
 
-        # register social service
+        # register social services
         content = "%s %s%s#reply-%s" % \
-                (content, options.siteurl, url, topic.reply_count)
-
-        for name in self.get_user_social(self.current_user.id):
-            register_service(name, self.current_user.id, content)
+                (content[:70], options.siteurl, url, topic.reply_count)
+        networks = self.get_user_social(self.current_user.id)
+        for name in networks:
+            if networks[name]['enabled'] == 'y':
+                register_service(name, self.current_user.id, content)
 
     def _calc_impact(self, topic):
         if self.current_user.reputation < 2:
@@ -170,6 +171,12 @@ class CreateTopicHandler(BaseHandler, NodeMixin):
         key3 = 'UserTopicsModule:%s:1:-impact' % self.current_user.id
         self.cache.delete_multi(['status', key1, key2, key3])
         self.redirect(url)
+
+        content = "%s %s%s" % (title[:70], options.siteurl, url)
+        networks = self.get_user_social(self.current_user.id)
+        for name in networks:
+            if networks[name]['enabled'] == 'y':
+                register_service(name, self.current_user.id, content)
 
     def _check_permission(self, node):
         user = self.current_user

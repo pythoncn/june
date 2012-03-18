@@ -43,9 +43,26 @@
 
 {% block sidebar %}
 <div class="widget">
-    <p>{{ _("Change your avatar at") }} <a href="http://en.gravatar.com">Gravatar</a></p>
+    <h4 class="widget-title">{{ _("Social") }}</h4>
+    {% for service in services %}
+
+    {% if service not in networks %}
+    <p><a href="/social/{{service}}" class="ui-btn">Connect {{service}}</a></p>
+    {% else %}
+
+    {%if networks[service]['enabled'] == 'y'%}
+    <p><a href="/social/{{service}}?enabled=n" class="ui-btn">Disable {{service}}</a></p>
+    {% else %}
+    <p><a href="/social/{{service}}?enabled=y" class="ui-btn">Enable {{service}}</a></p>
+    {% end %}
+
+    {% end %}
+
+    {% end %}
 </div>
 <div class="widget">
+    <h4 class="widget-title">{{ _("Account") }}</h4>
+    <p>{{ _("Change your avatar at") }} <a href="http://en.gravatar.com">Gravatar</a></p>
     <a href="/account/signout/everywhere" class="ui-btn">{{ _("Signout Everywhere") }}</a>
 </div>
 {% end %}

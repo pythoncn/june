@@ -6,6 +6,7 @@ from june.lib import validators
 from june.auth.recaptcha import RecaptchaMixin
 from june.models import Member, MemberLog, Notify
 from june.models import NodeMixin, MemberMixin, create_token
+from june.handlers.social import active_services
 
 
 class SigninHandler(BaseHandler):
@@ -162,7 +163,9 @@ class SettingHandler(BaseHandler):
     def get(self):
         q = MemberLog.query.filter_by(user_id=self.current_user.id)
         logs = q.order_by('-id').limit(5)
-        self.render('setting.html', logs=logs)
+        networks = self.get_user_social(self.current_user.id)
+        self.render('setting.html', logs=logs,
+                    services=active_services, networks=networks)
 
     @tornado.web.authenticated
     def post(self):
