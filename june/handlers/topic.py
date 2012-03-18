@@ -93,7 +93,11 @@ class TopicHandler(BaseHandler, TopicMixin, NodeMixin, PageMixin, NotifyMixin):
         self.redirect("%s#reply-%s" % (url, topic.reply_count))
 
         # register social service
-        register_service('twitter', self.current_user.id, content)
+        content = "%s %s%s#reply-%s" % \
+                (content, options.siteurl, url, topic.reply_count)
+
+        for name in self.get_user_social(self.current_user.id):
+            register_service(name, self.current_user.id, content)
 
     def _calc_impact(self, topic):
         if self.current_user.reputation < 2:
