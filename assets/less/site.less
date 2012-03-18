@@ -38,9 +38,6 @@ a:hover {
     color: darken(@link-color, 10%);
     text-decoration: none;
 }
-img {
-    max-width: 96%;
-}
 /*-------- Common Class ---------*/
 .avatar {
     display: inline-block;
@@ -275,6 +272,7 @@ html body button.ui-btn {
 .line .avatar {
     float: left;
     margin: 8px 10px 0 0;
+    padding: 3px;
 }
 .line .title {
     margin-bottom: 5px;
@@ -314,6 +312,7 @@ html body button.ui-btn {
     position: absolute;
     top: 24px;
     left: -24px;
+    padding: 3px;
     border-radius: 24px;
     img {
         border-radius: 18px;
@@ -339,6 +338,21 @@ html body button.ui-btn {
 .hentry .meta {
     font: 12px/1.2 @font-sans;
     color: #999;
+}
+.hentry .vote {
+    text-align: right;
+}
+.entry-content img, .replies .content img, #markdown-preview img {
+    max-width: 96%;
+    box-shadow: 2px 2px 6px #999;
+}
+.entry-content .emoji, .replies .content .emoji, #markdown-preview .emoji {
+    box-shadow: 0 0 0;
+}
+.highlight {
+    padding: 10px 10px 10px 14px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 3px;
 }
 /*------- replies ----------*/
 .reply-form {
@@ -417,6 +431,7 @@ html body button.ui-btn {
 .widget .avatar {
     float: left;
     margin-right: 10px;
+    padding: 3px;
 }
 /*------ pagination ------*/
 .pagination {

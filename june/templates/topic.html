@@ -15,6 +15,7 @@
     <div class="meta vcard">
         <a class="url fn" href="/member/{{user.username}}">{{user.username}}</a> posted
         at <time class="updated" datetime="{{xmldatetime(topic.created)}}">{{topic.created.strftime("%b %d, %Y %H:%M")}}</time>
+        {% if current_user %}• {{topic.hits}} hits {%if current_user.role > 9%}{{topic.impact}}{%end%}{%end%}
     </div>
     <div class="entry-content">
         {{ markdown(topic.content) }}
