@@ -161,6 +161,9 @@ class SignupHandler(BaseHandler, RecaptchaMixin):
 class SettingHandler(BaseHandler):
     @tornado.web.authenticated
     def get(self):
+        self._setting_render()
+
+    def _setting_render(self):
         q = MemberLog.query.filter_by(user_id=self.current_user.id)
         logs = q.order_by('-id').limit(5)
         networks = self.get_user_social(self.current_user.id)
@@ -171,29 +174,28 @@ class SettingHandler(BaseHandler):
     def post(self):
         username = self.get_argument('username', None)
         website = self.get_argument('website', None)
-        validate = True
         if not username:
-            validate = False
             self.create_message('Form Error', 'Please fill the required field')
+            self._setting_render()
+            return
 
         if not validators.username(username):
-            validate = False
             self.create_message('Form Error',
                                 "Username not valid, don't be evil")
+            self._setting_render()
+            return
 
         if website and not validators.url(website):
-            validate = False
             self.create_message('Form Error',
                                 "Website not valid, don't be evil")
+            self._setting_render()
+            return
 
         user = self.get_user_by_name(username)
         if user and user.id != self.current_user.id:
-            validate = False
             self.create_message('Form Error',
                                 "Username is registered by other member")
-
-        if not validate:
-            self.render('setting.html')
+            self._setting_render()
             return
 
         user = self.db.query(Member).filter_by(id=self.current_user.id).first()
