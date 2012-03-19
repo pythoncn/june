@@ -8,11 +8,11 @@
     {% end %}
     <li style="{%if node and node.bgcolor%}border-color:{{node.bgcolor}}{% end %}">
     {% set user = users[topic.user_id] %}
-    <a href="/topic/{{topic.id}}{%if topic.reply_count%}#reply-{{topic.reply_count}}{%end%}" class="count" title="{{topic.reply_count}} replies">{{topic.reply_count}}</a>
+    <a href="/topic/{{topic.id}}{%if topic.reply_count%}#reply{{topic.reply_count}}{%end%}" class="count" title="{{topic.reply_count}} replies">{{topic.reply_count}}</a>
     <div class="content">
         <a class="avatar" href="/member/{{user.username}}" title="{{user.username}}"><img src="{{user.get_avatar(36)}}" width="36" height="36" /></a>
         <div class="fn-wrap">
-            <h2 class="title"><a href="/topic/{{topic.id}}{%if topic.reply_count%}#reply-{{topic.reply_count}}{%end%}">{{escape(topic.title)}}</a></h2>
+            <h2 class="title"><a href="/topic/{{topic.id}}{%if topic.reply_count%}#reply{{topic.reply_count}}{%end%}">{{escape(topic.title)}}</a></h2>
             <div class="meta">
                 <a href="/member/{{user.username}}">{{user.username}}</a> posted
                 {%if node%}in <a href="/node/{{node.slug}}" rel="category">{{node.title}}</a>{%end%}
