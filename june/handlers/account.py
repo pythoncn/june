@@ -273,7 +273,7 @@ class MemberListModule(tornado.web.UIModule):
             return html
         users = Member.query.order_by(order).all()[:count]
         html = self.render_string(tpl, users=users)
-        self.handler.cache.set(key, html, 600)
+        self.handler.cache.set(key, html, 60)
         return html
 
 
