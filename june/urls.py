@@ -4,7 +4,7 @@ from june.handlers import topic
 from june.handlers import account
 from june.handlers import api
 from june.handlers import social
-from june.dashboard import handler as dashboard
+from june import dashboard
 
 handlers = []
 handlers.extend(account.handlers)
