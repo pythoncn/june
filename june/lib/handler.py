@@ -101,6 +101,7 @@ class BaseHandler(RequestHandler, MemberMixin, StorageMixin):
         self._context.footer = self.get_storage('footer')
         self._context.header = self.get_storage('header')
         self._context.ga = options.ga
+        self._context.gcse = options.gcse
         self._context.debug = options.debug
         self._context.message = []
 

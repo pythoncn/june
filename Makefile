@@ -9,11 +9,20 @@ PROJSERVER = linode.lepture.com:/home/lepture/project/june
 server:
 	june/app.py --config=$(CONFIG)
 
-less:
+less: siteless mobileless dashboardless googleless
+
+siteless:
 	if [ ! -d june/static/css ]; then mkdir -p june/static/css; fi
 	lessc --compress assets/less/site.less > june/static/css/site.css
+
+mobileless:
 	lessc --compress assets/less/mobile.less > june/static/css/mobile.css
+
+dashboardless:
 	lessc --compress assets/less/dashboard.less > june/static/css/dashboard.css
+
+googleless:
+	lessc --compress assets/less/google.less > june/static/css/google.css
 
 js: libjs atjs editorjs copyjs
 

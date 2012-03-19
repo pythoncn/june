@@ -44,11 +44,18 @@ class PreviewHandler(BaseHandler):
         self.write(safe_markdown(text))
 
 
+class SearchHandler(BaseHandler):
+    def get(self):
+        query = self.get_argument('q', '')
+        self.render('search.html', query=query)
+
+
 handlers = [
     ('/', HomeHandler),
     ('/subscription', SubscriptionHandler),
     ('/preview', PreviewHandler),
     ('/feed', SiteFeedHandler),
+    ('/search', SearchHandler),
 ]
 
 

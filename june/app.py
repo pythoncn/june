@@ -63,6 +63,7 @@ define('recaptcha_secret', '')
 define('recaptcha_theme', 'clean')
 define('emoji_url', '')
 define('ga', '')
+define('gcse', '')
 
 
 class Application(web.Application):

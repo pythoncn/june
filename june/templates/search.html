@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block subtitle %}{{ _("Search") }}{% end %}
+
+{% block main %}
+<div id="cse">Loading</div>
+<script src="http://www.google.com/jsapi" type="text/javascript"></script>
+<script type="text/javascript"> 
+    google.load('search', '1', {});
+    var googleSearch = function() {
+        var customSearchControl = new google.search.CustomSearchControl('{{context.gcse}}', {});
+        customSearchControl.setResultSetSize(google.search.Search.FILTERED_CSE_RESULTSET);
+        customSearchControl.draw('cse');
+        {%if query%}customSearchControl.execute("{{escape(query)}}");{%end%}
+    }
+    google.setOnLoadCallback(googleSearch, true);
+</script>
+<link rel="stylesheet" href="{{static_url('css/google.css')}}" type="text/css" />
+{% end %}

@@ -83,6 +83,11 @@
                         {% block main %}{% end %}
                     </div>
                     <div id="sidebar">
+                        <div class="widget">
+                            <form action="/search">
+                                <input class="fm-text" type="search" name="q" placeholder="Search.." />
+                            </form>
+                        </div>
                         {% block sidebar %}{% end %}
                         {{ context.sidebar or '' }}
                         <div class="widget">
