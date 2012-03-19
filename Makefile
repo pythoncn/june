@@ -15,13 +15,18 @@ less:
 	lessc --compress assets/less/mobile.less > june/static/css/mobile.css
 	lessc --compress assets/less/dashboard.less > june/static/css/dashboard.css
 
+js: libjs atjs editorjs copyjs
+
 libjs:
 	if [ ! -d june/static/js ]; then mkdir -p june/static/js; fi
 	uglifyjs -nc assets/js/lib/jquery.js > june/static/js/lib.js
-	uglifyjs -nc assets/js/lib/jquery.caret.js >> june/static/js/lib.js
-	uglifyjs -nc assets/js/lib/jquery.atwho.js >> june/static/js/lib.js
 	uglifyjs -nc assets/js/lib/jquery.timeago.js >> june/static/js/lib.js
 	uglifyjs -nc assets/js/lib/jquery.tipsy.js >> june/static/js/lib.js
+
+atjs:
+	uglifyjs -nc assets/js/lib/jquery.caret.js > june/static/js/at.js
+	uglifyjs -nc assets/js/lib/jquery.atwho.js >> june/static/js/at.js
+	uglifyjs -nc assets/js/at.js >> june/static/js/at.js
 
 editorjs:
 	uglifyjs -nc assets/js/lib/showdown.js > june/static/js/editor.js
@@ -31,7 +36,7 @@ image:
 	if [ ! -d june/static/img ]; then mkdir june/static/img; fi
 	cp -r assets/img/* june/static/img/
 
-js:
+copyjs:
 	if [ ! -d june/static/js ]; then mkdir -p june/static/js; fi
 	cp assets/js/pears.js june/static/js/
 
