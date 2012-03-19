@@ -5,9 +5,10 @@
         <title>{%block title%}{%block subtitle%}{%end%} | {{context.sitename}}{%end%}</title>
         {{ context.header or '' }}
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0" />
-        <link rel="stylesheet" href="{{static_url('css/site.css')}}" />
         {% if is_mobile() %}
         <link rel="stylesheet" href="{{static_url('css/mobile.css')}}" />
+        {% else %}
+        <link rel="stylesheet" href="{{static_url('css/site.css')}}" />
         {% end %}
         {% block afterstyle %}{% end %}
         <script type="text/javascript">
@@ -83,7 +84,7 @@
                         {% block main %}{% end %}
                     </div>
                     <div id="sidebar">
-                        <div class="widget">
+                        <div class="widget search">
                             <form action="/search">
                                 <input class="fm-text" type="search" name="q" placeholder="Search.." />
                             </form>

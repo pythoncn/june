@@ -13,7 +13,7 @@ jQuery.sendPost = function(url, args, callback, dataType) {
     }
 }
 $("a[href*='http://']:not([href*='"+location.hostname+"'])").attr("target","_blank");
-$('a[title]').tipsy({gravity: $.fn.tipsy.autoNS});
+$('[title]').tipsy({gravity: $.fn.tipsy.autoNS});
 $('time.updated').timeago();
 $('#nav-toggle').click(function(e){$('body').toggleClass('expanded'); return false;});
 $('#notify .js-hide').click(function(e) {
