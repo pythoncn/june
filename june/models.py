@@ -345,7 +345,7 @@ class Reply(db.Model):
 class Storage(db.Model):
     """A key-value storage"""
     key = Column(String(100), nullable=False, index=True)
-    value = Column(String(2000))
+    value = Column(Text)
 
 
 class StorageMixin(object):

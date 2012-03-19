@@ -84,6 +84,7 @@
                     </div>
                     <div id="sidebar">
                         {% block sidebar %}{% end %}
+                        {{ context.sidebar or '' }}
                         <div class="widget">
                             <h4 class="widget-title">{{_("Analytics")}}</h4>
                             <div class="meta">
