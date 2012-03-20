@@ -13,11 +13,17 @@ jQuery.sendPost = function(url, args, callback, dataType) {
     }
 }
 $("a[href*='http://']:not([href*='"+location.hostname+"'])").attr("target","_blank");
-$('[title]').tipsy({gravity: $.fn.tipsy.autoNS});
+$('a[title]').tipsy({gravity: $.fn.tipsy.autoNS});
 $('time.updated').timeago();
 $('#nav-toggle').click(function(e){$('body').toggleClass('expanded'); return false;});
 $('#notify .js-hide').click(function(e) {
     $(this).parentsUntil($('#notify'), '.message').remove();
+});
+$('.topics time.updated').each(function(i, item) {
+    var dis = (new Date()).getTime() - $.timeago.parse($(item).attr('datetime')).getTime();
+    if (dis < 600000) {
+        $(item).parentsUntil($('.topics'), 'li').addClass('new');
+    }
 });
 /*------ footer --------*/
 if($(window).height() >= $(document).height())$('#footer').addClass('show');

@@ -126,7 +126,7 @@ html body button.ui-btn {
     font: 12px/24px monospace;
     text-decoration: none;
     text-align: center;
-    border-radius: 12px;
+    border-radius: 50%;
     background: @green;
 }
 .line .count:visited {
@@ -134,6 +134,13 @@ html body button.ui-btn {
 }
 .line .count:hover {
     background-color: @red;
+}
+.line .new .count {
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
+    left: -20px;
+    top: 16px;
 }
 .line .content {
     border-bottom: 1px solid rgba(0,0,0,0.1);

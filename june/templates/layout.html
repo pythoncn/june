@@ -55,11 +55,11 @@
                         <a id="nav-toggle" href="#">hide</a>
                         <ul id="nav">
                             <li><a href="/">{{ _("Home") }}</a></li>
-                            <li><a href="/nodes">{{ _("Nodes") }}</a></li>
                             {% if current_user %}
                             <li><a href="/subscription">{{ _("Subscription") }}</a></li>
                             <li><a href="/topic">{{_("New Topic")}}</a></li>
                             {% end %}
+                            <li><a href="/nodes">{{ _("Nodes") }}</a></li>
                             {% if current_user and current_user.role > 9 %}
                             <li><a href="/dashboard">{{ _("Dashboard") }}</a></li>
                             {% end %}
