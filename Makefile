@@ -7,7 +7,7 @@ CONFIG = tmp.config
 PROJSERVER = linode.lepture.com:/home/lepture/project/june
 
 server:
-	june/app.py --config=$(CONFIG)
+	june/app.py --settings=$(CONFIG)
 
 static: less js image
 

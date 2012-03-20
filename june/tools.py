@@ -50,7 +50,7 @@ recaptcha_secret = ''
 
 
 def init_project():
-    f = open('config.py', 'w')
+    f = open('settings.py', 'w')
     f.write(config)
     f.close()
     return

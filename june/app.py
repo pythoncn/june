@@ -91,9 +91,9 @@ class Application(web.Application):
 
 
 def run_server():
-    define('config', '')
+    define('settings', '')
     tornado.options.parse_command_line()
-    parse_config_file(options.config)
+    parse_config_file(options.settings)
     server = HTTPServer(Application(), xheaders=True)
     server.listen(int(options.port))
     IOLoop.instance().start()
