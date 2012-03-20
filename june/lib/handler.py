@@ -6,7 +6,7 @@ from tornado.options import options
 from tornado import escape
 
 import june
-from june.models import MemberMixin, StorageMixin
+from june.models.mixin import MemberMixin, StorageMixin
 from june.lib.filters import safe_markdown, xmldatetime
 from june.lib.util import ObjectDict
 

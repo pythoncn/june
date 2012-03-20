@@ -2,8 +2,8 @@ import datetime
 import tornado.web
 from june.lib.handler import BaseHandler
 from june.lib.util import PageMixin
-from june.models import NodeMixin, MemberMixin
 from june.models import Topic, FollowNode
+from june.models.mixin import NodeMixin, MemberMixin
 
 
 class NodeHandler(BaseHandler, NodeMixin, PageMixin):

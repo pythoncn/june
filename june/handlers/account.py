@@ -4,8 +4,8 @@ from datetime import datetime
 from june.lib.handler import BaseHandler
 from june.lib import validators
 from june.auth.recaptcha import RecaptchaMixin
-from june.models import Member, MemberLog, Notify
-from june.models import NodeMixin, MemberMixin, create_token
+from june.models import Member, MemberLog, Notify, create_token
+from june.models.mixin import NodeMixin, MemberMixin
 from june.handlers.social import active_services
 
 

@@ -3,7 +3,7 @@ from june.lib.util import ObjectDict
 from june.lib.handler import BaseHandler
 from june.lib.decorators import require_admin
 from june.models import Topic, Member, Node, Reply
-from june.models import NodeMixin, TopicMixin
+from june.models.mixin import NodeMixin, TopicMixin
 
 
 class DashMixin(object):

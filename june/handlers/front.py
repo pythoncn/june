@@ -3,7 +3,7 @@ import tornado.web
 from june.lib.handler import BaseHandler
 from june.lib.filters import safe_markdown
 from june.models import Topic, Member, Node, Reply
-from june.models import NodeMixin
+from june.models.mixin import NodeMixin
 
 
 class HomeHandler(BaseHandler, NodeMixin):

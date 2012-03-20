@@ -10,7 +10,7 @@ from june.lib.util import ObjectDict, PageMixin
 from june.lib.filters import find_mention
 from june.handlers.social import register_service
 from june.models import Node, Topic, Reply
-from june.models import NodeMixin, TopicMixin, MemberMixin, NotifyMixin
+from june.models.mixin import NodeMixin, TopicMixin, MemberMixin, NotifyMixin
 
 
 class TopicHandler(BaseHandler, TopicMixin, NodeMixin, PageMixin, NotifyMixin):
