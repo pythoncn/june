@@ -24,9 +24,9 @@ current path.
     * change ``static_path``
     * add repatcha key and secret
 
-3. create database: ``june.tools -f settings.py createdb``
+3. create database: ``june.tools --settings=settings.py createdb``
 
-4. create super user: ``june.tools -f settings.py createuser``
+4. create super user: ``june.tools --settings=settings.py createuser``
 
 5. start server: ``june.server --settings=settings.py``
 

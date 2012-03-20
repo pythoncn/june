@@ -62,7 +62,7 @@ def main():
         description='June: a forum',
     )
     parser.add_argument('command', nargs="*")
-    parser.add_argument('-f', '--config', dest='config')
+    parser.add_argument('-f', '--settings', dest='config')
     args = parser.parse_args()
 
     if args.config:
