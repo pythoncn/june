@@ -320,6 +320,8 @@ class NodeTopicsModule(UIModule, MemberMixin, PageMixin):
         user_ids = []
         for topic in page.datalist:
             user_ids.append(topic.user_id)
+            if topic.last_reply_by:
+                user_ids.append(topic.last_reply_by)
         users = self.get_users(user_ids)
         html = self.render_string(tpl, page=page, users=users, nodes=None)
         self.handler.cache.set(key, html, 600)
