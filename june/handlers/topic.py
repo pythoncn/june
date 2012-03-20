@@ -75,6 +75,10 @@ class TopicHandler(BaseHandler, TopicMixin, NodeMixin, PageMixin, NotifyMixin):
         topic.reply_count += 1
         topic.impact += self._calc_impact(topic)
 
+        # last reply
+        topic.last_reply_by = self.current_user.id
+        topic.last_reply_time = datetime.utcnow()
+
         #TODO impact on creator
 
         self.db.add(reply)
@@ -291,6 +295,8 @@ class TopicListModule(UIModule, MemberMixin, NodeMixin, PageMixin):
         node_ids = []
         for topic in page.datalist:
             user_ids.append(topic.user_id)
+            if topic.last_reply_by:
+                user_ids.append(topic.last_reply_by)
             node_ids.append(topic.node_id)
         users = self.get_users(user_ids)
         nodes = self.get_nodes(node_ids)

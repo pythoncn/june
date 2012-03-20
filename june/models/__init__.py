@@ -160,6 +160,8 @@ class Topic(db.Model):
     downs = Column(Text)
     impact = Column(Integer, default=get_current_impact)
     reply_count = Column(Integer, default=0)
+    last_reply_by = Column(Integer, default=0)
+    last_reply_time = Column(DateTime, default=datetime.utcnow)
 
     @property
     def up_users(self):
