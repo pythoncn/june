@@ -8,7 +8,7 @@ from june.lib.handler import BaseHandler
 from june.lib.decorators import require_user
 from june.lib.util import ObjectDict, PageMixin
 from june.lib.filters import find_mention
-from june.handlers.social import register_service
+from june.social import register as register_social
 from june.models import Node, Topic, Reply
 from june.models.mixin import NodeMixin, TopicMixin, MemberMixin, NotifyMixin
 
@@ -96,9 +96,7 @@ class TopicHandler(BaseHandler, TopicMixin, NodeMixin, PageMixin, NotifyMixin):
         content = "%s %s%s#reply-%s" % \
                 (content[:70], options.siteurl, url, topic.reply_count)
         networks = self.get_user_social(self.current_user.id)
-        for name in networks:
-            if networks[name]['enabled'] == 'y':
-                register_service(name, self.current_user.id, content)
+        register_social(networks, content)
 
     def _calc_impact(self, topic):
         if self.current_user.reputation < 2:
@@ -172,11 +170,10 @@ class CreateTopicHandler(BaseHandler, NodeMixin):
         self.cache.delete_multi(['status', key1, key2, key3])
         self.redirect(url)
 
+        # social networks
         content = "%s %s%s" % (title[:70], options.siteurl, url)
         networks = self.get_user_social(self.current_user.id)
-        for name in networks:
-            if networks[name]['enabled'] == 'y':
-                register_service(name, self.current_user.id, content)
+        register_social(networks, content)
 
     def _check_permission(self, node):
         user = self.current_user

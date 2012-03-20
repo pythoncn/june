@@ -3,7 +3,7 @@ from june.handlers import node
 from june.handlers import topic
 from june.handlers import account
 from june.handlers import api
-from june.handlers import social
+from june import social
 from june import dashboard
 
 handlers = []

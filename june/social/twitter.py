@@ -1,29 +1,21 @@
-import urllib
 from tornado import escape
 from tornado.web import asynchronous
 from tornado.options import options
-from tornado.auth import httpclient
+from tornado.auth import TwitterMixin
 from june.lib.decorators import require_user, require_system
-from june.auth.twitter import TweetMixin
 from june.lib.handler import BaseHandler
 from june.models import Social
 
-active_services = []
-if hasattr(options, 'twitter_key') and hasattr(options, 'twitter_secret'):
-    active_services.append('twitter')
 
-
-def register_service(name, user_id, content):
-    if name not in active_services:
+class TwitterHandler(BaseHandler, TwitterMixin):
+    def check_xsrf_cookie(self):
+        # disable xsrf check
         return
-    http = httpclient.AsyncHTTPClient()
-    url = 'http://127.0.0.1:%s/social/%s' % (options.port, name)
-    post_args = {'user': user_id, 'content': escape.utf8(content)}
-    http.fetch(url, method="POST", body=urllib.urlencode(post_args),
-               callback=None)
 
+    def _oauth_consumer_token(self):
+        # reset method to get consumer token
+        return {'key': options.twitter_key, 'secret': options.twitter_secret}
 
-class TwitterHandler(BaseHandler, TweetMixin):
     @require_user
     @asynchronous
     def get(self):
@@ -58,27 +50,15 @@ class TwitterHandler(BaseHandler, TweetMixin):
         self.cache.delete('social:%s' % self.current_user.id)
         self.redirect('/account/setting')
 
-    def check_xsrf_cookie(self):
-        # disable xsrf check
-        return
-
     @require_system
     @asynchronous
     def post(self):
         content = self.get_argument('content', None)
-        user_id = self.get_argument('user', None)
-        if not (content and user_id):
+        token = self.get_argument('token', None)
+        if not (content and token):
             self.finish('deny')
             return
-        networks = self.get_user_social(user_id)
-        if 'twitter' not in networks:
-            self.finish('deny')
-            return
-        twitter = networks['twitter']
-        if twitter['enabled'] != 'y':
-            self.finish('deny')
-            return
-        token = escape.json_decode(twitter['token'])
+        token = escape.json_decode(token)
         status = escape.utf8(content)
         self.twitter_request(
             '/statuses/update',
@@ -91,9 +71,8 @@ class TwitterHandler(BaseHandler, TweetMixin):
             self.finish('fail')
             return
         self.finish('ok')
-twitter_service = ('/social/twitter', TwitterHandler)
 
 
-handlers = []
-if 'twitter' in active_services:
-    handlers.append(twitter_service)
+handlers = [
+    ('/social/twitter', TwitterHandler),
+]
