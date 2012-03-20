@@ -13,7 +13,7 @@
         <a class="avatar" href="/member/{{user.username}}" title="{{user.username}}"><img src="{{user.get_avatar(36)}}" width="36" height="36" /></a>
         {%if topic.last_reply_by%}
         {% set replyer = users[topic.last_reply_by] %}
-        <a href="/member/{{replyer.username}}" class="avatar small-avatar" title="{{replyer.username}}"><img src="{{replyer.get_avatar(20)}}" width="20" height="20" /></a>
+        <a href="/member/{{replyer.username}}" class="avatar small-avatar" title="recent replied by {{replyer.username}}"><img src="{{replyer.get_avatar(20)}}" width="20" height="20" /></a>
         {% end %}
         <div class="fn-wrap">
             <h2 class="title"><a href="/topic/{{topic.id}}{%if topic.reply_count%}#reply{{topic.reply_count}}{%end%}">{{escape(topic.title)}}</a></h2>
