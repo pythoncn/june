@@ -117,7 +117,8 @@ class BaseHandler(RequestHandler, MemberMixin, StorageMixin):
 
     def is_mobile(self):
         _mobile = (r'ipod|iphone|android|blackberry|palm|nokia|symbian|'
-                   r'samsung|psp|kindle|phone|mobile|ucweb|opera mini|fennec')
+                   r'samsung|psp|kindle|phone|mobile|ucweb|opera mini|fennec|'
+                   r'webos')
         return True if re.search(_mobile, self.user_agent.lower()) else False
 
     def is_spider(self):
