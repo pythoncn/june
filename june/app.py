@@ -49,11 +49,11 @@ define('cookie_secret', '')  # reset it
 define('reply_factor_for_topic', 800)
 define('reply_time_factor', 400)
 define('up_factor_for_topic', 1000)
-define('up_factor_for_user', 2)
+define('up_factor_for_user', 1)
 define('down_factor_for_topic', 800)
 define('down_factor_for_user', 1)
 define('vote_reply_factor_for_topic', 500)
-define('vote_reply_factor_for_user', 2)
+define('vote_reply_factor_for_user', 1)
 
 # third party support config
 define('gravatar_base_url', "http://www.gravatar.com/avatar/")
