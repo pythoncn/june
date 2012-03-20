@@ -46,9 +46,9 @@ define('xsrf_cookies', True)
 define('cookie_secret', '')  # reset it
 
 # factor config
-define('reply_factor_for_topic', 800)
-define('reply_time_factor', 400)
-define('up_factor_for_topic', 1000)
+define('reply_factor_for_topic', 600)
+define('reply_time_factor', 1000)
+define('up_factor_for_topic', 1500)
 define('up_factor_for_user', 1)
 define('down_factor_for_topic', 800)
 define('down_factor_for_user', 1)
