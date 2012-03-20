@@ -15,10 +15,10 @@ Fork and send pull request. All code must be linted by flake8.
 
 After installation, type ``june.tools -h`` for help.
 
-1. create a setting file: ``june.tools`` , a file called ``settings.py`` will be created in your
+1. create a settings file: ``june.tools`` , a file called ``settings.py`` will be created in your
 current path.
 
-2. edit setting file
+2. edit settings file
 
     * change ``master`` for your database
     * change ``static_path``
@@ -28,7 +28,7 @@ current path.
 
 4. create super user: ``june.tools -f settings.py createuser``
 
-5. start server: ``june.server --setting=settings.py``
+5. start server: ``june.server --settings=settings.py``
 
 ### The hard way
 
