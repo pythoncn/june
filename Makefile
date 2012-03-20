@@ -9,6 +9,8 @@ PROJSERVER = linode.lepture.com:/home/lepture/project/june
 server:
 	june/app.py --config=$(CONFIG)
 
+static: less js image
+
 less: siteless mobileless dashboardless googleless
 
 siteless:
