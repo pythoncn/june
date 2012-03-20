@@ -156,13 +156,13 @@ def safe_markdown(text, noclasses=False):
         return '\n\n<div class="code">%s</div>\n\n' % code
 
     text = pattern.sub(repl, text)
-    pattern = re.compile(r'@(\w+)')
-    text = pattern.sub(r'<a href="/member/\1">@\1</a>', text)
+    pattern = re.compile(r'@(\w+)\s')
+    text = pattern.sub(r'<a href="/member/\1">@\1</a> ', text)
     return emoji(markdown.markdown(text))
 
 
 def find_mention(text):
-    regex = r'@(\w+)'
+    regex = r'@(\w+)\s'
     return re.findall(regex, text)
 
 
