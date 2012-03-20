@@ -48,3 +48,17 @@ current path.
 ## How to set up a production enironment
 
 You need to know a little of supervisor and nginx, all config files are available in conf/
+
+
+### Set fator for your site:
+
++ reply_factor_for_topic (default: 600)
++ reply_time_factor (default: 1000)
++ up_factor_for_topic (default: 1500)
++ up_factor_for_user (default: 1)
++ down_factor_for_topic (default:800)
++ down_factor_for_user (default: 1)
++ vote_reply_factor_for_topic (default: 500)
++ vote_reply_factor_for_user (default: 1)
+
+**If your forum is very active, set the factors lower, otherwise set the factors higher!**
