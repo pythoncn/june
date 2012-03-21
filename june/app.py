@@ -57,7 +57,7 @@ define('vote_reply_factor_for_user', 1)
 
 # third party support config
 define('gravatar_base_url', "http://www.gravatar.com/avatar/")
-define('default_gravatar', '')
+define('gravatar_extra', '')
 define('recaptcha_key', '')
 define('recaptcha_secret', '')
 define('recaptcha_theme', 'clean')

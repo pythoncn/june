@@ -82,7 +82,7 @@ class Member(db.Model):
         if self.avatar:
             return self.avatar
         md5email = hashlib.md5(self.email).hexdigest()
-        query = "%s?s=%s&d=%s" % (md5email, size, options.default_gravatar)
+        query = "%s?s=%s%s" % (md5email, size, options.gravatar_extra)
         return options.gravatar_base_url + query
 
     @staticmethod
