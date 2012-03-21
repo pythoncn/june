@@ -20,7 +20,7 @@
             <div class="meta">
                 <a href="/member/{{user.username}}">{{user.username}}</a> posted
                 {%if node%}in <a href="/node/{{node.slug}}" rel="category">{{node.title}}</a>{%end%}
-                {% if topic.last_reply_time %}
+                {% if topic.last_reply_by and topic.last_reply_time %}
                 updated at <time class="updated" datetime="{{xmldatetime(topic.last_reply_time)}}">{{topic.last_reply_time.strftime("%b %d, %Y %H:%M")}}</time>
                 {% else %}
                 at <time class="updated" datetime="{{xmldatetime(topic.created)}}">{{topic.created.strftime("%b %d, %Y %H:%M")}}</time>
