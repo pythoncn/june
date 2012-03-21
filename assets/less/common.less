@@ -21,6 +21,16 @@
     0% {-moz-transform:scale(0); opacity:1.0}
     100% {-moz-transform:scale(1); opacity:0}
 }
+@-webkit-keyframes circle {
+    0% {-webkit-transform:rotate(0);}
+    50% {-webkit-transform:rotate(-180deg);}
+    100% {-webkit-transform:rotate(-360deg);}
+}
+@-moz-keyframes circle {
+    0% {-moz-transform:rotate(0);}
+    50% {-moz-transform:rotate(-180deg);}
+    100% {-moz-transform:rotate(-360deg);}
+}
 
 ::selection {
     color: rgba(255,255,255,0.85);
@@ -212,7 +222,7 @@ html body button.ui-btn {
     left: -19px;
 }
 .hentry .avatar:hover {
-    .transform(rotate(-45deg));
+    .animation(circle 0.4s linear);
 }
 .hentry .entry-title {
     font-size: 18px;
@@ -250,7 +260,7 @@ html body button.ui-btn {
     left: -24px;
     border-radius: 24px;
     &:hover {
-        .transform(rotate(-45deg));
+        .animation(circle 0.4s linear);
     }
     img {
         border-radius: 18px;
