@@ -200,7 +200,8 @@ class UpReplyHandler(VoteReplyHandler):
         self.db.add(reply)
         self.db.add(creator)
         self.db.commit()
-        dct = {'status': 'ok', 'msg': 'active'}
+        dct = {'status': 'ok'}
+        dct['data'] = {'action': 'active', 'count': len(up_users)}
         self.write(dct)
         return
 
@@ -250,7 +251,8 @@ class DownReplyHandler(VoteReplyHandler):
         self.db.add(reply)
         self.db.add(creator)
         self.db.commit()
-        dct = {'status': 'ok', 'msg': 'active'}
+        dct = {'status': 'ok'}
+        dct['data'] = {'action': 'active', 'count': len(down_users)}
         self.write(dct)
         return
 
