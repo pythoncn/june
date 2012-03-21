@@ -241,11 +241,59 @@ class EditTopicHandler(BaseHandler, TopicMixin, NodeMixin):
         return 1
 
 
+class MoveTopicHandler(BaseHandler, TopicMixin, NodeMixin):
+    @require_user
+    def get(self, id):
+        topic = self.db.query(Topic).filter_by(id=id).first()
+        if not topic:
+            self.send_error(404)
+            return
+        if not self._check_permission(topic):
+            self.send_error(403)
+            return
+        node_id = self.get_argument('node', None)
+        if not node_id:
+            self._render_tpl(topic)
+            return
+        try:
+            node_id = int(node_id)
+        except:
+            self._render_tpl(topic)
+            return
+        node = self.get_node_by_id(node_id)
+        if not node:
+            self._render_tpl(topic)
+            return
+        topic.node_id = node_id
+        self.db.add(topic)
+        self.db.commit()
+        self.redirect('/topic/%s' % topic.id)
+        self.cache.delete('topic:%s' % topic.id)
+
+    def _render_tpl(self, topic):
+        nodes = self.get_all_nodes()
+        self.render('move_topic.html', topic=topic, nodes=nodes)
+
+    def _check_permission(self, topic):
+        if self.current_user.role > 9:
+            return 1
+        if not self.is_owner_of(topic):
+            self.send_error(403)
+            return 0
+        timedel = datetime.utcnow() - topic.created
+        if timedel.days:
+            # user can only edit a topic in 10 minutes
+            self.create_message('Warning', "You can't edit this topic now")
+            return 2
+        return 1
+
+
 handlers = [
     ('/node/(\w+)/topic', CreateTopicHandler),
     ('/topic', NewTopicHandler),
     ('/topic/(\d+)', TopicHandler),
     ('/topic/(\d+)/edit', EditTopicHandler),
+    ('/topic/(\d+)/move', MoveTopicHandler),
 ]
 
 

@@ -61,10 +61,11 @@
 
 {% if current_user %}
 <div class="widget">
+    <a href="/node/{{node.slug}}/topic" class="ui-btn">{{_("New Topic")}}</a>
     {% if current_user.id == topic.user_id %}
     <a href="/topic/{{topic.id}}/edit" class="ui-btn">{{_("Edit Topic")}}</a>
+    <a href="/topic/{{topic.id}}/move" class="ui-btn">{{_("Move Topic")}}</a>
     {% end %}
-    <a href="/node/{{node.slug}}/topic" class="ui-btn">{{_("New Topic")}}</a>
 </div>
 {% end %}
 
