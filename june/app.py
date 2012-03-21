@@ -62,8 +62,8 @@ define('recaptcha_key', '')
 define('recaptcha_secret', '')
 define('recaptcha_theme', 'clean')
 define('emoji_url', '')
-define('ga', '')
-define('gcse', '')
+define('ga', '')  # google analytics
+define('gcse', '')  # google custom search
 
 
 class Application(web.Application):
