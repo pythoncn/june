@@ -1,3 +1,8 @@
+/*-------- web font ---------*/
+WebFontConfig = {
+    google: {families: ['Qwigley']}
+};
+$('body').append('<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js" async=true></script>');
 jQuery.getCookie = function(name) {
     var r = document.cookie.match("\\b" + name + "=([^;]*)\\b");
     return r ? r[1] : undefined;
