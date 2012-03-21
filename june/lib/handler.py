@@ -7,7 +7,7 @@ from tornado import escape
 
 import june
 from june.models.mixin import MemberMixin, StorageMixin
-from june.lib.filters import safe_markdown, xmldatetime
+from june.lib.filters import safe_markdown, xmldatetime, topiclink
 from june.lib.util import ObjectDict
 
 
@@ -109,6 +109,7 @@ class BaseHandler(RequestHandler, MemberMixin, StorageMixin):
         self._filters = ObjectDict()
         self._filters.markdown = safe_markdown
         self._filters.xmldatetime = xmldatetime
+        self._filters.topiclink = topiclink
         self._filters.get_user = self.get_user_by_id
         self._filters.is_mobile = self.is_mobile
 

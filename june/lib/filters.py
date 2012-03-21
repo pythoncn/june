@@ -168,3 +168,15 @@ def find_mention(text):
 
 def xmldatetime(value):
     return value.strftime('%Y-%m-%dT%H:%M:%SZ')
+
+
+def topiclink(topic, perpage=30):
+    url = '/topic/%s' % topic.id
+    num = (topic.reply_count - 1) / perpage + 1
+    if not topic.reply_count:
+        return url
+    if num > 1:
+        url += '?p=%s' % num
+
+    url += '#reply%s' % topic.reply_count
+    return url

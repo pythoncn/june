@@ -90,7 +90,10 @@ class TopicHandler(BaseHandler, TopicMixin, NodeMixin, PageMixin, NotifyMixin):
             self.create_mention(username, topic, content)
 
         self.db.commit()
+        num = (topic.reply_count - 1) / 30 + 1
         url = '/topic/%s' % str(id)
+        if num > 1:
+            url += '?p=%s' % num
         self.cache.set(key, url, 100)
         #TODO calculate page, delete the right cache
         self.cache.delete('ReplyListModule:%s:1' % str(id))
