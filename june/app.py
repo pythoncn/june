@@ -54,6 +54,9 @@ define('down_factor_for_topic', 800)
 define('down_factor_for_user', 1)
 define('vote_reply_factor_for_topic', 500)
 define('vote_reply_factor_for_user', 1)
+define('up_max_for_user', 10)
+define('down_max_for_user', 4)
+define('vote_max_for_user', 4)
 
 # third party support config
 define('gravatar_base_url', "http://www.gravatar.com/avatar/")

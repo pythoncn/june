@@ -63,7 +63,8 @@ class UpTopicHandler(BaseHandler):
         if self.current_user.reputation < 2:
             return 0
         factor = int(options.up_factor_for_user)
-        return factor * int(math.log(self.current_user.reputation))
+        impact = factor * int(math.log(self.current_user.reputation))
+        return min(impact, options.up_max_for_user)
 
 
 class DownTopicHandler(BaseHandler):
@@ -125,7 +126,8 @@ class DownTopicHandler(BaseHandler):
         if self.current_user.reputation < 2:
             return 0
         factor = int(options.down_factor_for_user)
-        return factor * int(math.log(self.current_user.reputation))
+        impact = factor * int(math.log(self.current_user.reputation))
+        return min(impact, options.down_max_for_user)
 
 
 class VoteReplyHandler(BaseHandler):
@@ -152,7 +154,8 @@ class VoteReplyHandler(BaseHandler):
         if self.current_user.reputation < 2:
             return 0
         factor = int(options.vote_reply_factor_for_user)
-        return factor * int(math.log(self.current_user.reputation))
+        impact = factor * int(math.log(self.current_user.reputation))
+        return min(impact, options.vote_max_for_user)
 
 
 class UpReplyHandler(VoteReplyHandler):
