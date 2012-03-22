@@ -38,7 +38,7 @@
 }
 body {
     color: #565656;
-    background: #e6eaec url(../img/tile.png);
+    background: #f0f0f0 url(../img/tile.gif);
     font: 14px/1.6 @font-helvetica;
 }
 a {
@@ -76,6 +76,12 @@ html body .node {
     &:hover {
         .opacity(0.8);
     }
+}
+.hsep {
+    margin-right: 10px;
+}
+.vsep {
+    margin-bottom: 10px;
 }
 /*----------- form ----------*/
 .fm-item input, .fm-text {
@@ -229,6 +235,7 @@ html body button.ui-btn {
     font-weight: bold;
 }
 .hentry .entry-content {
+    .fn-wrap;
     margin-top: 12px;
 }
 .hentry .meta {
@@ -268,6 +275,7 @@ html body button.ui-btn {
 }
 .replies .content {
     padding: 6px 30px;
+    .fn-wrap;
 }
 .replies .meta a {
     font-weight: bold;
