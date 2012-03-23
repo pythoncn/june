@@ -3,7 +3,7 @@ from tornado.auth import GoogleMixin
 from datetime import datetime
 from june.lib.handler import BaseHandler
 from june.lib import validators
-from june.auth.recaptcha import RecaptchaMixin
+from june.lib.recaptcha import RecaptchaMixin
 from june.models import Member, MemberLog, Notify, create_token
 from june.models.mixin import NodeMixin, MemberMixin
 from june.social import services
