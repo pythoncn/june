@@ -96,7 +96,7 @@ class TopicHandler(BaseHandler, TopicMixin, NodeMixin, PageMixin, NotifyMixin):
             url += '?p=%s' % num
         self.cache.set(key, url, 100)
         #TODO calculate page, delete the right cache
-        self.cache.delete('ReplyListModule:%s:1' % str(id))
+        self.cache.delete('ReplyListModule:%s:%s' % (str(id), num))
         self.redirect("%s#reply%s" % (url, topic.reply_count))
 
         # register social services

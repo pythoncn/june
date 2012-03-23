@@ -190,6 +190,7 @@ class AcceptReplyHandler(BaseHandler, NotifyMixin):
         self.db.commit()
         dct = {'status': 'ok', 'data': 'active'}
         self.write(dct)
+        self.cache.delete('ReplyListModule:%s:1' % topic.id)
         return
 
 
