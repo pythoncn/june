@@ -5,11 +5,11 @@
 
     {% if reply.user_id in users %}
 
-    <li id="reply-{{index}}">
+    <li id="reply-{{index}}"{%if reply.accepted and reply.accepted == 'y'%} class="accepted"{%end%} data-id="{{reply.id}}">
     {% set user = users[reply.user_id] %}
     <a class="avatar" href="/member/{{user.username}}" tabindex="-1" title="{{user.username}}"><img src="{{user.get_avatar(36)}}" width="36" height="36" /></a>
     <div class="content">
-        <article data-id="{{reply.id}}">
+        <article>
             {{ markdown(reply.content) }}
         </article>
         <div class="meta">

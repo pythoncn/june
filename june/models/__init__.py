@@ -182,20 +182,7 @@ class Reply(db.Model):
     content = Column(String(2000))
     created = Column(DateTime, default=datetime.utcnow)
 
-    ups = Column(Text)
-    downs = Column(Text)
-
-    @property
-    def up_users(self):
-        if not self.ups:
-            return []
-        return (int(i) for i in self.ups.split(','))
-
-    @property
-    def down_users(self):
-        if not self.downs:
-            return []
-        return (int(i) for i in self.downs.split(','))
+    accepted = Column(String(1), default='n')  # accepted by topic owner
 
 
 class Storage(db.Model):

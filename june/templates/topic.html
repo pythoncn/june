@@ -8,7 +8,7 @@
 {% end %}
 
 {% block main %}
-<article class="hentry">
+<article class="hentry" data-id="{{topic.id}}">
     {% set user = topic.creator %}
     <a href="/member/{{user.username}}" class="avatar" tabindex="-1" title="{{user.username}}"><img src="{{user.get_avatar(36)}}" width="36" height="36" /></a>
     <h1 class="entry-title"><a href="/topic/{{topic.id}}">{{escape(topic.title)}}</a></h1>

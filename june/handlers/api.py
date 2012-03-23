@@ -3,6 +3,7 @@ from tornado.options import options
 from june.lib.handler import BaseHandler
 from june.lib.decorators import require_user
 from june.models import Topic, Member, Reply
+from june.models.mixin import NotifyMixin
 
 
 class UpTopicHandler(BaseHandler):
@@ -130,7 +131,7 @@ class DownTopicHandler(BaseHandler):
         return min(impact, options.down_max_for_user)
 
 
-class VoteReplyHandler(BaseHandler):
+class AcceptReplyHandler(BaseHandler, NotifyMixin):
     """Vote for a reply will affect the topic impact and reply user's
     reputation
     """
@@ -144,22 +145,13 @@ class VoteReplyHandler(BaseHandler):
             return False
         return reply, topic
 
-    def _calc_topic_impact(self):
-        if self.current_user.reputation < 2:
-            return 0
-        factor = int(options.vote_reply_factor_for_topic)
-        return factor * int(math.log(self.current_user.reputation))
-
     def _calc_user_impact(self):
         if self.current_user.reputation < 2:
             return 0
-        factor = int(options.vote_reply_factor_for_user)
+        factor = int(options.accept_reply_factor_for_user)
         impact = factor * int(math.log(self.current_user.reputation))
         return min(impact, options.vote_max_for_user)
 
-
-class UpReplyHandler(VoteReplyHandler):
-    @require_user
     def post(self, topic_id, reply_id):
         reply_topic = self._is_exist(topic_id, reply_id)
         if not reply_topic:
@@ -168,94 +160,35 @@ class UpReplyHandler(VoteReplyHandler):
 
         reply, topic = reply_topic
         user_id = self.current_user.id
-        if user_id == reply.user_id:
-            dct = {'status': 'fail', 'msg': 'cannot vote your own reply'}
+        if user_id != topic.user_id:
+            dct = {'status': 'fail', 'msg': 'you are not topic owner'}
             self.write(dct)
             return
-
-        if user_id in reply.down_users:
-            # you can't up and down vote at the same time
-            dct = {'status': 'fail', 'msg': "cannot up vote your down reply"}
+        if user_id == reply.user_id:
+            dct = {'status': 'fail', 'msg': 'cannot accept your own reply'}
             self.write(dct)
             return
 
         creator = self.db.query(Member).filter_by(id=reply.user_id).first()
-        up_users = list(reply.up_users)
-        if user_id in up_users:
-            up_users.remove(user_id)
-            reply.ups = ','.join(str(i) for i in up_users)
+        if reply.accepted == 'y':
             creator.reputation -= self._calc_user_impact()
+            reply.accepted = 'n'
             self.db.add(creator)
             self.db.add(reply)
             self.db.commit()
-            dct = {'status': 'ok', 'msg': 'cancel'}
+            dct = {'status': 'ok', 'data': 'cancel'}
             self.write(dct)
             return
 
-        if user_id != topic.user_id:
-            # when topic creator vote a reply, topic impact will not change
-            topic.impact += self._calc_topic_impact()
-            self.db.add(topic)
-
-        up_users.append(user_id)
-        reply.ups = ','.join(str(i) for i in up_users)
         creator.reputation += self._calc_user_impact()
+        reply.accepted = 'y'
         self.db.add(reply)
         self.db.add(creator)
+        link = '/topic/%s' % topic.id
+        self.create_notify(reply.user_id, topic.title, reply.content,
+                           link, 'accept')
         self.db.commit()
-        dct = {'status': 'ok'}
-        dct['data'] = {'action': 'active', 'count': len(up_users)}
-        self.write(dct)
-        return
-
-
-class DownReplyHandler(VoteReplyHandler):
-    @require_user
-    def post(self, topic_id, reply_id):
-        reply_topic = self._is_exist(topic_id, reply_id)
-        if not reply_topic:
-            self.send_error(404)
-            return
-
-        reply, topic = reply_topic
-        user_id = self.current_user.id
-        if user_id == reply.user_id:
-            dct = {'status': 'fail', 'msg': 'cannot vote your own reply'}
-            self.write(dct)
-            return
-
-        if user_id in reply.up_users:
-            # you can't down and up vote at the same time
-            dct = {'status': 'fail', 'msg': "cannot down vote your up reply"}
-            self.write(dct)
-            return
-
-        creator = self.db.query(Member).filter_by(id=reply.user_id).first()
-        down_users = list(reply.down_users)
-        if user_id in down_users:
-            down_users.remove(user_id)
-            reply.downs = ','.join(str(i) for i in down_users)
-            creator.reputation += self._calc_user_impact()
-            self.db.add(creator)
-            self.db.add(reply)
-            self.db.commit()
-            dct = {'status': 'ok', 'msg': 'cancel'}
-            self.write(dct)
-            return
-
-        if user_id != topic.user_id:
-            # when topic creator vote a reply, topic impact will not change
-            topic.impact += self._calc_topic_impact()
-            self.db.add(topic)
-
-        down_users.append(user_id)
-        reply.downs = ','.join(str(i) for i in down_users)
-        creator.reputation -= self._calc_user_impact()
-        self.db.add(reply)
-        self.db.add(creator)
-        self.db.commit()
-        dct = {'status': 'ok'}
-        dct['data'] = {'action': 'active', 'count': len(down_users)}
+        dct = {'status': 'ok', 'data': 'active'}
         self.write(dct)
         return
 
@@ -263,6 +196,5 @@ class DownReplyHandler(VoteReplyHandler):
 handlers = [
     ('/api/topic/(\d+)/up', UpTopicHandler),
     ('/api/topic/(\d+)/down', DownTopicHandler),
-    ('/api/topic/(\d+)/(\d+)/up', UpReplyHandler),
-    ('/api/topic/(\d+)/(\d+)/down', DownReplyHandler),
+    ('/api/topic/(\d+)/(\d+)/accept', AcceptReplyHandler),
 ]

@@ -6,6 +6,9 @@
     #main .active {
         background: #f4f3de;
     }
+    .content .fn-wrap a {
+        color: #565656;
+    }
 </style>
 {% end %}
 {% block notify %}{% end %}
@@ -18,7 +21,7 @@
     <a class="avatar" href="/member/{{user.username}}" tabindex="-1" title="{{user.username}}"><img src="{{user.get_avatar(36)}}" width="36" height="36" /></a>
     <div class="content">
         <div class="fn-wrap">
-            <p>{{escape(msg.content)}}</p>
+            <p><a href="{{msg.link}}">{{escape(msg.content)}}</a></p>
             <div class="meta">
                 <a href="/member/{{user.username}}">{{user.username}}</a> {{msg.type}} on
                 <a href="{{msg.link}}"><strong>{{escape(msg.label)}}</strong></a>

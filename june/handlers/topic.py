@@ -85,7 +85,7 @@ class TopicHandler(BaseHandler, TopicMixin, NodeMixin, PageMixin, NotifyMixin):
         self.db.add(topic)
 
         # notifications
-        self.create_notify(topic.user_id, topic, content)
+        self.create_reply_notify(topic.user_id, topic, content)
         for username in set(find_mention(content)):
             self.create_mention(username, topic, content)
 

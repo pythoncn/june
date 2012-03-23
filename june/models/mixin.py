@@ -57,19 +57,22 @@ class MemberMixin(object):
 
 
 class NotifyMixin(object):
-    def create_notify(self, receiver, topic, content, type='reply'):
-        if receiver == self.current_user.id:
-            return
-        link = '/topic/%s#reply-%s' % (topic.id, topic.reply_count)
-        content = content[:200]
+    def create_notify(self, receiver, title, content, link, type):
         notify = Notify(sender=self.current_user.id, receiver=receiver,
-                         label=topic.title, link=link, content=content)
-        notify.type = type
+                        label=title, link=link, content=content[:100],
+                        type=type)
         self.db.add(notify)
         if not hasattr(self, 'cache'):
             self.cache = self.handler.cache
         self.cache.delete('notify:%s' % receiver)
         return notify
+
+    def create_reply_notify(self, receiver, topic, content):
+        if receiver == self.current_user.id:
+            return
+        link = '/topic/%s#reply-%s' % (topic.id, topic.reply_count)
+        title = topic.title
+        return self.create_notify(receiver, title, content, link, 'reply')
 
     def create_mention(self, username, topic, content):
         user = self.cache.get('member:%s' % str(username))
@@ -88,17 +91,8 @@ class NotifyMixin(object):
             return
 
         link = '/topic/%s#reply-%s' % (topic.id, topic.reply_count)
-        content = content[:200]
-        notify = Notify(
-            sender=self.current_user.id, receiver=user.id,
-            label=topic.title, link=link, content=content)
-        notify.type = 'mention'
-        self.db.add(notify)
-
-        if not hasattr(self, 'cache'):
-            self.cache = self.handler.cache
-        self.cache.delete('notify:%s' % user.id)
-        return notify
+        title = topic.title
+        return self.create_notify(user.id, title, content, link, 'mention')
 
 
 class NodeMixin(object):
