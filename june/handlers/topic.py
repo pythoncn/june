@@ -278,7 +278,6 @@ class MoveTopicHandler(BaseHandler, TopicMixin, NodeMixin):
         if self.current_user.role > 9:
             return 1
         if not self.is_owner_of(topic):
-            self.send_error(403)
             return 0
         timedel = datetime.utcnow() - topic.created
         if timedel.days:
@@ -286,6 +285,29 @@ class MoveTopicHandler(BaseHandler, TopicMixin, NodeMixin):
             self.create_message('Warning', "You can't edit this topic now")
             return 2
         return 1
+
+
+class CloseTopicHandler(BaseHandler, TopicMixin):
+    @require_user
+    def get(self, id):
+        topic = self.db.query(Topic).filter_by(id=id).first()
+        if not topic:
+            self.send_error(404)
+            return
+        if not self._check_permission(topic):
+            self.send_error(403)
+            return
+        #topic.is_close
+        topic.impact -= 86400  # one day
+        self.db.add(topic)
+        self.db.commit()
+        self.redirect('/topic/%s' % topic.id)
+        self.cache.delete('topic:%s' % topic.id)
+
+    def _check_permission(self, topic):
+        if self.current_user.role > 9:
+            return True
+        return self.is_owner_of(topic)
 
 
 handlers = [
