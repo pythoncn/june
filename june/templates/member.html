@@ -6,10 +6,10 @@
 {% end %}
 
 {% block main %}
-<article class="hentry profile">
-    <a class="avatar" href="/member/{{user.username}}" tabindex="-1"><img src="{{user.get_avatar(36)}}" alt="avatar" width="36" height="36" /></a>
+<article class="hentry profile vcard">
+    <a class="avatar" href="/member/{{user.username}}" tabindex="-1" title="#{{user.id}}"><img class="photo" src="{{user.get_avatar(36)}}" alt="avatar" width="36" height="36" /></a>
     <div class="content">
-        <h3 class="entry-title"><a href="/member/{{user.username}}">{{user.username}}</a></h3>
+        <h3 class="entry-title"><a class="fn url" href="/member/{{user.username}}">{{user.username}}</a></h3>
         <div class="meta">
             <span>{{ _("Reputation") }}: {{user.reputation}}</span>
             <span>{{ _("Join at") }}: {{user.created.strftime("%Y-%m-%d")}}</span>

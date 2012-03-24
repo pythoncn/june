@@ -58,7 +58,12 @@ class PageMixin(object):
         page_number = (count - 1) / perpage + 1  # this algorithm is fabulous
         dct['page_number'] = page_number
         dct['datalist'] = q[start:end]
-        dct['pagelist'] = range(1, page_number + 1)
+        if page < 5:
+            dct['pagelist'] = range(1, min(page_number, 9) + 1)
+        elif page + 4 > page_number:
+            dct['pagelist'] = range(max(page_number - 8, 1), page_number + 1)
+        else:
+            dct['pagelist'] = range(page - 4, min(page_number, page + 4) + 1)
         dct['current_page'] = page
         dct['item_number'] = count
         return dct
