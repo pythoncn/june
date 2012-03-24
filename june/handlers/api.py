@@ -41,6 +41,7 @@ class UpTopicHandler(BaseHandler):
             dct = {'status': 'ok'}
             dct['data'] = {'action': 'cancel', 'count': len(up_users)}
             self.write(dct)
+            self.cache.delete('topic:%s' % str(id))
             return
         up_users.append(user_id)
         topic.ups = ','.join(str(i) for i in up_users)
@@ -52,6 +53,7 @@ class UpTopicHandler(BaseHandler):
         dct = {'status': 'ok'}
         dct['data'] = {'action': 'active', 'count': len(up_users)}
         self.write(dct)
+        self.cache.delete('topic:%s' % str(id))
         return
 
     def _calc_topic_impact(self):
@@ -104,6 +106,7 @@ class DownTopicHandler(BaseHandler):
             dct = {'status': 'ok'}
             dct['data'] = {'action': 'cancel', 'count': len(down_users)}
             self.write(dct)
+            self.cache.delete('topic:%s' % str(id))
             return
         down_users.append(user_id)
         topic.downs = ','.join(str(i) for i in down_users)
@@ -115,6 +118,7 @@ class DownTopicHandler(BaseHandler):
         dct = {'status': 'ok'}
         dct['data'] = {'action': 'active', 'count': len(down_users)}
         self.write(dct)
+        self.cache.delete('topic:%s' % str(id))
         return
 
     def _calc_topic_impact(self):
