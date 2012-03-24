@@ -65,7 +65,7 @@ class UpTopicHandler(BaseHandler):
             return 0
         factor = int(options.up_factor_for_user)
         impact = factor * int(math.log(self.current_user.reputation))
-        return min(impact, options.up_max_for_user)
+        return min(impact, int(options.up_max_for_user))
 
 
 class DownTopicHandler(BaseHandler):
@@ -128,7 +128,7 @@ class DownTopicHandler(BaseHandler):
             return 0
         factor = int(options.down_factor_for_user)
         impact = factor * int(math.log(self.current_user.reputation))
-        return min(impact, options.down_max_for_user)
+        return min(impact, int(options.down_max_for_user))
 
 
 class AcceptReplyHandler(BaseHandler, NotifyMixin):
@@ -150,7 +150,7 @@ class AcceptReplyHandler(BaseHandler, NotifyMixin):
             return 0
         factor = int(options.accept_reply_factor_for_user)
         impact = factor * int(math.log(self.current_user.reputation))
-        return min(impact, options.vote_max_for_user)
+        return min(impact, int(options.vote_max_for_user))
 
     def post(self, topic_id, reply_id):
         reply_topic = self._is_exist(topic_id, reply_id)

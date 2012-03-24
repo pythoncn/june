@@ -242,9 +242,7 @@ class MemberHandler(BaseHandler, NodeMixin):
 
 
 class MemberListHandler(BaseHandler):
-    def head(self):
-        pass
-
+    @tornado.web.authenticated
     def get(self):
         self.render('member_list.html')
 
