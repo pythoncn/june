@@ -12,7 +12,8 @@ class HomeHandler(BaseHandler, NodeMixin):
 
     def get(self):
         # recent join
-        self.render('home.html')
+        members = Member.query.order_by('-id').all()[:5]
+        self.render('home.html', members=members)
 
 
 class SubscriptionHandler(BaseHandler, NodeMixin):

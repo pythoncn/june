@@ -65,7 +65,7 @@ class Member(db.Model):
     website = Column(String(400))
 
     role = Column(Integer, default=2)
-    reputation = Column(Integer, default=20)
+    reputation = Column(Integer, default=20, index=True)
     token = Column(String(16))
     created = Column(DateTime, default=datetime.utcnow)
     last_notify = Column(DateTime, default=datetime.utcnow)

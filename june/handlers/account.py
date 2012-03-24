@@ -3,6 +3,7 @@ from tornado.auth import GoogleMixin
 from datetime import datetime
 from june.lib.handler import BaseHandler
 from june.lib import validators
+from june.lib.util import ObjectDict, PageMixin
 from june.lib.recaptcha import RecaptchaMixin
 from june.models import Member, MemberLog, Notify, create_token
 from june.models.mixin import NodeMixin, MemberMixin
@@ -240,6 +241,14 @@ class MemberHandler(BaseHandler, NodeMixin):
         self.render('member.html', user=user)
 
 
+class MemberListHandler(BaseHandler):
+    def head(self):
+        pass
+
+    def get(self):
+        self.render('member_list.html')
+
+
 handlers = [
     ('/account/signin', SigninHandler),
     ('/account/signin/google', GoogleSigninHandler),
@@ -249,6 +258,7 @@ handlers = [
     ('/account/setting', SettingHandler),
     ('/account/notify', NotifyHandler),
     ('/member/(\w+)', MemberHandler),
+    ('/members', MemberListHandler),
 ]
 
 
@@ -264,16 +274,20 @@ class MemberModule(tornado.web.UIModule, MemberMixin):
         return html
 
 
-class MemberListModule(tornado.web.UIModule):
-    def render(self, order='-id', count=5, tpl='module/member_list.html'):
-        #TODO pagination available
-        key = 'MemberListModule:%s:%s' % (order, count)
+class MemberListModule(tornado.web.UIModule, PageMixin):
+    def render(self, tpl='module/member_list.html'):
+        p = self._get_page()
+        key = 'MemberListModule:%s' % p
         html = self.handler.cache.get(key)
         if html is not None:
             return html
-        users = Member.query.order_by(order).all()[:count]
-        html = self.render_string(tpl, users=users)
-        self.handler.cache.set(key, html, 60)
+
+        page = self._get_pagination(
+            Member.query.order_by('-reputation'),
+            perpage=30)
+        page = ObjectDict(page)
+        html = self.render_string(tpl, page=page)
+        self.handler.cache.set(key, html, 600)
         return html
 
 
