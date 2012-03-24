@@ -176,6 +176,7 @@ class AcceptReplyHandler(BaseHandler, NotifyMixin):
             self.db.add(creator)
             self.db.add(reply)
             self.db.commit()
+            self.cache.delete('ReplyListModule:%s:1' % topic.id)
             dct = {'status': 'ok', 'data': 'cancel'}
             self.write(dct)
             return
@@ -188,9 +189,9 @@ class AcceptReplyHandler(BaseHandler, NotifyMixin):
         self.create_notify(reply.user_id, topic.title, reply.content,
                            link, 'accept')
         self.db.commit()
+        self.cache.delete('ReplyListModule:%s:1' % topic.id)
         dct = {'status': 'ok', 'data': 'active'}
         self.write(dct)
-        self.cache.delete('ReplyListModule:%s:1' % topic.id)
         return
 
 

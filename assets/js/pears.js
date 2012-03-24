@@ -79,6 +79,30 @@ $('.vote .ui-btn').click(function(){
             that.toggleClass('active');
             that.text(data.data.count + ' ' + type);
         }
-    });
+    }, 'json');
     return false;
 });
+
+if(user.username) {
+    var topic_owner = $('#main article.hentry div.vcard a.fn').text();
+    if (topic_owner && user.username == topic_owner) {
+        $('ol.replies li').hover(function(e){
+            var that = $(this);
+            that.find('div.meta').append('<a class="btn" href="#">Accept</a>');
+            $('ol.replies li a.btn').click(function(e) {
+                var url = '/api/topic/' + $('article.hentry').attr('data-id') + '/' + that.attr('data-id') + '/accept';
+                $.sendPost(url, {}, function(data){
+                    if (data.status == 'fail') {
+                        alert(data.msg);
+                    } else {
+                        that.toggleClass('accepted');
+                    }
+                }, 'json');
+                return false;
+            });
+        }, function(e){
+            var that = $(this);
+            that.find('a.btn').remove();
+        });
+    }
+}
