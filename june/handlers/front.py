@@ -1,7 +1,11 @@
 import datetime
+import hashlib
 import tornado.web
+from tornado.util import import_object
+from tornado.options import options
 from june.lib.handler import BaseHandler
 from june.lib.filters import safe_markdown
+from june.lib.decorators import require_user
 from june.models import Topic, Member, Node, Reply
 from june.models.mixin import NodeMixin
 
@@ -51,12 +55,40 @@ class SearchHandler(BaseHandler):
         self.render('search.html', query=query)
 
 
+class UploadHandler(BaseHandler):
+    @require_user
+    def post(self):
+        #help(self.request.files)
+        image = self.request.files.get('image', None)
+        if not image:
+            self.write('{"stat": "fail", "msg": "no image"}')
+            return
+        image = image[0]
+        content_type = image.get('content_type', '')
+        if content_type not in ('image/png', 'image/jpeg'):
+            self.write('{"stat": "fail", "msg": "filetype not supported"}')
+            return
+        body = image.get('body', '')
+        filename = hashlib.md5(body).hexdigest()
+        if content_type == 'image/png':
+            filename += '.png'
+        else:
+            filename += '.jpg'
+
+        backend = import_object(options.backend)
+        backend.save(body, filename, self._on_post)
+
+    def _on_post(self, result):
+        self.write('{"stat":"ok", "url":"%s"}' % result)
+
+
 handlers = [
     ('/', HomeHandler),
     ('/subscription', SubscriptionHandler),
     ('/preview', PreviewHandler),
     ('/feed', SiteFeedHandler),
     ('/search', SearchHandler),
+    ('/upload', UploadHandler),
 ]
 
 

@@ -67,6 +67,9 @@ define('emoji_url', '')
 define('ga', '')  # google analytics
 define('gcse', '')  # google custom search
 
+# image backend
+define('backend', 'june.backend.local.LocalBackend')
+
 
 class Application(web.Application):
     def __init__(self):
