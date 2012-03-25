@@ -17,21 +17,6 @@
             <textarea name="content" rows="10" class="fm-text" cols="30">{{reply.content}}</textarea>
         </div>
     </div>
-
-    <div class="fm-row">
-        <div class="fm-item">
-            <label class="fm-label">up votes</label>
-            <input type="text" class="fm-text" value="{{reply.ups or ''}}" disabled/>
-        </div>
-    </div>
-    <div class="fm-row">
-        <div class="fm-item">
-            <label class="fm-label">down votes</label>
-            <input type="text" class="fm-text" value="{{reply.downs or ''}}" disabled/>
-        </div>
-    </div>
-
-
     <div class="fm-row">
         <div class="fm-item">
             <button class="ui-btn">{{_("Save")}}</button>
