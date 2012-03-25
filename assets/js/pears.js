@@ -88,7 +88,11 @@ if(user.username) {
     if (topic_owner && user.username == topic_owner) {
         $('ol.replies li').hover(function(e){
             var that = $(this);
-            that.find('div.meta').append('<a class="btn" href="#">Accept</a>');
+            if (that.hasClass('accepted')) {
+                that.find('div.meta').append('<a class="btn" href="#">Cancel</a>');
+            } else {
+                that.find('div.meta').append('<a class="btn" href="#">Accept</a>');
+            }
             $('ol.replies li a.btn').click(function(e) {
                 var url = '/api/topic/' + $('article.hentry').attr('data-id') + '/' + that.attr('data-id') + '/accept';
                 $.sendPost(url, {}, function(data){
