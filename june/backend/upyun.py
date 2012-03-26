@@ -43,16 +43,16 @@ class Upyun(object):
             return
         if response.error:
             callback(None)
-        else:
-            callback(self.static_url + filename)
+            return
+        callback(self.static_url + filename)
+        return
 
 
 class UpyunBackend(Backend):
-    _base_url = 'http://v0.api.upyun.com/'
-
     def save(self, body, filename, callback):
         upyun = Upyun(options.upyun_bucket, options.upyun_username,
                       options.upyun_password)
         if hasattr(options, 'upyun_static_url'):
             upyun.static_url = options.upyun_static_url
         upyun.upload(body, filename, callback)
+        return
