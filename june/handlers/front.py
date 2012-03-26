@@ -57,8 +57,8 @@ class SearchHandler(BaseHandler):
 
 class UploadHandler(BaseHandler):
     @require_user
+    @tornado.web.asynchronous
     def post(self):
-        #help(self.request.files)
         image = self.request.files.get('image', None)
         if not image:
             self.write('{"stat": "fail", "msg": "no image"}')
@@ -75,11 +75,15 @@ class UploadHandler(BaseHandler):
         else:
             filename += '.jpg'
 
-        backend = import_object(options.backend)
+        backend = import_object(options.backend)()
         backend.save(body, filename, self._on_post)
 
     def _on_post(self, result):
-        self.write('{"stat":"ok", "url":"%s"}' % result)
+        if result:
+            self.write('{"stat":"ok", "url":"%s"}' % result)
+        else:
+            self.write('{"stat":"fail", "msg": "server error"}')
+        self.finish()
 
 
 handlers = [

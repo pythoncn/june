@@ -4,8 +4,7 @@ from june.backend import Backend
 
 
 class LocalBackend(Backend):
-    @classmethod
-    def save(cls, body, filename, callback=None):
+    def save(self, body, filename, callback=None):
         path = os.path.join(options.local_backend_path, filename)
         f = open(path, 'w')
         f.write(body)
