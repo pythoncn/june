@@ -82,7 +82,7 @@ var emojis = [
 ]
 
 var emojis = $.map(emojis, function(value, i) {return {key: value + ':', name:value}});
-var names = [];
+var names = [$('article.hentry .vcard .fn').text()];
 $('.replies .meta>a').each(function(i, o){
     var name = $(o).text();
     if (names.indexOf(name) == -1) names.push(name);
