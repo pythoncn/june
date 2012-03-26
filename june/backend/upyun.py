@@ -6,11 +6,14 @@ from june.backend import Backend
 
 
 class Upyun(object):
-    def __init__(self, bucket, username, password, static_url=None):
-        self.url = 'http://v0.api.upyun.com/' + bucket + '/'
+    def __init__(self, bucket_with_dir, username, password, static_url=None):
+        _ = bucket_with_dir.split('/')
+        bucket = _[0]
+        self.url = 'http://v0.api.upyun.com/' + bucket_with_dir + '/'
         self.username = username
         self.password = password
-        self.static_url = 'http://%s.b0.upaiyun.com/' % bucket
+        self.static_url = 'http://%s.b0.upaiyun.com/%s/' \
+                % (bucket, '/'.join(_[1:]))
         if static_url:
             self.static_url = self.static_url
 
