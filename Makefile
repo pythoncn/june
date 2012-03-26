@@ -41,6 +41,7 @@ atjs:
 
 editorjs:
 	uglifyjs -nc assets/js/lib/showdown.js > june/static/js/editor.js
+	uglifyjs -nc assets/js/lib/jquery.uploader.js >> june/static/js/editor.js
 	uglifyjs -nc assets/js/editor.js >> june/static/js/editor.js
 
 image:
