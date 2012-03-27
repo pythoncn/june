@@ -104,9 +104,6 @@ def emoji(text):
             return ':%s:' % name
         tpl = ('<img class="emoji" title="%(name)s" alt="%(name)s" height="20"'
                ' width="20" src="%(url)s%(name)s.png" align="top">')
-        if name == '+1' and 'upaiyun' in options.emoji_url:
-            # fix upyun's bug
-            name = '_1'
         return tpl % {'name': name, 'url': options.emoji_url}
 
     text = pattern.sub(make_emoji, text)

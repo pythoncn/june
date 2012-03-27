@@ -31,6 +31,12 @@
 {% block sidebar %}
 {% if current_user %}
 {% module MemberModule(current_user) %}
+<div class="widget">
+    <h4 class="widget-title">{{ _("Following") }}</h4>
+    <div class="fn-wrap">
+        {% module FollowedNodesModule(current_user.id) %}
+    </div>
+</div>
 {% end %}
 {{ node.sidebar or '' }}
 {% end %}
