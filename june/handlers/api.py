@@ -186,9 +186,12 @@ class AcceptReplyHandler(BaseHandler, NotifyMixin):
             return
 
         creator.reputation += self._calc_user_impact()
+        topic_owner = self.db.query(Member).filter_by(id=topic.user_id).first()
+        topic_owner.reputation -= 1
         reply.accepted = 'y'
         self.db.add(reply)
         self.db.add(creator)
+        self.db.add(topic_owner)
         link = '/topic/%s' % topic.id
         self.create_notify(reply.user_id, topic.title, reply.content,
                            link, 'accept')
