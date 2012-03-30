@@ -137,7 +137,7 @@ class Node(db.Model):
     updated = Column(DateTime, default=datetime.utcnow,
                      onupdate=datetime.utcnow)
     limit_reputation = Column(Integer, default=0)
-    limit_role = Column(Integer, default=0)
+    limit_role = Column(Integer, default=2)
     topic_count = Column(Integer, default=0)
 
 
