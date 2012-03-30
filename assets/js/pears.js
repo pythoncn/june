@@ -137,3 +137,5 @@ if($('#editor').length) {
         return true;
     });
 }
+// return top
+$('body').dblclick(function(){$(this).animate({'scrollTop':0});});
