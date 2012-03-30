@@ -112,7 +112,7 @@
           callback = function() {
             return _this.view.hide();
           };
-          return _this.view.timeout_id = setTimeout(callback, 150);
+          return _this.view.timeout_id = setTimeout(callback, 500);
         });
         return log("At.init", this.$inputor[0]);
       },
@@ -356,7 +356,7 @@
       rePosition: function() {
         var rect;
         rect = this.holder.rect();
-        if (rect.bottom + this.jqo().height() > $(window).height()) {
+        if (rect.bottom + this.jqo().height() - $(window).scrollTop() > $(window).height()) {
           rect.bottom = rect.top - this.jqo().height();
         }
         log("AtView.rePosition", {
@@ -434,7 +434,7 @@
     };
     _highlighter = function(li, query) {
       if (_isNil(query)) return li;
-      return li.replace(new RegExp(">\\s*(\\w*)(" + query + ")(\\w*)\\s*<", 'ig'), function(str, $1, $2, $3) {
+      return li.replace(new RegExp(">\\s*(\\w*)(" + query.replace("+", "\\+") + ")(\\w*)\\s*<", 'ig'), function(str, $1, $2, $3) {
         return '> ' + $1 + '<strong>' + $2 + '</strong>' + $3 + ' <';
       });
     };

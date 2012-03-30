@@ -87,13 +87,12 @@ $('.replies .meta>a').each(function(i, o){
     var name = $(o).text();
     if (names.indexOf(name) == -1) names.push(name);
 });
-$('textarea').atWho('@', {
+$('#editor textarea').atWho('@', {
     data: names
 }).atWho(':', {
     data: emojis,
-    tpl: "<li data-keyname='${key}'>${name}</li>"
+    tpl: "<li data-value='${key}'>${name}</li>"
 });
-
 var uploadImage = function(response) {
     var response = $.parseJSON(response);
     if (response.stat == 'fail') {
