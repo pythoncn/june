@@ -37,6 +37,7 @@ libjs:
 atjs:
 	uglifyjs -nc assets/js/lib/jquery.caret.js > june/static/js/at.js
 	uglifyjs -nc assets/js/lib/jquery.atwho.js >> june/static/js/at.js
+	uglifyjs -nc assets/js/lib/jquery.uploader.js >> june/static/js/at.js
 	uglifyjs -nc assets/js/at.js >> june/static/js/at.js
 
 editorjs:

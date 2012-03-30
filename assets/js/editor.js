@@ -19,7 +19,6 @@ var uploadImage = function(response) {
     }
     var text = '\n![alt](' + response.url + ')'
     textarea.val($('#editor textarea').val() + text).focus();
-    console.log(response.url);
 }
 
 var xsrf = '<input name="_xsrf" value="' + $.getCookie('_xsrf') + '" />';

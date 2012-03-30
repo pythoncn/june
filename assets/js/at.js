@@ -93,3 +93,16 @@ $('textarea').atWho('@', {
     data: emojis,
     tpl: "<li data-keyname='${key}'>${name}</li>"
 });
+
+var uploadImage = function(response) {
+    var response = $.parseJSON(response);
+    if (response.stat == 'fail') {
+        alert(response.msg);
+        return
+    }
+    var text = '\n![alt](' + response.url + ')'
+    $('#editor textarea').val($('#editor textarea').val() + text).focus();
+}
+
+var xsrf = '<input name="_xsrf" value="' + $.getCookie('_xsrf') + '" />';
+$('input[type="file"]').uploader({formExtra: xsrf, callback: uploadImage});

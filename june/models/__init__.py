@@ -155,6 +155,7 @@ class Topic(db.Model):
     created = Column(DateTime, default=datetime.utcnow)
     updated = Column(DateTime, default=datetime.utcnow,
                       onupdate=datetime.utcnow)
+    status = Column(String(40))
     hits = Column(Integer, default=1)
     ups = Column(Text)  # e.g.  1,2,3,4
     downs = Column(Text)
