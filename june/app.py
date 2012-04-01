@@ -56,6 +56,7 @@ define('accept_reply_factor_for_user', 1)
 define('up_max_for_user', 10)
 define('down_max_for_user', 4)
 define('vote_max_for_user', 4)
+define('promote_topic_cost', 100)
 
 # third party support config
 define('gravatar_base_url', "http://www.gravatar.com/avatar/")

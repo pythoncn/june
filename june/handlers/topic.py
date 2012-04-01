@@ -9,7 +9,7 @@ from june.lib.decorators import require_user
 from june.lib.util import ObjectDict, PageMixin
 from june.lib.filters import find_mention
 from june.social import register as register_social
-from june.models import Node, Topic, Reply
+from june.models import Node, Topic, Reply, Member
 from june.models.mixin import NodeMixin, TopicMixin, MemberMixin, NotifyMixin
 
 
@@ -59,6 +59,9 @@ class TopicHandler(BaseHandler, TopicMixin, NodeMixin, PageMixin, NotifyMixin):
         topic = self.db.query(Topic).filter_by(id=id).first()
         if not topic:
             self.send_error(404)
+            return
+        if topic.status == 'close':
+            self.send_error(403)
             return
 
         key = hashlib.md5(utf8(content)).hexdigest()
@@ -297,9 +300,38 @@ class CloseTopicHandler(BaseHandler, TopicMixin):
         if not self._check_permission(topic):
             self.send_error(403)
             return
-        #topic.is_close
+        topic.status = 'close'
         topic.impact -= 86400  # one day
         self.db.add(topic)
+        self.db.commit()
+        self.redirect('/topic/%s' % topic.id)
+        self.cache.delete('topic:%s' % topic.id)
+
+    def _check_permission(self, topic):
+        if self.current_user.role > 9:
+            return True
+        return self.is_owner_of(topic)
+
+
+class PromoteTopicHandler(BaseHandler, TopicMixin):
+    @require_user
+    def get(self, id):
+        topic = self.db.query(Topic).filter_by(id=id).first()
+        if not topic:
+            self.send_error(404)
+            return
+        if not self._check_permission(topic):
+            self.send_error(403)
+            return
+        user = self.db.query(Member).filter_by(id=topic.user_id).first()
+        if user.reputation < int(options.promote_topic_cost) + 20:
+            self.send_error(403)
+            return
+        topic.status = 'promote'
+        topic.impact += 86400  # one day
+        user.reputation -= int(options.promote_topic_cost)
+        self.db.add(topic)
+        self.db.add(user)
         self.db.commit()
         self.redirect('/topic/%s' % topic.id)
         self.cache.delete('topic:%s' % topic.id)
@@ -316,6 +348,8 @@ handlers = [
     ('/topic/(\d+)', TopicHandler),
     ('/topic/(\d+)/edit', EditTopicHandler),
     ('/topic/(\d+)/move', MoveTopicHandler),
+    ('/topic/(\d+)/close', CloseTopicHandler),
+    ('/topic/(\d+)/promote', PromoteTopicHandler),
 ]
 
 

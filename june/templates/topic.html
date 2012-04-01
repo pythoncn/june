@@ -30,7 +30,11 @@
 {% module ReplyListModule(topic) %}
 
 {% if current_user %}
-<form action="/topic/{{topic.id}}" method="post" class="reply-form fm fn-clear">
+
+{% if topic.status == "close" %}
+<div class="reply-form">{{ _("This topic is closed") }}</div>
+{% else %}
+<form action="/topic/{{topic.id}}" method="post" class="reply-form fn-clear">
     {{ xsrf_form_html() }}
     <div id="editor" class="fm-item">
         <div id="editor-pannel">
@@ -48,6 +52,9 @@
     <button type="submit" class="ui-btn">{{ _("Post") }}</button>
 </form>
 {% end %}
+
+{% end %}
+
 {% end %}
 
 {% block sidebar %}
@@ -62,10 +69,17 @@
 
 {% if current_user %}
 <div class="widget">
-    <a href="/node/{{node.slug}}/topic" class="ui-btn">{{_("New Topic")}}</a>
     {% if current_user.id == topic.user_id %}
     <a href="/topic/{{topic.id}}/edit" class="ui-btn">{{_("Edit Topic")}}</a>
     <a href="/topic/{{topic.id}}/move" class="ui-btn">{{_("Move Topic")}}</a>
+    {% if topic.status != "close" %}
+    <a href="/topic/{{topic.id}}/close" class="ui-btn js-confirm">{{_("Close Topic")}}</a>
+    {% end %}
+    {% if topic.status != "promote" %}
+    <a href="/topic/{{topic.id}}/promote" class="ui-btn js-confirm">{{_("Promote Topic")}}</a>
+    {% end %}
+    {% else %}
+    <a href="/node/{{node.slug}}/topic" class="ui-btn">{{_("New Topic")}}</a>
     {% end %}
 </div>
 {% end %}

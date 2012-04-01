@@ -110,30 +110,7 @@ if(user.username) {
         });
     }
 }
-/* ------ sessionStorage -------- */
-var storage = {
-    save: function(text) {
-        if(!sessionStorage) return;
-        var key = location.pathname;
-        sessionStorage[key] = text;
-    },
-    get: function() {
-        if(!sessionStorage) return '';
-        return sessionStorage.getItem(location.pathname);
-    },
-    clear: function() {
-        if(!sessionStorage) return;
-        sessionStorage.clear();
-    }
-}
-// editor area
-if($('#editor').length) {
-    $('#editor textarea').val(storage.get() || $('#editor textarea').val());
-    $('#editor textarea').keyup(function(){
-        storage.save($('#editor textarea').val());
-    });
-    $('form').submit(function(){
-        storage.clear();
-        return true;
-    });
-}
+/* ------- alert ---------*/
+$('.js-confirm').click(function(e) {
+    return confirm("Are you sure?");
+});
