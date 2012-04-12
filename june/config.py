@@ -13,5 +13,6 @@ else:
 
 cache = memcache.Client(options.memcache.split(), debug=options.debug)
 app_list = [
-    ('account', 'account'),
+    ('account', 'june.account'),
+    ('admin', 'june.dashboard'),
 ]

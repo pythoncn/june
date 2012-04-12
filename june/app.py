@@ -32,6 +32,7 @@ if _first_run:
 
     options.locale_path = os.path.join(PROJDIR, 'locale')
     options.xsrf_cookies = True
+    options.login_url = '/account/signin'
 
     # factor config
     define('reply_factor_for_topic', 600)
