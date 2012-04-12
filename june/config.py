@@ -4,14 +4,14 @@
 import memcache
 
 from tornado.options import options
-from june.lib.database import SQLAlchemy
+from junetornado.database import SQLAlchemy
 
 if options.master.startswith('mysql'):
-    master = options.master
-    slaves = options.slaves.split()
-    db = SQLAlchemy(master, slaves, pool_recycle=3600, echo=options.debug)
+    db = SQLAlchemy(options.master, pool_recycle=3600, echo=options.debug)
 else:
-    master = options.master
-    slaves = options.slaves.split()
-    db = SQLAlchemy(master, slaves, echo=options.debug)
+    db = SQLAlchemy(options.master, echo=options.debug)
+
 cache = memcache.Client(options.memcache.split(), debug=options.debug)
+app_list = [
+    ('account', 'account'),
+]
