@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+#from tornado.options import options
+
 from .lib import MailHandler
 
 
@@ -15,9 +17,10 @@ class WelcomeMailHdr(MailHandler):
 
     def post(self):
         to_addr = self.get_argument('to_addr')
-        self.send(to_addr, 'Hello', 'how are you', self.render_mail('mail_example.html'))
+        self.send(to_addr, 'Hello', 'how are you',
+                  self.render_mail('mail/example.html'))
 
 
-handlers = [
+urls = [
     ('/mail/welcome', WelcomeMailHdr)
 ]

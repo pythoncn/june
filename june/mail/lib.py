@@ -4,11 +4,11 @@
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from junetornado import JuneHandler
+from july import JulyHandler
 from june.lib import validators
 
 
-class MailHandler(JuneHandler):
+class MailHandler(JulyHandler):
     """
     Usage:
 
@@ -46,9 +46,11 @@ class MailHandler(JuneHandler):
         # validate address before sending
         if not validators.email(msg['From'])\
             or not validators.email(msg['To']):
-            raise ValueError('Email address format invalid: %s, %s' % (msg['From'], msg['To']))
+            raise ValueError('Email address format invalid: %s, %s' %\
+                             (msg['From'], msg['To']))
 
-        # According to RFC 2046, the last part of a multipart message, in this case
+        # According to RFC 2046, the last part of a multipart message,
+        # in this case
         # the HTML message, is best and preferred.
         msg.attach(MIMEText(text, 'plain'))
         if html:
