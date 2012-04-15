@@ -8,9 +8,9 @@ class WelcomeMailHdr(MailHandler):
     # use options to replace
     SEND_INFO = {
         'hostport': 'smtp.gmail.com:587',
-        'username': 'reorx.xiao@gmail.com',
-        'password': 'mx320lf2',
-        'from_addr': 'reorx.xiao@gmail.com'
+        'username': 'test@gmail.com',
+        'password': 'test',
+        'from_addr': 'test@gmail.com'
     }
 
     def post(self):
