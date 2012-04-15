@@ -22,9 +22,8 @@ class WelcomeMailHdr(MailHandler):
     }
 
     def post(self):
-        to_addrs = self.get_argument('to_addrs').split(',')
-        # self.send(to_addrs, self.render_mail('mail/hello.html'))
-        self.send(to_addrs, 'hello')
+        to_addr = self.get_argument('to_addr')
+        self.send(to_addr, 'Hello', 'how are you', self.render_mail('mail_example.html'))
 
 
 handlers = [

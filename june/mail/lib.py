@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 from junetornado import JuneHandler
 
 
@@ -23,24 +25,37 @@ class MailHandler(JuneHandler):
     """
     SEND_INFO = {}
 
-    def send(self, to_addrs, body):
-        """
-        basic mail sending method
-        """
-        self._connect_smtp()
-
-        if isinstance(to_addrs, str):
-            to_addrs = [to_addrs, ]
-        assert isinstance(to_addrs, list), 'to_addrs argument must be a list'
-
-        self.client.sendmail(self.SEND_INFO['from_addr'], to_addrs, body)
-
-    def _connect_smtp(self):
+    def initialize(self):
         client = smtplib.SMTP(self.SEND_INFO['hostport'])
         client.ehlo()
         client.starttls()
         client.login(self.SEND_INFO['username'], self.SEND_INFO['password'])
         self.client = client
+
+    def finish(self, *args, **kwgs):
+        super(MailHandler, self).finish(*args, **kwgs)
+        self.client.quit()
+
+    def send(self, to_addr, subject, text, html=None):
+        """
+        basic mail sending method, only send to one address
+        """
+        msg = self.generate_message(to_addr, subject, text, html)
+        self.client.sendmail(self.SEND_INFO['from_addr'], to_addr, msg)
+
+    def generate_message(self, to_addr, subject, text, html=None):
+        msg = MIMEMultipart('alternative')
+        msg['Subject'] = subject
+        msg['From'] = self.SEND_INFO['from_addr']
+        msg['To'] = to_addr
+
+        # According to RFC 2046, the last part of a multipart message, in this case
+        # the HTML message, is best and preferred.
+        msg.attach(MIMEText(text, 'plain'))
+        if html:
+            msg.attach(MIMEText(html, 'html'))
+
+        return msg.as_string()
 
     def render_mail(self, template_name, context={}):
         """
