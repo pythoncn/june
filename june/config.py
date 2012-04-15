@@ -17,4 +17,5 @@ app_list = [
     ('node', 'june.node'),
     ('topic', 'june.topic'),
     ('admin', 'june.dashboard'),
+    ('mail', 'june.mail'),
 ]

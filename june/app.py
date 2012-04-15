@@ -31,7 +31,9 @@ if _first_run:
     options.template_path = os.path.join(PROJDIR, "templates")
 
     options.locale_path = os.path.join(PROJDIR, 'locale')
-    options.xsrf_cookies = True
+    # Suggestion: set to False in develop mode
+    # options.xsrf_cookies = True
+    options.xsrf_cookies = False
     options.login_url = '/account/signin'
 
     # factor config
