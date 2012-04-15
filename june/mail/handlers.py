@@ -22,5 +22,5 @@ class WelcomeMailHdr(MailHandler):
 
 
 urls = [
-    ('/mail/welcome', WelcomeMailHdr)
+    ('/welcome', WelcomeMailHdr)
 ]

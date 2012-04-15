@@ -13,10 +13,6 @@ handlers.extend(api.handlers)
 handlers.extend(social.handlers)
 handlers.extend(front.handlers)
 
-# mail test
-from june.mail.handlers import handlers as mail_handlers
-handlers.extend(mail_handlers)
-
 sub_handlers = []
 ui_modules = {}
 ui_modules.update(topic.ui_modules)
