@@ -1,14 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-#import logging
-#import urllib
-#import tornado.web
-#from datetime import datetime
-#from tornado.auth import httpclient
-#from tornado.options import options
-#from tornado.auth import GoogleMixin
-
 from .lib import MailHandler
 
 

@@ -5,6 +5,7 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from junetornado import JuneHandler
+from june.lib import validators
 
 
 class MailHandler(JuneHandler):
@@ -36,18 +37,16 @@ class MailHandler(JuneHandler):
         super(MailHandler, self).finish(*args, **kwgs)
         self.client.quit()
 
-    def send(self, to_addr, subject, text, html=None):
-        """
-        basic mail sending method, only send to one address
-        """
-        msg = self.generate_message(to_addr, subject, text, html)
-        self.client.sendmail(self.SEND_INFO['from_addr'], to_addr, msg)
-
     def generate_message(self, to_addr, subject, text, html=None):
         msg = MIMEMultipart('alternative')
         msg['Subject'] = subject
         msg['From'] = self.SEND_INFO['from_addr']
         msg['To'] = to_addr
+
+        # validate address before sending
+        if not validators.email(msg['From'])\
+            or not validators.email(msg['To']):
+            raise ValueError('Email address format invalid: %s, %s' % (msg['From'], msg['To']))
 
         # According to RFC 2046, the last part of a multipart message, in this case
         # the HTML message, is best and preferred.
@@ -62,3 +61,10 @@ class MailHandler(JuneHandler):
         render a mail from template and context data
         """
         return self.render_string(template_name, **context)
+
+    def send(self, to_addr, subject, text, html=None):
+        """
+        basic mail sending method, only send to one address
+        """
+        msg = self.generate_message(to_addr, subject, text, html)
+        self.client.sendmail(self.SEND_INFO['from_addr'], to_addr, msg)
