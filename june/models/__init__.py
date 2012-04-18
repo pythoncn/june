@@ -154,15 +154,15 @@ class Topic(db.Model):
     content = Column(Text)
     created = Column(DateTime, default=datetime.utcnow)
     updated = Column(DateTime, default=datetime.utcnow,
-                      onupdate=datetime.utcnow)
+                      onupdate=datetime.utcnow, index=True)
     status = Column(String(40))
     hits = Column(Integer, default=1)
     ups = Column(Text)  # e.g.  1,2,3,4
     downs = Column(Text)
-    impact = Column(Integer, default=get_current_impact)
+    impact = Column(Integer, default=get_current_impact, index=True)
     reply_count = Column(Integer, default=0)
     last_reply_by = Column(Integer, default=0)
-    last_reply_time = Column(DateTime, default=datetime.utcnow)
+    last_reply_time = Column(DateTime, default=datetime.utcnow, index=True)
 
     @property
     def up_users(self):

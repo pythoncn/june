@@ -20,6 +20,10 @@
         {% module FollowedNodesModule(current_user.id) %}
     </div>
 </div>
+<div class="widget">
+    <h4 class="widget-title">{{ _("Recent Updates") }}</h4>
+    {% module LastRepliedTopicsModule() %}
+</div>
 {% end %}
 <div class="widget">
     <h4 class="widget-title">{{ _("Recent Join") }}</h4>

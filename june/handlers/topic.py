@@ -1,5 +1,9 @@
 import hashlib
 import math
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from StringIO import StringIO
 from datetime import datetime
 from tornado.escape import utf8
 from tornado.options import options
@@ -452,9 +456,24 @@ class UserTopicsModule(UIModule, NodeMixin, PageMixin):
         return html
 
 
+class LastRepliedTopicsModule(UIModule):
+    def render(self):
+        io = StringIO()
+        io.write('<ul>')
+        q = Topic.query.order_by('-last_reply_time')[:10]
+        for topic in q:
+            li = '<li><a href="/topic/%s">%s</a></li>' % \
+                    (topic.id, topic.title)
+            io.write(li.encode('utf-8'))
+
+        io.write('</ul>')
+        return io.getvalue()
+
+
 ui_modules = {
     'ReplyListModule': ReplyListModule,
     'TopicListModule': TopicListModule,
     'NodeTopicsModule': NodeTopicsModule,
     'UserTopicsModule': UserTopicsModule,
+    'LastRepliedTopicsModule': LastRepliedTopicsModule,
 }
