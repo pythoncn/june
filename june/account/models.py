@@ -27,16 +27,11 @@ from datetime import datetime
 from sqlalchemy import Column
 from sqlalchemy import Integer, String, DateTime
 from tornado.options import options
-from june.config import db
-
-
-def create_token(length=16):
-    chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
-    salt = ''.join([choice(chars) for i in range(length)])
-    return salt
+from july.database import db
 
 
 class Member(db.Model):
+    id = Column(Integer, primary_key=True)
     username = Column(String(100), unique=True, index=True)
     email = Column(String(200), unique=True, nullable=False, index=True)
     password = Column(String(100), nullable=False)
@@ -51,7 +46,7 @@ class Member(db.Model):
 
     def __init__(self, email, **kwargs):
         self.email = email.lower()
-        self.token = create_token(16)
+        self.token = self.create_token(16)
         if 'username' not in kwargs:
             self.username = self.email.split('@')[0].lower()
         for k, v in kwargs.items():
@@ -66,9 +61,17 @@ class Member(db.Model):
 
     @staticmethod
     def create_password(raw):
-        salt = create_token(8)
+        salt = Member.create_token(8)
         hsh = hashlib.sha1(salt + raw + options.password_secret).hexdigest()
         return "%s$%s" % (salt, hsh)
+
+    @staticmethod
+    def create_token(length=16):
+        chars = ('0123456789'
+                 'abcdefghijklmnopqrstuvwxyz'
+                 'ABCDEFGHIJKLMNOPQRSTUVWXYZ')
+        salt = ''.join([choice(chars) for i in range(length)])
+        return salt
 
     def check_password(self, raw):
         if '$' not in self.password:
@@ -79,6 +82,7 @@ class Member(db.Model):
 
 
 class MemberLog(db.Model):
+    id = Column(Integer, primary_key=True)
     user_id = Column(Integer, nullable=False, index=True)
     message = Column(String(100))
     time = Column(DateTime, default=datetime.utcnow)
@@ -86,6 +90,7 @@ class MemberLog(db.Model):
 
 
 class Notify(db.Model):
+    id = Column(Integer, primary_key=True)
     sender = Column(Integer, nullable=False)
     receiver = Column(Integer, nullable=False, index=True)
     content = Column(String(400))
@@ -93,24 +98,3 @@ class Notify(db.Model):
     link = Column(String(400))
     type = Column(String(20), default='reply')
     created = Column(DateTime, default=datetime.utcnow)
-
-
-class MemberMixin(object):
-    def get_user_by_id(self, id):
-        return Member.query.filter_by(id=id).first()
-
-    def get_user_by_name(self, name):
-        return Member.query.filter_by(username=name).first()
-
-    def get_users(self, id_list):
-        return None
-        #return get_cache_list(self, Member, id_list, 'member:')
-
-    def create_user(self, email):
-        username = email.split('@')[0].lower()
-        username = username.replace('.', '').replace('-', '')
-        member = self.get_user_by_name(username)
-        if member:
-            username = username + create_token(5)
-        user = Member(email, username=username)
-        return user

@@ -1,31 +1,61 @@
-import datetime
+import logging
+import urllib
+from tornado.auth import httpclient
 from tornado.options import options
-from junetornado import JuneHandler
-from junetornado.util import ObjectDict
-from june.account.models import MemberMixin
+from july import JulyHandler
+from models import Member
 
 
-class UserHandler(JuneHandler, MemberMixin):
-    def finish(self, chunk=None):
-        super(UserHandler, self).finish(chunk)
-        if self.get_status() == 500:
-            try:
-                self.db.commit()
-            except:
-                self.db.rollback()
-            finally:
-                self.db.commit()
+class RecaptchaMixin(object):
+    RECAPTCHA_VERIFY_URL = "http://www.google.com/recaptcha/api/verify"
 
-    def prepare(self):
-        self._prepare_context()
-        self._prepare_filters()
+    def recaptcha_render(self):
+        token = self._recaptcha_token()
+        html = ('<div id="recaptcha_div"></div><script type="text/javascript" '
+                'src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js'
+                '"></script><script type="text/javascript">Recaptcha.create'
+                '("%(key)s", "recaptcha_div", {theme: "%(theme)s",callback:'
+                'Recaptcha.focus_response_field});</script>')
+        return html % token
 
-    def render_string(self, template_name, **kwargs):
-        kwargs.update(self._filters)
-        assert "context" not in kwargs, "context is a reserved keyword."
-        kwargs["context"] = self._context
-        return super(UserHandler, self).render_string(template_name, **kwargs)
+    def recaptcha_validate(self, callback):
+        token = self._recaptcha_token()
+        challenge = self.get_argument('recaptcha_challenge_field', None)
+        response = self.get_argument('recaptcha_response_field', None)
+        callback = self.async_callback(self._on_recaptcha_request, callback)
+        http = httpclient.AsyncHTTPClient()
+        post_args = {
+            'privatekey': token['secret'],
+            'remoteip': self.request.remote_ip,
+            'challenge': challenge,
+            'response': response
+        }
+        http.fetch(self.RECAPTCHA_VERIFY_URL, method="POST",
+                   body=urllib.urlencode(post_args), callback=callback)
 
+    def _on_recaptcha_request(self, callback, response):
+        if response.error:
+            logging.warning("Error response %s fetching %s", response.error,
+                    response.request.url)
+            callback(None)
+            return
+        verify, message = response.body.split()
+        if verify == 'true':
+            callback(response.body)
+        else:
+            logging.warning("Recaptcha verify failed %s", message)
+            callback(None)
+
+    def _recaptcha_token(self):
+        token = dict(
+            key=options.recaptcha_key,
+            secret=options.recaptcha_secret,
+            theme=options.recaptcha_theme,
+        )
+        return token
+
+
+class UserHandler(JulyHandler):
     def get_current_user(self):
         cookie = self.get_secure_cookie("user")
         if not cookie:
@@ -36,7 +66,7 @@ class UserHandler(JuneHandler, MemberMixin):
         except:
             self.clear_cookie("user")
             return None
-        user = self.get_user_by_id(id)
+        user = Member.query.filter_by(id=id).first()
         if not user:
             return None
         if token == user.token:
@@ -44,41 +74,7 @@ class UserHandler(JuneHandler, MemberMixin):
         self.clear_cookie("user")
         return None
 
-    def is_owner_of(self, model):
-        if not hasattr(model, 'user_id'):
-            return False
-        if not self.current_user:
-            return False
-        return model.user_id == self.current_user.id
-
     @property
     def next_url(self):
         next_url = self.get_argument("next", None)
         return next_url or '/'
-
-    def _prepare_context(self):
-        self._context = ObjectDict()
-        self._context.now = datetime.datetime.utcnow()
-        #self._context.version = june.__version__
-        self._context.version = ''
-        self._context.sitename = options.sitename
-        self._context.siteurl = options.siteurl
-        self._context.sitefeed = options.sitefeed
-        self._context.sidebar = ''
-        self._context.footer = ''
-        self._context.header = ''
-        self._context.ga = options.ga
-        self._context.gcse = options.gcse
-        self._context.debug = options.debug
-        self._context.message = []
-
-    def _prepare_filters(self):
-        self._filters = ObjectDict()
-        #self._filters.xmldatetime = xmldatetime
-        #self._filters.topiclink = topiclink
-        self._filters.get_user = self.get_user_by_id
-        self._filters.is_mobile = lambda f=None: False
-
-    def create_message(self, header, body):
-        msg = ObjectDict(header=header, body=body)
-        self._context.message.append(msg)

@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Signup</title>
+    </head>
+    <body>
+        {% for type, message in flash_message() %}
+        {{message}}
+        {% end %}
+
+        {% autoescape None %}
+        <form action="" method="post">
+            {{ xsrf_form_html() }}
+            <div class="fm-item fm-required">
+                <label for="username" class="fm-label">{{ _("Username") }}</label>
+                <input type="text" name="username" maxlength="100" value="{{username}}" />
+            </div>
+            <div class="fm-item fm-required">
+                <label for="email" class="fm-label">{{ _("Email") }}</label>
+                <input type="email" name="email" maxlength="100" value="{{email}}" />
+            </div>
+            <div class="fm-item fm-required">
+                <label for="password1" class="fm-label">{{ _("Password") }}</label>
+                <input type="password" name="password1" />
+            </div>
+            <div class="fm-item fm-required">
+                <label for="password2" class="fm-label">{{ _("Confirm") }}</label>
+                <input type="password" name="password2" />
+            </div>
+            <div class="fm-item">
+                {{recaptcha}}
+            </div>
+            <div class="fm-item">
+                <button class="ui-btn">{{_("Signup")}}</button>
+            </div>
+        </form>
+    </body>
+</html>
