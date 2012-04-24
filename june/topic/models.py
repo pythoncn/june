@@ -20,7 +20,7 @@ import time
 from datetime import datetime
 from sqlalchemy import Column
 from sqlalchemy import Integer, String, DateTime, Text
-from june.config import db
+from july.database import db
 
 
 def get_current_impact():
@@ -28,6 +28,7 @@ def get_current_impact():
 
 
 class Topic(db.Model):
+    id = Column(Integer, primary_key=True)
     node_id = Column(Integer, nullable=False, index=True)
     user_id = Column(Integer, nullable=False, index=True)
     title = Column(String(200))
@@ -58,14 +59,10 @@ class Topic(db.Model):
 
 
 class Reply(db.Model):
+    id = Column(Integer, primary_key=True)
     topic_id = Column(Integer, nullable=False, index=True)
     user_id = Column(Integer, nullable=False, index=True)
     content = Column(String(2000))
     created = Column(DateTime, default=datetime.utcnow)
 
     accepted = Column(String(1), default='n')  # accepted by topic owner
-
-
-class TopicMixin(object):
-    def get_topic_by_id(self, id):
-        return Topic.query.filter_by(id=id).first()
