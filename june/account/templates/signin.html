@@ -10,6 +10,7 @@
         {% end %}
 
         <form action="" method="post">
+            {{ xsrf_form_html() }}
             <input type="text" name="account" placeholder="username or email" />
             <input type="password" name="password" placeholder="password" />
             <input type="submit" />

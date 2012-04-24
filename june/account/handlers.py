@@ -169,4 +169,4 @@ handlers = [
 ]
 
 account_app = JulyApp('account', __name__, handlers=handlers,
-                      templates_folder='templates')
+                      template_folder='templates')

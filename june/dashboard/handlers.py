@@ -1,12 +1,17 @@
-from june.lib.util import ObjectDict
-from june.lib.decorators import require_admin
-from june.models import Topic, Member, Node, Reply
-from june.models.mixin import NodeMixin, TopicMixin
+from tornado.web import URLSpec as url
+from july import JulyApp
+from july.util import ObjectDict
+from july.database import db
+from july.cache import cache
 
-from junetornado import JuneHandler
+from june.account.decorators import require_admin
+from june.account.models import Member
+from june.account.lib import UserHandler
+from june.node.models import Node
+from june.topic.models import Topic, Reply
 
 
-class DashHandler(JuneHandler):
+class DashHandler(UserHandler):
     app_template = True
 
     def render(self, name, **kwargs):
@@ -28,8 +33,8 @@ class EditStorage(DashHandler):
         self.set_storage('header', self.get_argument('header', ''))
         self.set_storage('sidebar', self.get_argument('sidebar', ''))
         self.set_storage('footer', self.get_argument('footer', ''))
-        self.db.commit()
-        self.redirect('/dashboard')
+        db.commit()
+        self.reverse_redirect('dashboard')
 
 
 class CreateNode(DashHandler):
@@ -64,11 +69,13 @@ class CreateNode(DashHandler):
             self.create_message('Form Error', 'Please fill the required field')
             self.render('node.html', node=o)
             return
+
         node = Node(**o)
-        self.db.add(node)
-        self.db.commit()
-        self.cache.delete('allnodes')
-        self.redirect('/dashboard')
+
+        db.master.add(node)
+        db.master.commit()
+
+        self.reverse_redirect('dashboard')
 
 
 class EditNode(DashHandler, DashMixin):
@@ -82,7 +89,7 @@ class EditNode(DashHandler, DashMixin):
 
     @require_admin
     def post(self, slug):
-        node = self.db.query(Node).filter_by(slug=slug).first()
+        node = db.master.query(Node).filter_by(slug=slug).first()
         if not node:
             self.send_error(404)
             return
@@ -106,17 +113,16 @@ class EditNode(DashHandler, DashMixin):
         except:
             node.limit_role = 0
 
-        self.db.add(node)
-        self.db.commit()
+        db.master.add(node)
+        db.master.commit()
 
-        self.cache.delete('node:%s' % str(slug))
         self.redirect('/node/%s' % node.slug)
 
 
 class FlushCache(DashHandler):
     @require_admin
     def get(self):
-        self.cache.flush_all()
+        cache.flush_all()
         self.write('done')
 
 
@@ -131,7 +137,7 @@ class EditMember(DashHandler, DashMixin):
 
     @require_admin
     def post(self, name):
-        user = self.db.query(Member).filter_by(username=name).first()
+        user = db.master.query(Member).filter_by(username=name).first()
         if not user:
             self.send_error(404)
             return
@@ -139,16 +145,15 @@ class EditMember(DashHandler, DashMixin):
         self.update_model(user, 'email', True)
         self.update_model(user, 'role', True)
         self.update_model(user, 'reputation', True)
-        self.db.add(user)
-        self.db.commit()
-        self.cache.delete('user:%s' % str(user.id))
-        self.redirect('/dashboard')
+        db.master.add(user)
+        db.master.commit()
+        self.reverse_redirect('dashboard')
 
 
-class EditTopic(DashHandler, TopicMixin):
+class EditTopic(DashHandler):
     @require_admin
     def get(self, id):
-        topic = self.get_topic_by_id(id)
+        topic = Topic.query.filter_by(id=id).first()
         if not topic:
             self.send_error(404)
             return
@@ -156,7 +161,7 @@ class EditTopic(DashHandler, TopicMixin):
 
     @require_admin
     def post(self, id):
-        topic = self.db.query(Topic).filter_by(id=id).first()
+        topic = Topic.query.filter_by(id=id).first()
         if not topic:
             self.send_error(404)
             return
@@ -170,65 +175,67 @@ class EditTopic(DashHandler, TopicMixin):
             topic.node_id = int(node)
         except:
             pass
-        self.db.add(topic)
-        self.db.commit()
-        self.cache.delete('topic:%s' % topic.id)
+        db.master.add(topic)
+        db.master.commit()
         self.redirect('/topic/%d' % topic.id)
 
 
 class EditReply(DashHandler):
     @require_admin
     def get(self, id):
-        reply = self.db.query(Reply).filter_by(id=id).first()
+        reply = db.master.query(Reply).filter_by(id=id).first()
         if not reply:
             self.send_error(404)
             return
         if self.get_argument('delete', 'false') == 'true':
-            topic = self.db.query(Topic).filter_by(id=reply.topic_id).first()
+            topic = db.master.query(Topic).filter_by(id=reply.topic_id).first()
             topic.reply_count -= 1
-            self.db.add(topic)
-            self.db.delete(reply)
-            self.db.commit()
-            self.redirect('/dashboard')
+            db.master.add(topic)
+            db.master.delete(reply)
+            db.master.commit()
+            self.reverse_redirect('dashboard')
             return
         self.render('reply.html', reply=reply)
 
     @require_admin
     def post(self, id):
-        reply = self.db.query(Reply).filter_by(id=id).first()
+        reply = db.master.query(Reply).filter_by(id=id).first()
         if not reply:
             self.send_error(404)
             return
         content = self.get_argument('content', '')
         reply.content = content
-        self.db.add(reply)
-        self.db.commit()
-        self.redirect('/dashboard')
+        db.master.add(reply)
+        db.master.commit()
+        self.reverse_redirect('dashboard')
 
 
-class Dashboard(DashHandler, NodeMixin):
+class Dashboard(DashHandler):
     @require_admin
     def get(self):
         user = self.get_argument('user', None)
         if user:
-            self.redirect('/dashboard/member/%s' % user)
+            self.reverse_redirect('dashboard-member', user)
             return
-        cache = self.get_argument('cache', None)
-        if cache:
-            self.cache.delete(str(cache))
-            self.redirect('/dashboard')
+        _cache_key = self.get_argument('cache', None)
+        if _cache_key:
+            cache.delete(str(_cache_key))
+            self.reverse_redirect('dashboard')
             return
         nodes = Node.query.all()
         self.render('index.html', nodes=nodes)
 
 
-urls = [
-    ('/', Dashboard),
+handlers = [
+    url('/', Dashboard, name='dashboard'),
     ('/storage', EditStorage),
     ('/node', CreateNode),
     ('/node/(\w+)', EditNode),
-    ('/member/(.*)', EditMember),
+    url('/member/(.*)', EditMember, name='dashboard-member'),
     ('/topic/(\d+)', EditTopic),
     ('/reply/(\d+)', EditReply),
     ('/flushcache', FlushCache),
 ]
+
+dashboard_app = JulyApp('dashboard', __name__, handlers=handlers,
+                        template_folder='templates')

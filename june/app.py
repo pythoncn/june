@@ -20,6 +20,7 @@ if _first_run:
 
     # site config
     define('sitename', 'June', type=str)
+    define('version', '1.1.0', type=str)
     define('siteurl', 'http://lepture.com/project/june/')
     define('sitefeed', '/feed')
 
@@ -87,6 +88,12 @@ def main():
 
     from june.topic.handlers import topic_app
     application.register_app(topic_app, url_prefix='/topic')
+
+    from june.dashboard.handlers import dashboard_app
+    application.register_app(dashboard_app, url_prefix='/dashboard')
+
+    application.register_context('sitename', options.sitename)
+    application.register_context('version', options.version)
 
     run_server(application)
 
