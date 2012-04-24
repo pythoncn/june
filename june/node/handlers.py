@@ -1,6 +1,6 @@
 import datetime
 import tornado.web
-from july import JulyHandler
+from july import JulyHandler, JulyApp
 from june.account.lib import UserHandler
 from june.topic.models import Topic
 
@@ -90,3 +90,5 @@ handlers = [
     ('/(\w+)/unfollow', UnfollowNodeHandler),
     ('/(\w+)/feed', NodeFeedHandler),
 ]
+
+node_app = JulyApp('node', __name__)

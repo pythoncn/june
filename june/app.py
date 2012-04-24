@@ -11,43 +11,37 @@ except ImportError:
     site.addsitedir(ROOTDIR)
     print('Development of june')
 from tornado.options import define, options
-from junetornado import JuneApplication, run_server
-_first_run = True
+from july import JulyApplication, run_server
 
+_first_run = True
 if _first_run:
-    options.port = 8000
+    options.debug = True
     options.autoescape = None
-    define('master', "sqlite:////tmp/june.sqlite")
-    define('slaves', '')
-    define('memcache', "127.0.0.1:11211")
 
     # site config
-    define('sitename', 'June')
-    define('siteurl', 'http://lepture.com/project/june')
+    define('sitename', 'June', type=str)
+    define('siteurl', 'http://lepture.com/project/june/')
     define('sitefeed', '/feed')
-    define('password_secret', '')  # reset it
 
-    options.static_path = os.path.join(PROJDIR, 'static')
-    options.template_path = os.path.join(PROJDIR, "templates")
+    define('static_path', os.path.join(PROJDIR, 'static'))
+    define('static_url_prefix', '/static/', type=str)
+    define('template_path', os.path.join(PROJDIR, "templates"))
 
     options.locale_path = os.path.join(PROJDIR, 'locale')
-    # Suggestion: set to False in develop mode
-    # options.xsrf_cookies = True
-    options.xsrf_cookies = False
-    options.login_url = '/account/signin'
+    define('login_url', '/account/signin', type=str)
 
     # factor config
-    define('reply_factor_for_topic', 600)
-    define('reply_time_factor', 1000)
-    define('up_factor_for_topic', 1500)
-    define('up_factor_for_user', 1)
-    define('down_factor_for_topic', 800)
-    define('down_factor_for_user', 1)
-    define('accept_reply_factor_for_user', 1)
-    define('up_max_for_user', 10)
-    define('down_max_for_user', 4)
-    define('vote_max_for_user', 4)
-    define('promote_topic_cost', 100)
+    define('reply_factor_for_topic', 600, type=int)
+    define('reply_time_factor', 1000, type=int)
+    define('up_factor_for_topic', 1500, type=int)
+    define('up_factor_for_user', 1, type=int)
+    define('down_factor_for_topic', 800, type=int)
+    define('down_factor_for_user', 1, type=int)
+    define('accept_reply_factor_for_user', 1, type=int)
+    define('up_max_for_user', 10, type=int)
+    define('down_max_for_user', 4, type=int)
+    define('vote_max_for_user', 4, type=int)
+    define('promote_topic_cost', 100, type=int)
 
     # third party support config
     define('gravatar_base_url', "http://www.gravatar.com/avatar/")
@@ -65,5 +59,36 @@ if _first_run:
     _first_run = False
 
 
+def main():
+    from july.util import parse_config_file
+    from tornado.options import parse_command_line
+    parse_command_line()
+    if options.settings:
+        parse_config_file(options.settings)
+
+    settings = dict(
+        debug=options.debug,
+        autoescape=options.autoescape,
+        cookie_secret=options.cookie_secret,
+        xsrf_cookies=True,
+        login_url=options.login_url,
+
+        template_path=options.template_path,
+        static_path=options.static_path,
+        static_url_prefix=options.static_url_prefix,
+    )
+    application = JulyApplication(handlers=[], **settings)
+
+    from june.account.handlers import account_app
+    application.register_app(account_app, url_prefix='/account')
+
+    from june.node.handlers import node_app
+    application.register_app(node_app, url_prefix='/node')
+
+    from june.topic.handlers import topic_app
+    application.register_app(topic_app, url_prefix='/topic')
+
+    run_server(application)
+
 if __name__ == "__main__":
-    run_server(JuneApplication)
+    main()
