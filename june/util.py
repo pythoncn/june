@@ -1,11 +1,28 @@
-# coding: utf-8
 import re
-import markdown
-from tornado import escape
 from tornado.options import options
-from pygments import highlight
-from pygments.formatters import HtmlFormatter
-from pygments.lexers import get_lexer_by_name, TextLexer
+from markdown2 import markdown
+from july.cache import cache
+
+
+def get_cache_list(model, id_list, key_prefix, time=600):
+    if not id_list:
+        return {}
+    id_list = set(id_list)
+    data = cache.get_multi(id_list, key_prefix=key_prefix)
+    missing = id_list - set(data)
+    if missing:
+        dct = {}
+        for item in model.query.filter_by(id__in=missing).all():
+            dct[item.id] = item
+
+        cache.set_multi(dct, time=time, key_prefix=key_prefix)
+        data.update(dct)
+
+    return data
+
+
+def safe_markdown(text):
+    return markdown(text, safe_mode='escape', extras=['fenced-code-blocks'])
 
 
 emoji_list = [
@@ -108,57 +125,6 @@ def emoji(text):
 
     text = pattern.sub(make_emoji, text)
     return text
-
-
-def safe_markdown(text, noclasses=False):
-    text = escape.xhtml_escape(text)
-
-    # get link back
-    def make_link(m):
-        link = m.group(1)
-        title = link.replace('http://', '').replace('https://', '')
-        if len(title) > 30:
-            title = title[:20] + '...'
-        if link.startswith('http://') or link.startswith('https://'):
-            return '<a href="%s" rel="nofollow">%s</a>' % (link, title)
-        return '<a href="http://%s" rel="nofollow">%s</a>' % (link, title)
-
-    # http://daringfireball.net/2010/07/improved_regex_for_matching_urls
-    pattern = re.compile(
-        r'(?m)^((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}'
-        r'/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+'
-        r'|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?«»“”‘’]))')
-    text = pattern.sub(make_link, text)
-
-    pattern = re.compile(
-        r'(?i)(?:&lt;)((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}'
-        r'/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+'
-        r'|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?«»“”‘’]))(?:&gt;)')
-
-    text = pattern.sub(make_link, text)
-
-    pattern = re.compile(r'^```(\w+)(?:\n|\r\n|\r)(.*?)(?:\n|\r\n|\r)```',
-                         re.S | re.M)
-    formatter = HtmlFormatter(noclasses=noclasses)
-
-    def repl(m):
-        try:
-            name = m.group(1)
-            lexer = get_lexer_by_name(name)
-        except ValueError:
-            name = 'text'
-            lexer = TextLexer()
-        text = m.group(2).replace('&quot;', '"').replace('&amp;', '&')
-        text = text.replace('&lt;', '<').replace('&gt;', '>')
-        #text = m.group(2)
-        code = highlight(text, lexer, formatter)
-        code = code.replace('\n\n', '\n&nbsp;\n').replace('\n', '<br />')
-        return '\n\n<div class="code">%s</div>\n\n' % code
-
-    text = pattern.sub(repl, text)
-    pattern = re.compile(r'@(\w+)\s')
-    text = pattern.sub(r'<a href="/member/\1">@\1</a> ', text)
-    return emoji(markdown.markdown(text))
 
 
 def find_mention(text):

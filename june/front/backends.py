@@ -1,8 +1,26 @@
+import os.path
 import base64
 import functools
-from tornado import httpclient
 from tornado.options import options
-from june.backend import Backend
+from tornado import httpclient
+
+
+class Backend(object):
+    @classmethod
+    def save(cls, body, filename, callback=None):
+        raise NotImplemented
+
+
+class LocalBackend(Backend):
+    def save(self, body, filename, callback=None):
+        path = os.path.join(options.local_static_path, filename)
+        f = open(path, 'w')
+        f.write(body)
+        f.close()
+        if not callback:
+            return
+        callback(os.path.join(options.local_static_url, filename))
+        return
 
 
 class Upyun(object):

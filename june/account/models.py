@@ -59,6 +59,14 @@ class Member(db.Model):
         query = "%s?s=%s%s" % (md5email, size, options.gravatar_extra)
         return options.gravatar_base_url + query
 
+    def to_json(self):
+        data = (
+            '{"username":"%s", "avatar":"%s", "website":"%s",'
+            '"reputation":%s, "role":%s}'
+        ) % (self.username, self.get_avatar(), self.website or "",
+             self.reputation, self.role)
+        return data
+
     @staticmethod
     def create_password(raw):
         salt = Member.create_token(8)
