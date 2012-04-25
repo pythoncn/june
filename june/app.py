@@ -24,11 +24,11 @@ if _first_run:
     define('siteurl', 'http://lepture.com/project/june/')
     define('sitefeed', '/feed')
 
-    define('static_path', os.path.join(PROJDIR, 'static'))
+    define('static_path', os.path.join(PROJDIR, '_static'))
     define('static_url_prefix', '/static/', type=str)
-    define('template_path', os.path.join(PROJDIR, "templates"))
+    define('template_path', os.path.join(PROJDIR, "_templates"))
 
-    options.locale_path = os.path.join(PROJDIR, 'locale')
+    options.locale_path = os.path.join(PROJDIR, '_locale')
     define('login_url', '/account/signin', type=str)
 
     # factor config

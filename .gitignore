@@ -63,4 +63,4 @@ Backup[ ]of[ ]*.key/
 Backup[ ]of[ ]*.numbers/
 
 tmp.*
-static/
+_static/
