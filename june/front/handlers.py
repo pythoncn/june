@@ -8,7 +8,7 @@ from june.account.models import Member
 from june.account.decorators import require_user
 #from june.node.models import Node
 from june.topic.models import Topic
-from june.util import safe_markdown
+from june.util import safe_markdown, emoji
 
 
 class HomeHandler(UserHandler):
@@ -47,7 +47,7 @@ class SiteFeedHandler(tornado.web.RequestHandler):
 class PreviewHandler(UserHandler):
     def post(self):
         text = self.get_argument('text', '')
-        self.write(safe_markdown(text))
+        self.write(emoji(safe_markdown(text)))
 
 
 class SearchHandler(UserHandler):

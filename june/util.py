@@ -21,10 +21,6 @@ def get_cache_list(model, id_list, key_prefix, time=600):
     return data
 
 
-def safe_markdown(text):
-    return markdown(text, safe_mode='escape', extras=['fenced-code-blocks'])
-
-
 emoji_list = [
     "-1", "0", "1", "109", "2", "3", "4", "5", "6", "7", "8", "8ball", "9",
     "a", "ab", "airplane", "alien", "ambulance", "angel", "anger", "angry",
@@ -130,6 +126,17 @@ def emoji(text):
 def find_mention(text):
     regex = r'@(\w+)\s'
     return re.findall(regex, text)
+
+
+def safe_markdown(text):
+    patterns = [
+        (re.compile(r'@(\w+)'), r'/member/\1'),
+    ]
+    value = markdown(
+        text, safe_mode='escape', link_patterns=patterns,
+        extras=['fenced-code-blocks', 'link-patterns'],
+    )
+    return value
 
 
 def xmldatetime(value):

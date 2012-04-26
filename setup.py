@@ -13,7 +13,7 @@ setup(
     description='June: a forum',
     install_requires=[
         'python-memcached',
-        'markdown',
+        'markdown2',
         'pygments',
         'junetornado',
     ],
