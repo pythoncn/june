@@ -78,7 +78,8 @@ def main():
         static_path=options.static_path,
         static_url_prefix=options.static_url_prefix,
     )
-    application = JulyApplication(handlers=[], **settings)
+    from june.front.handlers import handlers
+    application = JulyApplication(handlers=handlers, **settings)
 
     from june.account.handlers import account_app
     application.register_app(account_app, url_prefix='/account')
@@ -93,7 +94,17 @@ def main():
     application.register_app(dashboard_app, url_prefix='/dashboard')
 
     application.register_context('sitename', options.sitename)
+    application.register_context('siteurl', options.siteurl)
+    application.register_context('sitefeed', options.sitefeed)
     application.register_context('version', options.version)
+    import datetime
+    application.register_context('now', datetime.datetime.utcnow)
+
+    from june.util import safe_markdown, emoji, xmldatetime
+    application.register_filter(
+        'markdown', lambda text, arg=False: emoji(safe_markdown(text, arg))
+    )
+    application.register_filter('xmldatetime', xmldatetime)
 
     run_server(application)
 

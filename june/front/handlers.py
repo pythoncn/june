@@ -1,8 +1,10 @@
-import datetime
+import os.path
 import hashlib
 import tornado.web
 from tornado.options import options
+from july import JulyHandler
 from july.util import import_object
+from july.cache import cache
 from june.account.lib import UserHandler
 from june.account.models import Member
 from june.account.decorators import require_user
@@ -27,20 +29,21 @@ class SubscriptionHandler(UserHandler):
         self.render('subscription.html')
 
 
-class SiteFeedHandler(tornado.web.RequestHandler):
+class SiteFeedHandler(JulyHandler):
+    def get_template_path(self):
+        return os.path.join(os.path.dirname(__file__), '_templates')
+
     def get(self):
         self.set_header('Content-Type', 'text/xml; charset=utf-8')
-        html = self.cache.get('sitefeed')
+        html = cache.get('sitefeed')
         if html is not None:
             self.write(html)
             return
         topics = Topic.query.order_by('-id')[:20]
-        user_ids = (topic.user_id for topic in topics)
-        users = self.get_users(user_ids)
-        now = datetime.datetime.utcnow()
-        html = self.render_string('feed.xml', topics=topics, users=users,
-                                  node=None, now=now)
-        self.cache.set('sitefeed', html, 1800)
+        #user_ids = (topic.user_id for topic in topics)
+        #users = self.get_users(user_ids)
+        html = self.render_string('feed.xml', topics=topics, node=None)
+        cache.set('sitefeed', html, 1800)
         self.write(html)
 
 
