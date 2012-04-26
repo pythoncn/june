@@ -128,13 +128,19 @@ def find_mention(text):
     return re.findall(regex, text)
 
 
-def safe_markdown(text):
+def safe_markdown(text, noclasses=False):
     patterns = [
         (re.compile(r'@(\w+)'), r'/member/\1'),
     ]
+
+    extras = {
+        'fenced-code-blocks': {'noclasses': noclasses},
+        'link-patterns': {}
+    }
+
     value = markdown(
         text, safe_mode='escape', link_patterns=patterns,
-        extras=['fenced-code-blocks', 'link-patterns'],
+        extras=extras,
     )
     return value
 
