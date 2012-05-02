@@ -2,118 +2,51 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <title>{%block title%}{%block subtitle%}{%end%} | {{context.sitename}}{%end%}</title>
-        {{ context.header or '' }}
+        <title>{%block title%}{%block subtitle%}{%end%} | {{g.sitename}}{%end%}</title>
+        {{ g.header or '' }}
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0" />
-        {% if is_mobile() %}
         <link rel="stylesheet" href="{{static_url('css/mobile.css')}}" />
-        {% else %}
-        <link rel="stylesheet" href="{{static_url('css/site.css')}}" />
-        {% end %}
         {% block afterstyle %}{% end %}
         <script type="text/javascript">
             {% if current_user %}
-            var user = {id: {{current_user.id}}, username: "{{current_user.username}}", avatar: "{{current_user.get_avatar(48)}}"};
+            var user = {{current_user.to_json()}};
             {% else %}
             var user = {id: 0};
             {% end %}
-            {% if context.ga %}
-            var _gaq = _gaq || [];
-            _gaq.push(['_setAccount', '{{context.ga}}']);
-            _gaq.push(['_trackPageview']);
-            _gaq.push(['_trackPageLoadTime']);
-            _gaq.push(['_setCustomVar', 1, 'UserType', {%if current_user%}'Member'{%else%}'Guest'{%end%}, 2]);
-            (function() {
-             var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-             ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-             var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-             })();
-            {% end %}
         </script>
-        <link rel="alternate" type="application/atom+xml" href="{{context.sitefeed}}" title="{{context.sitename}}" />
+        <link rel="alternate" type="application/atom+xml" href="{{g.sitefeed}}" title="{{g.sitename}}" />
     </head>
     <body>
-        {% block notify %}
-        <div id="notify">
-            {% for msg in context.message %}
-            <div class="message">
-                <h3>{{ _(msg.header) }}</h3>
-                <div>{{ _(msg.body) }}</div>
-                <div class="js-hide"></div>
-            </div>
-            {% end %}
-        </div>
-        {% end %}
         <header id="header" role="banner">
-            <h1><a href="{{context.siteurl}}">{{context.sitename}}</a></h1>
-        </header>
-        <div class="wrap">
-            <div class="inner-wrap fn-clear">
-                {% block side %}
-                <aside id="side">
-                    <nav role="navigation" class="fn-clear">
-                        <a id="nav-toggle" href="#">hide</a>
-                        <ul id="nav">
-                            <li><a href="/">{{ _("Home") }}</a></li>
-                            {% if current_user %}
-                            <li><a href="/subscription">{{ _("Subscription") }}</a></li>
-                            <li><a href="/members">{{ _("Members") }}</a></li>
-                            <li><a href="/topic">{{_("New Topic")}}</a></li>
-                            {% end %}
-                            <li><a href="/nodes">{{ _("Nodes") }}</a></li>
-                            {% if current_user and current_user.role > 9 %}
-                            <li><a href="/dashboard">{{ _("Dashboard") }}</a></li>
-                            {% end %}
-                        </ul>
-                        <h2>{{ _("Account") }}</h2>
-                        <ul id="account">
-                            {% if current_user %}
-                            <li><a href="/member/{{current_user.username}}">{{current_user.username}}</a></li>
-                            <li><a href="/account/setting">{{ _("Setting") }}</a></li>
-                            <li><a href="/account/signout">{{ _("Signout") }}</a></li>
-                            {% else %}
-                            <li><a href="/account/signup">{{ _("Signup") }}</a></li>
-                            <li><a href="/account/signin">{{ _("Signin") }}</a></li>
-                            {% end %}
-                        </ul>
-                    </nav>
-                </aside>
-                {% end %}
-                <div id="content" class="fn-clear">
-                    {% block content %}
-                    <div id="main">
-                        {% block main %}{% end %}
-                    </div>
-                    <div id="sidebar">
-                        <div class="widget search">
-                            <form action="/search">
-                                <input class="fm-text" type="search" name="q" placeholder="Search.." />
-                            </form>
-                        </div>
-                        {% block sidebar %}{% end %}
-                        {{ context.sidebar or '' }}
-                        <div class="widget">
-                            <h4 class="widget-title">{{_("Analytics")}}</h4>
-                            <div class="meta">
-                                {% module SystemStatusModule() %}
-                            </div>
-                        </div>
-                    </div>
-                    {% end %}
-                </div>
+            <div class="wrapper fn-clear">
+                <h1><a href="/">{{g.sitename}}</a></h1>
+                <nav>
+                    <a href="/account/signin">Signin</a>
+                </nav>
             </div>
+        </header>
+        <nav id="nav" role="navigation">
+            <div class="wrapper">
+                <a href="/">{{ _("Popular") }}</a>
+                <a href="/latest">{{ _("Latest") }}</a>
+                <a href="/following">{{ _("Following") }}</a>
+                <a href="/nodes">{{ _("Nodes") }}</a>
+                <a href="/topic/create">Add+</a>
+            </div>
+        </nav>
+        <div id="main" class="fn-clear">
         </div>
         <footer id="footer">
             <div class="footer-inner fn-clear">
                 <div class="default-footer">
-                    <p>Copyright &copy; {{context.sitename}}. All articles &copy; their respective owners.</p>
+                    <p>Copyright &copy; {{g.sitename}}. All articles &copy; their respective owners.</p>
                     <p class="copyright">Designed by <a href="http://lepture.com">lepture</a>.
-                    Powered by <a href="https://github.com/lepture/june">June</a> {{context.version}}.
+                    Powered by <a href="https://github.com/lepture/june">June</a> {{g.version}}.
                     Hosted by <a href="http://www.linode.com/?r=b9e3629fcf78988ff7cc8f6c4ef59c5a2c626b8a" rel="nofollow">Linode</a>
                     </p>
                 </div>
                 <div class="expand-footer">
-                    {{ context.footer or '' }}
+                    {{ g.footer or '' }}
                 </div>
             </div>
         </footer>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title><![CDATA[{{ g.sitename }}{%if node%}:{{node.title}}{%end%}]]></title>
+    <link href="{{ g.siteurl }}/{%if node%}node/{{node.slug}}/{%end%}feed" rel="self" />
+    <link href="{{ g.siteurl }}{%if node%}/node/{{node.slug}}{%end%}" />
+    <updated>{{xmldatetime(g.now())}}</updated>
+    <id>{{ g.siteurl }}/</id>
+    {% for topic in topics %}
+    <entry>
+        <title type="html"><![CDATA[{{ topic.title }}]]></title>
+        <link href="{{g.siteurl}}/topic/{{topic.id}}"/>
+        <updated>{{ xmldatetime(topic.updated) }}</updated>
+        <published>{{ xmldatetime(topic.created) }}</published>
+        <id>{{g.siteurl}}/topic/{{topic.id}}</id>
+        {% if node %}
+        <category scheme="{{g.siteurl}}/node/{{node.slug}}" term="{{node.slug}}" label="{{ node.title}}" />
+        {% end %}
+        <content type="html" xml:base="{{ g.siteurl }}" xml:lang="en">
+            <![CDATA[ {{ markdown(topic.content, True) }} ]]>
+        </content>
+    </entry>
+    {% end %}
+</feed>

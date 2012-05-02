@@ -5,6 +5,7 @@ from tornado.options import options
 from july import JulyHandler
 from july.util import import_object
 from july.cache import cache
+from july.database import db
 from june.account.lib import UserHandler
 from june.account.models import Member
 from june.account.decorators import require_user
@@ -19,6 +20,8 @@ class HomeHandler(UserHandler):
 
     def get(self):
         # recent join
+        db._ping_db()
+        #db.master.commit()
         members = Member.query.order_by('-id').all()[:5]
         self.render('home.html', members=members)
 
