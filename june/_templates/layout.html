@@ -34,20 +34,18 @@
                 <a href="/topic/create">Add+</a>
             </div>
         </nav>
-        <div id="main" class="fn-clear">
+        <div id="main">
+            <div class="wrapper fn-clear">
+                {% block main %}{% end %}
+            </div>
         </div>
         <footer id="footer">
-            <div class="footer-inner fn-clear">
-                <div class="default-footer">
-                    <p>Copyright &copy; {{g.sitename}}. All articles &copy; their respective owners.</p>
-                    <p class="copyright">Designed by <a href="http://lepture.com">lepture</a>.
-                    Powered by <a href="https://github.com/lepture/june">June</a> {{g.version}}.
-                    Hosted by <a href="http://www.linode.com/?r=b9e3629fcf78988ff7cc8f6c4ef59c5a2c626b8a" rel="nofollow">Linode</a>
-                    </p>
-                </div>
-                <div class="expand-footer">
-                    {{ g.footer or '' }}
-                </div>
+            <div class="wrapper">
+                <p>Copyright &copy; {{g.sitename}}. All articles &copy; their respective owners.</p>
+                <p class="copyright">Designed by <a href="http://lepture.com">lepture</a>.
+                Powered by <a href="https://github.com/lepture/june">June</a> {{g.version}}.
+                Hosted by <a href="http://www.linode.com/?r=b9e3629fcf78988ff7cc8f6c4ef59c5a2c626b8a" rel="nofollow">Linode</a>
+                </p>
             </div>
         </footer>
         {% block beforejs %}{% end %}
