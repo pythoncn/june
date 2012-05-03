@@ -160,12 +160,27 @@ class SignupHandler(UserHandler, RecaptchaMixin):
         return self.redirect(self.next_url)
 
 
+class DeleteAccountHandler(UserHandler):
+    @authenticated
+    def post(self):
+        password = self.get_argument('password', None)
+        if not password:
+            self.flash_message('Please fill the required fields', 'warn')
+            #: TODO
+            return
+        if not self.current_user.check_password(password):
+            self.flash_message('Invalid password', 'error')
+            #: TODO
+            return
+
+
 handlers = [
     ('/signup', SignupHandler),
     ('/signin', SigninHandler),
     ('/signin/google', GoogleSigninHandler),
     ('/signout', SignoutHandler),
     ('/signout/everywhere', SignoutEverywhereHandler),
+    ('/delete', DeleteAccountHandler),
 ]
 
 account_app = JulyApp('account', __name__, handlers=handlers,
