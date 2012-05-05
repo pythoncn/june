@@ -1,0 +1,3 @@
+[submodule "assets/resources/At.js"]
+	path = assets/resources/At.js
+	url = git://github.com/ichord/At.js.git
