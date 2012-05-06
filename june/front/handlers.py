@@ -19,11 +19,9 @@ class HomeHandler(UserHandler):
         pass
 
     def get(self):
-        # recent join
-        db._ping_db()
-        #db.master.commit()
-        members = Member.query.order_by('-id').all()[:5]
-        self.render('home.html', members=members)
+        members = Member.query.order_by('-id')[:5]
+        topics = Topic.query.order_by('-impact')[:20]
+        self.render('home.html', members=members, topics=topics)
 
 
 class SubscriptionHandler(UserHandler):

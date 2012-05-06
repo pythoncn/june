@@ -6,24 +6,19 @@
 <link rel="canonical" href="{{g.siteurl}}" />
 {% end %}
 
-{% block main %}
+{% block content %}
+<div class="ui-box">
+    {% for topic in topics %}
+    {{topic.title}}
+    {% end %}
+</div>
 {% end %}
 
 {% block sidebar %}
-{% if current_user %}
-
-<div class="widget">
-    <h4 class="widget-title">{{ _("Following") }}</h4>
-    <div class="fn-wrap">
-    </div>
-</div>
-{% end %}
-<div class="widget">
-    <h4 class="widget-title">{{ _("Recent Join") }}</h4>
-    <div class="fn-wrap">
-        {% for user in members %}
-        <a class="avatar fn-left" href="/member/{{user.username}}" title="{{user.username}}"><img src="{{user.get_avatar(36)}}" alt="avatar" width="36" height="36" /></a>
-        {% end %}
+<div class="ui-box">
+    <h3 class="ui-box-title">{{ _("Recent Join") }}</h3>
+    <div class="ui-box-container">
+        lepture
     </div>
 </div>
 {% end %}

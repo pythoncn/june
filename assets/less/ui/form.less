@@ -1,0 +1,46 @@
+.fm-item {
+    padding: 8px 0;
+}
+.fm-text {
+    padding: 6px 8px;
+    margin-bottom: 2px;
+    color: #333;
+    border-radius: 3px;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15);
+    border: 1px solid #dadada;
+}
+.fm-text:focus {
+    outline: 0 none;
+    border-color: #acacac;
+}
+.fm-required .fm-label {
+    font-weight: bold;
+}
+.fm-label {
+    display: inline-block;
+    width: 100px;
+    margin-right: 12px;
+    text-align: right;
+}
+.fm-explain {
+    font-size: 12px;
+    color: #999;
+    margin-left: 115px;
+}
+.fm-item button {
+    margin-left: 115px;
+}
+@media screen and (max-width: 480px) {
+    .fm-label {
+        display: block;
+        width: auto;
+        text-align: left;
+        margin-bottom: 4px;
+    }
+    .fm-explain {
+        margin-left: 0;
+    }
+    .fm-item button {
+        margin-left: 0;
+    }
+}

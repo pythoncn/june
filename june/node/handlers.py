@@ -1,8 +1,10 @@
 import datetime
 import tornado.web
 from july import JulyHandler, JulyApp
+from july.util import ObjectDict
 from june.account.lib import UserHandler
 from june.topic.models import Topic
+from models import Node
 
 
 class NodeHandler(UserHandler):
@@ -58,7 +60,7 @@ class NodeListHandler(UserHandler):
         pass
 
     def get(self):
-        nodes = self.get_all_nodes()
+        nodes = Node.query.order_by('-updated').all()
         self.render('node_list.html', nodes=nodes)
 
 
@@ -83,12 +85,22 @@ class NodeFeedHandler(JulyHandler):
         self.write(html)
 
 
+class CreateTopicHandler(UserHandler):
+    def get(self, slug):
+        node = Node.query.filter_by(slug=slug).first()
+        if not node:
+            self.send_error(404)
+            return
+        self.render('topic_form.html', title='Create', node=node,
+                    topic=ObjectDict())
+
+
 handlers = [
-    #('/all', NodeListHandler),
     ('/(\w+)', NodeHandler),
+    ('/(\w+)/create', CreateTopicHandler),
     ('/(\w+)/follow', FollowNodeHandler),
     ('/(\w+)/unfollow', UnfollowNodeHandler),
     ('/(\w+)/feed', NodeFeedHandler),
 ]
 
-node_app = JulyApp('node', __name__)
+node_app = JulyApp('node', __name__, handlers=handlers)

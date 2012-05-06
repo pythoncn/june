@@ -11,12 +11,6 @@ from livereload.task import Task
 from livereload.compiler import lessc, uglifyjs
 
 
-def all_less():
-    from livereload.compiler import LessCompiler
-    less = LessCompiler('assets/less/mobile.less')
-    less.write('june/_static/css/mobile.css')
-
-
 def lib_js():
     from livereload.compiler import UglifyJSCompiler
     output = 'june/_static/js/lib.js'
@@ -55,8 +49,8 @@ def editor_js():
 
 #: less tasks
 Task.add(
-    'assets/less/mobile.less',
-    lessc('assets/less/mobile.less', 'june/_static/css/mobile.css')
+    'assets/less',
+    lessc('assets/less/site.less', 'june/_static/css/site.css')
 )
 
 

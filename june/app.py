@@ -84,8 +84,9 @@ def main():
     from june.account.handlers import account_app
     application.register_app(account_app, url_prefix='/account')
 
-    from june.node.handlers import node_app
+    from june.node.handlers import node_app, NodeListHandler
     application.register_app(node_app, url_prefix='/node')
+    application.add_handler(('/nodes', NodeListHandler))
 
     from june.topic.handlers import topic_app
     application.register_app(topic_app, url_prefix='/topic')
