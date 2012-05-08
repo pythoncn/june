@@ -107,10 +107,8 @@ def main():
     import datetime
     application.register_context('now', datetime.datetime.utcnow)
 
-    from june.util import safe_markdown, emoji, xmldatetime
-    application.register_filter(
-        'markdown', lambda text, arg=False: emoji(safe_markdown(text, arg))
-    )
+    from june.typo import markdown, xmldatetime
+    application.register_filter('markdown', markdown)
     application.register_filter('xmldatetime', xmldatetime)
 
     run_server(application)

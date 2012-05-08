@@ -10,7 +10,7 @@
 {% block content %}
 <article class="hentry ui-box" data-id="{{topic.id}}">
     <h3 class="ui-box-title entry-title">{{topic.title}}</h3>
-    {{ topic.content }}
+    {{ markdown(topic.content) }}
 </article>
 {% end %}
 

@@ -9,7 +9,7 @@ from june.account.lib import UserHandler
 from june.account.decorators import require_user
 #from june.node.models import Node
 from june.topic.models import Topic
-from june.util import safe_markdown, emoji
+from june.typo import markdown
 
 
 class HomeHandler(UserHandler):
@@ -59,7 +59,7 @@ class SiteFeedHandler(JulyHandler):
 class PreviewHandler(UserHandler):
     def post(self):
         text = self.get_argument('text', '')
-        self.write(emoji(safe_markdown(text)))
+        self.write(markdown(text))
 
 
 class SearchHandler(UserHandler):

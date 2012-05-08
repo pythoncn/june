@@ -13,9 +13,10 @@ setup(
     description='June: a forum',
     install_requires=[
         'python-memcached',
-        'markdown2',
+        #'markdown2',
+        'misaka',
         'pygments',
-        'junetornado',
+        'july',
     ],
     include_package_data=True,
     license='BSD License',
