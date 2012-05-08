@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block subtitle%}{{title}}{%end%}
+
+{% block content %}
+<div class="ui-box">
+    {% for topic in topics %}
+    <div class="ui-cell">
+        <a href="/topic/{{topic.id}}">{{topic.title}}</a>
+    </div>
+    {% end %}
+</div>
+{% end %}

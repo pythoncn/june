@@ -78,18 +78,24 @@ def main():
         static_path=options.static_path,
         static_url_prefix=options.static_url_prefix,
     )
+    #: init application
     from june.front.handlers import handlers
     application = JulyApplication(handlers=handlers, **settings)
 
+    #: register account app
     from june.account.handlers import account_app
     application.register_app(account_app, url_prefix='/account')
 
+    #: register node app
     from june.node.handlers import node_app, NodeListHandler
     application.register_app(node_app, url_prefix='/node')
     application.add_handler(('/nodes', NodeListHandler))
 
+    #: register topic app
     from june.topic.handlers import topic_app
+    from june.topic.handlers import CreateNodeTopicHandler
     application.register_app(topic_app, url_prefix='/topic')
+    application.add_handler(('/node/(\w+)/create', CreateNodeTopicHandler))
 
     from june.dashboard.handlers import dashboard_app
     application.register_app(dashboard_app, url_prefix='/dashboard')

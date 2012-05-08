@@ -4,41 +4,42 @@
 
 {% block afterstyle %}
 <style type="text/css">
+    #content {
+        width: 50%;
+    }
+    #sidebar {
+        width: 48%;
+    }
+    textarea {
+        width: 90%;
+        height: 250px;
+    }
 </style>
 {% end %}
 
-{% block main %}
+{% block content %}
+<div id="markdown-explain" class="ui-box">
+    <h3 class="ui-box-title">Markdown Explain</h3>
+    <pre>```python
+def hello():
+    return True
+```</pre>
+</div>
 <div class="ui-box">
     <h3 class="ui-box-title">{{ _("This topic is in") }}: <a href="/node/{{node.slug}}"><strong>{{node.title}}</strong></a></h3>
 
     <form action="" method="post">
         {{ xsrf_form_html() }}
-        <div id="editor">
-            <div id="editor-pannel">
-                <a href="#" class="js-write current" tabindex="-1">{{ _("Write") }}</a>
-                <a href="#" class="js-preview" tabindex="-1">{{ _("Preview") }}</a>
-                <input type="file" name="image" accept="image/*" />
-            </div>
-        </div>
-    </form>
-</div>
-<div id="markdown-form">
-    <form action="" method="post">
         <div class="fm-item fm-required">
-            <label for="title">{{ _("Title") }}</label>
-            <input type="text" class="fm-text" name="title" value="{{topic.title or ""}}" required/>
+            <input type="text" class="fm-text" name="title" value="{{topic.title or ""}}" placeholder="{{_('Title')}}" required/>
         </div>
-        <div id="editor" class="fm-item fm-required fn-clear">
+        <div id="editor" class="fm-item">
             <div id="editor-pannel">
                 <a href="#" class="js-write current" tabindex="-1">{{ _("Write") }}</a>
                 <a href="#" class="js-preview" tabindex="-1">{{ _("Preview") }}</a>
-                <div id="editor-explain">
-                    <a class="copyright" href="http://daringfireball.net/projects/markdown/syntax">Markdown</a> and 
-                    <a href="http://www.emoji-cheat-sheet.com/" class="copyright">Emoji</a> Support
-                </div>
+                <a href="#" class="js-upload" tabindex="-1">{{ _("Upload") }}</a>
             </div>
             <textarea name="content" class="fm-text" required>{% if topic %}{{topic.content or ""}}{% end %}</textarea>
-            <div id="editor-preview"></div>
         </div>
         <div>
             <button type="submit" class="ui-btn">{{_("Save")}}</button>
@@ -46,16 +47,11 @@
         </div>
     </form>
 </div>
-<div id="markdown-explain">
-    <pre>```python
-def hello():
-    return True
-```</pre>
-    <div id="markdown-preview">
-    </div>
-</div>
 {% end %}
 
-{% block afterjs %}
-<script type="text/javascript" src="{{static_url('js/editor.js')}}"></script>
+{% block sidebar %}
+<div id="markdown-preview" class="ui-box">
+    <h3 class="ui-box-title">Markdown Preview</h3>
+    <div id="markdown-preview-container"></div>
+</div>
 {% end %}

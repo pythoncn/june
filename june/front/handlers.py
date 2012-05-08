@@ -5,9 +5,7 @@ from tornado.options import options
 from july import JulyHandler
 from july.util import import_object
 from july.cache import cache
-from july.database import db
 from june.account.lib import UserHandler
-from june.account.models import Member
 from june.account.decorators import require_user
 #from june.node.models import Node
 from june.topic.models import Topic
@@ -19,15 +17,25 @@ class HomeHandler(UserHandler):
         pass
 
     def get(self):
-        members = Member.query.order_by('-id')[:5]
+        title = 'Popular'
         topics = Topic.query.order_by('-impact')[:20]
-        self.render('home.html', members=members, topics=topics)
+        self.render('topic_list.html', topics=topics, title=title)
 
 
-class SubscriptionHandler(UserHandler):
+class FollowingHandler(UserHandler):
     @tornado.web.authenticated
     def get(self):
-        self.render('subscription.html')
+        self.render('following.html')
+
+
+class LatestHandler(UserHandler):
+    def head(self):
+        pass
+
+    def get(self):
+        title = 'Latest'
+        topics = Topic.query.order_by('-id')[:20]
+        self.render('topic_list.html', topics=topics, title=title)
 
 
 class SiteFeedHandler(JulyHandler):
@@ -93,7 +101,8 @@ class UploadHandler(UserHandler):
 
 handlers = [
     ('/', HomeHandler),
-    ('/subscription', SubscriptionHandler),
+    ('/following', FollowingHandler),
+    ('/latest', LatestHandler),
     ('/preview', PreviewHandler),
     ('/feed', SiteFeedHandler),
     ('/search', SearchHandler),

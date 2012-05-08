@@ -20,7 +20,7 @@ class require_role(object):
                 return handler.redirect(url)
             user = handler.current_user
             if user.role == 1:
-                return handler.redirect('/account/verify')
+                return handler.redirect('/account/setting')
             if user.role == 0:
                 return handler.redirect('/doc/guideline')
             if user.role < self.role:
