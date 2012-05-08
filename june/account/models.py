@@ -38,7 +38,8 @@ class Member(db.Model):
     avatar = Column(String(400))
     website = Column(String(400))
 
-    role = Column(Integer, default=2)
+    role = Column(Integer, default=0)
+    # 0: registered,  1: username
     reputation = Column(Integer, default=20, index=True)
     token = Column(String(16))
     created = Column(DateTime, default=datetime.utcnow)
@@ -47,8 +48,6 @@ class Member(db.Model):
     def __init__(self, email, **kwargs):
         self.email = email.lower()
         self.token = self.create_token(16)
-        if 'username' not in kwargs:
-            self.username = self.email.split('@')[0].lower()
         for k, v in kwargs.items():
             setattr(self, k, v)
 

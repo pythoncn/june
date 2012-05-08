@@ -21,8 +21,10 @@
             <div class="wrapper fn-clear">
                 <h1><a href="/">{{g.sitename}}</a></h1>
                 <nav>
-                    {% if current_user %}
+                    {% if current_user and current_user.username %}
                     <a href="/member/{{current_user.username}}">{{current_user.username}}</a>
+                    {% elif current_user %}
+                    <a href="/account/setting">{{current_user.email}}</a>
                     {% else %}
                     <a class="nav-button" href="/account/signin">Signin</a>
                     {% end %}

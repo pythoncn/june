@@ -1,68 +1,25 @@
 {% extends "layout.html" %}
 
 {% block subtitle %}{{_("Account")}}{% end %}
-{% block afterstyle %}
-<style type="text/css">
-    .line {
-        margin-top: 40px;
-    }
-</style>
-{% end %}
 
-{% block main %}
-<form action="" method="post" class="fm">
-    {{ xsrf_form_html() }}
-    <div class="fm-item fm-required">
-        <label class="fm-label" for="username">{{ _("Username") }}</label>
-        <input type="text" class="fm-text" name="username" value="{{current_user.username}}"required />
-        <div class="fm-explain">{{ _("Only English characters and digits are accepted.") }}</div>
-    </div>
-
-    <div class="fm-item">
-        <label class="fm-label" for="website">{{ _("Website") }}</label>
-        <input type="url" class="fm-text" name="website" value="{{current_user.website or ""}}" />
-    </div>
-
-    <div class="fm-item">
-        <button class="ui-btn">{{_("Save")}}</button>
-    </div>
-</form>
-<ol class="line">
-    {% for log in logs %}
-    <li>
-    <div class="content">
-        <strong>{{log.message}}</strong>
-        <div class="meta">
-            <time class="updated" datetime="{{xmldatetime(log.time)}}">{{log.time.strftime("%b %d, %Y %H:%M")}}</time> at {{log.ip}}
+{% block content %}
+<div class="ui-box">
+    <form action="" method="post" class="fm">
+        {{ xsrf_form_html() }}
+        <div class="fm-item fm-required">
+            <label class="fm-label" for="username">{{ _("Username") }}</label>
+            <input type="text" class="fm-text" name="username" value="{{current_user.username or ''}}"required />
+            <div class="fm-explain">{{ _("Only English characters and digits are accepted.") }}</div>
         </div>
-    </div>
-    </li>
-    {% end %}
-</ol>
-{% end %}
 
-{% block sidebar %}
-<div class="widget">
-    <h4 class="widget-title">{{ _("Social") }}</h4>
-    {% for service in services %}
+        <div class="fm-item">
+            <label class="fm-label" for="website">{{ _("Website") }}</label>
+            <input type="url" class="fm-text" name="website" value="{{current_user.website or ""}}" />
+        </div>
 
-    {% if service not in networks %}
-    <p><a href="/social/{{service}}" class="ui-btn">Connect {{service}}</a></p>
-    {% else %}
-
-    {%if networks[service]['enabled'] == 'y'%}
-    <p><a href="/social/{{service}}?enabled=n" class="ui-btn">Disable {{service}}</a></p>
-    {% else %}
-    <p><a href="/social/{{service}}?enabled=y" class="ui-btn">Enable {{service}}</a></p>
-    {% end %}
-
-    {% end %}
-
-    {% end %}
-</div>
-<div class="widget">
-    <h4 class="widget-title">{{ _("Account") }}</h4>
-    <p>{{ _("Change your avatar at") }} <a href="http://en.gravatar.com">Gravatar</a></p>
-    <a href="/account/signout/everywhere" class="ui-btn">{{ _("Signout Everywhere") }}</a>
+        <div class="fm-item">
+            <button class="ui-btn">{{_("Save")}}</button>
+        </div>
+    </form>
 </div>
 {% end %}

@@ -3,10 +3,15 @@
 {% block subtitle %}{{ _("Signup") }}{% end %}
 
 {% block afterstyle %}
-<link rel="canonical" href="{{context.siteurl}}/account/signup" />
+<link rel="canonical" href="{{g.siteurl}}/account/signup" />
 <style type="text/css">
     #recaptcha_div {
-        margin-left: 205px;
+        margin-left: 115px;
+    }
+    @media screen and (max-width: 480px) {
+        #recaptcha_div {
+            margin-left: 0;
+        }
     }
     #recaptcha_table {
         background: #fff;
@@ -17,33 +22,29 @@
 </style>
 {% end %}
 
-{% block main %}
-<form action="" method="post">
-    {{ xsrf_form_html() }}
-    <div class="fm-item fm-required">
-        <label for="email" class="fm-label">{{ _("Email") }}</label>
-        <input type="email" class="fm-text" name="email" maxlength="100" value="{{email}}" required/>
-    </div>
-    <div class="fm-item fm-required">
-        <label for="password1" class="fm-label">{{ _("Password") }}</label>
-        <input type="password" class="fm-text" name="password1" required/>
-    </div>
-    <div class="fm-item fm-required">
-        <label for="password2" class="fm-label">{{ _("Confirm") }}</label>
-        <input type="password" class="fm-text" name="password2" required/>
-    </div>
-    <div class="fm-item">
-        {{recaptcha}}
-    </div>
-    <div class="fm-item">
-        <button class="ui-btn">{{_("Signup")}}</button>
-        <a href="/account/signin/google" class="ui-btn">Signin with Google</a>
-    </div>
-</form>
-{% end %}
-
-{% block afterjs %}
-<script type="text/javascript">
-    $('body').addClass('expanded');
-</script>
+{% block content %}
+<div class="ui-box">
+    <form action="" method="post">
+        {{ xsrf_form_html() }}
+        <div class="fm-item fm-required">
+            <label for="email" class="fm-label">{{ _("Email") }}</label>
+            <input type="email" class="fm-text" name="email" maxlength="100" value="{{email}}" required/>
+        </div>
+        <div class="fm-item fm-required">
+            <label for="password1" class="fm-label">{{ _("Password") }}</label>
+            <input type="password" class="fm-text" name="password1" required/>
+        </div>
+        <div class="fm-item fm-required">
+            <label for="password2" class="fm-label">{{ _("Confirm") }}</label>
+            <input type="password" class="fm-text" name="password2" required/>
+        </div>
+        <div class="fm-item">
+            {{recaptcha}}
+        </div>
+        <div class="fm-item">
+            <button class="ui-btn">{{_("Signup")}}</button>
+            <a href="/account/signin/google" class="ui-btn">Signin with Google</a>
+        </div>
+    </form>
+</div>
 {% end %}

@@ -21,7 +21,7 @@ class SigninHandler(UserHandler):
         account = self.get_argument('account', None)
         password = self.get_argument('password', None)
         if not (account and password):
-            self.flash_message('Please fill the required fields', 'warn')
+            self.flash_message('Please fill the required fields', 'error')
             self.render('signin.html')
             return
         if '@' in account:
@@ -32,7 +32,7 @@ class SigninHandler(UserHandler):
             self.set_secure_cookie('user', '%s/%s' % (user.id, user.token))
             self.redirect(self.next_url)
             return
-        self.flash_message('Invalid account or password', 'warn')
+        self.flash_message('Invalid account or password', 'error')
         self.render('signin.html')
 
 
@@ -54,21 +54,17 @@ class GoogleSigninHandler(UserHandler, GoogleMixin):
         email = user["email"].lower()
         user = Member.query.filter_by(email=email).first()
         if not user:
-            #: TODO
-            #user = self.create_user(email)
-            username = email.split('@')[0].lower()
-            username = username.replace('.', '').replace('-', '')
-            member = Member.query.filter_by(username=username).first()
-            if member:
-                username = email.replace('.', '').replace('-', '')\
-                        .replace('@', '')
-            user = Member(email, username=username)
+            user = Member(email)
             user.password = '!'
             db.master.add(user)
             db.master.commit()
+            self.set_secure_cookie('user', '%s/%s' % (user.id, user.token))
+            self.redirect('/account/setting')
+            return
 
         self.set_secure_cookie('user', '%s/%s' % (user.id, user.token))
         self.redirect(self.next_url)
+        return
 
 
 class SignoutHandler(UserHandler):
@@ -99,65 +95,51 @@ class SignupHandler(UserHandler, RecaptchaMixin):
 
     @asynchronous
     def post(self):
-        username = self.get_argument('username', '')
         email = self.get_argument('email', '')
         password1 = self.get_argument('password1', None)
         password2 = self.get_argument('password2', None)
         if not (email and password1 and password2):
-            self.flash_message('Please fill the required fields', 'warn')
+            self.flash_message('Please fill the required fields', 'error')
             recaptcha = self.recaptcha_render()
-            self.render('signup.html', username=username, email=email,
-                        recaptcha=recaptcha)
+            self.render('signup.html', email=email, recaptcha=recaptcha)
             return
 
         if password1 != password2:
-            self.flash_message("Password doesn't match", 'warn')
+            self.flash_message("Password doesn't match", 'error')
             recaptcha = self.recaptcha_render()
-            self.render('signup.html', username=username, email=email,
-                        recaptcha=recaptcha)
+            self.render('signup.html', email=email, recaptcha=recaptcha)
             return
 
         if not validators.email(email):
-            self.flash_message('Not a valid email address', 'warn')
+            self.flash_message('Not a valid email address', 'error')
             recaptcha = self.recaptcha_render()
-            self.render('signup.html', username=username, email=email,
-                        recaptcha=recaptcha)
+            self.render('signup.html', email=email, recaptcha=recaptcha)
             return
 
         member = Member.query.filter_by(email=email).first()
         if member:
             self.flash_message("This email is already registered", 'warn')
             recaptcha = self.recaptcha_render()
-            self.render('signup.html', username=username, email=email,
-                        recaptcha=recaptcha)
-            return
-
-        member = Member.query.filter_by(username=username).first()
-        if member:
-            self.flash_message("This username is already registered", 'warn')
-            recaptcha = self.recaptcha_render()
-            self.render('signup.html', username=username, email=email,
-                        recaptcha=recaptcha)
+            self.render('signup.html', email=email, recaptcha=recaptcha)
             return
 
         self.recaptcha_validate(self._on_validate)
 
     def _on_validate(self, response):
-        username = self.get_argument('username', '')
         email = self.get_argument('email', '')
         password = self.get_argument('password1', None)
         if not response:
-            self.flash_message('Captcha not valid', 'warn')
+            self.flash_message('Captcha not valid', 'error')
             recaptcha = self.recaptcha_render()
-            self.render('signup.html', username=username, email=email,
-                        recaptcha=recaptcha)
+            self.render('signup.html', email=email, recaptcha=recaptcha)
             return
-        user = Member(email, username=username)
+        user = Member(email)
         user.password = user.create_password(password)
         db.master.add(user)
         db.master.commit()
         self.set_secure_cookie('user', '%s/%s' % (user.id, user.token))
-        return self.redirect(self.next_url)
+        self.redirect('/account/setting')  # account information
+        return
 
 
 class DeleteAccountHandler(UserHandler):
@@ -174,14 +156,56 @@ class DeleteAccountHandler(UserHandler):
             return
 
 
+class SettingHandler(UserHandler):
+    @authenticated
+    def get(self):
+        self.render('setting.html')
+
+    @authenticated
+    def post(self):
+        username = self.get_argument('username', None)
+        website = self.get_argument('website', None)
+        if not username:
+            self.flash_message('Please fill the required fields', 'error')
+            self.render('setting.html')
+            return
+
+        if not validators.username(username):
+            self.flash_message('Username is invalid', 'error')
+            self.render('setting.html')
+            return
+
+        if website and not validators.url(website):
+            self.flash_message('Website is invalid', 'error')
+            self.render('setting.html')
+            return
+
+        if db.master.query(Member).filter_by(username=username).count() > 0:
+            self.flash_message('Username has been taken', 'error')
+            self.render('setting.html')
+            return
+
+        user = db.master.query(Member).get(self.current_user.id)
+        user.username = username
+        user.website = website
+        db.master.add(user)
+        db.master.commit()
+        self.redirect('/account/setting')
+
+
 handlers = [
     ('/signup', SignupHandler),
     ('/signin', SigninHandler),
     ('/signin/google', GoogleSigninHandler),
     ('/signout', SignoutHandler),
+    ('/setting', SettingHandler),
     ('/signout/everywhere', SignoutEverywhereHandler),
     ('/delete', DeleteAccountHandler),
 ]
 
-account_app = JulyApp('account', __name__, handlers=handlers,
-                      template_folder='templates')
+account_app = JulyApp(
+    'account',
+    __name__,
+    handlers=handlers,
+    template_folder='templates'
+)
