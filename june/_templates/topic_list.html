@@ -6,7 +6,9 @@
 <div class="ui-box">
     {% for topic in topics %}
     <div class="ui-cell">
+        {{topic.user.username}}
         <a href="/topic/{{topic.id}}">{{topic.title}}</a>
+        {{topic.node.title}}
     </div>
     {% end %}
 </div>

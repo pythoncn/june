@@ -9,6 +9,7 @@ from june.account.lib import UserHandler
 from june.account.decorators import require_user
 #from june.node.models import Node
 from june.topic.models import Topic
+from june.topic.lib import get_full_topics
 from june.typo import markdown
 
 
@@ -18,7 +19,7 @@ class HomeHandler(UserHandler):
 
     def get(self):
         title = 'Popular'
-        topics = Topic.query.order_by('-impact')[:20]
+        topics = get_full_topics(Topic.query.order_by('-impact')[:20])
         self.render('topic_list.html', topics=topics, title=title)
 
 
@@ -34,7 +35,7 @@ class LatestHandler(UserHandler):
 
     def get(self):
         title = 'Latest'
-        topics = Topic.query.order_by('-id')[:20]
+        topics = get_full_topics(Topic.query.order_by('-id')[:20])
         self.render('topic_list.html', topics=topics, title=title)
 
 
