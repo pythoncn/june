@@ -13,3 +13,29 @@
     {% end %}
 </div>
 {% end %}
+
+{% block sidebar %}
+<div class="ui-box">
+    <div class="ui-box-header fn-clear">
+        <a href="/member/lepture" class="ui-avatar"><img src="{{current_user.get_avatar(48)}}" /></a>
+        <div class="fn-wrap">
+            <div class="username"><strong>lepture</strong></div>
+            <div class="website"><a href="#">http://lepture.com</a></div>
+        </div>
+    </div>
+    <div class="ui-box-container fn-clear">
+        <div class="status status-topic">
+            <strong>10</strong>
+            {{ _("Topics") }}
+        </div>
+        <div class="status status-reply">
+            <strong>10</strong>
+            {{ _("Replies") }}
+        </div>
+        <div class="status status-reputation">
+            <strong>10</strong>
+            {{ _("Reputation") }}
+        </div>
+    </div>
+</div>
+{% end %}

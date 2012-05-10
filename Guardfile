@@ -43,8 +43,10 @@ def editor_js():
     from livereload.compiler import UglifyJSCompiler
     static = 'assets/js/editor'
     output = 'june/_static/js/editor.js'
-    js = UglifyJSCompiler('%s/upload.js' % static)
-    js.write(output)
+    UglifyJSCompiler(
+        'https://raw.github.com/chjj/marked/master/lib/marked.js'
+    ).write(output)
+    UglifyJSCompiler('%s/upload.js' % static).append(output)
 
 
 #: less tasks
