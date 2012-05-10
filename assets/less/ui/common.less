@@ -4,7 +4,7 @@
     background: #fff;
     border: 1px solid #ccc;
     border-top-color: #dadada;
-    border-radius: 3px;
+    border-radius: 4px;
     box-shadow: 1px 1px 10px #bcbcbc;
 }
 @media screen and (max-width: 480px) {
@@ -26,21 +26,37 @@
     padding: 6px 10px 14px;
 }
 .ui-box-header {
+    position: relative;
     padding: 6px 10px;
     background: @darkColor;
     .vertical-linear-gradient(lighten(@darkColor, 15%), darken(@darkColor, 8%));
     border-bottom: 1px solid darken(@darkColor, 10%);
-    color: #fff;
+    color: lighten(@darkColor, 50%);
     border-radius: 3px 3px 0 0;
-    line-height: 1.6;
+    font: 14px/1.6 "Helvetica", arial, sans-serif;
     a {
-        color: #fff;
+        color: lighten(@darkColor, 50%);
     }
+}
+.ui-box-footer {
+    padding: 10px;
+    text-align: center;
+    border-top: 1px solid #dadada;
 }
 
 .ui-cell {
     padding: 6px 10px;
     border-bottom: 1px solid #eee;
+}
+.ui-you-label {
+    position: absolute;
+    top: 6px;
+    right: 10px;
+    color: #fff;
+    font-size: 10px;
+    background: darken(@darkColor, 10%);
+    padding: 2px 6px;
+    border-radius: 3px;
 }
 
 
@@ -100,4 +116,42 @@
     display: block;
     font-size: 16px;
     color: lighten(@darkColor, 10%);
+}
+
+/* signin form */
+#signin-box {
+    position: fixed;
+    top: -400px;
+    left: 50%;
+    width: 400px;
+    margin-left: -200px;
+    background: #fff;
+    border-radius: 4px;
+    z-index: 9999;
+    .transition(top 0.2s ease-in);
+}
+.overlay-mode #signin-box {
+    top: 100px;
+}
+#signin-box .ui-box-header {
+    color: #fff;
+    font-size: 18px;
+    font-family: Georgia, serif;
+    text-shadow: 1px 1px 0 #333;
+}
+#signin-box .ui-close {
+    position: absolute;
+    top: 6px;
+    right: 14px;
+}
+#signin-box .fm-text {
+    width: 80%;
+}
+.overlay-mode .ui-overlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(0,0,0,0.6);
 }

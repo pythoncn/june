@@ -17,10 +17,11 @@
 {% block sidebar %}
 <div class="ui-box">
     <div class="ui-box-header fn-clear">
-        <a href="/member/lepture" class="ui-avatar"><img src="{{current_user.get_avatar(48)}}" /></a>
-        <div class="fn-wrap">
+        <a href="/member/lepture" class="ui-avatar"><img src="{{current_user.get_avatar(48)}}" width="48" height="48" /></a>
+        <div class="user fn-wrap">
             <div class="username"><strong>lepture</strong></div>
             <div class="website"><a href="#">http://lepture.com</a></div>
+            <span class="ui-you-label">You</span>
         </div>
     </div>
     <div class="ui-box-container fn-clear">
@@ -36,6 +37,10 @@
             <strong>10</strong>
             {{ _("Reputation") }}
         </div>
+    </div>
+    <div class="ui-box-footer">
+        <a href="/member/lepture" class="ui-btn">View Profile</a>
+        <a href="#" class="ui-btn">Send Message</a>
     </div>
 </div>
 {% end %}

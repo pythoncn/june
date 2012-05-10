@@ -10,6 +10,9 @@
 @import "ui/form";
 
 /* layout */
+body {
+    font: @normalSansFont;
+}
 
 .wrapper {
     margin: 0 auto;
@@ -66,7 +69,7 @@
 
 #nav a {
     font: @smallSansFont;
-    padding: 8px 6px 6px;
+    padding: 8px 6px 5px;
     text-shadow: 1px 1px 0 #222;
 }
 #nav a:hover {
@@ -108,4 +111,11 @@
 #footer p {
     margin: 0;
     padding: 0;
+}
+
+/* widget */
+.ui-box .username {
+    color: #fff;
+    font-size: 16px;
+    text-shadow: 1px 1px 0 darken(@darkColor, 14%);
 }
