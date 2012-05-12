@@ -1,4 +1,5 @@
 @darkColor: #575D60;
+@blue: #599bdc;
 @serifFont: ~'16px/1.62 Georgia, 'Xin Gothic', 'PT Sans', 'Hiragino Sans GB', 'Helvetica Neue', Helvetica, Arial, sans-serif';
 @smallSansFont: ~'12px/1.2 "Luxi Sans", "Lucida Grande", "Hiragino Sans GB", sans-serif';
 @normalSansFont: ~'14px/1.2 "Luxi Sans", "Lucida Grande", "Hiragino Sans GB", sans-serif';
@@ -29,6 +30,7 @@ body {
 #header {
     background-color: @darkColor;
     border-bottom: 1px solid darken(@darkColor, 5%);
+    text-shadow: 1px 1px 0 #222;
 }
 
 #nav {
@@ -45,14 +47,20 @@ body {
 #header h1 {
     float: left;
     font: 24px/1.2 "Georgia", serif;
-    text-shadow: 1px 1px 0 #222;
 }
-#header nav {
+#header .user-box {
     float: right;
     margin-top: 5px;
 }
-
-#header .nav-button {
+#header .user {
+    float: left;
+    margin-right: 12px;
+    font-weight: bold;
+    padding: 4px 0;
+    color: white;
+}
+#header .user-links {
+    float: left;
     font: 14px/1.2 "Luxi Sans", "Lucida Grande", "Hiragino Sans GB", sans-serif;
     padding: 4px 8px;
     background: darken(@darkColor, 2%);
@@ -61,10 +69,12 @@ body {
     border-top-color: darken(@darkColor, 4%);
     border-bottom-color: darken(@darkColor, 8%);
     box-shadow: 0 1px 0 lighten(@darkColor, 6%) inset;
-    text-shadow: 1px 1px 0 #222;
+    a {
+        padding: 1px 4px;
+    }
 }
-#header .nav-button:hover {
-    background: lighten(@darkColor, 1%);
+#header .user-links a:hover {
+    opacity: .8;
 }
 
 #nav a {

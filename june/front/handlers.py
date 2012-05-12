@@ -13,7 +13,17 @@ from june.topic.lib import get_full_topics
 from june.typo import markdown
 
 
-class HomeHandler(UserHandler):
+class LatestHandler(UserHandler):
+    def head(self):
+        pass
+
+    def get(self):
+        title = 'Latest'
+        topics = get_full_topics(Topic.query.order_by('-id')[:20])
+        self.render('topic_list.html', topics=topics, title=title)
+
+
+class PopularHandler(UserHandler):
     def head(self):
         pass
 
@@ -27,16 +37,6 @@ class FollowingHandler(UserHandler):
     @tornado.web.authenticated
     def get(self):
         self.render('following.html')
-
-
-class LatestHandler(UserHandler):
-    def head(self):
-        pass
-
-    def get(self):
-        title = 'Latest'
-        topics = get_full_topics(Topic.query.order_by('-id')[:20])
-        self.render('topic_list.html', topics=topics, title=title)
 
 
 class SiteFeedHandler(JulyHandler):
@@ -101,9 +101,9 @@ class UploadHandler(UserHandler):
 
 
 handlers = [
-    ('/', HomeHandler),
+    ('/', LatestHandler),
     ('/following', FollowingHandler),
-    ('/latest', LatestHandler),
+    ('/popular', PopularHandler),
     ('/preview', PreviewHandler),
     ('/feed', SiteFeedHandler),
     ('/search', SearchHandler),

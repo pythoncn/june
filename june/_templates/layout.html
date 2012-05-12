@@ -6,6 +6,7 @@
         {{ g.header or '' }}
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0" />
         <link rel="stylesheet" href="{{static_url('css/site.css')}}" />
+        <link rel="stylesheet" href="http://fortawesome.github.com/Font-Awesome/assets/css/font-awesome.css" />
         {% block afterstyle %}{% end %}
         <script type="text/javascript">
             {% if current_user %}
@@ -20,24 +21,29 @@
         <header id="header" role="banner">
             <div class="wrapper fn-clear">
                 <h1><a href="/">{{g.sitename}}</a></h1>
-                <nav>
-                    {% if current_user and current_user.username %}
-                    <a href="/member/{{current_user.username}}">{{current_user.username}}</a>
-                    {% elif current_user %}
-                    <a href="/account/setting">{{current_user.email}}</a>
+                <div class="user-box fn-clear">
+                    {% if current_user %}
+                    <div class="user">
+                        <span class="icon-user"></span>
+                        <a href="/member/{{current_user.username}}">{{current_user.username}}</a>
+                    </div>
+                    <nav class="user-links">
+                        <a href="/topic/create" title="Create Topic"><span class="icon-edit"></span></a>
+                        <a href="/account/setting" title="Setting"><span class="icon-cog"></span></a>
+                        <a href="/account/signout" title="Signout"><span class="icon-signout"></span></a>
+                    </nav>
                     {% else %}
-                    <a class="nav-button" href="/account/signin">Signin</a>
+                    <a href="/account/signin" title="Signin"><span class="icon-signin"></span></a>
                     {% end %}
-                </nav>
+                </div>
             </div>
         </header>
         <nav id="nav" role="navigation">
             <div class="wrapper">
-                <a href="/">{{ _("Popular") }}</a>
-                <a href="/latest">{{ _("Latest") }}</a>
-                <a href="/following">{{ _("Following") }}</a>
-                <a href="/nodes">{{ _("Nodes") }}</a>
-                <a href="/topic/create">Add+</a>
+                <a href="/"><span class="icon-home"></span>{{ _("Latest") }}</a>
+                <a href="/popular"><span class="icon-fire"></span>{{ _("Popular") }}</a>
+                <a href="/following"><span class="icon-star"></span>{{ _("Following") }}</a>
+                <a href="/nodes"><span class="icon-bookmark"></span>{{ _("Nodes") }}</a>
             </div>
         </nav>
         <div id="main">
