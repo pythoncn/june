@@ -16,9 +16,8 @@
 }
 .ui-box-title {
     margin: 0;
-    padding: 0 0 6px;
+    padding: 8px;
     border-bottom: 1px solid #dadada;
-    margin-bottom: 12px;
     font: @normalSansFont;
     font-weight: bold;
 }
@@ -43,17 +42,27 @@
     text-align: center;
     border-top: 1px solid #dadada;
 }
-
-.ui-cell {
-    padding: 6px 10px;
-    border-bottom: 1px solid #eee;
+.ui-box-pagination {
+    padding: 10px;
+    a {
+        background: @darkColor;
+        color: #fff;
+        padding: 2px 6px;
+        border-radius: 3px;
+    }
 }
-.ui-you-label {
+.ui-cell {
+    font: 14px/1.6 "Helvetica", "Hiragino Sans GB", sans-serif;
+    position: relative;
+    padding: 6px 10px;
+    border-bottom: 1px solid #ddd;
+}
+.ui-box-label {
     position: absolute;
     top: 6px;
     right: 10px;
     color: #fff;
-    font-size: 10px;
+    font: 10px/1.2 "Luxi Sans", "Lucida Grande", "Hiragino Sans GB", sans-serif;
     background: darken(@darkColor, 10%);
     padding: 2px 6px;
     border-radius: 3px;
@@ -95,6 +104,14 @@
     margin-right: 14px;
     img {
         border-radius: 4px;
+    }
+}
+.ui-small-avatar {
+    position: absolute;
+    top: 36px;
+    left: 38px;
+    img {
+        border-radius: 3px;
     }
 }
 
@@ -154,4 +171,24 @@
     top: 0;
     left: 0;
     background: rgba(0,0,0,0.6);
+}
+
+/* article */
+.ui-cell-header, .ui-cell-footer {
+    color: #999;
+    font-size: 12px;
+    a {
+        color: #666;
+        font-weight: bold;
+    }
+}
+.ui-cell-body {
+    line-height: 1.8;
+    a {
+        color: @darkColor;
+    }
+    h3 {
+        font-size: 18px;
+        font-weight: normal;
+    }
 }

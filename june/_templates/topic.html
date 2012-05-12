@@ -10,11 +10,14 @@
 {% block content %}
 <article class="hentry ui-box" data-id="{{topic.id}}">
     <h3 class="ui-box-title entry-title">{{topic.title}}</h3>
-    {{ markdown(topic.content) }}
+    <div class="ui-box-container entry-content">
+        {{ markdown(topic.content) }}
+    </div>
 </article>
 {% end %}
 
 {% block sidebar %}
+{% module User(topic.user_id) %}
 <div class="ui-box">
     <h3 class="ui-box-title">In Node</h3>
     <div class="ui-box-container">
