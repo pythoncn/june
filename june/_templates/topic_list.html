@@ -7,31 +7,34 @@
     <div class="ui-box-header">
         <a href="/">{{g.sitename}}</a> » {{title}}
     </div>
-    {% for topic in topics %}
-    <div class="ui-cell">
+
+    {% for topic in pagination.datalist %}
+    <div class="ui-cell article">
         <a href="/member/{{topic.user.username}}" class="ui-avatar"><img src="{{topic.user.get_avatar(48)}}" width="48" height="48" /></a>
         {% if topic.replyer %}
         <a href="/member/{{topic.replyer.username}}" class="ui-small-avatar"><img src="{{topic.replyer.get_avatar(24)}}" width="24" height="24" /></a>
         {% end %}
-        <div class="ui-cell-body">
-            <h3 title="{{_("Created at")}} {{topic.created}}"><a href="/topic/{{topic.id}}">{{topic.title}}</a></h3>
-        </div>
-        <div class="ui-cell-footer">
-            by <a href="/member/{{topic.user.username or topic.user.id}}">{{topic.user.username}}</a> •
-            in <a href="/node/{{topic.node.slug}}">{{topic.node.title}}</a> •
-            {{topic.hits or 1}} hits •
-            {% if topic.last_reply_time %}
-            <time datetime="{{xmldatetime(topic.last_reply_time)}}" title="replied">{{topic.last_reply_time}}</time>
-            {% else %}
-            <time datetime="{{xmldatetime(topic.created)}}" title="created">{{topic.created}}</time>
-            {% end %}
+        <a href="{{topiclink(topic)}}" class="reply-count">{{topic.reply_count or 0}}</a>
+        <div class="article fn-wrap">
+            <h3 title="{{_("Created at")}} {{topic.created}}"><a href="{{topiclink(topic)}}">{{topic.title}}</a></h3>
+            <div class="article-meta">
+                by <a href="/member/{{topic.user.username or topic.user.id}}">{{topic.user.username}}</a> •
+                in <a href="/node/{{topic.node.slug}}">{{topic.node.title}}</a> •
+                {% if topic.last_reply_time %}
+                <time datetime="{{xmldatetime(topic.last_reply_time)}}" title="replied">{{timesince(topic.last_reply_time, locale.code)}}</time>
+                {% else %}
+                <time datetime="{{xmldatetime(topic.created)}}" title="created">{{timesince(topic.created, locale.code)}}</time>
+                {% end %}
+                • {{topic.hits or 1}} hits
+            </div>
         </div>
     </div>
     {% end %}
-    <div class="ui-box-pagination">
-        <a href="#">1</a>
-        <a href="#">2</a>
-        <a href="#">3</a>
+
+    <div class="ui-box-footer pagination">
+        {% for p in pagination.page_range %}
+        <a href="?p={{p}}">{{p}}</a>
+        {% end %}
     </div>
 </div>
 {% end %}

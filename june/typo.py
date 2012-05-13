@@ -171,3 +171,15 @@ def timesince(value, locale='en_US'):
     if delta.seconds > 60:
         return _('%s minutes ago') % (delta.seconds / 60)
     return _('just now')
+
+
+def topiclink(topic, perpage=30):
+    url = '/topic/%s' % topic.id
+    num = (topic.reply_count - 1) / perpage + 1
+    if not topic.reply_count:
+        return url
+    if num > 1:
+        url += '?p=%s' % num
+
+    url += '#reply%s' % topic.reply_count
+    return url

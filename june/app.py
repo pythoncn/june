@@ -108,10 +108,12 @@ def main():
     application.register_context('now', datetime.datetime.utcnow)
 
     from june.typo import markdown, xmldatetime, localtime, timesince
+    from june.typo import topiclink
     application.register_filter('markdown', markdown)
     application.register_filter('xmldatetime', xmldatetime)
     application.register_filter('localtime', localtime)
     application.register_filter('timesince', timesince)
+    application.register_filter('topiclink', topiclink)
 
     run_server(application)
 

@@ -4,43 +4,62 @@
 
 {% block afterstyle %}
 <meta name="description" content="{{node.description}}" />
-<link rel="canonical" href="{{context.siteurl}}/node/{{node.slug}}" />
+<link rel="canonical" href="{{g.siteurl}}/node/{{node.slug}}" />
 {{ node.header or '' }}
-<link rel="alternate" type="application/atom+xml" href="/node/{{node.slug}}/feed" title="{{context.sitename}}:{{node.title}}" />
+<link rel="alternate" type="application/atom+xml" href="/node/{{node.slug}}/feed" title="{{g.sitename}}:{{node.title}}" />
 {% end %}
 
-{% block main %}
-<article class="hentry line">
-    <a title="{{node.topic_count}} topics" href="/node/{{node.slug}}" class="count" style="{%if node.bgcolor%}background-color:{{node.bgcolor}}{%end%}{%if node.fgcolor%};color:{{node.fgcolor}}{%end%}">{{node.topic_count}}</a>
-    <h1 class="entry-title"><a href="/node/{{node.slug}}">{{escape(node.title)}}</a></h1>
-    <p class="meta">
-        {{ node.description }}
-    </p>
-    {% if current_user %}
-    <a href="/node/{{node.slug}}/topic" class="ui-btn">{{_("New Topic")}}</a>
-    {% if is_following %}
-    <a href="/node/{{node.slug}}/unfollow" class="js-unfollow ui-btn">{{_("Unfollow")}}</a>
-    {% else %}
-    <a href="/node/{{node.slug}}/follow" class="js-follow ui-btn">{{_("Follow")}}</a>
+{% block content %}
+<div class="ui-box">
+    <div class="ui-box-header">
+        <a href="/">{{g.sitename}}</a> » <a href="/node/{{node.slug}}">{{node.title}}</a>
+    </div>
+    {% for topic in pagination.datalist %}
+    <div class="ui-cell article">
+        <a href="/member/{{topic.user.username}}" class="ui-avatar"><img src="{{topic.user.get_avatar(48)}}" width="48" height="48" /></a>
+        {% if topic.replyer %}
+        <a href="/member/{{topic.replyer.username}}" class="ui-small-avatar"><img src="{{topic.replyer.get_avatar(24)}}" width="24" height="24" /></a>
+        {% end %}
+        <div class="article fn-wrap">
+            <h3 title="{{_("Created at")}} {{topic.created}}"><a href="/topic/{{topic.id}}">{{topic.title}}</a></h3>
+            <div class="article-meta">
+                by <a href="/member/{{topic.user.username or topic.user.id}}">{{topic.user.username}}</a> •
+                {{topic.hits or 1}} hits •
+                {% if topic.last_reply_time %}
+                <time datetime="{{xmldatetime(topic.last_reply_time)}}" title="replied">{{localtime(topic.last_reply_time)}}</time>
+                {% else %}
+                <time datetime="{{xmldatetime(topic.created)}}" title="created">{{localtime(topic.created)}}</time>
+                {% end %}
+            </div>
+        </div>
+    </div>
     {% end %}
-    {% end %}
-</article>
-{% module NodeTopicsModule(node.id) %}
-{% end %}
-
-{% block sidebar %}
-{% if current_user %}
-{% module MemberModule(current_user) %}
-<div class="widget">
-    <h4 class="widget-title">{{ _("Following") }}</h4>
-    <div class="fn-wrap">
-        {% module FollowedNodesModule(current_user.id) %}
+    <div class="ui-box-footer pagination">
+        {% for p in pagination.page_range %}
+        <a href="?p={{p}}">{{p}}</a>
+        {% end %}
     </div>
 </div>
 {% end %}
-{{ node.sidebar or '' }}
-{% end %}
 
-{% block afterjs %}
-{{ node.footer or '' }}
+{% block sidebar %}
+<div class="widget-node ui-box">
+    <div class="ui-box-header" style="
+        {%if node.bgcolor%}background-color:{{node.bgcolor}};{%end%}
+        {%if node.fgcolor%}color:{{node.fgcolor}};{%end%}
+        {%if not node.fgcolor and node.bgcolor%}color:#fff;{%end%}
+        ">
+        <h4>{{node.title}}</h4>
+    </div>
+    <div class="ui-box-container">
+        {{node.description}}
+    </div>
+</div>
+{% if node.sidebar %}
+<div class="ui-box">
+    <div class="ui-box-container">
+        {{node.sidebar}}
+    </div>
+</div>
+{% end %}
 {% end %}

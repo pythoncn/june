@@ -7,36 +7,105 @@ from july.util import import_object
 from july.cache import cache
 from june.account.lib import UserHandler
 from june.account.decorators import require_user
-#from june.node.models import Node
+from june.node.models import Node
 from june.topic.models import Topic
 from june.topic.lib import get_full_topics
 from june.typo import markdown
+from june.util import Pagination
 
 
-class LatestHandler(UserHandler):
+class PageHandler(UserHandler):
+    def get_page(self):
+        page = self.get_argument('p', 1)
+        try:
+            page = int(page)
+        except:
+            return None
+        if page < 0:
+            return None
+        return page
+
+
+class LatestHandler(PageHandler):
     def head(self):
         pass
 
     def get(self):
         title = 'Latest'
-        topics = get_full_topics(Topic.query.order_by('-id')[:20])
-        self.render('topic_list.html', topics=topics, title=title)
+
+        page = self.get_page()
+        if not page:
+            self.send_error(404)
+            return
+        total = Topic.query.count()
+        perpage = 30
+
+        p = Pagination(page, perpage, total)
+        if p.page > p.page_count:
+            self.send_error(404)
+            return
+
+        q = Topic.query.order_by('-last_reply_time')[p.start:p.end]
+        p.datalist = get_full_topics(q)
+        self.render('topic_list.html', title=title, pagination=p)
 
 
-class PopularHandler(UserHandler):
+class PopularHandler(PageHandler):
     def head(self):
         pass
 
     def get(self):
         title = 'Popular'
-        topics = get_full_topics(Topic.query.order_by('-impact')[:20])
-        self.render('topic_list.html', topics=topics, title=title)
+
+        page = self.get_page()
+        if not page:
+            self.send_error(404)
+            return
+        total = Topic.query.count()
+        perpage = 30
+
+        pagination = Pagination(page, perpage, total)
+        if pagination.page > pagination.page_count:
+            self.send_error(404)
+            return
+
+        q = Topic.query.order_by('-impact')[pagination.start:pagination.end]
+        pagination.datalist = get_full_topics(q)
+        self.render('topic_list.html', title=title, pagination=pagination)
 
 
 class FollowingHandler(UserHandler):
     @tornado.web.authenticated
     def get(self):
         self.render('following.html')
+
+
+class NodeHandler(PageHandler):
+    def head(self, slug):
+        pass
+
+    def get(self, slug):
+        page = self.get_page()
+        if not page:
+            self.send_error(404)
+            return
+        node = Node.query.get_first(slug=slug)
+        if not node:
+            self.send_error(404)
+            return
+
+        q = Topic.query.filter_by(node_id=node.id)
+        total = q.count()
+        perpage = 30
+
+        pagination = Pagination(page, perpage, total)
+        if pagination.page > pagination.page_count:
+            self.send_error(404)
+            return
+
+        q = q.order_by('-impact')[pagination.start:pagination.end]
+        pagination.datalist = get_full_topics(q)
+        self.render('node.html', pagination=pagination, node=node)
 
 
 class SiteFeedHandler(JulyHandler):
@@ -108,4 +177,5 @@ handlers = [
     ('/feed', SiteFeedHandler),
     ('/search', SearchHandler),
     ('/upload', UploadHandler),
+    ('/node/(\w+)', NodeHandler),
 ]

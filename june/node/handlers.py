@@ -7,24 +7,6 @@ from june.topic.models import Topic
 from models import Node
 
 
-class NodeHandler(UserHandler):
-    def head(self, slug):
-        pass
-
-    def get(self, slug):
-        node = self.get_node_by_slug(slug)
-        if not node:
-            self.send_error(404)
-            return
-
-        if self.current_user:
-            is_following = self.is_user_follow_node(
-                self.current_user.id, node.id)
-        else:
-            is_following = False
-        self.render('node.html', node=node, is_following=is_following)
-
-
 class FollowNodeHandler(UserHandler):
     @tornado.web.authenticated
     def get(self, slug):
@@ -96,7 +78,6 @@ class CreateTopicHandler(UserHandler):
 
 
 handlers = [
-    ('/(\w+)', NodeHandler),
     ('/(\w+)/create', CreateTopicHandler),
     ('/(\w+)/follow', FollowNodeHandler),
     ('/(\w+)/unfollow', UnfollowNodeHandler),
