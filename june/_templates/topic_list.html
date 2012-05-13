@@ -14,7 +14,9 @@
         {% if topic.replyer %}
         <a href="/member/{{topic.replyer.username}}" class="ui-small-avatar"><img src="{{topic.replyer.get_avatar(24)}}" width="24" height="24" /></a>
         {% end %}
-        <a href="{{topiclink(topic)}}" class="reply-count">{{topic.reply_count or 0}}</a>
+
+        <a href="{{topiclink(topic)}}" class="ui-cell-top-right">{{topic.reply_count or 0}}</a>
+
         <div class="article fn-wrap">
             <h3 title="{{_("Created at")}} {{topic.created}}"><a href="{{topiclink(topic)}}">{{topic.title}}</a></h3>
             <div class="article-meta">

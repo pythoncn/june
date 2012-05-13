@@ -55,6 +55,43 @@
     padding: 2px 6px;
     border-radius: 3px;
 }
+.ui-cell-top-right {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: @darkColor;
+    color: #fff;
+    padding: 2px 6px;
+    font-size: 12px;
+    line-height: 1;
+    border-radius: 0 0 0 6px;
+    &:hover {
+        text-decoration: none;
+        opacity: .8;
+    }
+    &:visited {
+        background: #d3d3d3 !important;
+    }
+}
+
+.ui-cell-bottom-right {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    background: #d3d3d3;
+    font-size: 12px;
+    line-height: 1;
+    border-radius: 6px 0 0 0;
+    padding: 2px 0;
+    a {
+        color: #fff;
+        padding: 2px 6px;
+    }
+    a:hover {
+        text-decoration: none;
+        opacity: .8;
+    }
+}
 
 /* widget-user */
 .widget-user .username {

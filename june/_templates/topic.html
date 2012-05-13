@@ -5,6 +5,12 @@
 {% block afterstyle %}
 <link rel="canonical" href="{{g.siteurl}}/topic/{{topic.id}}" />
 {{ node.header or '' }}
+<style type="text/css">
+    #editor textarea {
+        width: 94%;
+        height: 90px;
+    }
+</style>
 {% end %}
 
 {% block content %}
@@ -12,8 +18,8 @@
     <div class="ui-box-header fn-clear">
         <h3 class="entry-title">{{topic.title}}</h3>
         <div class="entry-vote">
-            <a href="#" class="up-vote"><span class="icon-thumbs-up"></span></a>
-            <a href="#" class="down-vote"><span class="icon-thumbs-down"</span></a>
+            <a href="#" class="up-vote active"><span class="icon-thumbs-up"></span>{{topic.up_count}}</a>
+            <a href="#" class="down-vote"><span class="icon-thumbs-down"></span>{{topic.down_count}}</a>
         </div>
     </div>
     <div class="ui-box-container entry-content">
@@ -38,11 +44,12 @@
     <div class="ui-cell reply fn-clear">
         <a href="/member/{{reply.user.username}}" class="ui-avatar"><img src="{{reply.user.get_avatar(48)}}" width="48" height="48" /></a>
 
-        {% if current_user and current_user.id == reply.user_id %}
-        <a href="#{{reply.id}}" class="reply-delete"><span class="icon-trash"></span></a>
-        {% end %}
-
-        <a href="#{{reply.id}}" class="reply-accept{%if reply.accepted == 's'%} active{%end%}"><span class="icon-ok"></span></a>
+        <div class="ui-cell-bottom-right">
+            {% if current_user and current_user.id == reply.user_id %}
+            <a href="#{{reply.id}}" class="js-delete"><span class="icon-trash"></span></a>
+            {% end %}
+            <a href="#{{reply.id}}" class="js-accept{%if reply.accepted == 's'%} active{%end%}"><span class="icon-ok"></span></a>
+        </div>
 
         <div class="reply-content fn-wrap">
             <div class="reply-meta">
@@ -54,6 +61,21 @@
     </div>
     {% end %}
 </div>
+{% if current_user %}
+<form action="" class="ui-box" method="post">
+    <div class="ui-box-container">
+        <div id="editor">
+            <div id="editor-pannel">
+                <a href="#" class="js-write current" tabindex="-1">{{ _("Write") }}</a>
+                <a href="#" class="js-preview" tabindex="-1">{{ _("Preview") }}</a>
+                <a href="#" class="js-upload" tabindex="-1">{{ _("Upload") }}</a>
+            </div>
+            <textarea name="content" class="fm-text" required></textarea>
+        </div>
+        <button type="submit" class="ui-btn">{{_("Post")}}</button>
+    </div>
+</form>
+{% end %}
 {% end %}
 
 {% block sidebar %}
