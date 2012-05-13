@@ -14,32 +14,27 @@
         box-shadow: 1px 0 3px #ccc;
     }
 }
-.ui-box-title {
-    margin: 0;
-    padding: 8px;
-    border-bottom: 1px solid #dadada;
-    font: @normalSansFont;
-    font-weight: bold;
-}
 .ui-box-container {
     padding: 6px 10px 14px;
 }
 .ui-box-header {
     position: relative;
     padding: 6px 10px;
+    border-bottom: 1px solid #dadada;
+    border-radius: 3px 3px 0 0;
+    font: 14px/1.6 "Helvetica", arial, sans-serif;
+}
+.ui-box-header.primary {
     background: @darkColor;
     .vertical-linear-gradient(lighten(@darkColor, 15%), darken(@darkColor, 8%));
     border-bottom: 1px solid darken(@darkColor, 10%);
     color: lighten(@darkColor, 50%);
-    border-radius: 3px 3px 0 0;
-    font: 14px/1.6 "Helvetica", arial, sans-serif;
     a {
         color: lighten(@darkColor, 50%);
     }
 }
 .ui-box-footer {
     padding: 10px;
-    text-align: center;
     border-top: 1px solid #dadada;
 }
 .ui-box-pagination {
@@ -69,8 +64,11 @@
 }
 
 /* widget-user */
-.ui-box .username {
+.widget-user .username {
     color: #fff;
     font-size: 16px;
     text-shadow: 1px 1px 0 darken(@darkColor, 14%);
+}
+.widget-user .ui-box-footer {
+    text-align: center;
 }

@@ -9,9 +9,21 @@
 
 {% block content %}
 <article class="hentry ui-box" data-id="{{topic.id}}">
-    <h3 class="ui-box-title entry-title">{{topic.title}}</h3>
+    <div class="ui-box-header fn-clear">
+        <h3 class="entry-title">{{topic.title}}</h3>
+        <div class="entry-vote">
+            <a href="#" class="up-vote"><span class="icon-thumbs-up"></span></a>
+            <a href="#" class="down-vote"><span class="icon-thumbs-down"</span></a>
+        </div>
+    </div>
     <div class="ui-box-container entry-content">
         {{ markdown(topic.content) }}
+    </div>
+    <div class="ui-box-footer">
+        <div class="entry-meta">
+            <time class="created">{{topic.created}}</time>
+            <time class="updated">{{topic.updated}}</time>
+        </div>
     </div>
 </article>
 {% end %}
@@ -19,9 +31,21 @@
 {% block sidebar %}
 {% module User(topic.user_id) %}
 <div class="ui-box">
-    <h3 class="ui-box-title">In Node</h3>
+    <div class="ui-box-header" style="
+        {%if node.bgcolor%}background-color:{{node.bgcolor}};{%end%}
+        {%if node.fgcolor%}color:{{node.fgcolor}};{%end%}
+        ">
+        <h4>{{node.title}}</h4>
+    </div>
     <div class="ui-box-container">
         {{node.description}}
     </div>
 </div>
+{% if node.sidebar %}
+<div class="ui-box">
+    <div class="ui-box-container">
+        {{node.sidebar}}
+    </div>
+</div>
+{% end %}
 {% end %}
