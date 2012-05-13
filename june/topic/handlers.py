@@ -4,15 +4,37 @@ from june.account.lib import UserHandler
 from june.account.decorators import require_user
 from june.account.models import Member
 from june.node.models import Node
+from june.util import Pagination
 from models import Topic, Reply
+from lib import get_full_replies
 
 
 class TopicHandler(UserHandler):
     def get(self, id):
+        page = self.get_argument('p', 1)
+        try:
+            page = int(page)
+        except:
+            self.send_error(404)
+            return
+        if page < 0:
+            self.send_error(404)
+            return
+
         topic = Topic.query.get_first(id=id)
+        if not topic:
+            self.send_error(404)
+            return
+
+        p = Pagination(page, 50, topic.reply_count)
+        if p.page > p.page_count:
+            self.send_error(404)
+            return
+
         node = Node.query.get_first(id=topic.node_id)
-        user = Member.query.get_first(id=topic.user_id)
-        self.render('topic.html', topic=topic, node=node, user=user)
+        q = Reply.query.filter_by(topic_id=topic.id)[p.start:p.end]
+        p.datalist = get_full_replies(q)
+        self.render('topic.html', topic=topic, node=node, pagination=p)
 
 
 class CreateTopicHandler(UserHandler):

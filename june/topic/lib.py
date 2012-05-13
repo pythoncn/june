@@ -22,3 +22,11 @@ def get_full_topics(topics):
                 topic.replyer = None
             topic.node = nodes[topic.node_id]
             yield topic
+
+
+def get_full_replies(replies):
+    users = get_cache_list(Member, (r.user_id for r in replies), 'member:')
+    for reply in replies:
+        if reply.user_id in users:
+            reply.user = users[reply.user_id]
+            yield reply

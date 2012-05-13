@@ -21,11 +21,39 @@
     </div>
     <div class="ui-box-footer">
         <div class="entry-meta">
-            <time class="created">{{topic.created}}</time>
-            <time class="updated">{{topic.updated}}</time>
+            <time class="created" title="Created" datetime="{{xmldatetime(topic.created)}}">{{localtime(topic.created)}}</time> /
+            <time class="updated" title="Updated" datetime="{{xmldatetime(topic.updated)}}">{{localtime(topic.updated)}}</time>
         </div>
     </div>
 </article>
+
+<div class="replies ui-box">
+    <div class="ui-box-header">
+        {% if topic.last_reply_time%}
+        Last reply at <time datetime="{{xmldatetime(topic.last_reply_time)}}">{{localtime(topic.last_reply_time)}}</time> |
+        {% end %}
+        {{topic.reply_count}} replies
+    </div>
+    {% for reply in pagination.datalist %}
+    <div class="ui-cell reply fn-clear">
+        <a href="/member/{{reply.user.username}}" class="ui-avatar"><img src="{{reply.user.get_avatar(48)}}" width="48" height="48" /></a>
+
+        {% if current_user and current_user.id == reply.user_id %}
+        <a href="#{{reply.id}}" class="reply-delete"><span class="icon-trash"></span></a>
+        {% end %}
+
+        <a href="#{{reply.id}}" class="reply-accept{%if reply.accepted == 's'%} active{%end%}"><span class="icon-ok"></span></a>
+
+        <div class="reply-content fn-wrap">
+            <div class="reply-meta">
+                <a href="/member/{{reply.user.username}}">{{reply.user.username}}</a> reply at
+                <time datetime="{{xmldatetime(reply.created)}}">{{timesince(reply.created, locale.code)}}</time>
+            </div>
+            {{markdown(reply.content)}}
+        </div>
+    </div>
+    {% end %}
+</div>
 {% end %}
 
 {% block sidebar %}
@@ -34,6 +62,7 @@
     <div class="ui-box-header" style="
         {%if node.bgcolor%}background-color:{{node.bgcolor}};{%end%}
         {%if node.fgcolor%}color:{{node.fgcolor}};{%end%}
+        {%if not node.fgcolor and node.bgcolor%}color:#fff;{%end%}
         ">
         <h4>{{node.title}}</h4>
     </div>

@@ -131,7 +131,7 @@ class HighlightRender(m.HtmlRenderer, m.SmartyPants):
         return highlight(text, lexer, formatter)
 
     def postprocess(self, text):
-        text = re.sub(r'@(\w+)', r'<a href="/member/\1">\1</a>', text)
+        text = re.sub(r'@(\w+)', r'@<a href="/member/\1">\1</a>', text)
         return emoji(text)
 
 

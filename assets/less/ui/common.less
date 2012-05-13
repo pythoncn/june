@@ -20,6 +20,7 @@
     border-right: 1px solid #ddd;
     width: 33%;
     font-size: 12px;
+    line-height: 1.2;
     text-align: center;
     color: lighten(@darkColor, 30%);
     font-family: "Luxi Sans", "Lucida Grande", "Hiragino Sans GB", sans-serif;
@@ -101,6 +102,7 @@
         background: lighten(@darkColor, 10%);
     }
 }
+/* reply */
 .reply-count {
     position: absolute;
     top: 0;
@@ -118,4 +120,44 @@
 }
 .reply-count:visited {
     background: #d3d3d3 !important;
+}
+.replies .ui-box-header {
+    color: #999;
+}
+.reply-meta {
+    font-size: 12px;
+    color: #999;
+}
+.reply p {
+    margin: 4px 0 14px;
+}
+.reply-delete, .reply-accept {
+    position: absolute;
+    right: 0;
+    background: @darkColor;
+    color: #fff;
+    padding: 2px 8px;
+    font-size: 12px;
+    line-height: 1;
+    &:hover {
+        background: lighten(@darkColor, 10%);
+    }
+}
+.reply-delete {
+    bottom: 0;
+    border-radius: 6px 0 0 0;
+}
+.reply-accept {
+    top: 0;
+    border-radius: 0 0 0 6px;
+}
+.reply .reply-delete, .reply .reply-accept {
+    visibility: hidden;
+    text-decoration: none;
+}
+.reply:hover .reply-delete, .reply:hover .reply-accept {
+    visibility: visible;
+}
+.reply .reply-accept.active {
+    visibility: visible;
 }
