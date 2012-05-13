@@ -15,8 +15,8 @@ from july import JulyApplication, run_server
 
 _first_run = True
 if _first_run:
-    options.debug = True
-    options.autoescape = None
+    define('debug', True, type=bool)
+    define('autoescape', None)
 
     # site config
     define('sitename', 'June', type=str)
@@ -107,9 +107,11 @@ def main():
     import datetime
     application.register_context('now', datetime.datetime.utcnow)
 
-    from june.typo import markdown, xmldatetime
+    from june.typo import markdown, xmldatetime, localtime, timesince
     application.register_filter('markdown', markdown)
     application.register_filter('xmldatetime', xmldatetime)
+    application.register_filter('localtime', localtime)
+    application.register_filter('timesince', timesince)
 
     run_server(application)
 

@@ -1,5 +1,7 @@
 import re
+import datetime
 import misaka as m
+import tornado.locale
 from tornado import escape
 from tornado.options import options
 from pygments import highlight
@@ -147,3 +149,25 @@ def markdown(text, noclasses=False):
 
 def xmldatetime(value):
     return value.strftime('%Y-%m-%dT%H:%M:%SZ')
+
+
+def localtime(value, timezone=8):
+    value = value + datetime.timedelta(hours=timezone)
+    return value.strftime('%Y-%m-%d %H:%M')
+
+
+def timesince(value, locale='en_US'):
+    _ = tornado.locale.get(locale).translate
+    now = datetime.datetime.utcnow()
+    delta = now - value
+    if delta.days > 365:
+        return _('%s years ago') % (delta.days / 365)
+    if delta.days > 30:
+        return _('%s months ago') % (delta.days / 30)
+    if delta.days > 0:
+        return _('%s days ago') % delta.days
+    if delta.seconds > 3600:
+        return _('%s hours ago') % (delta.seconds / 3600)
+    if delta.seconds > 60:
+        return _('%s minutes ago') % (delta.seconds / 60)
+    return _('just now')
