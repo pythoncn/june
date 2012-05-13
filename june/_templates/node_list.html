@@ -2,27 +2,26 @@
 
 {% block subtitle %}{{ _("Nodes") }}{% end %}
 
-{% block main %}
-<ol class="line nodes">
-    {% for node in nodes %}
-    <li style="{%if node.bgcolor%}border-color:{{node.bgcolor}}{% end %}">
-        <a href="/node/{{node.slug}}#{{node.topic_count}}" class="count" title="{{node.topic_count}} topics">{{node.topic_count}}</a>
-        <div class="content">
-            <h2 class="title"><a href="/node/{{node.slug}}#{{node.topic_count}}">{{escape(node.title)}}</a></h2>
-            <div class="meta">{{node.description}}</div>
-        </div>
-    </li>
-    {% end %}
-</ol>
+{% block content %}
+<div class="ui-box">
+    <div class="ui-box-header">
+        <h3>{{ _("All Nodes")}}</h3>
+    </div>
+    <div class="ui-box-container">
+        {% for node in nodes %}
+        <a href="/node/{{node.slug}}">{{escape(node.title)}}</a>
+        {% end %}
+    </div>
+</div>
 {% end %}
 
 {% block sidebar %}
 {% if current_user %}
-{% module MemberModule(current_user) %}
-<div class="widget">
-    <h4 class="widget-title">{{ _("Following") }}</h4>
-    <div class="fn-wrap">
-        {% module FollowedNodesModule(current_user.id) %}
+<div class="ui-box">
+    <div class="ui-box-header">
+        <h4>{{ _("Following") }}</h4>
+    </div>
+    <div class="ui-box-container">
     </div>
 </div>
 {% end %}
