@@ -1,44 +1,28 @@
-@darkColor: #575D60;
-@blue: #599bdc;
-@serifFont: ~'16px/1.62 Georgia, 'Xin Gothic', 'PT Sans', 'Hiragino Sans GB', 'Helvetica Neue', Helvetica, Arial, sans-serif';
-@smallSansFont: ~'12px/1.2 "Luxi Sans", "Lucida Grande", "Hiragino Sans GB", sans-serif';
-@normalSansFont: ~'14px/1.2 "Luxi Sans", "Lucida Grande", "Hiragino Sans GB", sans-serif';
+@import "util/variables";
 
 @import "lib/base";
 @import "lib/function";
+
 @import "ui/common";
+@import "ui/box";
 @import "ui/alerts";
 @import "ui/form";
+@import "ui/button";
+@import "ui/typo";
 
-/* layout */
+@import "util/define";
+@import "util/layout";
+
+/* reset */
+a {
+    color: @darkColor;
+}
 body {
     font: @normalSansFont;
 }
 
-.wrapper {
-    margin: 0 auto;
-    max-width: 960px;
-    padding: 6px 14px;
-}
 
-@media screen and (max-width: 480px) {
-    .wrapper {
-        padding: 6px 0;
-    }
-}
-
-#header {
-    background-color: @darkColor;
-    border-bottom: 1px solid darken(@darkColor, 5%);
-    text-shadow: 1px 1px 0 #222;
-}
-
-#nav {
-    background-color: darken(@darkColor, 4%);
-    border-top: 1px solid darken(@darkColor, 8%);
-    text-align: center;
-}
-
+/* header */
 #header a, #nav a {
     color: #fff;
     text-decoration: none;
@@ -86,34 +70,7 @@ body {
     background: @darkColor;
 }
 
-#main {
-    min-height: 800px;
-    background: url("../img/main_bg.gif");
-}
-
-#content {
-    float: left;
-    width: 64%;
-    margin-right: 1%;
-}
-#sidebar {
-    float: left;
-    width: 34%;
-}
-@media screen and (max-width: 650px) {
-    #content, #sidebar {
-        float: none;
-        width: 100%;
-        margin: 0;
-    }
-}
-
-#footer {
-    color: lighten(@darkColor, 20%);
-    font: @smallSansFont;
-    border-top: 1px solid #ccc;
-    padding: 10px 0 5px;
-}
+/* footer */
 #footer a {
     color: lighten(@darkColor, 20%);
     font-weight: bold;
@@ -121,11 +78,4 @@ body {
 #footer p {
     margin: 0;
     padding: 0;
-}
-
-/* widget */
-.ui-box .username {
-    color: #fff;
-    font-size: 16px;
-    text-shadow: 1px 1px 0 darken(@darkColor, 14%);
 }
