@@ -9,28 +9,7 @@
     </div>
 
     {% for topic in pagination.datalist %}
-    <div class="ui-cell article">
-        <a href="/member/{{topic.user.username}}" class="ui-avatar"><img src="{{topic.user.get_avatar(48)}}" width="48" height="48" /></a>
-        {% if topic.replyer %}
-        <a href="/member/{{topic.replyer.username}}" class="ui-small-avatar"><img src="{{topic.replyer.get_avatar(24)}}" width="24" height="24" /></a>
-        {% end %}
-
-        <a href="{{topiclink(topic)}}" class="ui-cell-top-right">{{topic.reply_count or 0}}</a>
-
-        <div class="article fn-wrap">
-            <h3 title="{{_("Created at")}} {{topic.created}}"><a href="{{topiclink(topic)}}">{{topic.title}}</a></h3>
-            <div class="article-meta">
-                by <a href="/member/{{topic.user.username or topic.user.id}}">{{topic.user.username}}</a> •
-                in <a href="/node/{{topic.node.slug}}">{{topic.node.title}}</a> •
-                {% if topic.last_reply_time %}
-                <time datetime="{{xmldatetime(topic.last_reply_time)}}" title="replied">{{timesince(topic.last_reply_time, locale.code)}}</time>
-                {% else %}
-                <time datetime="{{xmldatetime(topic.created)}}" title="created">{{timesince(topic.created, locale.code)}}</time>
-                {% end %}
-                • {{topic.hits or 1}} hits
-            </div>
-        </div>
-    </div>
+    {% module Template("module/topic_cell.html", topic=topic) %}
     {% end %}
 
     <div class="ui-box-footer pagination">
@@ -42,4 +21,25 @@
 {% end %}
 
 {% block sidebar %}
+
+{% if current_user %}
+<div class="ui-box">
+    <div class="ui-box-header">
+        <h4>Following Nodes</h4>
+    </div>
+    <div class="ui-box-container">
+        {% module FollowingNodes(current_user.id) %}
+    </div>
+</div>
+{% end %}
+
+<div class="ui-box">
+    <div class="ui-box-header">
+        <h4>Recent Nodes</h4>
+    </div>
+    <div class="ui-box-container">
+        {% module RecentAddNodes() %}
+    </div>
+</div>
+
 {% end %}

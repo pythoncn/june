@@ -1,10 +1,10 @@
 import datetime
 import tornado.web
+from tornado.web import UIModule
 from july import JulyHandler, JulyApp
-from july.util import ObjectDict
 from june.account.lib import UserHandler
 from june.topic.models import Topic
-from models import Node
+from models import FollowNode, Node
 
 
 class FollowNodeHandler(UserHandler):
@@ -67,21 +67,31 @@ class NodeFeedHandler(JulyHandler):
         self.write(html)
 
 
-class CreateTopicHandler(UserHandler):
-    def get(self, slug):
-        node = Node.query.filter_by(slug=slug).first()
-        if not node:
-            self.send_error(404)
-            return
-        self.render('topic_form.html', title='Create', node=node,
-                    topic=ObjectDict())
-
-
-handlers = [
-    ('/(\w+)/create', CreateTopicHandler),
+app_handlers = [
     ('/(\w+)/follow', FollowNodeHandler),
     ('/(\w+)/unfollow', UnfollowNodeHandler),
     ('/(\w+)/feed', NodeFeedHandler),
 ]
 
-node_app = JulyApp('node', __name__, handlers=handlers)
+
+class FollowingNodes(UIModule):
+    def render(self, user_id):
+        fs = FollowNode.query.filter_by(user_id=user_id).values('node_id')
+        node_ids = (f[0] for f in fs)
+        nodes = Node.query.filter_by(id__in=node_ids).all()
+        return self.render_string('module/node_list.html', nodes=nodes)
+
+
+class RecentAddNodes(UIModule):
+    def render(self):
+        nodes = Node.query.order_by('-id')[:20]
+        return self.render_string('module/node_list.html', nodes=nodes)
+
+
+app_modules = {
+    'FollowingNodes': FollowingNodes,
+    'RecentAddNodes': RecentAddNodes,
+}
+
+node_app = JulyApp('node', __name__, handlers=app_handlers,
+                   ui_modules=app_modules)

@@ -4,10 +4,12 @@
 
 {% block content %}
 <div class="ui-box">
-    <h3 class="ui-box-title">{{ _("Choose a node") }}</h3>
-    <div class="wrapper nodes">
+    <div class="ui-box-header">
+        <h3>{{ _("Choose a node") }}</h3>
+    </div>
+    <div class="ui-box-container nodes">
         {% for node in nodes %}
-        <a class="node" href="/node/{{node.slug}}/create" style="{%if node.bgcolor%}background-color:{{node.bgcolor}}{% end %}{%if node.fgcolor%};color:{{node.fgcolor}}{%end%}">{{node.title}}</a>
+        <a class="node" href="/node/{{node.slug}}/create">{{node.title}}</a>
         {% end %}
     </div>
 </div>

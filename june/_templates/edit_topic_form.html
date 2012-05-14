@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block subtitle %}{{ _(title) }}{% end %}
+{% block subtitle %}{{ _("Edit Topic") }}{% end %}
 
 {% block afterstyle %}
 <style type="text/css">
@@ -43,7 +43,7 @@
     <form action="" method="post" class="ui-box-container">
         {{ xsrf_form_html() }}
         <div class="fm-item fm-required">
-            <input type="text" class="fm-text" name="title" value="{{topic.title or ""}}" placeholder="{{_('Title')}}" required/>
+            <input type="text" class="fm-text" name="title" value="{{topic.title}}" placeholder="{{_('Title')}}" required/>
         </div>
         <div id="editor" class="fm-item">
             <div id="editor-pannel">
@@ -51,11 +51,11 @@
                 <a href="#" class="js-preview" tabindex="-1">{{ _("Preview") }}</a>
                 <a href="#" class="js-upload" tabindex="-1">{{ _("Upload") }}</a>
             </div>
-            <textarea name="content" class="fm-text" required>{% if topic %}{{topic.content or ""}}{% end %}</textarea>
+            <textarea name="content" class="fm-text" required>{{topic.content}}</textarea>
         </div>
         <div>
             <button type="submit" class="ui-btn">{{_("Save")}}</button>
-            {% if topic %}<a class="ui-btn" href="/topic/{{topic.id}}">{{ _("Cancel") }}</a>{% end %}
+            <a href="/topic/{{topic.id}}" class="ui-btn">{{_("Cancel")}}</a>
         </div>
     </form>
 </div>
