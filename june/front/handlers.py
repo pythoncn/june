@@ -7,7 +7,7 @@ from july.util import import_object
 from july.cache import cache
 from june.account.lib import UserHandler
 from june.account.decorators import require_user
-from june.node.models import Node
+from june.node.models import FollowNode, Node
 from june.topic.models import Topic
 from june.topic.lib import get_full_topics
 from june.typo import markdown
@@ -64,20 +64,42 @@ class PopularHandler(PageHandler):
         total = Topic.query.count()
         perpage = 30
 
-        pagination = Pagination(page, perpage, total)
-        if pagination.page > pagination.page_count:
+        p = Pagination(page, perpage, total)
+        if p.page > p.page_count:
             self.send_error(404)
             return
 
-        q = Topic.query.order_by('-impact')[pagination.start:pagination.end]
-        pagination.datalist = get_full_topics(q)
-        self.render('topic_list.html', title=title, pagination=pagination)
+        q = Topic.query.order_by('-impact')[p.start:p.end]
+        p.datalist = get_full_topics(q)
+        self.render('topic_list.html', title=title, pagination=p)
 
 
-class FollowingHandler(UserHandler):
+class FollowingHandler(PageHandler):
     @tornado.web.authenticated
     def get(self):
-        self.render('following.html')
+        title = 'Popular'
+
+        page = self.get_page()
+        if not page:
+            self.send_error(404)
+            return
+
+        user_id = self.current_user.id
+        fs = FollowNode.query.filter_by(user_id=user_id).values('node_id')
+        node_ids = (f[0] for f in fs)
+        q = Topic.query.filter_by(node_id__in=node_ids)
+
+        total = q.count()
+        perpage = 30
+
+        p = Pagination(page, perpage, total)
+        if p.page > p.page_count:
+            self.send_error(404)
+            return
+
+        q = q.order_by('-impact')[p.start:p.end]
+        p.datalist = get_full_topics(q)
+        self.render('topic_list.html', title=title, pagination=p)
 
 
 class NodeHandler(PageHandler):
@@ -98,14 +120,14 @@ class NodeHandler(PageHandler):
         total = q.count()
         perpage = 30
 
-        pagination = Pagination(page, perpage, total)
-        if pagination.page > pagination.page_count:
+        p = Pagination(page, perpage, total)
+        if p.page > p.page_count:
             self.send_error(404)
             return
 
-        q = q.order_by('-impact')[pagination.start:pagination.end]
-        pagination.datalist = get_full_topics(q)
-        self.render('node.html', pagination=pagination, node=node)
+        q = q.order_by('-impact')[p.start:p.end]
+        p.datalist = get_full_topics(q)
+        self.render('node.html', p=p, node=node)
 
 
 class SiteFeedHandler(JulyHandler):
