@@ -17,7 +17,7 @@ def get_full_topics(topics):
         if topic.user_id in users and topic.node_id in nodes:
             topic.user = users[topic.user_id]
             if topic.last_reply_by:
-                topic.replyer = users[topic.user_id]
+                topic.replyer = users[topic.last_reply_by]
             else:
                 topic.replyer = None
             topic.node = nodes[topic.node_id]

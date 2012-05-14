@@ -84,24 +84,9 @@
 {% end %}
 
 {% block sidebar %}
+
 {% module User(topic.user_id) %}
-<div class="ui-box">
-    <div class="ui-box-header" style="
-        {%if node.bgcolor%}background-color:{{node.bgcolor}};{%end%}
-        {%if node.fgcolor%}color:{{node.fgcolor}};{%end%}
-        {%if not node.fgcolor and node.bgcolor%}color:#fff;{%end%}
-        ">
-        <h4>{{node.title}}</h4>
-    </div>
-    <div class="ui-box-container">
-        {{node.description}}
-    </div>
-</div>
-{% if node.sidebar %}
-<div class="ui-box">
-    <div class="ui-box-container">
-        {{node.sidebar}}
-    </div>
-</div>
-{% end %}
+
+{% module Node(node=node) %}
+
 {% end %}

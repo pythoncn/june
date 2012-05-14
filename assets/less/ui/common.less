@@ -1,6 +1,9 @@
 .ui-avatar {
     float: left;
     margin-right: 14px;
+    &:hover {
+        opacity: 0.8;
+    }
     img {
         border-radius: 4px;
     }
@@ -9,6 +12,9 @@
     position: absolute;
     top: 36px;
     left: 38px;
+    &:hover {
+        opacity: 0.8;
+    }
     img {
         border-radius: 3px;
     }
@@ -115,4 +121,16 @@
 }
 .reply p {
     margin: 4px 0 14px;
+}
+.node {
+    display: inline-block;
+    padding: 2px 12px;
+    margin: 3px;
+    color: white;
+    background-color: rgba(0,0,0,0.2);
+    border-radius: 3px;
+    &:hover {
+        opacity: 0.8;
+        text-decoration: none;
+    }
 }

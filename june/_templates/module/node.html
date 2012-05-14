@@ -1,0 +1,29 @@
+<div class="widget-node ui-box">
+    <div class="ui-box-header" style="
+        {%if node.bgcolor%}background-color:{{node.bgcolor}};{%end%}
+        {%if node.fgcolor%}color:{{node.fgcolor}};{%end%}
+        {%if not node.fgcolor and node.bgcolor%}color:#fff;{%end%}
+        ">
+        <h4>{{node.title}}</h4>
+    </div>
+    <div class="ui-box-container">
+        {{node.description}}
+    </div>
+    <div class="ui-box-footer">
+        <a href="/node/{{node.slug}}/create" class="ui-btn">Create</a>
+        {% if following %}
+        <a href="#" class="ui-btn">Unfollow</a>
+        {% else %}
+        <a href="#" class="ui-btn">Follow</a>
+        {% end %}
+        <a href="/node/{{node.slug}}/feed" class="ui-btn">Subscribe</a>
+    </div>
+</div>
+
+{% if node.sidebar %}
+<div class="ui-box">
+    <div class="ui-box-container">
+        {{node.sidebar}}
+    </div>
+</div>
+{% end %}

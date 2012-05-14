@@ -74,7 +74,21 @@ app_handlers = [
 ]
 
 
-class FollowingNodes(UIModule):
+class NodeModule(UIModule):
+    def render(self, node):
+        user = self.handler.current_user
+        if not user:
+            following = False
+        elif FollowNode.query.get_first(user_id=user.id, node_id=node.id):
+            following = True
+        else:
+            following = False
+
+        return self.render_string('module/node.html', node=node,
+                                  following=following)
+
+
+class FollowingNodesModule(UIModule):
     def render(self, user_id):
         fs = FollowNode.query.filter_by(user_id=user_id).values('node_id')
         node_ids = (f[0] for f in fs)
@@ -82,15 +96,16 @@ class FollowingNodes(UIModule):
         return self.render_string('module/node_list.html', nodes=nodes)
 
 
-class RecentAddNodes(UIModule):
+class RecentAddNodesModule(UIModule):
     def render(self):
         nodes = Node.query.order_by('-id')[:20]
         return self.render_string('module/node_list.html', nodes=nodes)
 
 
 app_modules = {
-    'FollowingNodes': FollowingNodes,
-    'RecentAddNodes': RecentAddNodes,
+    'Node': NodeModule,
+    'FollowingNodes': FollowingNodesModule,
+    'RecentAddNodes': RecentAddNodesModule,
 }
 
 node_app = JulyApp('node', __name__, handlers=app_handlers,
