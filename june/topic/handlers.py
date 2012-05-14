@@ -61,12 +61,7 @@ class CreateNodeTopicHandler(UserHandler):
         if not node:
             self.send_error(404)
             return
-        if not self._check_permission(node):
-            self.flash_message(
-                "You have no permission to create a topic in this node",
-                "warn"
-            )
-
+        self._check_permission(node)
         self.render('create_topic_form.html', node=node)
 
     @require_user
@@ -82,10 +77,6 @@ class CreateNodeTopicHandler(UserHandler):
             self.render('create_topic_form.html', node=node)
             return
         if not self._check_permission(node):
-            self.flash_message(
-                "You have no permission to create a topic in this node",
-                "warn"
-            )
             self.render('create_topic_form.html', node=node)
             return
         #: avoid double submit
@@ -113,14 +104,67 @@ class CreateNodeTopicHandler(UserHandler):
         user = self.current_user
         if user.role > 9:
             return True
-        if user.reputation < node.limit_reputation:
+        if user.reputation < node.limit_reputation or \
+           user.role < node.limit_role:
+            self.flash_message(
+                "You have no permission to create a topic in this node",
+                "warn"
+            )
             return False
-        return user.role >= node.limit_role
+        return True
+
+
+class EditTopicHandler(UserHandler):
+    @require_user
+    def get(self, id):
+        topic = Topic.query.get_first(id=id)
+        if not topic:
+            self.send_error(404)
+            return
+        self._check_permission(topic)
+        self.render('edit_topic_form.html', topic=topic)
+
+    @require_user
+    def post(self, id):
+        topic = Topic.query.get_first(id=id)
+        if not topic:
+            self.send_error(404)
+            return
+        title = self.get_argument('title', None)
+        content = self.get_argument('content', None)
+        if not (title and content):
+            self.flash_message('Please fill the required fields', 'error')
+            self.render('edit_topic_form.html', topic=topic)
+            return
+        if not self._check_permission(topic):
+            self.render('edit_topic_form.html', topic=topic)
+            return
+
+        #TODO topic log
+
+        topic.title = title
+        topic.content = content
+        db.master.add(topic)
+        db.master.commit()
+
+        url = '/topic/%s' % topic.id
+        self.redirect(url)
+
+    def _check_permission(self, topic):
+        user = self.current_user
+        if user.role > 9 or topic.user_id == user.id:
+            return True
+        self.flash_message(
+            "You have no permission to edit this topic",
+            "warn"
+        )
+        return False
 
 
 app_handlers = [
     ('/create', CreateTopicHandler),
     ('/(\d+)', TopicHandler),
+    ('/(\d+)/edit', EditTopicHandler),
 ]
 
 
