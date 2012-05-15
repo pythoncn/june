@@ -11,7 +11,8 @@ except ImportError:
     site.addsitedir(ROOTDIR)
     print('Development of june')
 from tornado.options import define, options
-from july import JulyApplication, run_server
+from july.app import JulyApplication
+from july.web import run_server
 
 _first_run = True
 if _first_run:

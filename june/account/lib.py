@@ -2,7 +2,7 @@ import logging
 import urllib
 from tornado.auth import httpclient
 from tornado.options import options
-from july import JulyHandler
+from july.web import JulyHandler
 from models import Member
 
 

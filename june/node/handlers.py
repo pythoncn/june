@@ -1,7 +1,8 @@
 import datetime
 import tornado.web
 from tornado.web import UIModule
-from july import JulyHandler, JulyApp
+from july.web import JulyHandler
+from july.app import JulyApp
 from june.account.lib import UserHandler
 from june.topic.models import Topic
 from models import FollowNode, Node

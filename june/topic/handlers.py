@@ -2,7 +2,7 @@ import hashlib
 from datetime import datetime
 from tornado.web import UIModule, authenticated
 from tornado.escape import utf8
-from july import JulyApp
+from july.app import JulyApp
 from july.cache import cache
 from july.database import db
 from june.account.lib import UserHandler

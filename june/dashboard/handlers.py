@@ -1,5 +1,5 @@
 from tornado.web import URLSpec as url
-from july import JulyApp
+from july.app import JulyApp
 from july.util import ObjectDict
 from july.database import db
 from july.cache import cache
