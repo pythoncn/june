@@ -7,14 +7,14 @@
 
     <li id="reply-{{index}}"{%if reply.accepted and reply.accepted == 'y'%} class="accepted"{%end%} data-id="{{reply.id}}">
     {% set user = users[reply.user_id] %}
-    <a class="avatar" href="/member/{{user.username}}" tabindex="-1" title="{{user.username}}"><img src="{{user.get_avatar(36)}}" width="36" height="36" /></a>
+    <a class="avatar" href="/~{{user.username}}" tabindex="-1" title="{{user.username}}"><img src="{{user.get_avatar(36)}}" width="36" height="36" /></a>
     <div class="content">
         <article>
             {{ markdown(reply.content) }}
         </article>
         <div class="meta">
             #{{index}}
-            <a href="/member/{{user.username}}">{{user.username}}</a> posted
+            <a href="/~{{user.username}}">{{user.username}}</a> posted
             at <time class="updated" datetime="{{xmldatetime(reply.created)}}">{{reply.created.strftime("%b %d, %Y %H:%M")}}</time>
         </div>
     </div>

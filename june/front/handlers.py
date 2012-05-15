@@ -5,10 +5,11 @@ from tornado.options import options
 from july import JulyHandler
 from july.util import import_object
 from july.cache import cache
+from june.account.models import Member
 from june.account.lib import UserHandler
 from june.account.decorators import require_user
 from june.node.models import FollowNode, Node
-from june.topic.models import Topic
+from june.topic.models import Topic, Reply
 from june.topic.lib import get_full_topics
 from june.typo import markdown
 from june.util import Pagination
@@ -130,6 +131,39 @@ class NodeHandler(PageHandler):
         self.render('node.html', pagination=p, node=node)
 
 
+class MemberHandler(PageHandler):
+    def get(self, username):
+        page = self.get_page()
+        if not page:
+            self.send_error(404)
+            return
+
+        user = Member.query.get_first(username=username)
+        if not user:
+            self.send_error(404)
+            return
+        q = Topic.query.filter_by(user_id=user.id)
+        total = q.count()
+        perpage = 30
+
+        p = Pagination(page, perpage, total)
+        if p.page > p.page_count:
+            self.send_error(404)
+            return
+
+        q = q.order_by('-impact')[p.start:p.end]
+        p.datalist = get_full_topics(q)
+
+        replies = Reply.query.filter_by(user_id=user.id).order_by('-id')[:20]
+
+        self.render('member.html', pagination=p, user=user, replies=replies)
+
+
+class RedirectMemberHandler(JulyHandler):
+    def get(self, username):
+        self.redirect('/~%s' % username)
+
+
 class SiteFeedHandler(JulyHandler):
     def get_template_path(self):
         return os.path.join(os.path.dirname(__file__), '_templates')
@@ -200,4 +234,6 @@ handlers = [
     ('/search', SearchHandler),
     ('/upload', UploadHandler),
     ('/node/(\w+)', NodeHandler),
+    ('/~(\w+)', MemberHandler),
+    ('/member/(\w+)', RedirectMemberHandler),
 ]
