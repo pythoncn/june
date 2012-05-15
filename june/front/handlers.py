@@ -127,7 +127,7 @@ class NodeHandler(PageHandler):
 
         q = q.order_by('-impact')[p.start:p.end]
         p.datalist = get_full_topics(q)
-        self.render('node.html', p=p, node=node)
+        self.render('node.html', pagination=p, node=node)
 
 
 class SiteFeedHandler(JulyHandler):
