@@ -122,7 +122,7 @@ class HighlightRender(m.HtmlRenderer, m.SmartyPants):
     def block_code(self, text, lang):
         if not lang:
             return '\n<pre><code>%s</code></pre>\n' %\
-                    escape.escape_html(text.strip())
+                    escape.xhtml_escape(text.strip())
         lexer = get_lexer_by_name(lang, stripall=True)
         if hasattr(self, '_pygments_options'):
             formatter = HtmlFormatter(**self._pygments_options)

@@ -29,6 +29,7 @@
         <div class="entry-meta">
             <time class="created" title="Created" datetime="{{xmldatetime(topic.created)}}">{{localtime(topic.created)}}</time> /
             <time class="updated" title="Updated" datetime="{{xmldatetime(topic.updated)}}">{{localtime(topic.updated)}}</time>
+            {% if current_user.is_staff %}{{topic.impact}}{% end %}
         </div>
         {% if current_user and current_user.id == topic.user_id %}
         <div class="entry-action">
@@ -62,18 +63,27 @@
                 <a href="/member/{{reply.user.username}}">{{reply.user.username}}</a> reply at
                 <time datetime="{{xmldatetime(reply.created)}}">{{timesince(reply.created, locale.code)}}</time>
             </div>
-            {{markdown(reply.content)}}
+            <div class="content">
+                {{markdown(reply.content)}}
+            </div>
         </div>
     </div>
     {% end %}
+    {% if topic.reply_count %}
     <div class="ui-box-footer pagination">
         {% for p in pagination.page_range %}
         <a href="?p={{p}}">{{p}}</a>
         {% end %}
     </div>
+    {% else %}
+    <div class="ui-box-footer pagination">
+        {{ _("Use your source") }}
+    </div>
+    {% end %}
 </div>
 {% if current_user %}
-<form action="" class="ui-box" method="post">
+<form action="/topic/{{topic.id}}/reply" class="ui-box" method="post">
+    {{ xsrf_form_html() }}
     <div class="ui-box-container">
         <div id="editor">
             <div id="editor-pannel">

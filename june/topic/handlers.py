@@ -1,5 +1,6 @@
 import hashlib
-from tornado.web import UIModule
+from datetime import datetime
+from tornado.web import UIModule, authenticated
 from tornado.escape import utf8
 from july import JulyApp
 from july.cache import cache
@@ -10,7 +11,7 @@ from june.account.models import Member
 from june.node.models import Node
 from june.util import Pagination
 from models import Topic, Reply, Vote
-from lib import get_full_replies
+from lib import get_full_replies, reply_impact_for_topic
 
 
 class TopicHandler(UserHandler):
@@ -102,7 +103,7 @@ class CreateNodeTopicHandler(UserHandler):
 
     def _check_permission(self, node):
         user = self.current_user
-        if user.role > 9:
+        if user.is_admin:
             return True
         if user.reputation < node.limit_reputation or \
            user.role < node.limit_role:
@@ -152,7 +153,7 @@ class EditTopicHandler(UserHandler):
 
     def _check_permission(self, topic):
         user = self.current_user
-        if user.role > 9 or topic.user_id == user.id:
+        if user.is_staff or topic.user_id == user.id:
             return True
         self.flash_message(
             "You have no permission to edit this topic",
@@ -161,10 +162,99 @@ class EditTopicHandler(UserHandler):
         return False
 
 
+class CreateReplyHandler(UserHandler):
+    @require_user
+    def post(self, id):
+        # for topic reply
+        content = self.get_argument('content', None)
+        if not content:
+            self.flash_message('Please fill the required fields', 'error')
+            self.redirect('/topic/%s' % id)
+            return
+
+        topic = Topic.query.get_first(id=id)
+        if not topic:
+            self.send_error(404)
+            return
+        if topic.status == 'delete':
+            self.send_error(404)
+            return
+        if topic.status == 'close':
+            self.send_error(403)
+            return
+        key = hashlib.md5(utf8(content)).hexdigest()
+        url = cache.get(key)
+        # avoid double submit
+        if url:
+            self.redirect(url)
+            return
+
+        user = self.current_user
+
+        #: create reply
+        reply = Reply(topic_id=id, user_id=user.id, content=content)
+
+        #: impact on topic
+        topic.reply_count += 1
+        topic.impact += reply_impact_for_topic(topic, user.reputation)
+
+        #: update topic's last replyer
+        topic.last_reply_by = self.current_user.id
+        topic.last_reply_time = datetime.utcnow()
+
+        db.master.add(reply)
+        db.master.add(topic)
+        db.master.commit()
+
+        num = (topic.reply_count - 1) / 30 + 1
+        url = '/topic/%s' % str(id)
+        if num > 1:
+            url += '?p=%s' % num
+        cache.set(key, url, 100)
+        self.redirect("%s#reply%s" % (url, topic.reply_count))
+
+        #TODO: notifications
+        #TODO: social networks
+
+
+#: /reply/$id
+class ReplyHandler(UserHandler):
+    """ReplyHandler
+
+    - POST: for topic owner to accept a reply.
+    - DELETE: for reply owner to delete a reply.
+    """
+
+    @require_user
+    def post(self, reply_id):
+        #: accept reply
+        pass
+
+    @authenticated
+    def delete(self, reply_id):
+        reply = Reply.query.get_first(id=reply_id)
+        if not reply:
+            self.send_error(404)
+            self.write({'stat': 'fail', 'msg': 'reply not found'})
+            return
+        if self.current_user.is_staff or self.current_user.id == reply.user_id:
+            topic = Topic.query.get_first(id=reply.topic_id)
+            if topic and topic.reply_count:
+                topic.reply_count -= 1
+            db.master.delete(reply)
+            db.master.add(topic)
+            db.master.commit()
+            self.write({'stat': 'ok'})
+            return
+        self.send_error(403)
+        self.write({'stat': 'fail', 'msg': 'permission denied'})
+
+
 app_handlers = [
     ('/create', CreateTopicHandler),
     ('/(\d+)', TopicHandler),
     ('/(\d+)/edit', EditTopicHandler),
+    ('/(\d+)/reply', CreateReplyHandler),
 ]
 
 

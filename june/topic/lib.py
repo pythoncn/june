@@ -1,5 +1,9 @@
+import math
+from datetime import datetime
+from tornado.options import options
 from july.cache import get_cache_list
 from june.account.models import Member
+
 from june.node.models import Node
 
 
@@ -30,3 +34,43 @@ def get_full_replies(replies):
         if reply.user_id in users:
             reply.user = users[reply.user_id]
             yield reply
+
+
+def reply_impact_for_topic(topic, reputation):
+    if reputation < 2:
+        return 0
+    factor = int(options.reply_factor_for_topic)
+    time_factor = int(options.reply_time_factor)
+    time = datetime.utcnow() - topic.created
+    factor += time.days * time_factor
+    return factor * int(math.log(reputation))
+
+
+def up_impact_for_topic(reputation):
+    if reputation < 2:
+        return 0
+    factor = int(options.up_factor_for_topic)
+    return factor * int(math.log(reputation))
+
+
+def down_impact_for_topic(reputation):
+    if reputation < 2:
+        return 0
+    factor = int(options.down_factor_for_topic)
+    return factor * int(math.log(reputation))
+
+
+def up_impact_for_user(reputation):
+    if reputation < 2:
+        return 0
+    factor = int(options.up_factor_for_user)
+    impact = factor * int(math.log(reputation))
+    return min(impact, int(options.up_max_for_user))
+
+
+def down_impact_for_user(reputation):
+    if reputation < 2:
+        return 0
+    factor = int(options.down_factor_for_user)
+    impact = factor * int(math.log(reputation))
+    return min(impact, int(options.down_max_for_user))

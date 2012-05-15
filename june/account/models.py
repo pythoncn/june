@@ -87,6 +87,14 @@ class Member(db.Model):
         verify = hashlib.sha1(salt + raw + options.password_secret).hexdigest()
         return verify == hsh
 
+    @property
+    def is_staff(self):
+        return self.role > 6
+
+    @property
+    def is_admin(self):
+        return self.role > 9
+
 
 class MemberLog(db.Model):
     id = Column(Integer, primary_key=True)
