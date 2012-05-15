@@ -96,12 +96,13 @@ class MemberLog(db.Model):
     ip = Column(String(100))
 
 
-class Notify(db.Model):
+class Notification(db.Model):
     id = Column(Integer, primary_key=True)
     sender = Column(Integer, nullable=False)
     receiver = Column(Integer, nullable=False, index=True)
+
     content = Column(String(400))
-    label = Column(String(200))
-    link = Column(String(400))
+    refer = Column(String(600))
+
     type = Column(String(20), default='reply')
     created = Column(DateTime, default=datetime.utcnow)
