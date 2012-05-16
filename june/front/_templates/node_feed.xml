@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <title><![CDATA[{{ g.sitename }}]]></title>
-    <link href="{{ g.siteurl }}/feed" rel="self" />
-    <link href="{{ g.siteurl }}" />
+    <title><![CDATA[{{ g.sitename }}:{{node.title}}]]></title>
+    <link href="{{ g.siteurl }}/node/{{node.slug}}/feed" rel="self" />
+    <link href="{{ g.siteurl }}/node/{{node.slug}}" />
     <updated>{{xmldatetime(g.now())}}</updated>
     <id>{{ g.siteurl }}/</id>
     {% for topic in topics %}
@@ -13,7 +13,7 @@
         <updated>{{ xmldatetime(topic.updated) }}</updated>
         <published>{{ xmldatetime(topic.created) }}</published>
         <id>{{g.siteurl}}/topic/{{topic.id}}</id>
-        <category scheme="{{g.siteurl}}/node/{{topic.node.slug}}" term="{{topic.node.slug}}" label="{{ topic.node.title}}" />
+        <category scheme="{{g.siteurl}}/node/{{node.slug}}" term="{{node.slug}}" label="{{ node.title}}" />
         <content type="html" xml:base="{{ g.siteurl }}" xml:lang="en">
             <![CDATA[ {{ markdown(topic.content, True) }} ]]>
         </content>

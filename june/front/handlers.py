@@ -190,15 +190,38 @@ class SiteFeedHandler(JulyHandler):
         return os.path.join(os.path.dirname(__file__), '_templates')
 
     def get(self):
-        subtitle = ''
         self.set_header('Content-Type', 'text/xml; charset=utf-8')
         html = cache.get('sitefeed')
         if html is not None:
             self.write(html)
             return
         topics = get_full_topics(Topic.query.order_by('-id')[:20])
-        html = self.render_string('feed.xml', topics=topics, subtitle=subtitle)
+        html = self.render_string('feed.xml', topics=topics)
         cache.set('sitefeed', html, 1800)
+        self.write(html)
+
+
+class NodeFeedHandler(JulyHandler):
+    def get_template_path(self):
+        return os.path.join(os.path.dirname(__file__), '_templates')
+
+    def get(self, slug):
+        node = Node.query.get_first(slug=slug)
+        if not node:
+            self.send_error(404)
+            return
+
+        self.set_header('Content-Type', 'text/xml; charset=utf-8')
+        key = 'nodefeed:%s' % str(slug)
+        html = cache.get(key)
+        if html is not None:
+            self.write(html)
+            return
+
+        topics = Topic.query.filter_by(node_id=node.id)[:20]
+        topics = get_full_topics(topics)
+        html = self.render_string('node_feed.xml', topics=topics, node=node)
+        cache.set(key, html, 1800)
         self.write(html)
 
 
@@ -254,6 +277,7 @@ handlers = [
     ('/search', SearchHandler),
     ('/upload', UploadHandler),
     ('/node/(\w+)', NodeHandler),
+    ('/node/(\w+)/feed', NodeFeedHandler),
     ('/~(\w+)', MemberHandler),
     ('/member/(\w+)', RedirectMemberHandler),
 ]
