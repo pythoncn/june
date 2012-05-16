@@ -20,7 +20,7 @@ class Pagination(object):
         self.total = total
 
         self.start = (page - 1) * perpage
-        self.end = (page + 1) * perpage
+        self.end = page * perpage
 
         self.page_count = (total - 1) / perpage + 1
 

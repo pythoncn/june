@@ -9,15 +9,15 @@ from june.account.models import Member
 from june.account.lib import UserHandler
 from june.account.decorators import require_user
 from june.node.models import FollowNode, Node
-from june.topic.models import Topic, Reply
+from june.topic.models import Topic, Reply, Vote
 from june.topic.lib import get_full_topics
 from june.typo import markdown
 from june.util import Pagination
 
 
 class PageHandler(UserHandler):
-    def get_page(self):
-        page = self.get_argument('p', 1)
+    def get_page(self, arg='p'):
+        page = self.get_argument(arg, 1)
         try:
             page = int(page)
         except:
@@ -133,8 +133,11 @@ class NodeHandler(PageHandler):
 
 class MemberHandler(PageHandler):
     def get(self, username):
-        page = self.get_page()
-        if not page:
+        perpage = 10
+
+        topic_page = self.get_page('tp')
+        fav_page = self.get_page('fp')
+        if not (topic_page and fav_page):
             self.send_error(404)
             return
 
@@ -142,21 +145,39 @@ class MemberHandler(PageHandler):
         if not user:
             self.send_error(404)
             return
-        q = Topic.query.filter_by(user_id=user.id)
-        total = q.count()
-        perpage = 30
 
-        p = Pagination(page, perpage, total)
-        if p.page > p.page_count:
+        #: user's topics pagination {{{
+        tq = Topic.query.filter_by(user_id=user.id)
+        total = tq.count()
+        tp = Pagination(topic_page, perpage, total)
+        if tp.page > tp.page_count:
             self.send_error(404)
             return
 
-        q = q.order_by('-impact')[p.start:p.end]
-        p.datalist = get_full_topics(q)
+        tq = tq.order_by('-id')[tp.start:tp.end]
+        tp.datalist = get_full_topics(tq)
+        #: }}}
+
+        #: user's faved topics pagination {{{
+        #: TODO cache
+        votes = Vote.query.filter_by(user_id=user.id, type='up')\
+                .values('topic_id')
+        topic_ids = (v[0] for v in votes)
+        fq = Topic.query.filter_by(id__in=topic_ids)
+        total = fq.count()
+        fp = Pagination(fav_page, perpage, total)
+        if fp.page > fp.page_count:
+            self.send_error(404)
+            return
+
+        fq = fq.order_by('-id')[fp.start:fp.end]
+        fp.datalist = get_full_topics(fq)
+        #: }}}
 
         replies = Reply.query.filter_by(user_id=user.id).order_by('-id')[:20]
 
-        self.render('member.html', pagination=p, user=user, replies=replies)
+        self.render('member.html', topic_pagination=tp, fav_pagination=fp,
+                    user=user, replies=replies)
 
 
 class RedirectMemberHandler(JulyHandler):
