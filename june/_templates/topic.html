@@ -29,7 +29,7 @@
         <div class="entry-meta">
             <time class="created" title="Created" datetime="{{xmldatetime(topic.created)}}">{{localtime(topic.created)}}</time> /
             <time class="updated" title="Updated" datetime="{{xmldatetime(topic.updated)}}">{{localtime(topic.updated)}}</time>
-            {% if current_user.is_staff %}{{topic.impact}}{% end %}
+            {% if current_user and current_user.is_staff %}{{topic.impact}}{% end %}
         </div>
         {% if current_user and current_user.id == topic.user_id %}
         <div class="entry-action">

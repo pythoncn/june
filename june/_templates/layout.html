@@ -6,7 +6,7 @@
         {{ g.header or '' }}
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0" />
         <link rel="stylesheet" href="{{static_url('css/site.css')}}" />
-        <link rel="stylesheet" href="http://fortawesome.github.com/Font-Awesome/assets/css/font-awesome.css" />
+        <link rel="stylesheet" href="{{static_url('fontello-eccd8160/fontello-eccd8160.css')}}" />
         {% block afterstyle %}{% end %}
         <script type="text/javascript">
             {% if current_user %}
@@ -30,10 +30,10 @@
                     <nav class="user-links">
                         <a href="/topic/create" title="Create Topic"><span class="icon-edit"></span></a>
                         <a href="/account/setting" title="Setting"><span class="icon-cog"></span></a>
-                        <a href="/account/signout" title="Signout"><span class="icon-signout"></span></a>
+                        <a href="/account/signout" title="Signout"><span class="icon-logout"></span></a>
                     </nav>
                     {% else %}
-                    <a href="/account/signin" title="Signin"><span class="icon-signin"></span></a>
+                    <a href="/account/signin" title="Signin"><span class="icon-login"></span></a>
                     {% end %}
                 </div>
             </div>
