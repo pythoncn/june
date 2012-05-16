@@ -20,9 +20,7 @@ def lib_js():
 
     github = 'https://raw.github.com'
     urls = [
-        'http://timeago.yarp.com/jquery.timeago.js',
         '%s/jaz303/tipsy/master/src/javascripts/jquery.tipsy.js' % github,
-
     ]
     for path in urls:
         js = UglifyJSCompiler(path)
@@ -46,7 +44,8 @@ def editor_js():
     UglifyJSCompiler(
         'https://raw.github.com/chjj/marked/master/lib/marked.js'
     ).write(output)
-    UglifyJSCompiler('%s/upload.js' % static).append(output)
+    #UglifyJSCompiler('%s/upload.js' % static).append(output)
+    UglifyJSCompiler('%s/editor.js' % static).append(output)
 
 
 #: less tasks
