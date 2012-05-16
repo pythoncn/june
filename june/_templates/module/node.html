@@ -10,11 +10,12 @@
         {{node.description}}
     </div>
     <div class="ui-box-footer">
-        <a href="/node/{{node.slug}}/create" class="ui-btn">Create</a>
+        <a href="/node/{{node.slug}}" class="ui-btn">{{ _("View") }}</a>
+        <a href="/node/{{node.slug}}/create" class="ui-btn">{{ _("Create") }}</a>
         {% if following %}
-        <a href="#" class="ui-btn">Unfollow</a>
+        <a href="#" class="ui-btn">{{ _("Unfollow") }}</a>
         {% else %}
-        <a href="#" class="ui-btn">Follow</a>
+        <a href="#" class="ui-btn">{{ _("Follow") }}</a>
         {% end %}
     </div>
 </div>

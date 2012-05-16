@@ -122,7 +122,7 @@ class EditTopicHandler(UserHandler):
         if not topic:
             self.send_error(404)
             return
-        self._check_permission(topic)
+        self.check_permission_of(topic)
         self.render('edit_topic_form.html', topic=topic)
 
     @require_user
@@ -137,7 +137,7 @@ class EditTopicHandler(UserHandler):
             self.flash_message('Please fill the required fields', 'error')
             self.render('edit_topic_form.html', topic=topic)
             return
-        if not self._check_permission(topic):
+        if not self.check_permission_of(topic):
             self.render('edit_topic_form.html', topic=topic)
             return
 
@@ -151,15 +151,43 @@ class EditTopicHandler(UserHandler):
         url = '/topic/%s' % topic.id
         self.redirect(url)
 
-    def _check_permission(self, topic):
-        user = self.current_user
-        if user.is_staff or topic.user_id == user.id:
-            return True
-        self.flash_message(
-            "You have no permission to edit this topic",
-            "warn"
-        )
-        return False
+
+class MoveTopicHandler(UserHandler):
+    @require_user
+    def get(self, topic_id):
+        topic = Topic.query.get_first(id=topic_id)
+        if not topic:
+            self.send_error(404)
+            return
+        self.check_permission_of(topic)
+        nodes = Node.query.all()
+        self.render('move_topic.html', topic=topic, nodes=nodes)
+
+    @require_user
+    def post(self, topic_id):
+        slug = self.get_argument('slug', None)
+        if not slug:
+            self.send_error(404)
+            return
+        topic = Topic.query.get_first(id=topic_id)
+        if not topic:
+            self.send_error(404)
+            return
+        node = Node.query.get_first(slug=slug)
+        if not node:
+            self.send_error(404)
+            return
+        if not self.check_permission_of(topic):
+            return
+        topic.node_id = node.id
+        node.topic_count += 1
+        old_node = Node.query.get_first(id=topic.node_id)
+        old_node.topic_count -= 1
+        db.master.add(topic)
+        db.master.add(node)
+        db.master.add(old_node)
+        db.master.commit()
+        self.redirect('/topic/%s' % topic.id)
 
 
 class CreateReplyHandler(UserHandler):
@@ -254,6 +282,7 @@ app_handlers = [
     ('/create', CreateTopicHandler),
     ('/(\d+)', TopicHandler),
     ('/(\d+)/edit', EditTopicHandler),
+    ('/(\d+)/move', MoveTopicHandler),
     ('/(\d+)/reply', CreateReplyHandler),
 ]
 

@@ -78,3 +78,14 @@ class UserHandler(JulyHandler):
     def next_url(self):
         next_url = self.get_argument("next", None)
         return next_url or '/'
+
+    def check_permission_of(self, model):
+        user = self.current_user
+        if user.is_staff or model.user_id == user.id:
+            return True
+        self.flash_message(
+            "You have no permission",
+            "warn"
+        )
+        self.send_error(403)
+        return False
