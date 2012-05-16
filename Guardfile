@@ -48,6 +48,14 @@ def editor_js():
     UglifyJSCompiler('%s/editor.js' % static).append(output)
 
 
+def site_css():
+    from livereload.compiler import SlimmerCompiler
+    output = 'june/_static/css/site.css'
+    pygment = 'http://flask.pocoo.org/docs/_static/pygments.css'
+    slimmer = SlimmerCompiler(pygment)
+    slimmer.append(output)
+
+
 #: less tasks
 Task.add(
     'assets/less',
