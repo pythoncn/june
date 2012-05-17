@@ -8,6 +8,18 @@ PROJSERVER = linode.lepture.com:/home/lepture/project/june
 STATIC = june/_static
 
 
+# Development
+server:
+	june/app.py --settings=$(CONFIG)
+
+
+database:
+	june/tools.py --settings=$(CONFIG) createdb
+
+
+admin:
+	june/tools.py --settings=$(CONFIG) createuser
+
 # Common Task
 clean: clean-build clean-pyc
 
@@ -25,11 +37,6 @@ clean-pyc:
 # Sphinx Documentation
 docs:
 	$(MAKE) -C docs html
-
-
-# Development
-server:
-	june/app.py --settings=$(CONFIG)
 
 
 # Deployment

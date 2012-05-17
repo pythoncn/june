@@ -42,7 +42,7 @@ class LatestHandler(PageHandler):
         perpage = 30
 
         p = Pagination(page, perpage, total)
-        if p.page > p.page_count:
+        if total and p.page > p.page_count:
             self.send_error(404)
             return
 
@@ -66,7 +66,7 @@ class PopularHandler(PageHandler):
         perpage = 30
 
         p = Pagination(page, perpage, total)
-        if p.page > p.page_count:
+        if total and p.page > p.page_count:
             self.send_error(404)
             return
 
@@ -94,7 +94,7 @@ class FollowingHandler(PageHandler):
         perpage = 30
 
         p = Pagination(page, perpage, total)
-        if p.page > p.page_count:
+        if total and p.page > p.page_count:
             self.send_error(404)
             return
 
@@ -122,7 +122,7 @@ class NodeHandler(PageHandler):
         perpage = 30
 
         p = Pagination(page, perpage, total)
-        if p.page > p.page_count:
+        if total and p.page > p.page_count:
             self.send_error(404)
             return
 
@@ -150,7 +150,7 @@ class MemberHandler(PageHandler):
         tq = Topic.query.filter_by(user_id=user.id)
         total = tq.count()
         tp = Pagination(topic_page, perpage, total)
-        if tp.page > tp.page_count:
+        if total and tp.page > tp.page_count:
             self.send_error(404)
             return
 
@@ -166,7 +166,7 @@ class MemberHandler(PageHandler):
         fq = Topic.query.filter_by(id__in=topic_ids)
         total = fq.count()
         fp = Pagination(fav_page, perpage, total)
-        if fp.page > fp.page_count:
+        if total and fp.page > fp.page_count:
             self.send_error(404)
             return
 
