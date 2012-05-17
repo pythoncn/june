@@ -64,3 +64,4 @@ Backup[ ]of[ ]*.numbers/
 
 tmp.*
 _static/
+_build/
