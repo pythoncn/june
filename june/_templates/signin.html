@@ -20,10 +20,19 @@
         </div>
         <div class="fm-item">
             <button class="ui-btn">{{_("Signin")}}</button>
-            <a href="/account/signin/google" class="ui-btn">Signin with Google</a>
+            <a href="/account/signin/google" class="ui-btn">Google Account</a>
         </div>
     </form>
 </div>
 {% end %}
 
-{% block signin-box %}{% end %}
+{% block sidebar %}
+<div class="ui-box">
+    <div class="ui-box-container">
+        {{ _("Don't have an account ?") }}
+    </div>
+    <div class="ui-box-footer">
+        <a href="/account/signup" class="ui-btn">{{ _("Signup") }}</a>
+    </div>
+</div>
+{% end %}

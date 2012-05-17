@@ -81,22 +81,29 @@
     </div>
     {% end %}
 </div>
+<div class="ui-box">
 {% if current_user %}
-<form action="/topic/{{topic.id}}/reply" class="ui-box" method="post">
+<form action="/topic/{{topic.id}}/reply" class="ui-box-container" method="post">
     {{ xsrf_form_html() }}
-    <div class="ui-box-container">
-        <div id="editor">
-            <div id="editor-pannel">
-                <a href="#" class="js-write current" tabindex="-1">{{ _("Write") }}</a>
-                <a href="#" class="js-preview" tabindex="-1">{{ _("Preview") }}</a>
-                <a href="#" class="js-upload" tabindex="-1">{{ _("Upload") }}</a>
-            </div>
-            <textarea name="content" class="fm-text" required></textarea>
+    <div id="editor">
+        <div id="editor-pannel">
+            <a href="#" class="js-write current" tabindex="-1">{{ _("Write") }}</a>
+            <a href="#" class="js-preview" tabindex="-1">{{ _("Preview") }}</a>
+            <a href="#" class="js-upload" tabindex="-1">{{ _("Upload") }}</a>
         </div>
-        <button type="submit" class="ui-btn">{{_("Post")}}</button>
+        <textarea name="content" class="fm-text" required></textarea>
     </div>
+    <button type="submit" class="ui-btn">{{_("Post")}}</button>
 </form>
+{% else %}
+<div class="ui-box-container">
+    {{_("Want to comment ?")}}
+</div>
+<div class="ui-box-footer">
+    <a href="/account/signin" class="ui-btn js-overlay">{{_("Signin")}}</a>
+</div>
 {% end %}
+</div>
 {% end %}
 
 {% block sidebar %}
@@ -105,4 +112,10 @@
 
 {% module Node(node=node) %}
 
+{% end %}
+
+{% block afterjs %}
+{% if not current_user %}
+{% include "snippet/signinbox.html" %}
+{% end %}
 {% end %}
