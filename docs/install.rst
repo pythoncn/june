@@ -68,10 +68,7 @@ If you have git installed, get source code from github::
 
 Get required libraries for june::
 
-    $ pip install july
-    $ pip install misaka
-    $ pip install pygments
-    $ pip install sqlalchemy
+    $ pip install -r requirements.txt
 
 Get required libraries for your database, ``sqlite3``, ``MySQL``,  ``PostgreSQL``.
 
