@@ -118,4 +118,27 @@
 {% if not current_user %}
 {% include "snippet/signinbox.html" %}
 {% end %}
+
+<script type="text/javascript">
+    {% if current_user and current_user.id == topic.user_id %}
+    $('.js-accept').click(function(){
+        var url = '/reply/' + $(this).attr('href').slice(1);
+        $.sendPost(url, {}, function(data) {
+            console.log(data)
+        });
+    });
+    {% end %}
+    $('.js-delete').click(function(){
+        var url = '/reply/' + $(this).attr('href').slice(1);
+        var $this = $(this);
+        $.sendDelete(url, {}, function(data) {
+            if (data.stat === 'ok') {
+                $this.parents('.ui-cell').remove();
+            } else {
+                alert(data.msg);
+            }
+        });
+        return false;
+    });
+</script>
 {% end %}

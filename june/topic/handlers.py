@@ -301,7 +301,7 @@ class ReplyHandler(UserHandler):
     def delete(self, reply_id):
         reply = Reply.query.get_first(id=reply_id)
         if not reply:
-            self.send_error(404)
+            self.set_statu(404)
             self.write({'stat': 'fail', 'msg': 'reply not found'})
             return
         if self.current_user.is_staff or self.current_user.id == reply.user_id:
@@ -313,7 +313,7 @@ class ReplyHandler(UserHandler):
             db.master.commit()
             self.write({'stat': 'ok'})
             return
-        self.send_error(403)
+        self.set_status(403)
         self.write({'stat': 'fail', 'msg': 'permission denied'})
 
 

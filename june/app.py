@@ -85,8 +85,10 @@ def create_application():
     #: register topic app
     from june.topic.handlers import topic_app
     from june.topic.handlers import CreateNodeTopicHandler
+    from june.topic.handlers import ReplyHandler
     application.register_app(topic_app, url_prefix='/topic')
     application.add_handler(('/node/(\w+)/create', CreateNodeTopicHandler))
+    application.add_handler(('/reply/(\d+)', ReplyHandler))
 
     from june.dashboard.handlers import dashboard_app
     application.register_app(dashboard_app, url_prefix='/dashboard')
