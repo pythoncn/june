@@ -7,7 +7,9 @@
     <div class="ui-box-header">
         <a href="/topic/{{topic.id}}">{{topic.title}}</a>: {{ _("Choose a node") }}
     </div>
-    <div class="ui-box-container">
+    <form id="move-node-form" class="ui-box-container" method="post">
+        {{ xsrf_form_html() }}
+        <input type="hidden" name="slug" />
         {% for node in nodes %}
         <a class="node" href="#{{node.slug}}" data-node-slug="{{node.slug}}" style="
             {%if node.bgcolor%}background-color:{{node.bgcolor}};{%end%}
@@ -15,6 +17,17 @@
             {%if not node.fgcolor and node.bgcolor%}color:#fff;{%end%}
             ">{{escape(node.title)}}</a>
         {% end %}
-    </div>
+    </form>
 </div>
+{% end %}
+
+{% block afterjs %}
+<script type="text/javascript">
+    $('#move-node-form .node').click(function() {
+        var slug = $(this).attr('data-node-slug');
+        $('input[name=slug]').val(slug);
+        $('#move-node-form').submit();
+        return false;
+    });
+</script>
 {% end %}

@@ -177,17 +177,56 @@ class MoveTopicHandler(UserHandler):
         if not node:
             self.send_error(404)
             return
+        #: check permission
         if not self.check_permission_of(topic):
             return
+
+        #: increase node.topic_count
         topic.node_id = node.id
         node.topic_count += 1
+
+        #: decrease topic's original node.topic_count
         old_node = Node.query.get_first(id=topic.node_id)
         old_node.topic_count -= 1
+
         db.master.add(topic)
         db.master.add(node)
         db.master.add(old_node)
+
         db.master.commit()
         self.redirect('/topic/%s' % topic.id)
+
+
+class DeleteTopicHandler(UserHandler):
+    @require_user
+    def post(self, id):
+        #: delete topic need a password
+        password = self.get_argument('password', None)
+        if not password:
+            self.flash_message('Password is required', 'error')
+            self.redirect('/topic/%s' % id)
+            return
+        topic = Topic.query.get_first(id=id)
+        if not topic:
+            self.send_error(404)
+            return
+        #: check permission
+        if not self.check_permission_of(topic):
+            return
+
+        #: delete a topic
+        db.master.delete(topic)
+
+        #: decrease node.topic_count
+        node = Node.query.get_first(id=topic.node_id)
+        node.topic_count -= 1
+        db.master.add(node)
+
+        #: commit
+        db.master.commit()
+
+        self.flash_message('Topic is deleted', 'info')
+        self.redirect('/')
 
 
 class CreateReplyHandler(UserHandler):
@@ -283,6 +322,7 @@ app_handlers = [
     ('/(\d+)', TopicHandler),
     ('/(\d+)/edit', EditTopicHandler),
     ('/(\d+)/move', MoveTopicHandler),
+    ('/(\d+)/delete', DeleteTopicHandler),
     ('/(\d+)/reply', CreateReplyHandler),
 ]
 
