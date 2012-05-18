@@ -8,9 +8,9 @@ from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 
-__all__ = ['emoji', 'markdown', 'xmldatetime']
+__all__ = ['markdown', 'xmldatetime']
 
-emoji_list = [
+_emoji_list = [
     "-1", "0", "1", "109", "2", "3", "4", "5", "6", "7", "8", "8ball", "9",
     "a", "ab", "airplane", "alien", "ambulance", "angel", "anger", "angry",
     "apple", "aquarius", "aries", "arrow_backward", "arrow_down",
@@ -94,7 +94,7 @@ emoji_list = [
 ]
 
 
-def emoji(text):
+def _emoji(text):
     if not hasattr(options, 'emoji_url'):
         return text
 
@@ -105,7 +105,7 @@ def emoji(text):
 
     def make_emoji(m):
         name = m.group(1)
-        if name not in emoji_list:
+        if name not in _emoji_list:
             return ':%s:' % name
         tpl = ('<img class="emoji" title="%(name)s" alt="%(name)s" height="20"'
                ' width="20" src="%(url)s%(name)s.png" align="top">')
@@ -115,9 +115,14 @@ def emoji(text):
     return text
 
 
-class HighlightRender(m.HtmlRenderer, m.SmartyPants):
+class JuneRender(m.HtmlRenderer, m.SmartyPants):
     def set_pygments_options(self, options):
         self._pygments_options = options
+
+    def header(self, text, level):
+        #: disable header
+        pattern = '<p class="header-%s"><strong>%s</strong></p>'
+        return pattern % (level, text)
 
     def block_code(self, text, lang):
         if not lang:
@@ -130,14 +135,53 @@ class HighlightRender(m.HtmlRenderer, m.SmartyPants):
             formatter = HtmlFormatter()
         return highlight(text, lexer, formatter)
 
+    def autolink(self, link, is_email):
+        #: youtube.com
+        pattern = r'http://www.youtube.com/watch\?v=([a-zA-Z0-9\-\_]+)'
+        match = re.match(pattern, link)
+        if not match:
+            pattern = r'http://youtu.be/([a-zA-Z0-9\-\_]+)'
+            match = re.match(pattern, link)
+        if match:
+            value = ('<iframe width="560" height="315" src='
+                     '"http://www.youtube.com/embed/%(id)s" '
+                     'frameborder="0" allowfullscreen></iframe>'
+                     '<div><a rel="nofollow" href="%(link)s">'
+                     '%(link)s</a></div>'
+                    ) % {'id': match.group(1), 'link': link}
+            return value
+
+        #: gist support
+        pattern = r'(https?://gist.github.com/[\d]+)'
+        match = re.match(pattern, link)
+        if match:
+            value = ('<script src="%(link)s.js"></script>'
+                     '<div><a rel="nofollow" href="%(link)s">'
+                     '%(link)s</a></div>'
+                    ) % {'link': match.group(1)}
+            return value
+
+        #: vimeo.com
+        pattern = r'http://vimeo.com/([\d]+)'
+        match = re.match(pattern, link)
+        if match:
+            value = ('<iframe width="500" height="281" frameborder="0" '
+                     'src="http://player.vimeo.com/video/%(id)s" '
+                     'allowFullScreen></iframe>'
+                     '<div><a rel="nofollow" href="%(link)s">'
+                     '%(link)s</a></div>'
+                    ) % {'id': match.group(1), 'link': link}
+            return value
+        return super(JuneRender, self).autolink(link, is_email)
+
     def postprocess(self, text):
         text = re.sub(r'@(\w+)', r'@<a href="/member/\1">\1</a>', text)
-        return emoji(text)
+        return _emoji(text)
 
 
 def markdown(text, noclasses=False):
     options = {'noclasses': noclasses}
-    render = HighlightRender(flags=m.HTML_ESCAPE | m.HTML_USE_XHTML)
+    render = JuneRender(flags=m.HTML_ESCAPE | m.HTML_USE_XHTML)
     render.set_pygments_options(options)
     md = m.Markdown(
         render,
