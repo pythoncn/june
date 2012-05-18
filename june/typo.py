@@ -172,11 +172,14 @@ class JuneRender(m.HtmlRenderer, m.SmartyPants):
                      '%(link)s</a></div>'
                     ) % {'id': match.group(1), 'link': link}
             return value
-        return super(JuneRender, self).autolink(link, is_email)
+        if not is_email:
+            return '<a href="%(link)s">%(link)s</a>' % {'link': link}
+        return '<a href="mailto:%(link)s">%(link)s</a>' % {'link': link}
 
-    def postprocess(self, text):
-        text = re.sub(r'@(\w+)', r'@<a href="/member/\1">\1</a>', text)
-        return _emoji(text)
+    def paragraph(self, text):
+        text = re.sub(r'[^a-z><]@(\w+)', r'@<a href="/member/\1">\1</a>', text)
+        text = _emoji(text)
+        return '<p>%s</p>' % text
 
 
 def markdown(text, noclasses=False):
