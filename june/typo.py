@@ -136,6 +136,8 @@ class JuneRender(m.HtmlRenderer, m.SmartyPants):
         return highlight(text, lexer, formatter)
 
     def autolink(self, link, is_email):
+        title = link.replace('http://', '').replace('https://', '')
+
         #: youtube.com
         pattern = r'http://www.youtube.com/watch\?v=([a-zA-Z0-9\-\_]+)'
         match = re.match(pattern, link)
@@ -147,8 +149,8 @@ class JuneRender(m.HtmlRenderer, m.SmartyPants):
                      '"http://www.youtube.com/embed/%(id)s" '
                      'frameborder="0" allowfullscreen></iframe>'
                      '<div><a rel="nofollow" href="%(link)s">'
-                     '%(link)s</a></div>'
-                    ) % {'id': match.group(1), 'link': link}
+                     '%(title)s</a></div>'
+                    ) % {'id': match.group(1), 'link': link, 'title': title}
             return value
 
         #: gist support
@@ -157,8 +159,8 @@ class JuneRender(m.HtmlRenderer, m.SmartyPants):
         if match:
             value = ('<script src="%(link)s.js"></script>'
                      '<div><a rel="nofollow" href="%(link)s">'
-                     '%(link)s</a></div>'
-                    ) % {'link': match.group(1)}
+                     '%(title)s</a></div>'
+                    ) % {'link': match.group(1), 'title': title}
             return value
 
         #: vimeo.com
@@ -169,15 +171,22 @@ class JuneRender(m.HtmlRenderer, m.SmartyPants):
                      'src="http://player.vimeo.com/video/%(id)s" '
                      'allowFullScreen></iframe>'
                      '<div><a rel="nofollow" href="%(link)s">'
-                     '%(link)s</a></div>'
-                    ) % {'id': match.group(1), 'link': link}
+                     '%(title)s</a></div>'
+                    ) % {'id': match.group(1), 'link': link, 'title': title}
             return value
-        if not is_email:
-            return '<a href="%(link)s">%(link)s</a>' % {'link': link}
-        return '<a href="mailto:%(link)s">%(link)s</a>' % {'link': link}
+        if is_email:
+            return '<a href="mailto:%(link)s">%(link)s</a>' % {'link': link}
+
+        #: make short link
+        if len(title) > 24:
+            title = title[:20] + '...'
+        return '<a href="%s" rel="nofollow">%s</a>' % (link, title)
 
     def paragraph(self, text):
-        text = re.sub(r'[^a-z><]@(\w+)', r'@<a href="/member/\1">\1</a>', text)
+        pattern = re.compile(r'\s@(\w+)')
+        text = pattern.sub(r'@<a href="/~\1">\1</a> ', text)
+        pattern = re.compile(r'^@(\w+)')
+        text = pattern.sub(r'@<a href="/~\1">\1</a> ', text)
         text = _emoji(text)
         return '<p>%s</p>' % text
 
