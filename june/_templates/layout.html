@@ -46,13 +46,13 @@
                 <a href="/nodes"><span class="icon-bookmark"></span>{{ _("Nodes") }}</a>
             </div>
         </nav>
+        {% for type, message in flash_message() %}
+        <div class="alert alert-{{type}}">
+            {{ _(message) }}
+        </div>
+        {% end %}
         <div id="main">
             <div class="wrapper fn-clear">
-                {% for type, message in flash_message() %}
-                <div class="alert alert-{{type}}">
-                    {{message}}
-                </div>
-                {% end %}
                 {% block main %}
                 <div id="content">
                     {% block content %}{% end %}
