@@ -294,14 +294,32 @@ class ReplyHandler(UserHandler):
 
     @require_user
     def post(self, reply_id):
-        #: accept reply
-        pass
+        _ = self.locale.translate
+        reply = Reply.query.get_first(id=reply_id)
+        if not reply:
+            self.set_status(404)
+            self.write({'stat': 'fail', 'msg': _('reply not found')})
+            return
+        #: check permission,
+        #: only topic owner can accept a reply
+        topic = Topic.query.get_first(id=reply.topic_id)
+        #: if this topic is deleted
+        if not topic:
+            self.set_status(404)
+            self.write({'stat': 'fail', 'msg': _('topic not found')})
+            return
+        if self.current_user.id != topic.user_id:
+            self.set_status(403)
+            self.write({'stat': 'fail', 'msg': _('permission denied')})
+            return
+        self.set_status(403)
+        self.write({'stat': 'fail', 'msg': _('permission denied')})
 
     @authenticated
     def delete(self, reply_id):
         reply = Reply.query.get_first(id=reply_id)
         if not reply:
-            self.set_statu(404)
+            self.set_status(404)
             self.write({'stat': 'fail', 'msg': 'reply not found'})
             return
         if self.current_user.is_staff or self.current_user.id == reply.user_id:

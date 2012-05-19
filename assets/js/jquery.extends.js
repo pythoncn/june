@@ -3,9 +3,17 @@ jQuery.getCookie = function(name) {
     return r ? r[1] : undefined;
 }
 jQuery.sendPost = function(url, args, callback, dataType) {
+    if (!dataType) dataType = 'json';
     args._xsrf = $.getCookie('_xsrf');
     if (args._xsrf){
         $.post(url, args, callback, dataType)
+        .error(function(jqXHR, textStatus, errorThrown) {
+            if (dataType === 'json') {
+                callback(jQuery.parseJSON(jqXHR.responseText));
+            } else {
+                callback(jqXHR.responseText);
+            }
+        });
     } else {
         var href = '/account/signin?next=' + encodeURI(location.href);
         location.assign(href);

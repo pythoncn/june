@@ -51,11 +51,11 @@
     <div id="reply-{{reply.id}}" class="ui-cell reply fn-clear">
         <a href="/member/{{reply.user.username}}" class="ui-avatar"><img src="{{reply.user.get_avatar(48)}}" width="48" height="48" /></a>
 
-        <div class="ui-cell-bottom-right">
+        <div class="ui-cell-bottom-right{%if reply.accepted == 'y'%} active{%end%}">
             {% if current_user and current_user.id == reply.user_id %}
             <a href="#{{reply.id}}" class="js-delete"><span class="icon-trash"></span></a>
             {% end %}
-            <a href="#{{reply.id}}" class="js-accept{%if reply.accepted == 's'%} active{%end%}"><span class="icon-ok"></span></a>
+            <a href="#{{reply.id}}" class="js-accept"><span class="icon-ok"></span></a>
         </div>
 
         <div class="reply-content fn-wrap">
@@ -126,6 +126,7 @@
         $.sendPost(url, {}, function(data) {
             console.log(data)
         });
+        return false;
     });
     {% end %}
     $('.js-delete').click(function(){
