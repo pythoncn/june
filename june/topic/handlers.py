@@ -12,6 +12,7 @@ from june.node.models import Node
 from june.util import Pagination
 from .models import Topic, Reply, Vote
 from .lib import get_full_replies, reply_impact_for_topic
+from .lib import accept_reply_impact_for_user
 
 
 class TopicHandler(UserHandler):
@@ -330,8 +331,12 @@ class ReplyHandler(UserHandler):
             self.set_status(403)
             self.write({'stat': 'fail', 'msg': _('permission denied')})
             return
-        self.set_status(403)
-        self.write({'stat': 'fail', 'msg': _('permission denied')})
+
+        #: toggle acception
+        if reply.accepted == 'y':
+            self.unaccept(reply)
+            return
+        self.accept(reply)
 
     @authenticated
     def delete(self, reply_id):
@@ -351,6 +356,32 @@ class ReplyHandler(UserHandler):
             return
         self.set_status(403)
         self.write({'stat': 'fail', 'msg': 'permission denied'})
+
+    def accept(self, reply):
+        #: when accept an answer, topic owner pay 1 reputation
+        user = Member.query.get_first(id=self.current_user.id)
+        user.reputation -= 1
+        db.master.add(user)
+
+        reply.accepted = 'y'
+        db.master.add(reply)
+
+        #: replyer get reputation
+        replyer = Member.query.get_first(id=reply.user_id)
+        replyer.reputation += accept_reply_impact_for_user(user.reputation)
+        db.master.add(replyer)
+        self.write({'stat': 'ok', 'data': 'accept'})
+
+    def unaccept(self, reply):
+        reply.accepted = 'n'
+        db.master.add(reply)
+
+        #: replyer loose reputation
+        replyer = Member.query.get_first(id=reply.user_id)
+        loose = accept_reply_impact_for_user(self.current_user.reputation)
+        replyer.reputation -= loose
+        db.master.add(replyer)
+        self.write({'stat': 'ok', 'data': 'unaccept'})
 
 
 app_handlers = [

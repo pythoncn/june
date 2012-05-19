@@ -74,3 +74,11 @@ def down_impact_for_user(reputation):
     factor = int(options.down_factor_for_user)
     impact = factor * int(math.log(reputation))
     return min(impact, int(options.down_max_for_user))
+
+
+def accept_reply_impact_for_user(reputation):
+    if reputation < 2:
+        return 0
+    factor = int(options.accept_reply_factor_for_user)
+    impact = factor * int(math.log(reputation))
+    return min(impact, int(options.vote_max_for_user))
