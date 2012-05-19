@@ -1,83 +1,86 @@
-#navigation
-"Latest", 最近更新
-"Popular", 热门更新
+# ========== template ===========
+# navigation
+"Latest","最近更新"
+"Popular","热门更新"
+"Following","关注"
+"Nodes","节点"
+"Create Topic","发表话题"
+"Setting","设置"
+"Signin","登录"
+"Signout","登出"
+"Notification","消息"
+
+# signup signin setting
+"Account","账户"
+"Password","密码"
+"Signup","注册"
+"Don't have an account?","还没有账户？"
+"Email","邮箱"
+"Confirm","确认"
+"Username","用户名"
+"Website","个人网站"
+"Only English characters and digits are accepted.","只允许填写英文字符和数字"
+"Save","保存"
 
 
-"Account", 账户
-"Password", 密码
-"Signin", 登录
-"Signout", 登出
-"Signup", 注册
-"Setting", 设置
+# topic
+"Edit","编辑"
+"Move","移动"
+"Write","编写"
+"Preview","预览"
+"Upload","上传"
+"Post","发布"
+"Want to comment ?","想要评论？"
+"Edit Topic","编辑话题"
+"Title","标题"
+"Cancel","取消"
+"Create Topic","新建话题"
+"This topic is in","这个话题位于"
+"Created at","新建于"
+"Move Topic","移动话题"
+"Choose a node","选择一个节点"
+"Can't find a node?","找不到合适的节点？"
+"Have anything in trouble?"
+"Feedback","反馈"
+"hits","点击"
+"replies","回复"
+"Last reply at","最后回复于"
+"reply at","回复于"
 
-"Title", 标题
-"Slug", 链接名
-"Description", 简介
-"Background", 背景色
-"Font Color", 前景色
-"Header", 头部
-"Footer", 尾部
-"Sidebar", 侧栏
-"Content", 内容
+# node
+"View","查看"
+"Create","新建"
+"Follow","关注"
+"Unfollow","取消"
+"All Nodes","所有节点"
+"Following Nodes","关注节点"
 
-"Save", 保存
-"Post", 发表
-"Cancel", 取消
-"Preview", 预览
-"Write", 编辑
-
-"Home", 首页
-"Subscription", 订阅
-"Node", 节点
-"Nodes", 节点
-"Notify", 提醒
-"Dashboard", 管理
-"Mentioned Nodes", 相关节点
-"Recent Join", 最近加入
-"Welcome", 欢迎
-"In Node", 所属节点
-"Vote", 投票者
-"Topic", 话题
-"New Topic", 新话题
-"Edit Topic", 编辑
-"Move Topic", 移动
-"Topic Creator", 话题发起者
-"Choose a node", 选择一个节点
-"Analytics", 统计
-"Message", 消息
-"Reply", 回复
-"Delete", 删除
-
-"Follow", 关注
-"Following", 关注
-"Unfollow", 取消关注
-
-"Member", 会员
-"Members", 会员
-"Reputation", 声誉
-"Role", 角色
-"Username", 用户名
-"Website", 个人站点
-"Email", 邮箱
-"Confirm", 确认
-"Join at", 加入于
-"Only English characters and digits are accepted.", 只接受英文字符和数字
-"You need follow some nodes", 去注几个节点吧
-"This topic is in", 这个话题位于
-"Warning", 警告
-"You have no permission to create a topic in this node", 对不起，你不能在这里新建一个话题
-"You can't edit this topic now", 你现在不能再编辑这个话题了
-
-"New Node", 新建节点
-"Flush Cache", 清空缓存
-"Member Manage", 会员管理
-
-"Hits", 点击
-"unread messages", 条未读消息
-
+# =========== python file ==========
 # timesince
-"%s minutes ago", %s分钟前
-"%s hours ago", %s小时前
-"%s days ago", %s天前
-"%s months ago", %s个月前
-"%s years ago", %s年前
+"%s minutes ago","%s分钟前"
+"%s hours ago","%s小时前"
+"%s days ago","%s天前"
+"%s months ago","%s个月前"
+"%s years ago","%s年前"
+
+# topic/handlers.py
+"reply not found","回复不存在"
+"topic not found","话题不存在"
+"permission denied","没有权限"
+
+# ======= flash message ==========
+# topic
+"Please fill the required fields","请填写以下必填项"
+"You have no permission to create a topic in this node","你没有权限在这个节点里新建话题"
+"Password is required","需要填写密码"
+"Topic is deleted","话题已删除"
+#account
+"Invalid account or password","账户或密码错误"
+"Password doesn't match","密码不匹配"
+"Not a valid email address","邮箱格式不正确"
+"This email is already registered","该邮箱已注册"
+"Captcha not valid","验证码不正确"
+"Invalid password","密码不正确"
+"Username is invalid","用户名不正确"
+"Website is invalid","个人网站格式不正确"
+"Username has been taken","用户名已被注册"

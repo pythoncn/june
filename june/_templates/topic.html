@@ -43,9 +43,9 @@
 <div class="replies ui-box">
     <div class="ui-box-header">
         {% if topic.last_reply_time%}
-        Last reply at <time datetime="{{xmldatetime(topic.last_reply_time)}}">{{localtime(topic.last_reply_time)}}</time> |
+        {{_("Last reply at")}} <time datetime="{{xmldatetime(topic.last_reply_time)}}">{{localtime(topic.last_reply_time)}}</time> |
         {% end %}
-        {{topic.reply_count}} replies
+        {{topic.reply_count}} {{_("replies")}}
     </div>
     {% for reply in pagination.datalist %}
     <div id="reply-{{reply.id}}" class="ui-cell reply fn-clear">
@@ -60,7 +60,7 @@
 
         <div class="reply-content fn-wrap">
             <div class="reply-meta">
-                <a href="/member/{{reply.user.username}}">{{reply.user.username}}</a> reply at
+                <a href="/member/{{reply.user.username}}">{{reply.user.username}}</a> {{_("reply at")}}
                 <time datetime="{{xmldatetime(reply.created)}}">{{timesince(reply.created, locale.code)}}</time>
             </div>
             <div class="content">
@@ -123,8 +123,13 @@
     {% if current_user and current_user.id == topic.user_id %}
     $('.js-accept').click(function(){
         var url = '/reply/' + $(this).attr('href').slice(1);
+        var $this = $(this);
         $.sendPost(url, {}, function(data) {
-            console.log(data)
+            if (data.stat === 'ok') {
+                $this.parents('.ui-cell-bottom-right').toggleClass('active');
+            } else {
+                alert(data.msg);
+            }
         });
         return false;
     });

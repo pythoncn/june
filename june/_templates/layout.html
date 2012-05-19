@@ -28,12 +28,12 @@
                         <a href="/~{{current_user.username}}">{{current_user.username}}</a>
                     </div>
                     <nav class="user-links">
-                        <a href="/topic/create" title="Create Topic"><span class="icon-edit"></span></a>
-                        <a href="/account/setting" title="Setting"><span class="icon-cog"></span></a>
-                        <a href="/account/signout" title="Signout"><span class="icon-logout"></span></a>
+                    <a href="/topic/create" title="{{_("Create Topic")}}"><span class="icon-edit"></span></a>
+                    <a href="/account/setting" title="{{_("Setting")}}"><span class="icon-cog"></span></a>
+                    <a href="/account/signout" title="{{_("Signout")}}"><span class="icon-logout"></span></a>
                     </nav>
                     {% else %}
-                    <a href="/account/signin" title="Signin"><span class="icon-login"></span></a>
+                    <a href="/account/signin" title="{{_("Signin")}}"><span class="icon-login"></span></a>
                     {% end %}
                 </div>
             </div>
