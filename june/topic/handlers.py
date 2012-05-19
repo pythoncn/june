@@ -48,6 +48,17 @@ class TopicHandler(UserHandler):
         self.render('topic.html', topic=topic, node=node, pagination=p,
                     vote=vote)
 
+    def post(self, id):
+        #: hit count
+        topic = Topic.query.get_first(id=id)
+        if not topic:
+            self.send_error(404)
+            return
+        topic.hits += 1
+        db.master.add(topic)
+        db.master.commit()
+        self.write('ok')
+
 
 class CreateTopicHandler(UserHandler):
     def get(self):

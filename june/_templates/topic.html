@@ -45,7 +45,8 @@
         {% if topic.last_reply_time%}
         {{_("Last reply at")}} <time datetime="{{xmldatetime(topic.last_reply_time)}}">{{localtime(topic.last_reply_time)}}</time> |
         {% end %}
-        {{topic.reply_count}} {{_("replies")}}
+        {{topic.reply_count}} {{_("replies")}} |
+        {{topic.hits}} {{_("hits")}}
     </div>
     {% for reply in pagination.datalist %}
     <div id="reply-{{reply.id}}" class="ui-cell reply fn-clear">
@@ -120,6 +121,7 @@
 {% end %}
 
 <script type="text/javascript">
+    $.sendPost('/topic/{{topic.id}}', {})
     {% if current_user and current_user.id == topic.user_id %}
     $('.js-accept').click(function(){
         var url = '/reply/' + $(this).attr('href').slice(1);
