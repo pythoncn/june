@@ -8,3 +8,4 @@ Contents:
 
     install
     develop
+    styleguide
