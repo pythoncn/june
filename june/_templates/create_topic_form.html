@@ -4,39 +4,11 @@
 
 {% block afterstyle %}
 <style type="text/css">
-    #content {
-        width: 50%;
-    }
-    #sidebar {
-        width: 48%;
-    }
-    textarea {
-        width: 90%;
-        height: 250px;
-    }
-    #markdown-syntax .ui-box-header h4 {
-        float: left;
-    }
-    #markdown-syntax .ui-box-header .toggle {
-        float: right;
-        text-decoration: none;
-    }
-    #markdown-syntax .ui-box-header .toggle:hover {
-        color: #222;
-    }
+    {% include "snippet/topic_form.css" %}
 </style>
 {% end %}
 
 {% block content %}
-<div id="markdown-syntax" class="ui-box">
-    <div class="ui-box-header fn-clear">
-        <h4>Markdown Syntax</h4>
-        <a href="#" class="toggle"><span class="icon-chevron-up"></span></a>
-    </div>
-    <div class="ui-box-container">
-        {% include "snippet/markdown.html" %}
-    </div>
-</div>
 <div class="ui-box">
     <h3 class="ui-box-header">{{ _("This topic is in") }}: <a href="/node/{{node.slug}}"><strong>{{node.title}}</strong></a></h3>
 
@@ -52,6 +24,7 @@
                 <a href="#" class="js-upload" tabindex="-1">{{ _("Upload") }}</a>
             </div>
             <textarea name="content" class="fm-text" required></textarea>
+            <div id="editor-preview"></div>
         </div>
         <div>
             <button type="submit" class="ui-btn">{{_("Save")}}</button>
@@ -61,6 +34,15 @@
 {% end %}
 
 {% block sidebar %}
+<div id="markdown-syntax" class="ui-box">
+    <div class="ui-box-header fn-clear">
+        <h4>Markdown Syntax</h4>
+        <a href="#" class="js-toggle"><span class="icon-down-open"></span></a>
+    </div>
+    <div class="ui-box-container fn-hide">
+        {% include "snippet/markdown.html" %}
+    </div>
+</div>
 <div id="markdown-preview" class="ui-box">
     <div class="ui-box-header">
         <h4>Markdown Preview</h4>
@@ -68,4 +50,8 @@
     <div id="markdown-preview-container" class="ui-box-container">
     </div>
 </div>
+{% end %}
+
+{% block afterjs %}
+<script type="text/javascript" src="{{ static_url('js/editor.js') }}"></script>
 {% end %}

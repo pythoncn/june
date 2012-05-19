@@ -4,42 +4,16 @@
 
 {% block afterstyle %}
 <style type="text/css">
-    #content {
-        width: 50%;
-    }
-    #sidebar {
-        width: 48%;
-    }
-    textarea {
-        width: 90%;
-        height: 250px;
-    }
-    #markdown-syntax .ui-box-header h4 {
-        float: left;
-    }
-    #markdown-syntax .ui-box-header .toggle {
-        float: right;
-        text-decoration: none;
-    }
-    #markdown-syntax .ui-box-header .toggle:hover {
-        color: #222;
-    }
+    {% include "snippet/topic_form.css" %}
 </style>
 {% end %}
 
 {% block content %}
-<div id="markdown-syntax" class="ui-box">
-    <div class="ui-box-header fn-clear">
-        <h4>Markdown Syntax</h4>
-        <a href="#" class="toggle"><span class="icon-chevron-up"></span></a>
-    </div>
-    <div class="ui-box-container">
-        {% include "snippet/markdown.html" %}
-    </div>
-</div>
 <div class="ui-box">
-    <h3 class="ui-box-header">{{ _("Edit topic") }}: <a href="/topic/{{topic.id}}"><strong>{{topic.title}}</strong></a></h3>
-
+    <div class="ui-box-header">
+        {{ _("Edit Topic") }}:
+        <a href="/topic/{{topic.id}}"><strong>{{topic.title}}</strong></a>
+    </div>
     <form action="" method="post" class="ui-box-container">
         {{ xsrf_form_html() }}
         <div class="fm-item fm-required">
@@ -52,6 +26,7 @@
                 <a href="#" class="js-upload" tabindex="-1">{{ _("Upload") }}</a>
             </div>
             <textarea name="content" class="fm-text" required>{{topic.content}}</textarea>
+            <div id="editor-preview"></div>
         </div>
         <div>
             <button type="submit" class="ui-btn">{{_("Save")}}</button>
@@ -59,9 +34,34 @@
         </div>
     </form>
 </div>
+<div class="ui-box">
+    <div class="ui-box-header warn">
+        <h4>{{_("Delete Topic")}}</h4>
+    </div>
+    <form action="/topic/{{topic.id}}" class="ui-box-container" method="post">
+        {{ xsrf_form_html() }}
+        <input type="hidden" name="action" value="delete" />
+        <div class="fm-item fm-required">
+            <label class="fm-label" for="password">{{ _("Password") }}</label>
+            <input type="password" class="fm-text" name="password" required/>
+        </div>
+        <div class="fm-item">
+            <button class="ui-btn">{{_("Delete")}}</button>
+        </div>
+    </form>
+</div>
 {% end %}
 
 {% block sidebar %}
+<div id="markdown-syntax" class="ui-box">
+    <div class="ui-box-header fn-clear">
+        <h4>Markdown Syntax</h4>
+        <a href="#" class="js-toggle"><span class="icon-down-open"></span></a>
+    </div>
+    <div class="ui-box-container fn-hide">
+        {% include "snippet/markdown.html" %}
+    </div>
+</div>
 <div id="markdown-preview" class="ui-box">
     <div class="ui-box-header">
         <h4>Markdown Preview</h4>
@@ -69,4 +69,8 @@
     <div id="markdown-preview-container" class="ui-box-container">
     </div>
 </div>
+{% end %}
+
+{% block afterjs %}
+<script type="text/javascript" src="{{ static_url('js/editor.js') }}"></script>
 {% end %}

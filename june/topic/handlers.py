@@ -49,6 +49,11 @@ class TopicHandler(UserHandler):
                     vote=vote)
 
     def post(self, id):
+        action = self.get_argument('action', 'hit')
+        #: compatible for rest api
+        if action == 'delete':
+            self.delete(id)
+            return
         #: hit count
         topic = Topic.query.get_first(id=id)
         if not topic:
@@ -58,6 +63,40 @@ class TopicHandler(UserHandler):
         db.master.add(topic)
         db.master.commit()
         self.write('ok')
+
+    @require_user
+    def delete(self, id):
+        #: delete topic need a password
+        password = self.get_argument('password', None)
+        if not password:
+            self.flash_message('Password is required', 'error')
+            self.redirect('/topic/%s' % id)
+            return
+        if not self.current_user.check_password(password):
+            self.flash_message('Invalid password', 'error')
+            self.redirect('/topic/%s' % id)
+            return
+        topic = Topic.query.get_first(id=id)
+        if not topic:
+            self.send_error(404)
+            return
+        #: check permission
+        if not self.check_permission_of(topic):
+            return
+
+        #: delete a topic
+        db.master.delete(topic)
+
+        #: decrease node.topic_count
+        node = Node.query.get_first(id=topic.node_id)
+        node.topic_count -= 1
+        db.master.add(node)
+
+        #: commit
+        db.master.commit()
+
+        self.flash_message('Topic is deleted', 'info')
+        self.redirect('/')
 
 
 class CreateTopicHandler(UserHandler):
@@ -208,38 +247,6 @@ class MoveTopicHandler(UserHandler):
         self.redirect('/topic/%s' % topic.id)
 
 
-class DeleteTopicHandler(UserHandler):
-    @require_user
-    def post(self, id):
-        #: delete topic need a password
-        password = self.get_argument('password', None)
-        if not password:
-            self.flash_message('Password is required', 'error')
-            self.redirect('/topic/%s' % id)
-            return
-        topic = Topic.query.get_first(id=id)
-        if not topic:
-            self.send_error(404)
-            return
-        #: check permission
-        if not self.check_permission_of(topic):
-            return
-
-        #: delete a topic
-        db.master.delete(topic)
-
-        #: decrease node.topic_count
-        node = Node.query.get_first(id=topic.node_id)
-        node.topic_count -= 1
-        db.master.add(node)
-
-        #: commit
-        db.master.commit()
-
-        self.flash_message('Topic is deleted', 'info')
-        self.redirect('/')
-
-
 class CreateReplyHandler(UserHandler):
     @require_user
     def post(self, id):
@@ -351,7 +358,6 @@ app_handlers = [
     ('/(\d+)', TopicHandler),
     ('/(\d+)/edit', EditTopicHandler),
     ('/(\d+)/move', MoveTopicHandler),
-    ('/(\d+)/delete', DeleteTopicHandler),
     ('/(\d+)/reply', CreateReplyHandler),
 ]
 

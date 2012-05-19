@@ -49,6 +49,7 @@ install_static: install_image install_js install_css
 
 install_js:
 	livereload lib_js
+	livereload editor_js
 	livereload site_js
 
 install_css:
