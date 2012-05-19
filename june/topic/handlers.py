@@ -10,8 +10,8 @@ from june.account.decorators import require_user
 from june.account.models import Member
 from june.node.models import Node
 from june.util import Pagination
-from models import Topic, Reply, Vote
-from lib import get_full_replies, reply_impact_for_topic
+from .models import Topic, Reply, Vote
+from .lib import get_full_replies, reply_impact_for_topic
 
 
 class TopicHandler(UserHandler):

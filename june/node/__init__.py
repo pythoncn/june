@@ -4,9 +4,4 @@
 :license: BSD
 """
 
-__appname__ = 'June Node'
-__version__ = "0.1 alpha"
-
-requirements = [
-    'june.account',
-]
+from .handlers import node_app

@@ -5,7 +5,7 @@ from july.web import JulyHandler
 from july.app import JulyApp
 from june.account.lib import UserHandler
 from june.topic.models import Topic
-from models import FollowNode, Node
+from .models import FollowNode, Node
 
 
 class FollowNodeHandler(UserHandler):

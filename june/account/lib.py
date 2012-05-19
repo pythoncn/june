@@ -3,7 +3,7 @@ import urllib
 from tornado.auth import httpclient
 from tornado.options import options
 from july.web import JulyHandler
-from models import Member
+from .models import Member
 
 
 class RecaptchaMixin(object):

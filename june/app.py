@@ -74,23 +74,25 @@ def create_application():
     application = JulyApplication(handlers=handlers, **settings)
 
     #: register account app
-    from june.account.handlers import account_app
+    from june.account import account_app
     application.register_app(account_app, url_prefix='/account')
 
     #: register node app
-    from june.node.handlers import node_app, NodeListHandler
+    from june.node import node_app
     application.register_app(node_app, url_prefix='/node')
+    from june.node.handlers import NodeListHandler
     application.add_handler(('/nodes', NodeListHandler))
 
     #: register topic app
-    from june.topic.handlers import topic_app
+    from june.topic import topic_app
+    application.register_app(topic_app, url_prefix='/topic')
+
     from june.topic.handlers import CreateNodeTopicHandler
     from june.topic.handlers import ReplyHandler
-    application.register_app(topic_app, url_prefix='/topic')
     application.add_handler(('/node/(\w+)/create', CreateNodeTopicHandler))
     application.add_handler(('/reply/(\d+)', ReplyHandler))
 
-    from june.dashboard.handlers import dashboard_app
+    from june.dashboard import dashboard_app
     application.register_app(dashboard_app, url_prefix='/dashboard')
 
     application.register_context('sitename', options.sitename)

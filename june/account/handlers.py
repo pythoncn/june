@@ -3,8 +3,8 @@ from tornado.auth import GoogleMixin
 from july.app import JulyApp
 from july.database import db
 from lib import UserHandler, RecaptchaMixin
-from models import Member
-import validators
+from .models import Member
+from . import validators
 
 
 class SigninHandler(UserHandler):
