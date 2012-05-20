@@ -18,8 +18,8 @@
     <div class="ui-box-header fn-clear">
         <h3 class="entry-title">{{topic.title}}</h3>
         <div class="entry-vote">
-            <a href="#" class="up-vote{%if vote and vote.type=='up'%} active{%end%}"><span class="icon-thumbs-up"></span>{{topic.up_count}}</a>
-            <a href="#" class="down-vote{%if vote and vote.type=='down'%} active{%end%}"><span class="icon-thumbs-down"></span>{{topic.down_count}}</a>
+            <a href="#" class="js-up-vote{%if vote and vote.type=='up'%} active{%end%}"><span class="icon-thumbs-up"></span><span class="count">{{topic.up_count}}</span></a>
+            <a href="#" class="js-down-vote{%if vote and vote.type=='down'%} active{%end%}"><span class="icon-thumbs-down"></span><span class="count">{{topic.down_count}}</span></a>
         </div>
     </div>
     <div class="ui-box-container entry-content">
@@ -56,7 +56,8 @@
             {% if current_user and current_user.id == reply.user_id %}
             <a href="#{{reply.id}}" class="js-delete"><span class="icon-trash"></span></a>
             {% end %}
-            <a href="#{{reply.id}}" class="js-accept"><span class="icon-ok"></span></a>
+            <a href="#{{reply.id}}"{%if current_user and current_user.id == topic.user_id%} class="js-accept"{%end%}><span class="icon-ok"></span></a>
+    
         </div>
 
         <div class="reply-content fn-wrap">
@@ -119,34 +120,5 @@
 {% if not current_user %}
 {% include "snippet/signinbox.html" %}
 {% end %}
-
-<script type="text/javascript">
-    $.sendPost('/topic/{{topic.id}}');
-    {% if current_user and current_user.id == topic.user_id %}
-    $('.js-accept').click(function(){
-        var url = '/reply/' + $(this).attr('href').slice(1);
-        var $this = $(this);
-        $.sendPost(url, {}, function(data) {
-            if (data.stat === 'ok') {
-                $this.parents('.ui-cell-bottom-right').toggleClass('active');
-            } else {
-                alert(data.msg);
-            }
-        });
-        return false;
-    });
-    {% end %}
-    $('.js-delete').click(function(){
-        var url = '/reply/' + $(this).attr('href').slice(1);
-        var $this = $(this);
-        $.sendDelete(url, {}, function(data) {
-            if (data.stat === 'ok') {
-                $this.parents('.ui-cell').remove();
-            } else {
-                alert(data.msg);
-            }
-        });
-        return false;
-    });
-</script>
+<script type="text/javascript" src="{{static_url('js/topic.js')}}"></script>
 {% end %}

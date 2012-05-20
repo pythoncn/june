@@ -51,6 +51,7 @@ install_js:
 	livereload lib_js
 	livereload editor_js
 	livereload site_js
+	livereload topic_js
 
 install_css:
 	livereload site_css

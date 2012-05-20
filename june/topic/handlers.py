@@ -11,8 +11,10 @@ from june.account.models import Member
 from june.node.models import Node
 from june.util import Pagination
 from .models import Topic, Reply, Vote
-from .lib import get_full_replies, reply_impact_for_topic
-from .lib import accept_reply_impact_for_user
+from .lib import get_full_replies
+from .lib import reply_impact_for_topic, accept_reply_impact_for_user
+from .lib import up_impact_for_topic, up_impact_for_user
+from .lib import down_impact_for_topic, down_impact_for_user
 
 
 class TopicHandler(UserHandler):
@@ -244,6 +246,8 @@ class MoveTopicHandler(UserHandler):
         db.master.add(node)
         db.master.add(old_node)
 
+        #:TODO edit log
+
         db.master.commit()
         self.redirect('/topic/%s' % topic.id)
 
@@ -372,6 +376,8 @@ class ReplyHandler(UserHandler):
         db.master.add(replyer)
         self.write({'stat': 'ok', 'data': 'accept'})
 
+        #: TODO notification
+
     def unaccept(self, reply):
         reply.accepted = 'n'
         db.master.add(reply)
@@ -384,12 +390,137 @@ class ReplyHandler(UserHandler):
         self.write({'stat': 'ok', 'data': 'unaccept'})
 
 
+class VoteTopicHandler(UserHandler):
+    @require_user
+    def post(self, id):
+        _ = self.locale.translate
+        topic = Topic.query.get_first(id=id)
+        if not topic:
+            self.send_error(404)
+            return
+        if topic.user_id == self.current_user.id:
+            # you can't vote your own topic
+            dct = {'stat': 'fail', 'msg': _("can't vote your own topic")}
+            self.write(dct)
+            return
+        action = self.get_argument('action', None)
+        if not action:
+            self.send_error(403)
+            return
+        if action == 'up':
+            self.up_topic(topic)
+            return
+        if action == 'down':
+            self.down_topic(topic)
+            return
+        self.send_error('403')
+        return
+
+    def up_topic(self, topic):
+        _ = self.locale.translate
+        user = self.current_user
+        vote = Vote.query.get_first(user_id=user.id, topic_id=topic.id)
+        owner = Member.query.get_first(id=topic.user_id)
+        if not vote:
+            vote = Vote(user_id=user.id, topic_id=topic.id, type='up')
+            db.master.add(vote)
+            self._active_up(topic, owner, user.reputation)
+            return
+        #: cancel vote
+        if vote.type == 'up':
+            vote.type = 'none'
+            db.master.add(vote)
+            self._cancle_up(topic, owner, user.reputation)
+            return
+        #: change vote
+        if vote.type == 'down':
+            self.write({'stat': 'fail', 'msg': _("cancel your vote first")})
+            return
+        #: vote
+        vote.type = 'up'
+        db.master.add(vote)
+        self._active_up(topic, owner, user.reputation)
+        return
+
+    def _active_up(self, topic, owner, reputation):
+        #: increase topic's impact
+        topic.impact += up_impact_for_topic(reputation)
+        topic.up_count += 1
+        db.master.add(topic)
+        #: increase topic owner's reputation
+        owner.reputation += up_impact_for_user(reputation)
+        db.master.add(owner)
+        db.master.commit()
+        self.write({'stat': 'ok', 'data': topic.up_count})
+        return
+
+    def _cancle_up(self, topic, owner, reputation):
+        topic.impact -= up_impact_for_topic(reputation)
+        topic.up_count -= 1
+        db.master.add(topic)
+        owner.reputation -= up_impact_for_user(reputation)
+        db.master.add(owner)
+        db.master.commit()
+        self.write({'stat': 'ok', 'data': topic.up_count})
+        return
+
+    def down_topic(self, topic):
+        _ = self.locale.translate
+        user = self.current_user
+        vote = Vote.query.get_first(user_id=user.id, topic_id=topic.id)
+        owner = Member.query.get_first(id=topic.user_id)
+        if not vote:
+            vote = Vote(user_id=user.id, topic_id=topic.id, type='down')
+            db.master.add(vote)
+            self._active_down(topic, owner, user.reputation)
+            return
+        #: cancel vote
+        if vote.type == 'down':
+            vote.type = 'none'
+            db.master.add(vote)
+            self._cancel_down(topic, owner, user.reputation)
+            return
+
+        #: change vote
+        if vote.type == 'up':
+            self.write({'stat': 'fail', 'msg': _("cancel your vote first")})
+            return
+
+        vote.type = 'down'
+        db.master.add(vote)
+        self._active_down(topic, owner, user.reputation)
+        return
+
+    def _active_down(self, topic, owner, reputation):
+        #: increase topic's impact
+        topic.impact -= down_impact_for_topic(reputation)
+        topic.down_count += 1
+        db.master.add(topic)
+        #: increase topic owner's reputation
+        owner.reputation -= down_impact_for_user(reputation)
+        db.master.add(owner)
+        db.master.commit()
+        self.write({'stat': 'ok', 'data': topic.down_count})
+        return
+
+    def _cancel_down(self, topic, owner, reputation):
+        topic.impact += down_impact_for_topic(reputation)
+        topic.down_count -= 1
+        db.master.add(topic)
+        owner.reputation += down_impact_for_user(reputation)
+        db.master.add(owner)
+        db.master.commit()
+        self.write({'stat': 'ok', 'data': topic.down_count})
+        return
+
+
 app_handlers = [
     ('/create', CreateTopicHandler),
     ('/(\d+)', TopicHandler),
     ('/(\d+)/edit', EditTopicHandler),
     ('/(\d+)/move', MoveTopicHandler),
     ('/(\d+)/reply', CreateReplyHandler),
+    ('/(\d+)/vote', VoteTopicHandler),
 ]
 
 
