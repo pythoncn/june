@@ -10,33 +10,28 @@
 {% block content %}
 <div class="ui-box">
     <div class="ui-box-header">
-        <h3>{{ _("Recent Topics") }}</h3>
+        <h3>{{ _("Topics") }}</h3>
     </div>
 
-    {% for topic in topic_pagination.datalist %}
+    {% for topic in topics %}
     {% module Template("module/topic_cell.html", topic=topic) %}
     {% end %}
-
-    <div class="ui-box-footer pagination">
-        {% for p in topic_pagination.page_range %}
-        <a href="?tp={{p}}">{{p}}</a>
-        {% end %}
+    <div class="ui-box-footer">
+        <a href="/~{{user.username}}/topics">{{ _("More Topics") }} »</a>
     </div>
 </div>
 
 <div class="ui-box">
     <div class="ui-box-header">
-        <h3>{{ _("Fav Topics") }}</h3>
+        <h3>{{ _("Likes") }}</h3>
     </div>
 
-    {% for topic in fav_pagination.datalist %}
+    {% for topic in likes %}
     {% module Template("module/topic_cell.html", topic=topic) %}
     {% end %}
 
-    <div class="ui-box-footer pagination">
-        {% for p in fav_pagination.page_range %}
-        <a href="?fp={{p}}">{{p}}</a>
-        {% end %}
+    <div class="ui-box-footer">
+        <a href="/~{{user.username}}/likes">{{ _("More Likes") }} »</a>
     </div>
 </div>
 
@@ -47,7 +42,7 @@
 
 <div class="ui-box">
     <div class="ui-box-header">
-        <h4>{{ _("Recent Replies") }}</h4>
+        <h4>{{ _("Replies") }}</h4>
     </div>
     {% for reply in replies %}
     <div class="ui-cell">

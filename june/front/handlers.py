@@ -133,51 +133,27 @@ class NodeHandler(PageHandler):
 
 class MemberHandler(PageHandler):
     def get(self, username):
-        perpage = 10
-
-        topic_page = self.get_page('tp')
-        fav_page = self.get_page('fp')
-        if not (topic_page and fav_page):
-            self.send_error(404)
-            return
-
         user = Member.query.get_first(username=username)
         if not user:
             self.send_error(404)
             return
 
-        #: user's topics pagination {{{
-        tq = Topic.query.filter_by(user_id=user.id)
-        total = tq.count()
-        tp = Pagination(topic_page, perpage, total)
-        if total and tp.page > tp.page_count:
-            self.send_error(404)
-            return
+        q = Topic.query.filter_by(user_id=user.id)
+        topics = get_full_topics(q.order_by('-id')[:10])
 
-        tq = tq.order_by('-id')[tp.start:tp.end]
-        tp.datalist = get_full_topics(tq)
-        #: }}}
-
-        #: user's faved topics pagination {{{
+        #: user's faved topics {{{
         #: TODO cache
         votes = Vote.query.filter_by(user_id=user.id, type='up')\
                 .values('topic_id')
         topic_ids = (v[0] for v in votes)
-        fq = Topic.query.filter_by(id__in=topic_ids)
-        total = fq.count()
-        fp = Pagination(fav_page, perpage, total)
-        if total and fp.page > fp.page_count:
-            self.send_error(404)
-            return
-
-        fq = fq.order_by('-id')[fp.start:fp.end]
-        fp.datalist = get_full_topics(fq)
+        q = Topic.query.filter_by(id__in=topic_ids)
+        likes = get_full_topics(q.order_by('-id')[:10])
         #: }}}
 
         replies = Reply.query.filter_by(user_id=user.id).order_by('-id')[:20]
 
-        self.render('member.html', topic_pagination=tp, fav_pagination=fp,
-                    user=user, replies=replies)
+        self.render('member.html', topics=topics, likes=likes, user=user,
+                    replies=replies)
 
 
 class RedirectMemberHandler(JulyHandler):
