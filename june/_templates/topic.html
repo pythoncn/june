@@ -18,6 +18,7 @@
     <div class="ui-box-header fn-clear">
         <h3 class="entry-title">{{topic.title}}</h3>
         <div class="entry-vote">
+            {% if topic.status %}<span class="ui-label">{{topic.status}}</span>{% end %}
             <a href="#" class="js-up-vote{%if vote and vote.type=='up'%} active{%end%}"><span class="icon-thumbs-up"></span><span class="count">{{topic.up_count}}</span></a>
             <a href="#" class="js-down-vote{%if vote and vote.type=='down'%} active{%end%}"><span class="icon-thumbs-down"></span><span class="count">{{topic.down_count}}</span></a>
         </div>
@@ -84,7 +85,11 @@
     {% end %}
 </div>
 <div class="ui-box">
-{% if current_user %}
+{% if topic.status == 'close' %}
+<div class="ui-box-container">
+    {{ _("Topic is closed") }}
+</div>
+{% elif current_user %}
 <form action="/topic/{{topic.id}}/reply" class="ui-box-container" method="post">
     {{ xsrf_form_html() }}
     <div id="editor">

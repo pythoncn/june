@@ -2,6 +2,7 @@ import hashlib
 from datetime import datetime
 from tornado.web import UIModule, authenticated
 from tornado.escape import utf8
+from tornado.options import options
 from july.app import JulyApp
 from july.cache import cache
 from july.database import db
@@ -57,6 +58,12 @@ class TopicHandler(UserHandler):
         if action == 'delete':
             self.delete(id)
             return
+        if action == 'close':
+            self.close_topic(id)
+            return
+        if action == 'promote':
+            self.promote_topic(id)
+            return
         #: hit count
         topic = Topic.query.get_first(id=id)
         if not topic:
@@ -69,24 +76,9 @@ class TopicHandler(UserHandler):
 
     @require_user
     def delete(self, id):
-        #: delete topic need a password
-        password = self.get_argument('password', None)
-        if not password:
-            self.flash_message('Password is required', 'error')
-            self.redirect('/topic/%s' % id)
-            return
-        if not self.current_user.check_password(password):
-            self.flash_message('Invalid password', 'error')
-            self.redirect('/topic/%s' % id)
-            return
-        topic = Topic.query.get_first(id=id)
+        topic = self._get_verified_topic(id)
         if not topic:
-            self.send_error(404)
             return
-        #: check permission
-        if not self.check_permission_of(topic):
-            return
-
         #: delete a topic
         db.master.delete(topic)
 
@@ -100,6 +92,69 @@ class TopicHandler(UserHandler):
 
         self.flash_message('Topic is deleted', 'info')
         self.redirect('/')
+
+    @require_user
+    def close_topic(self, id):
+        topic = self._get_verified_topic(id)
+        if not topic:
+            return
+        topic.status = 'close'
+        db.master.add(topic)
+        db.master.commit()
+        self.flash_message('Topic is closed', 'info')
+        self.redirect('/topic/%s' % topic.id)
+
+    @require_user
+    def promote_topic(self, id):
+        topic = self._get_verified_topic(id)
+        if not topic:
+            return
+        #: promote topic cost reputation
+        user = Member.query.get_first(id=topic.user_id)
+        if not user:
+            self.send_error(404)
+            return
+        if topic.status == 'promote':
+            self.flash_message('Your topic is promoted', 'info')
+            self.redirect('/topic/%s' % topic.id)
+            return
+        cost = int(options.promote_topic_cost)
+        if user.reputation < cost + 20:
+            self.flash_message('Your reputation is too low', 'warn')
+            self.redirect('/topic/%s' % topic.id)
+            return
+        user.reputation -= cost
+        db.master.add(user)
+
+        topic.status = 'promote'
+        topic.impact += 86400  # one day
+        db.master.add(topic)
+        db.master.commit()
+        self.flash_message('Your topic is promoted', 'info')
+        self.redirect('/topic/%s' % topic.id)
+
+    @require_user
+    def _get_verified_topic(self, id):
+        #: delete topic need a password
+        password = self.get_argument('password', None)
+        if not password:
+            self.flash_message('Password is required', 'error')
+            self.redirect('/topic/%s' % id)
+            return
+
+        if not self.current_user.check_password(password):
+            self.flash_message('Invalid password', 'error')
+            self.redirect('/topic/%s' % id)
+            return
+
+        topic = Topic.query.get_first(id=id)
+        if not topic:
+            self.send_error(404)
+            return
+        #: check permission
+        if not self.check_permission_of(topic):
+            return
+        return topic
 
 
 class CreateTopicHandler(UserHandler):
