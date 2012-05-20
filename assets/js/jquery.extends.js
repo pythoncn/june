@@ -4,10 +4,12 @@ jQuery.getCookie = function(name) {
 }
 jQuery.sendPost = function(url, args, callback, dataType) {
     if (!dataType) dataType = 'json';
+    if (!args) args = {};
     args._xsrf = $.getCookie('_xsrf');
     if (args._xsrf){
         $.post(url, args, callback, dataType)
         .error(function(jqXHR, textStatus, errorThrown) {
+            if (!callback) return;
             if (dataType === 'json') {
                 callback(jQuery.parseJSON(jqXHR.responseText));
             } else {

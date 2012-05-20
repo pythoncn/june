@@ -63,7 +63,7 @@ class TopicHandler(UserHandler):
         topic.hits += 1
         db.master.add(topic)
         db.master.commit()
-        self.write('ok')
+        self.write({'stat': 'ok'})
 
     @require_user
     def delete(self, id):

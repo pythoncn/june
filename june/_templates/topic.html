@@ -121,7 +121,7 @@
 {% end %}
 
 <script type="text/javascript">
-    $.sendPost('/topic/{{topic.id}}', {})
+    $.sendPost('/topic/{{topic.id}}');
     {% if current_user and current_user.id == topic.user_id %}
     $('.js-accept').click(function(){
         var url = '/reply/' + $(this).attr('href').slice(1);
