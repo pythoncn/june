@@ -25,7 +25,9 @@
                     {% if current_user %}
                     <div class="user">
                         <span class="icon-user"></span>
+                        {% if current_user.username %}
                         <a href="/~{{current_user.username}}">{{current_user.username}}</a>
+                        {% end %}
                     </div>
                     <nav class="user-links">
                     <a href="/topic/create" title="{{_("Create Topic")}}"><span class="icon-edit"></span></a>

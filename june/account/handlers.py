@@ -2,7 +2,8 @@ from tornado.web import authenticated, asynchronous
 from tornado.auth import GoogleMixin
 from july.app import JulyApp
 from july.database import db
-from lib import UserHandler, RecaptchaMixin
+from july.auth.recaptcha import RecaptchaMixin
+from .lib import UserHandler
 from .models import Member
 from . import validators
 

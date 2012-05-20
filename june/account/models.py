@@ -38,7 +38,7 @@ class Member(db.Model):
     avatar = Column(String(400))
     website = Column(String(400))
 
-    role = Column(Integer, default=0)
+    role = Column(Integer, default=1)
     # 0: registered,  1: username
     reputation = Column(Integer, default=20, index=True)
     token = Column(String(16))
