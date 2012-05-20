@@ -16,7 +16,7 @@
 {% block content %}
 <article class="hentry ui-box" data-id="{{topic.id}}">
     <div class="ui-box-header fn-clear">
-        <h3 class="entry-title">{{topic.title}}</h3>
+        <h3 class="entry-title"><a href="/topic/{{topic.id}}">{{topic.title}}</a></h3>
         <div class="entry-vote">
             {% if topic.status %}<span class="ui-label">{{topic.status}}</span>{% end %}
             <a href="#" class="js-up-vote{%if vote and vote.type=='up'%} active{%end%}"><span class="icon-thumbs-up"></span><span class="count">{{topic.up_count}}</span></a>
