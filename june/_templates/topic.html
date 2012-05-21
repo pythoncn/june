@@ -119,6 +119,19 @@
 
 {% module Node(node=node) %}
 
+{% if logs %}
+<div class="widget-logs ui-box">
+    <div class="ui-box-header">
+        <h4>{{_("Edit History")}}</h4>
+    </div>
+    <div class="ui-box-container">
+        <ul>
+            {% for log in logs %}<li>{{timesince(log.created, locale.code)}}</li>{% end %}
+        </ul>
+    </div>
+</div>
+{% end %}
+
 {% end %}
 
 {% block afterjs %}

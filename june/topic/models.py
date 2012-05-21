@@ -72,7 +72,6 @@ class Vote(db.Model):
 
 class TopicLog(db.Model):
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, nullable=False, index=True)
     topic_id = Column(Integer, nullable=False, index=True)
-    content = Column(Text)
+    user_id = Column(Integer, nullable=False)
     created = Column(DateTime, default=datetime.utcnow)

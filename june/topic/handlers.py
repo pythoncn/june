@@ -1,17 +1,23 @@
+# -*- coding: utf-8 -*-
+
 import hashlib
 from datetime import datetime
+
 from tornado.web import UIModule, authenticated
 from tornado.escape import utf8
 from tornado.options import options
+
 from july.app import JulyApp
 from july.cache import cache
 from july.database import db
+
 from june.account.lib import UserHandler
 from june.account.decorators import require_user
 from june.account.models import Member
 from june.node.models import Node
 from june.util import Pagination
-from .models import Topic, Reply, Vote
+
+from .models import Topic, Reply, Vote, TopicLog
 from .lib import get_full_replies
 from .lib import reply_impact_for_topic, accept_reply_impact_for_user
 from .lib import up_impact_for_topic, up_impact_for_user
@@ -49,8 +55,11 @@ class TopicHandler(UserHandler):
                 topic_id=topic.id, user_id=self.current_user.id)
         else:
             vote = None
+
+        logs = TopicLog.query.filter_by(topic_id=topic.id)\
+                .order_by('-id').all()
         self.render('topic.html', topic=topic, node=node, pagination=p,
-                    vote=vote)
+                    vote=vote, logs=logs)
 
     def post(self, id):
         action = self.get_argument('action', 'hit')
@@ -249,11 +258,13 @@ class EditTopicHandler(UserHandler):
             self.render('edit_topic_form.html', topic=topic)
             return
 
-        #TODO topic log
-
         topic.title = title
         topic.content = content
         db.master.add(topic)
+
+        log = TopicLog(topic_id=topic.id, user_id=self.current_user.id)
+        db.master.add(log)
+
         db.master.commit()
 
         url = '/topic/%s' % topic.id
