@@ -59,3 +59,8 @@ install_css:
 install_image:
 	if [ ! -d $(STATIC)/img ]; then mkdir $(STATIC)/img; fi
 	cp -r assets/img/* $(STATIC)/img/
+
+
+# Git
+github:
+	git push origin develop
