@@ -5,9 +5,41 @@
 {% block afterstyle %}
 <link rel="canonical" href="{{g.siteurl}}/~{{user.username}}" />
 {% if user.website %}<link rel="me" href="{{user.website}}" />{% end %}
+<style type="text/css">
+    .widget-profile .ui-box-container { padding: 0 10px; }
+    .widget-profile .ui-box-footer { position: relative; color: #999; }
+    .widget-profile .ui-box-footer span { color: #454545; }
+    .widget-profile .ui-box-footer .ui-label { color: #fff; }
+    .widget-profile .ui-box-footer .ui-btn { position: absolute; top: 4px; right: 8px; }
+</style>
 {% end %}
 
 {% block content %}
+<div class="ui-box widget-profile">
+    <div class="ui-box-header primary fn-clear">
+        <a href="/member/{{user.username}}" class="ui-avatar"><img src="{{user.get_avatar(48)}}" width="48" height="48" /></a>
+        <div class="user fn-wrap">
+            <div class="username"><strong>{{escape(user.username)}}</strong></div>
+            {% if user.website %}
+            <div class="website"><a href="{{escape(user.website)}}" rel="nofollow">{{escape(user.website)}}</a></div>
+            {% end %}
+            {% if current_user and current_user.id == user.id %}
+            <span class="ui-box-label">{{ user.reputation }}</span>
+            {% end %}
+        </div>
+    </div>
+    {% if profile and profile.description %}
+    <div class="ui-box-container fn-clear">
+        {{ markdown(profile.description) }}
+    </div>
+    {% end %}
+    <div class="ui-box-footer">
+        <span>#{{user.id}} {{_("join at")}} {{ user.created.strftime("%Y-%m-%d") }}</span>
+        {% if profile and profile.city %}| <span>{{ _("now at") }} <a href="/city/{{profile.city}}">{{profile.city}}</a></span>{% end %}
+        {% if user.is_staff %}| <span class="ui-label">Staff</span>{% end %}
+        <a href="#" class="ui-btn">Send Message</a>
+    </div>
+</div>
 <div class="ui-box">
     <div class="ui-box-header">
         <h3>{{ _("Topics") }}</h3>
@@ -38,8 +70,6 @@
 {% end %}
 
 {% block sidebar %}
-{% module User(user.id) %}
-
 <div class="ui-box">
     <div class="ui-box-header">
         <h4>{{ _("Replies") }}</h4>

@@ -5,7 +5,7 @@ from tornado.options import options
 from july.web import JulyHandler
 from july.util import import_object
 from july.cache import cache
-from june.account.models import Member
+from june.account.models import Member, Profile
 from june.account.lib import UserHandler
 from june.account.decorators import require_user
 from june.node.models import FollowNode, Node
@@ -151,9 +151,9 @@ class MemberHandler(PageHandler):
         #: }}}
 
         replies = Reply.query.filter_by(user_id=user.id).order_by('-id')[:20]
-
+        profile = Profile.query.get_first(user_id=user.id)
         self.render('member.html', topics=topics, likes=likes, user=user,
-                    replies=replies)
+                    replies=replies, profile=profile)
 
 
 class RedirectMemberHandler(JulyHandler):
