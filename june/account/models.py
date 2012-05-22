@@ -26,7 +26,6 @@ from random import choice
 from datetime import datetime
 from sqlalchemy import Column
 from sqlalchemy import Integer, String, DateTime, Text
-from tornado import escape
 from tornado.options import options
 from july.database import db
 
@@ -101,18 +100,8 @@ class Profile(db.Model):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, nullable=False, index=True, unique=True)
     city = Column(String(200))
-    description = Column(String(240))
-    links = Column(Text)
+    description = Column(Text)
     edit_username_count = Column(Integer, default=2)
-
-    def set_link(self, name, link):
-        links = escape.json_decode(self.links)
-        links[name] = link
-        self.links = escape.json_encode(links)
-
-    @property
-    def networks(self):
-        return escape.json_decode(self.links)
 
 
 class Notification(db.Model):

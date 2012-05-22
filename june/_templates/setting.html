@@ -2,10 +2,22 @@
 
 {% block subtitle %}{{_("Account")}}{% end %}
 
+{% block afterstyle %}
+<style type="text/css">
+    textarea {
+        width: 60%;
+        height: 200px;
+    }
+    @media screen and (max-width: 480px) {
+        width: 90%;
+    }
+</style>
+{% end %}
+
 {% block content %}
 <div class="ui-box">
     <div class="ui-box-header">
-        <h4>Edit Profile</h4>
+        <h4>{{ _("Edit Profile") }}</h4>
     </div>
     <form action="" method="post" class="ui-box-container">
         {{ xsrf_form_html() }}
@@ -20,8 +32,12 @@
             <input type="url" class="fm-text" name="website" value="{{current_user.website or ""}}" />
         </div>
         <div class="fm-item">
-            <label for="github">GitHub</label>
-            <input type="text" class="fm-text" name="github" value/>
+            <label class="fm-label" for="city">{{ _("City") }}</label>
+            <input type="text" class="fm-text" name="city" {%if profile%}value="{{ profile.city or ''}}"{%end%} />
+        </div>
+        <div class="fm-item">
+            <label class="fm-label" for="description">{{ _("Description") }}</label>
+            <textarea class="fm-text" name="description">{%if profile%}{{profile.description or ''}}{%end%}</textarea>
         </div>
         <div class="fm-item">
             <button class="ui-btn">{{_("Save")}}</button>

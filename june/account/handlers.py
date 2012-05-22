@@ -182,22 +182,10 @@ class SettingHandler(UserHandler):
             self.render('setting.html')
             return
 
-        links = {}
-        links['github'] = self.get_argument('github', '')
-        links['twitter'] = self.get_argument('twitter', '')
-        for key in links:
-            if links[key] and not validators.url(links[key]):
-                self.flash_message('%s is invalid' % key, 'error')
-                self.render('setting.html')
-                return
-
         #: edit profile
         profile = Profile.query.get_first(user_id=self.current_user.id)
         if not profile:
             profile = Profile(user_id=self.current_user.id)
-
-        for name in links:
-            profile.set_link(name, links[name])
 
         profile.city = self.get_argument('city', '')
         profile.description = self.get_argument('description', '')
