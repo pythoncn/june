@@ -231,9 +231,4 @@ handlers = [
     ('/delete', DeleteAccountHandler),
 ]
 
-app = JulyApp(
-    'account',
-    __name__,
-    handlers=handlers,
-    template_folder='templates'
-)
+app = JulyApp('account', __name__, handlers=handlers)
