@@ -11,7 +11,7 @@ from june.account.decorators import require_user
 from june.node.models import FollowNode, Node
 from june.topic.models import Topic, Reply, Vote
 from june.topic.lib import get_full_topics
-from june.typo import markdown
+from june.filters import markdown
 from june.util import Pagination
 
 

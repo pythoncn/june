@@ -104,8 +104,8 @@ def create_application():
     import datetime
     application.register_context('now', datetime.datetime.utcnow)
 
-    from june.typo import markdown, xmldatetime, localtime, timesince
-    from june.typo import topiclink
+    from june.filters import markdown, xmldatetime, localtime, timesince
+    from june.filters import topiclink
     application.register_filter('markdown', markdown)
     application.register_filter('xmldatetime', xmldatetime)
     application.register_filter('localtime', localtime)
