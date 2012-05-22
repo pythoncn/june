@@ -109,5 +109,4 @@ app_modules = {
     'RecentAddNodes': RecentAddNodesModule,
 }
 
-node_app = JulyApp('node', __name__, handlers=app_handlers,
-                   ui_modules=app_modules)
+app = JulyApp('node', __name__, handlers=app_handlers, ui_modules=app_modules)

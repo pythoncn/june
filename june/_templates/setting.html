@@ -19,7 +19,10 @@
             <label class="fm-label" for="website">{{ _("Website") }}</label>
             <input type="url" class="fm-text" name="website" value="{{current_user.website or ""}}" />
         </div>
-
+        <div class="fm-item">
+            <label for="github">GitHub</label>
+            <input type="text" class="fm-text" name="github" value/>
+        </div>
         <div class="fm-item">
             <button class="ui-btn">{{_("Save")}}</button>
         </div>

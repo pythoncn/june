@@ -74,31 +74,33 @@ def create_application():
     application = JulyApplication(handlers=handlers, **settings)
 
     #: register account app
-    from june.account.handlers import account_app
-    application.register_app(account_app, url_prefix='/account')
+    application.register_app(
+        'june.account.handlers.app',
+        url_prefix='/account'
+    )
 
     #: register node app
-    from june.node.handlers import node_app
-    application.register_app(node_app, url_prefix='/node')
+    application.register_app('june.node.handlers.app', url_prefix='/node')
+
     from june.node.handlers import NodeListHandler
     application.add_handler(('/nodes', NodeListHandler))
 
     #: register topic app
-    from june.topic.handlers import topic_app
-    application.register_app(topic_app, url_prefix='/topic')
+    application.register_app('june.topic.handlers.app', url_prefix='/topic')
 
     from june.topic.handlers import CreateNodeTopicHandler
     from june.topic.handlers import ReplyHandler
     application.add_handler(('/node/(\w+)/create', CreateNodeTopicHandler))
     application.add_handler(('/reply/(\d+)', ReplyHandler))
 
-    from june.dashboard.handlers import dashboard_app
-    application.register_app(dashboard_app, url_prefix='/dashboard')
+    application.register_app(
+        'june.dashboard.handlers.app',
+        url_prefix='/dashboard'
+    )
 
-    application.register_context('sitename', options.sitename)
-    application.register_context('siteurl', options.siteurl)
-    application.register_context('sitefeed', options.sitefeed)
-    application.register_context('version', options.version)
+    for key in ['sitename', 'siteurl', 'sitefeed', 'version']:
+        application.register_context(key, options[key].value())
+
     import datetime
     application.register_context('now', datetime.datetime.utcnow)
 

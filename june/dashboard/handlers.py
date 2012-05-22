@@ -237,5 +237,5 @@ handlers = [
     ('/flushcache', FlushCache),
 ]
 
-dashboard_app = JulyApp('dashboard', __name__, handlers=handlers,
-                        template_folder='templates')
+app = JulyApp('dashboard', __name__, handlers=handlers,
+              template_folder='templates')

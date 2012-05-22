@@ -611,7 +611,7 @@ app_modules = {
     'User': UserModule,
 }
 
-topic_app = JulyApp(
+app = JulyApp(
     'topic', __name__, handlers=app_handlers,
     ui_modules=app_modules
 )

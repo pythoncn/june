@@ -4,7 +4,7 @@ from july.app import JulyApp
 from july.database import db
 from july.auth.recaptcha import RecaptchaMixin
 from .lib import UserHandler
-from .models import Member
+from .models import Member, Profile
 from . import validators
 
 
@@ -160,12 +160,12 @@ class DeleteAccountHandler(UserHandler):
 class SettingHandler(UserHandler):
     @authenticated
     def get(self):
-        self.render('setting.html')
+        profile = Profile.query.get_first(user_id=self.current_user.id)
+        self.render('setting.html', profile=profile)
 
     @authenticated
     def post(self):
         username = self.get_argument('username', None)
-        website = self.get_argument('website', None)
         if not username:
             self.flash_message('Please fill the required fields', 'error')
             self.render('setting.html')
@@ -176,17 +176,56 @@ class SettingHandler(UserHandler):
             self.render('setting.html')
             return
 
+        website = self.get_argument('website', '')
         if website and not validators.url(website):
             self.flash_message('Website is invalid', 'error')
             self.render('setting.html')
             return
 
-        if db.master.query(Member).filter_by(username=username).count() > 0:
+        links = {}
+        links['github'] = self.get_argument('github', '')
+        links['twitter'] = self.get_argument('twitter', '')
+        for key in links:
+            if links[key] and not validators.url(links[key]):
+                self.flash_message('%s is invalid' % key, 'error')
+                self.render('setting.html')
+                return
+
+        #: edit profile
+        profile = Profile.query.get_first(user_id=self.current_user.id)
+        if not profile:
+            profile = Profile(user_id=self.current_user.id)
+
+        for name in links:
+            profile.set_link(name, links[name])
+
+        profile.city = self.get_argument('city', '')
+        profile.description = self.get_argument('description', '')
+
+        if self.current_user.username == username:
+            user = Member.query.get(self.current_user.id)
+            user.website = website
+            db.master.add(user)
+            db.master.add(profile)
+            db.master.commit()
+            self.redirect('/account/setting')
+            return
+
+        #: changed username
+        if not profile.edit_username_count:
+            self.flash_message("You can't edit username", 'warn')
+            self.render('setting.html')
+            return
+
+        profile.edit_username_count -= 1
+        db.master.add(profile)
+
+        if Member.query.filter_by(username=username).count() > 0:
             self.flash_message('Username has been taken', 'error')
             self.render('setting.html')
             return
 
-        user = db.master.query(Member).get(self.current_user.id)
+        user = Member.query.get(self.current_user.id)
         user.username = username
         user.website = website
         db.master.add(user)
@@ -204,7 +243,7 @@ handlers = [
     ('/delete', DeleteAccountHandler),
 ]
 
-account_app = JulyApp(
+app = JulyApp(
     'account',
     __name__,
     handlers=handlers,
