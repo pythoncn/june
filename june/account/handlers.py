@@ -165,27 +165,28 @@ class SettingHandler(UserHandler):
 
     @authenticated
     def post(self):
+        profile = Profile.query.get_first(user_id=self.current_user.id)
         username = self.get_argument('username', None)
         if not username:
             self.flash_message('Please fill the required fields', 'error')
-            self.render('setting.html')
+            self.render('setting.html', profile=profile)
             return
 
         if not validators.username(username):
             self.flash_message('Username is invalid', 'error')
-            self.render('setting.html')
+            self.render('setting.html', profile=profile)
             return
 
         website = self.get_argument('website', '')
         if website and not validators.url(website):
             self.flash_message('Website is invalid', 'error')
-            self.render('setting.html')
+            self.render('setting.html', profile=profile)
             return
 
         #: edit profile
-        profile = Profile.query.get_first(user_id=self.current_user.id)
         if not profile:
-            profile = Profile(user_id=self.current_user.id)
+            profile = Profile(user_id=self.current_user.id,
+                              edit_username_count=2)
 
         profile.city = self.get_argument('city', '')
         profile.description = self.get_argument('description', '')
@@ -202,20 +203,21 @@ class SettingHandler(UserHandler):
         #: changed username
         if not profile.edit_username_count:
             self.flash_message("You can't edit username", 'warn')
-            self.render('setting.html')
+            self.render('setting.html', profile=profile)
+            return
+
+        if Member.query.filter_by(username=username).count() > 0:
+            self.flash_message('Username has been taken', 'error')
+            self.render('setting.html', profile=profile)
             return
 
         profile.edit_username_count -= 1
         db.master.add(profile)
 
-        if Member.query.filter_by(username=username).count() > 0:
-            self.flash_message('Username has been taken', 'error')
-            self.render('setting.html')
-            return
-
         user = Member.query.get(self.current_user.id)
         user.username = username
         user.website = website
+        user.role = 2
         db.master.add(user)
         db.master.commit()
         self.redirect('/account/setting')

@@ -15,7 +15,7 @@ from june.account.lib import UserHandler
 from june.account.decorators import require_user
 from june.account.models import Member
 from june.node.models import Node
-from june.util import Pagination
+from june.util import Pagination, find_mention
 
 from .models import Topic, Reply, Vote, TopicLog
 from .lib import get_full_replies
@@ -369,7 +369,16 @@ class CreateReplyHandler(UserHandler):
         cache.set(key, url, 100)
         self.redirect("%s#reply%s" % (url, topic.reply_count))
 
-        #TODO: notifications
+        refer = '<a href="/topic/%s#reply-%s">%s</a>' % \
+                (topic.id, topic.reply_count, topic.title)
+        #: reply notification
+        self.create_notification(topic.user_id, content, refer, type='reply')
+        #: mention notification
+        for username in set(find_mention(content)):
+            self.create_notification(username, content, refer,
+                                     exception=topic.user_id)
+
+        db.master.commit()
         #TODO: social networks
 
 
@@ -383,6 +392,7 @@ class ReplyHandler(UserHandler):
 
     @require_user
     def post(self, reply_id):
+        #: toggle accept of a reply by topic owner
         _ = self.locale.translate
         reply = Reply.query.get_first(id=reply_id)
         if not reply:
@@ -410,6 +420,7 @@ class ReplyHandler(UserHandler):
 
     @authenticated
     def delete(self, reply_id):
+        #: delete a reply by reply owner
         reply = Reply.query.get_first(id=reply_id)
         if not reply:
             self.set_status(404)
@@ -450,8 +461,8 @@ class ReplyHandler(UserHandler):
 
         #: replyer loose reputation
         replyer = Member.query.get_first(id=reply.user_id)
-        loose = accept_reply_impact_for_user(self.current_user.reputation)
-        replyer.reputation -= loose
+        lose = accept_reply_impact_for_user(self.current_user.reputation)
+        replyer.reputation -= lose
         db.master.add(replyer)
         self.write({'stat': 'ok', 'data': 'unaccept'})
 

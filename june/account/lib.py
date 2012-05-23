@@ -1,5 +1,6 @@
 from july.web import JulyHandler
-from .models import Member
+from july.database import db
+from .models import Member, Notification
 
 
 class UserHandler(JulyHandler):
@@ -36,3 +37,24 @@ class UserHandler(JulyHandler):
         )
         self.send_error(403)
         return False
+
+    def create_notification(self, receiver, content, refer, **kwargs):
+        if not self.current_user:
+            return
+        if isinstance(receiver, str):
+            # receiver is username
+            receiver = Member.query.filter_by(username=receiver).value('id')
+
+        if not receiver:
+            return
+        if receiver == self.current_user.id:
+            #: can't send notification to oneself
+            return
+        if 'exception' in kwargs and receiver == kwargs['exception']:
+            return
+
+        data = Notification(sender=self.current_user.id, receiver=receiver,
+                            content=content, refer=refer)
+        if 'type' in kwargs:
+            data.type = kwargs['type']
+        db.master.add(data)

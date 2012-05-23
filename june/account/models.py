@@ -112,5 +112,5 @@ class Notification(db.Model):
     content = Column(String(400))
     refer = Column(String(600))
 
-    type = Column(String(20), default='reply')
+    type = Column(String(20), default='mention')
     created = Column(DateTime, default=datetime.utcnow)
