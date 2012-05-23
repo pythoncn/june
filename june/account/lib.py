@@ -41,7 +41,7 @@ class UserHandler(JulyHandler):
     def create_notification(self, receiver, content, refer, **kwargs):
         if not self.current_user:
             return
-        if isinstance(receiver, str):
+        if not isinstance(receiver, (int, long)):
             # receiver is username
             receiver = Member.query.filter_by(username=receiver).value('id')
 
