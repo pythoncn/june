@@ -49,10 +49,11 @@
         {{topic.reply_count}} {{_("replies")}} |
         {{topic.hits}} {{_("hits")}}
     </div>
+    {% set index = 0 %}
     {% for reply in pagination.datalist %}
-    <div id="reply-{{reply.id}}" class="ui-cell reply fn-clear">
+    {% set index += 1 %}
+    <div id="reply-{{index}}" class="ui-cell reply fn-clear">
         <a href="/member/{{reply.user.username}}" class="ui-avatar"><img src="{{reply.user.get_avatar(48)}}" width="48" height="48" /></a>
-
         <div class="ui-cell-bottom-right{%if reply.accepted == 'y'%} active{%end%}">
             {% if current_user and current_user.id == reply.user_id %}
             <a href="#{{reply.id}}" class="js-delete"><span class="icon-trash"></span></a>
@@ -64,7 +65,7 @@
         <div class="reply-content fn-wrap">
             <div class="reply-meta">
                 <a href="/member/{{reply.user.username}}">{{reply.user.username}}</a> {{_("reply at")}}
-                <time datetime="{{xmldatetime(reply.created)}}">{{timesince(reply.created, locale.code)}}</time>
+                <time datetime="{{xmldatetime(reply.created)}}">{{timesince(reply.created, locale.code)}}</time> #{{index}}
             </div>
             <div class="content">
                 {{markdown(reply.content)}}

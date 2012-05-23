@@ -4,7 +4,7 @@ from tornado.auth import GoogleMixin
 from july.app import JulyApp
 from july.database import db
 from july.auth.recaptcha import RecaptchaMixin
-from .lib import UserHandler
+from .lib import UserHandler, get_full_notifications
 from .models import Member, Profile, Notification
 from . import validators
 
@@ -230,6 +230,7 @@ class NotificationHandler(UserHandler):
         user = Member.query.get(self.current_user.id)
         messages = Notification.query.filter_by(receiver=user.id)\
                 .order_by('-id')[:20]
+        messages = get_full_notifications(messages)
         self.render('notification.html', messages=messages)
 
         #: after render, modify user.last_notify

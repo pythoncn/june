@@ -1,5 +1,6 @@
 from july.web import JulyHandler
 from july.database import db
+from july.cache import get_cache_list
 from .models import Member, Notification
 
 
@@ -58,3 +59,11 @@ class UserHandler(JulyHandler):
         if 'type' in kwargs:
             data.type = kwargs['type']
         db.master.add(data)
+
+
+def get_full_notifications(messages):
+    users = get_cache_list(Member, (m.sender for m in messages), 'member:')
+    for msg in messages:
+        if msg.sender in users:
+            msg.who = users[msg.sender]
+            yield msg

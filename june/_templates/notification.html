@@ -3,23 +3,37 @@
 {% block subtitle %}{{ _("Notification") }}{% end %}
 {% block afterstyle %}
 <style type="text/css">
-    #main .active {
-        background: #f4f3de;
+    .notification .header {
+        font-size: 12px;
     }
-    .content .fn-wrap a {
-        color: #565656;
+    .notification .header a {
+        font-weight: bold;
+    }
+    .notification .unread {
+        background: rgba(0, 200, 0, 0.08);
     }
 </style>
 {% end %}
 
 {% block content %}
-<div class="ui-box">
+<div class="ui-box notification">
     <div class="ui-box-header">
         <h4>{{_("Notification")}}</h4>
     </div>
+    {% set index = 0 %}
     {% for msg in messages %}
+    {% set index += 1 %}
     <div class="ui-cell{% if msg.readed == 'n' %} unread{%end%}">
-        {{msg.content}}
+        <a href="/~{{msg.who.username}}" class="ui-avatar"><img src="{{msg.who.get_avatar(48)}}" width="48" height="48" /></a>
+        <div class="fn-wrap">
+            <div class="header">{{ _(msg.type) }} on {{ msg.refer }}</div>
+            {{ markdown(msg.content) }}
+        </div>
+    </div>
+    {% end %}
+    {% if not index %}
+    <div class="ui-box-container">
+        <p>{{ _("You have no notification") }}</p>
     </div>
     {% end %}
 </div>
