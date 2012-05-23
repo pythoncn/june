@@ -239,8 +239,26 @@ class NotificationHandler(UserHandler):
         db.master.commit()
 
     @authenticated
+    def post(self):
+        #: mark all as read
+        messages = Notification.query.filter_by(readed='n')\
+                .filter_by(receiver=self.current_user.id).all()
+        for msg in messages:
+            msg.readed = 'y'
+            db.master.add(msg)
+
+        db.master.commit()
+        self.write({'stat': 'ok'})
+
+    @authenticated
     def delete(self):
-        pass
+        #: delete all
+        for msg in Notification.query.filter_by(receiver=self.current_user.id):
+            db.master.delete(msg)
+
+        db.master.commit()
+        self.write({'stat': 'ok'})
+
 
 handlers = [
     ('/signup', SignupHandler),
