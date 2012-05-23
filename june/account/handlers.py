@@ -1,10 +1,11 @@
+import datetime
 from tornado.web import authenticated, asynchronous
 from tornado.auth import GoogleMixin
 from july.app import JulyApp
 from july.database import db
 from july.auth.recaptcha import RecaptchaMixin
 from .lib import UserHandler
-from .models import Member, Profile
+from .models import Member, Profile, Notification
 from . import validators
 
 
@@ -223,6 +224,23 @@ class SettingHandler(UserHandler):
         self.redirect('/account/setting')
 
 
+class NotificationHandler(UserHandler):
+    @authenticated
+    def get(self):
+        user = Member.query.get(self.current_user.id)
+        messages = Notification.query.filter_by(receiver=user.id)\
+                .order_by('-id')[:20]
+        self.render('notification.html', messages=messages)
+
+        #: after render, modify user.last_notify
+        user.last_notify = datetime.datetime.utcnow()
+        db.master.add(user)
+        db.master.commit()
+
+    @authenticated
+    def delete(self):
+        pass
+
 handlers = [
     ('/signup', SignupHandler),
     ('/signin', SigninHandler),
@@ -231,6 +249,7 @@ handlers = [
     ('/setting', SettingHandler),
     ('/signout/everywhere', SignoutEverywhereHandler),
     ('/delete', DeleteAccountHandler),
+    ('/notification', NotificationHandler),
 ]
 
 app = JulyApp('account', __name__, handlers=handlers)

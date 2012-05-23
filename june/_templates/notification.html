@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block subtitle %}{{ _("Notification") }}{% end %}
+{% block afterstyle %}
+<style type="text/css">
+    #main .active {
+        background: #f4f3de;
+    }
+    .content .fn-wrap a {
+        color: #565656;
+    }
+</style>
+{% end %}
+
+{% block content %}
+<div class="ui-box">
+    <div class="ui-box-header">
+        <h4>{{_("Notification")}}</h4>
+    </div>
+    {% for msg in messages %}
+    <div class="ui-cell{% if msg.readed == 'n' %} unread{%end%}">
+        {{msg.content}}
+    </div>
+    {% end %}
+</div>
+{% end %}
+
+{% block sidebar %}
+<div class="ui-box">
+    <div class="ui-box-header warn">
+        <h4>Important</h4>
+    </div>
+    <div class="ui-box-container">
+        <a href="#" class="ui-btn">Mark all as read</a>
+        <a href="#" class="ui-btn">Delete all</a>
+    </div>
+</div>
+{% end %}

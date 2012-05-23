@@ -43,7 +43,6 @@ class Member(db.Model):
     reputation = Column(Integer, default=20, index=True)
     token = Column(String(16))
     created = Column(DateTime, default=datetime.utcnow)
-    last_notify = Column(DateTime, default=datetime.utcnow)
 
     def __init__(self, email, **kwargs):
         self.email = email.lower()
@@ -114,3 +113,4 @@ class Notification(db.Model):
 
     type = Column(String(20), default='mention')
     created = Column(DateTime, default=datetime.utcnow)
+    readed = Column(String(1), default='n')
