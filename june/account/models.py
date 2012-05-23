@@ -57,6 +57,11 @@ class Member(db.Model):
         query = "%s?s=%s%s" % (md5email, size, options.gravatar_extra)
         return options.gravatar_base_url + query
 
+    def get_notification(self):
+        count = Notification.query.filter_by(readed='n')\
+                .filter_by(receiver=self.id).count()
+        return count
+
     def to_json(self):
         data = (
             '{"username":"%s", "avatar":"%s", "website":"%s",'

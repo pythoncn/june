@@ -60,6 +60,19 @@
                     {% block content %}{% end %}
                 </div>
                 <div id="sidebar">
+                    {% if current_user %}
+                    {% set notification = current_user.get_notification() %}
+                    {% if notification %}
+                    <div class="ui-box">
+                        <div class="ui-box-header">
+                            <h4>{{ _("Notification") }}</h4>
+                        </div>
+                        <div class="ui-box-container">
+                            <a class="notification" href="/account/notification">{{notification}} {{_("unread notification")}}</a>
+                        </div>
+                    </div>
+                    {% end %}
+                    {% end %}
                     {% block sidebar %}{% end %}
                 </div>
                 {% end %}

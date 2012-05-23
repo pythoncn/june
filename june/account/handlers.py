@@ -253,4 +253,5 @@ handlers = [
     ('/notification', NotificationHandler),
 ]
 
+
 app = JulyApp('account', __name__, handlers=handlers)
