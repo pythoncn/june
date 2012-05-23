@@ -119,3 +119,11 @@ class Notification(db.Model):
     type = Column(String(20), default='mention')
     created = Column(DateTime, default=datetime.utcnow)
     readed = Column(String(1), default='n')
+
+
+class Social(db.Model):
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, nullable=False, index=True)
+    enabled = Column(String(1), default='y')
+    service = Column(String(100))  # service name: twitter, douban
+    token = Column(Text)

@@ -78,6 +78,7 @@ def create_application():
         'june.account.handlers.app',
         url_prefix='/account'
     )
+    application.register_app('june.account.service.app', url_prefix='/social')
 
     #: register node app
     application.register_app('june.node.handlers.app', url_prefix='/node')

@@ -1,7 +1,7 @@
 from july.web import JulyHandler
 from july.database import db
 from july.cache import get_cache_list
-from .models import Member, Notification
+from .models import Member, Notification, Social
 
 
 class UserHandler(JulyHandler):
@@ -67,3 +67,11 @@ def get_full_notifications(messages):
         if msg.sender in users:
             msg.who = users[msg.sender]
             yield msg
+
+
+def get_social_map(user_id):
+    dct = {}
+    for network in Social.query.filter_by(user_id=user_id):
+        dct[network.service] = network
+
+    return dct
