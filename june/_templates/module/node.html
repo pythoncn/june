@@ -13,9 +13,9 @@
         <a href="/node/{{node.slug}}" class="ui-btn">{{ _("View") }}</a>
         <a href="/node/{{node.slug}}/create" class="ui-btn">{{ _("Create") }}</a>
         {% if following %}
-        <a href="#" class="ui-btn">{{ _("Unfollow") }}</a>
+        <a href="/node/{{node.slug}}" class="ui-btn following js-follow-node">{{ _("Following") }}</a>
         {% else %}
-        <a href="#" class="ui-btn">{{ _("Follow") }}</a>
+        <a href="/node/{{node.slug}}" class="ui-btn js-follow-node">{{ _("Follow") }}</a>
         {% end %}
     </div>
 </div>
@@ -32,3 +32,8 @@
     </div>
 </div>
 {% end %}
+<script type="text/javascript">
+    var june = june || {}; june.unfollow = "{{_('Unfollow')}}";
+    june.follow = "{{_('Follow')}}";
+    june.following = "{{_('Following')}}";
+</script>

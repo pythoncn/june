@@ -1,41 +1,29 @@
-import datetime
 import tornado.web
 from tornado.web import UIModule
-from july.web import JulyHandler
 from july.app import JulyApp
+from july.database import db
 from june.account.lib import UserHandler
-from june.topic.models import Topic
 from .models import FollowNode, Node
 
 
 class FollowNodeHandler(UserHandler):
-    @tornado.web.authenticated
-    def get(self, slug):
-        node = self.get_node_by_slug(slug)
-        if not node:
-            self.send_error(404)
-            return
-        self.follow_node(node.id)
-        self.db.commit()
-        self.redirect('/node/%s' % node.slug)
+    """Toggle following"""
 
-
-class UnfollowNodeHandler(UserHandler):
     @tornado.web.authenticated
-    def get(self, slug):
-        node = self.get_node_by_slug(slug)
-        if not node:
-            self.send_error(404)
+    def post(self, slug):
+        node = Node.query.filter_by(slug=slug).first_or_404()
+
+        user = self.current_user
+        follow = FollowNode.query.get_first(user_id=user.id, node_id=node.id)
+        if follow:
+            db.session.delete(follow)
+            db.session.commit()
+            self.write({'stat': 'ok', 'data': 'unfollow'})
             return
-        sql = 'delete from follownode where user_id=%s and node_id=%s' % \
-                (self.current_user.id, node.id)
-        self.db.execute(sql)
-        self.db.commit()
-        key1 = 'TopicListModule:%s:1:-impact' % self.current_user.id
-        key2 = 'follownode:%s' % self.current_user.id
-        key3 = 'FollowedNodesModule:%s' % self.current_user.id
-        self.cache.delete_multi([key1, key2, key3])
-        self.redirect('/node/%s' % node.slug)
+        follow = FollowNode(user_id=self.current_user.id, node_id=node.id)
+        db.session.add(follow)
+        db.session.commit()
+        self.write({'stat': 'ok', 'data': 'follow'})
 
 
 class NodeListHandler(UserHandler):
@@ -47,31 +35,8 @@ class NodeListHandler(UserHandler):
         self.render('node_list.html', nodes=nodes)
 
 
-class NodeFeedHandler(JulyHandler):
-    def get(self, slug):
-        self.set_header('Content-Type', 'text/xml; charset=utf-8')
-        node = self.get_node_by_slug(slug)
-        if not node:
-            self.send_error(404)
-            return
-        html = self.cache.get('nodefeed:%s' % str(slug))
-        if html is not None:
-            self.write(html)
-            return
-        topics = Topic.query.filter_by(node_id=node.id).order_by('-id')[:20]
-        user_ids = (topic.user_id for topic in topics)
-        users = self.get_users(user_ids)
-        now = datetime.datetime.utcnow()
-        html = self.render_string('feed.xml', topics=topics, users=users,
-                                  node=node, now=now)
-        self.cache.set('nodefeed:%s' % str(slug), html, 3600)
-        self.write(html)
-
-
 app_handlers = [
     ('/(\w+)/follow', FollowNodeHandler),
-    ('/(\w+)/unfollow', UnfollowNodeHandler),
-    ('/(\w+)/feed', NodeFeedHandler),
 ]
 
 
