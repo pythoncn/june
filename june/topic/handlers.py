@@ -29,7 +29,9 @@ class TopicHandler(UserHandler):
         topic = Topic.query.get_or_404(id)
         node = Node.query.get_or_404(topic.node_id)
         p = self.get_argument('p', 1)
-        pagination = Reply.query.filter_by(topic_id=topic.id).paginate(p, 50)
+
+        pagination = Reply.query.filter_by(topic_id=topic.id)\
+                .paginate(p, 50, total=topic.reply_count)
         pagination.items = get_full_replies(pagination.items)
 
         if self.current_user:
