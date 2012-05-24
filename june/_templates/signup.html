@@ -24,7 +24,10 @@
 
 {% block content %}
 <div class="ui-box">
-    <form action="" method="post">
+    <div class="ui-box-header">
+        <h4>{{_("Register")}}</h4>
+    </div>
+    <form action="" method="post" class="ui-box-container">
         {{ xsrf_form_html() }}
         <div class="fm-item fm-required">
             <label for="email" class="fm-label">{{ _("Email") }}</label>
@@ -46,5 +49,16 @@
             <a href="/account/signin/google" class="ui-btn">Signin with Google</a>
         </div>
     </form>
+</div>
+{% end %}
+
+{% block sidebar %}
+<div class="ui-box">
+    <div class="ui-box-header">
+        <h4>{{ _("Already have an account?") }}</h4>
+    </div>
+    <div class="ui-box-container">
+        <a href="/account/signin" class="ui-btn">{{_("Signin") }}</a>
+    </div>
 </div>
 {% end %}

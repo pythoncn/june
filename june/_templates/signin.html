@@ -8,6 +8,9 @@
 
 {% block content %}
 <div class="ui-box">
+    <div class="ui-box-header">
+        <h4>{{_("Login")}}</h4>
+    </div>
     <form class="ui-box-container" action="" method="post">
         {{ xsrf_form_html() }}
         <div class="fm-item fm-required">
@@ -24,14 +27,35 @@
         </div>
     </form>
 </div>
+
+<div class="ui-box">
+    <div class="ui-box-header">
+        <h4>{{ _("Find Password") }}</h4>
+    </div>
+    <form class="ui-box-container" action="/account/password" method="post">
+        {{ xsrf_form_html() }}
+        <input type="hidden" name="action" value="email" />
+        <div class="fm-item fm-required">
+            <label class="fm-label" for="email">{{ _("Email") }}</label>
+            <input type="email" class="fm-text" name="email" placeholder="Email" />
+            <div class="fm-explain">{{_("Please leave your contact email.")}}</div>
+        </div>
+        <div class="fm-item">
+            <button class="ui-btn">{{_("Send")}}</button>
+        </div>
+    </form>
+    <div class="ui-box-footer">
+        If you can't remember your email address, please contact administrators.
+    </div>
+</div>
 {% end %}
 
 {% block sidebar %}
 <div class="ui-box">
-    <div class="ui-box-container">
-        {{ _("Don't have an account?") }}
+    <div class="ui-box-header">
+        <h4>{{ _("Don't have an account?") }}</h4>
     </div>
-    <div class="ui-box-footer">
+    <div class="ui-box-container">
         <a href="/account/signup" class="ui-btn">{{ _("Signup") }}</a>
     </div>
 </div>

@@ -270,11 +270,16 @@ class PasswordHandler(UserHandler):
     - GET: 1. form view 2. verify link from email
     - POST: 1. send email to find password. 2. change password
     """
-    @authenticated
     def get(self):
         token = self.get_argument('verify', None)
         if token and self._verify_token(token):
             self.render('password.html', token=token)
+            return
+        if token:
+            self.flash_message('This link is expired, request again', 'warn')
+
+        if not self.current_user:
+            self.redirect('/account/signin')
             return
         self.render('password.html', token=None)
 
@@ -289,9 +294,22 @@ class PasswordHandler(UserHandler):
             return
         self.find_password()
 
-    @authenticated
     def send_password_email(self):
-        token = self._create_token(self.current_user)
+        email = self.get_argument('email', None)
+        if self.current_user:
+            user = self.current_user
+        elif not email:
+            self.flash_message("Please fill the required fields", "error")
+            self.redirect('/account/signin')
+            return
+        else:
+            user = Member.query.get_first(email=email)
+            if not user:
+                self.flash_message("User does not exists", "error")
+                self.redirect('/account/signin')
+                return
+
+        token = self._create_token(user)
         url = '%s/account/password?verify=%s' % \
                 (options.siteurl, urllib.quote(token))
         self.write(url)
