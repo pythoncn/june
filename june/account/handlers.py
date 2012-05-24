@@ -1,6 +1,10 @@
+import time
 import datetime
+import hashlib
+import urllib
 from tornado.web import authenticated, asynchronous
 from tornado.auth import GoogleMixin
+from tornado.options import options
 from july.app import JulyApp
 from july.database import db
 from july.auth.recaptcha import RecaptchaMixin
@@ -260,6 +264,103 @@ class NotificationHandler(UserHandler):
         self.write({'stat': 'ok'})
 
 
+class PasswordHandler(UserHandler):
+    """Password
+
+    - GET: 1. form view 2. verify link from email
+    - POST: 1. send email to find password. 2. change password
+    """
+    @authenticated
+    def get(self):
+        token = self.get_argument('verify', None)
+        if token and self._verify_token(token):
+            self.render('password.html', token=token)
+            return
+        self.render('password.html', token=None)
+
+    def post(self):
+        action = self.get_argument('action', None)
+        if action == 'email':
+            self.send_password_email()
+            return
+        password = self.get_argument('password', None)
+        if password:
+            self.change_password()
+            return
+        self.find_password()
+
+    @authenticated
+    def send_password_email(self):
+        token = self._create_token(self.current_user)
+        url = '%s/account/password?verify=%s' % \
+                (options.siteurl, urllib.quote(token))
+        self.write(url)
+        #TODO
+
+    @authenticated
+    def change_password(self):
+        user = Member.query.get_or_404(self.current_user.id)
+        password = self.get_argument('password', None)
+        if not user.check_password(password):
+            self.flash_message("Invalid password", "error")
+            self.render('password.html', token=None)
+            return
+        password1 = self.get_argument('password1', None)
+        password2 = self.get_argument('password2', None)
+        self._change_password(user, password1, password2)
+
+    def find_password(self):
+        token = self.get_argument('token', None)
+        if not token:
+            self.redirect('/account/password')
+            return
+        user = self._verify_token(token)
+        if not user:
+            self.flash_message('This link is expired, request again', 'warn')
+            self.redirect('/account/password')
+            return
+        password1 = self.get_argument('password1', None)
+        password2 = self.get_argument('password2', None)
+        self._change_password(user, password1, password2)
+
+    def _change_password(self, user, password1, password2):
+        if password1 != password2:
+            self.flash_message("Password doesn't match", 'error')
+            self.render('password.html', token=None)
+            return
+        user.password = user.create_password(password1)
+        user.token = user.create_token(16)
+        db.session.add(user)
+        db.session.commit()
+        self.flash_message('Password changed', 'info')
+        self.set_secure_cookie('user', '%s/%s' % (user.id, user.token))
+        self.redirect('/account/password')
+
+    def _create_token(self, user):
+        salt = user.create_token(8)
+        created = str(int(time.time()))
+        hsh = hashlib.sha1(salt + created + user.token).hexdigest()
+        return "%s|%s|%s|%s" % (user.email, salt, created, hsh)
+
+    def _verify_token(self, token):
+        splits = token.split('|')
+        if len(splits) != 4:
+            return False
+        email, salt, created, hsh = splits
+        delta = time.time() - int(created)
+        if delta < 1:
+            return False
+        if delta > 600:
+            # 10 minutes
+            return False
+        user = Member.query.get_first(email=email)
+        if not user:
+            return False
+        if hsh == hashlib.sha1(salt + created + user.token).hexdigest():
+            return user
+        return False
+
+
 handlers = [
     ('/signup', SignupHandler),
     ('/signin', SigninHandler),
@@ -269,6 +370,7 @@ handlers = [
     ('/signout/everywhere', SignoutEverywhereHandler),
     ('/delete', DeleteAccountHandler),
     ('/notification', NotificationHandler),
+    ('/password', PasswordHandler),
 ]
 
 
