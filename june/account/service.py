@@ -30,8 +30,8 @@ class TwitterHandler(UserHandler, TwitterMixin):
                 return
             twitter = networks['twitter']
             twitter.enabled = enabled
-            db.master.add(twitter)
-            db.master.commit()
+            db.session.add(twitter)
+            db.session.commit()
             self.redirect('/account/setting')
             return
         if self.get_argument('oauth_token', None):

@@ -26,6 +26,7 @@ from .lib import down_impact_for_topic, down_impact_for_user
 
 class TopicHandler(UserHandler):
     def get(self, id):
+        topic = Topic.query.get_or_404(id)
         page = self.get_argument('p', 1)
         try:
             page = int(page)
@@ -33,11 +34,6 @@ class TopicHandler(UserHandler):
             self.send_error(404)
             return
         if page < 0:
-            self.send_error(404)
-            return
-
-        topic = Topic.query.get_first(id=id)
-        if not topic:
             self.send_error(404)
             return
 
@@ -79,8 +75,8 @@ class TopicHandler(UserHandler):
             self.send_error(404)
             return
         topic.hits += 1
-        db.master.add(topic)
-        db.master.commit()
+        db.session.add(topic)
+        db.session.commit()
         self.write({'stat': 'ok'})
 
     @require_user
@@ -89,15 +85,15 @@ class TopicHandler(UserHandler):
         if not topic:
             return
         #: delete a topic
-        db.master.delete(topic)
+        db.session.delete(topic)
 
         #: decrease node.topic_count
         node = Node.query.get_first(id=topic.node_id)
         node.topic_count -= 1
-        db.master.add(node)
+        db.session.add(node)
 
         #: commit
-        db.master.commit()
+        db.session.commit()
 
         self.flash_message('Topic is deleted', 'info')
         self.redirect('/')
@@ -108,8 +104,8 @@ class TopicHandler(UserHandler):
         if not topic:
             return
         topic.status = 'close'
-        db.master.add(topic)
-        db.master.commit()
+        db.session.add(topic)
+        db.session.commit()
         self.flash_message('Topic is closed', 'info')
         self.redirect('/topic/%s' % topic.id)
 
@@ -133,12 +129,12 @@ class TopicHandler(UserHandler):
             self.redirect('/topic/%s' % topic.id)
             return
         user.reputation -= cost
-        db.master.add(user)
+        db.session.add(user)
 
         topic.status = 'promote'
         topic.impact += 86400  # one day
-        db.master.add(topic)
-        db.master.commit()
+        db.session.add(topic)
+        db.session.commit()
         self.flash_message('Your topic is promoted', 'info')
         self.redirect('/topic/%s' % topic.id)
 
@@ -208,9 +204,9 @@ class CreateNodeTopicHandler(UserHandler):
         topic.node_id = node.id
         topic.user_id = self.current_user.id
         node.topic_count += 1
-        db.master.add(topic)
-        db.master.add(node)
-        db.master.commit()
+        db.session.add(topic)
+        db.session.add(node)
+        db.session.commit()
 
         url = '/topic/%d' % topic.id
         cache.set(key, url, 100)
@@ -260,12 +256,12 @@ class EditTopicHandler(UserHandler):
 
         topic.title = title
         topic.content = content
-        db.master.add(topic)
+        db.session.add(topic)
 
         log = TopicLog(topic_id=topic.id, user_id=self.current_user.id)
-        db.master.add(log)
+        db.session.add(log)
 
-        db.master.commit()
+        db.session.commit()
 
         url = '/topic/%s' % topic.id
         self.redirect(url)
@@ -308,13 +304,13 @@ class MoveTopicHandler(UserHandler):
         old_node = Node.query.get_first(id=topic.node_id)
         old_node.topic_count -= 1
 
-        db.master.add(topic)
-        db.master.add(node)
-        db.master.add(old_node)
+        db.session.add(topic)
+        db.session.add(node)
+        db.session.add(old_node)
 
         #:TODO edit log
 
-        db.master.commit()
+        db.session.commit()
         self.redirect('/topic/%s' % topic.id)
 
 
@@ -358,9 +354,9 @@ class CreateReplyHandler(UserHandler):
         topic.last_reply_by = self.current_user.id
         topic.last_reply_time = datetime.utcnow()
 
-        db.master.add(reply)
-        db.master.add(topic)
-        db.master.commit()
+        db.session.add(reply)
+        db.session.add(topic)
+        db.session.commit()
 
         num = (topic.reply_count - 1) / 30 + 1
         url = '/topic/%s' % str(id)
@@ -378,7 +374,7 @@ class CreateReplyHandler(UserHandler):
             self.create_notification(username, content, refer,
                                      exception=topic.user_id)
 
-        db.master.commit()
+        db.session.commit()
         #TODO: social networks
 
 
@@ -430,9 +426,9 @@ class ReplyHandler(UserHandler):
             topic = Topic.query.get_first(id=reply.topic_id)
             if topic and topic.reply_count:
                 topic.reply_count -= 1
-            db.master.delete(reply)
-            db.master.add(topic)
-            db.master.commit()
+            db.session.delete(reply)
+            db.session.add(topic)
+            db.session.commit()
             self.write({'stat': 'ok'})
             return
         self.set_status(403)
@@ -442,28 +438,28 @@ class ReplyHandler(UserHandler):
         #: when accept an answer, topic owner pay 1 reputation
         user = Member.query.get_first(id=self.current_user.id)
         user.reputation -= 1
-        db.master.add(user)
+        db.session.add(user)
 
         reply.accepted = 'y'
-        db.master.add(reply)
+        db.session.add(reply)
 
         #: replyer get reputation
         replyer = Member.query.get_first(id=reply.user_id)
         replyer.reputation += accept_reply_impact_for_user(user.reputation)
-        db.master.add(replyer)
+        db.session.add(replyer)
         self.write({'stat': 'ok', 'data': 'accept'})
 
         #: TODO notification
 
     def unaccept(self, reply):
         reply.accepted = 'n'
-        db.master.add(reply)
+        db.session.add(reply)
 
         #: replyer loose reputation
         replyer = Member.query.get_first(id=reply.user_id)
         lose = accept_reply_impact_for_user(self.current_user.reputation)
         replyer.reputation -= lose
-        db.master.add(replyer)
+        db.session.add(replyer)
         self.write({'stat': 'ok', 'data': 'unaccept'})
 
 
@@ -500,13 +496,13 @@ class VoteTopicHandler(UserHandler):
         owner = Member.query.get_first(id=topic.user_id)
         if not vote:
             vote = Vote(user_id=user.id, topic_id=topic.id, type='up')
-            db.master.add(vote)
+            db.session.add(vote)
             self._active_up(topic, owner, user.reputation)
             return
         #: cancel vote
         if vote.type == 'up':
             vote.type = 'none'
-            db.master.add(vote)
+            db.session.add(vote)
             self._cancle_up(topic, owner, user.reputation)
             return
         #: change vote
@@ -515,7 +511,7 @@ class VoteTopicHandler(UserHandler):
             return
         #: vote
         vote.type = 'up'
-        db.master.add(vote)
+        db.session.add(vote)
         self._active_up(topic, owner, user.reputation)
         return
 
@@ -523,21 +519,21 @@ class VoteTopicHandler(UserHandler):
         #: increase topic's impact
         topic.impact += up_impact_for_topic(reputation)
         topic.up_count += 1
-        db.master.add(topic)
+        db.session.add(topic)
         #: increase topic owner's reputation
         owner.reputation += up_impact_for_user(reputation)
-        db.master.add(owner)
-        db.master.commit()
+        db.session.add(owner)
+        db.session.commit()
         self.write({'stat': 'ok', 'data': topic.up_count})
         return
 
     def _cancle_up(self, topic, owner, reputation):
         topic.impact -= up_impact_for_topic(reputation)
         topic.up_count -= 1
-        db.master.add(topic)
+        db.session.add(topic)
         owner.reputation -= up_impact_for_user(reputation)
-        db.master.add(owner)
-        db.master.commit()
+        db.session.add(owner)
+        db.session.commit()
         self.write({'stat': 'ok', 'data': topic.up_count})
         return
 
@@ -548,13 +544,13 @@ class VoteTopicHandler(UserHandler):
         owner = Member.query.get_first(id=topic.user_id)
         if not vote:
             vote = Vote(user_id=user.id, topic_id=topic.id, type='down')
-            db.master.add(vote)
+            db.session.add(vote)
             self._active_down(topic, owner, user.reputation)
             return
         #: cancel vote
         if vote.type == 'down':
             vote.type = 'none'
-            db.master.add(vote)
+            db.session.add(vote)
             self._cancel_down(topic, owner, user.reputation)
             return
 
@@ -564,7 +560,7 @@ class VoteTopicHandler(UserHandler):
             return
 
         vote.type = 'down'
-        db.master.add(vote)
+        db.session.add(vote)
         self._active_down(topic, owner, user.reputation)
         return
 
@@ -572,21 +568,21 @@ class VoteTopicHandler(UserHandler):
         #: increase topic's impact
         topic.impact -= down_impact_for_topic(reputation)
         topic.down_count += 1
-        db.master.add(topic)
+        db.session.add(topic)
         #: increase topic owner's reputation
         owner.reputation -= down_impact_for_user(reputation)
-        db.master.add(owner)
-        db.master.commit()
+        db.session.add(owner)
+        db.session.commit()
         self.write({'stat': 'ok', 'data': topic.down_count})
         return
 
     def _cancel_down(self, topic, owner, reputation):
         topic.impact += down_impact_for_topic(reputation)
         topic.down_count -= 1
-        db.master.add(topic)
+        db.session.add(topic)
         owner.reputation += down_impact_for_user(reputation)
-        db.master.add(owner)
-        db.master.commit()
+        db.session.add(owner)
+        db.session.commit()
         self.write({'stat': 'ok', 'data': topic.down_count})
         return
 

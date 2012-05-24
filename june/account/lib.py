@@ -58,7 +58,7 @@ class UserHandler(JulyHandler):
                             content=content, refer=refer)
         if 'type' in kwargs:
             data.type = kwargs['type']
-        db.master.add(data)
+        db.session.add(data)
 
 
 def get_full_notifications(messages):

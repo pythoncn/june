@@ -58,8 +58,8 @@ class GoogleSigninHandler(UserHandler, GoogleMixin):
         if not user:
             user = Member(email)
             user.password = '!'
-            db.master.add(user)
-            db.master.commit()
+            db.session.add(user)
+            db.session.commit()
             self.set_secure_cookie('user', '%s/%s' % (user.id, user.token))
             self.redirect('/account/setting')
             return
@@ -78,10 +78,10 @@ class SignoutHandler(UserHandler):
 class SignoutEverywhereHandler(UserHandler):
     @authenticated
     def get(self):
-        user = db.master.query(Member).get(self.current_user.id)
+        user = Member.query.get(self.current_user.id)
         user.token = user.create_token(16)
-        db.master.add(user)
-        db.master.commit()
+        db.session.add(user)
+        db.session.commit()
         self.redirect(self.next_url)
 
 
@@ -137,8 +137,8 @@ class SignupHandler(UserHandler, RecaptchaMixin):
             return
         user = Member(email)
         user.password = user.create_password(password)
-        db.master.add(user)
-        db.master.commit()
+        db.session.add(user)
+        db.session.commit()
         self.set_secure_cookie('user', '%s/%s' % (user.id, user.token))
         self.redirect('/account/setting')  # account information
         return
@@ -195,9 +195,9 @@ class SettingHandler(UserHandler):
         if self.current_user.username == username:
             user = Member.query.get(self.current_user.id)
             user.website = website
-            db.master.add(user)
-            db.master.add(profile)
-            db.master.commit()
+            db.session.add(user)
+            db.session.add(profile)
+            db.session.commit()
             self.redirect('/account/setting')
             return
 
@@ -213,14 +213,14 @@ class SettingHandler(UserHandler):
             return
 
         profile.edit_username_count -= 1
-        db.master.add(profile)
+        db.session.add(profile)
 
         user = Member.query.get(self.current_user.id)
         user.username = username
         user.website = website
         user.role = 2
-        db.master.add(user)
-        db.master.commit()
+        db.session.add(user)
+        db.session.commit()
         self.redirect('/account/setting')
 
 
@@ -235,8 +235,8 @@ class NotificationHandler(UserHandler):
 
         #: after render, modify user.last_notify
         user.last_notify = datetime.datetime.utcnow()
-        db.master.add(user)
-        db.master.commit()
+        db.session.add(user)
+        db.session.commit()
 
     @authenticated
     def post(self):
@@ -245,18 +245,18 @@ class NotificationHandler(UserHandler):
                 .filter_by(receiver=self.current_user.id).all()
         for msg in messages:
             msg.readed = 'y'
-            db.master.add(msg)
+            db.session.add(msg)
 
-        db.master.commit()
+        db.session.commit()
         self.write({'stat': 'ok'})
 
     @authenticated
     def delete(self):
         #: delete all
         for msg in Notification.query.filter_by(receiver=self.current_user.id):
-            db.master.delete(msg)
+            db.session.delete(msg)
 
-        db.master.commit()
+        db.session.commit()
         self.write({'stat': 'ok'})
 
 

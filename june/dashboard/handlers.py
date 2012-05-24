@@ -72,8 +72,8 @@ class CreateNode(DashHandler):
 
         node = Node(**o)
 
-        db.master.add(node)
-        db.master.commit()
+        db.session.add(node)
+        db.session.commit()
 
         self.reverse_redirect('dashboard')
 
@@ -89,7 +89,7 @@ class EditNode(DashHandler, DashMixin):
 
     @require_admin
     def post(self, slug):
-        node = db.master.query(Node).filter_by(slug=slug).first()
+        node = Node.query.filter_by(slug=slug).first()
         if not node:
             self.send_error(404)
             return
@@ -113,8 +113,8 @@ class EditNode(DashHandler, DashMixin):
         except:
             node.limit_role = 0
 
-        db.master.add(node)
-        db.master.commit()
+        db.session.add(node)
+        db.session.commit()
 
         self.redirect('/node/%s' % node.slug)
 
@@ -137,7 +137,7 @@ class EditMember(DashHandler, DashMixin):
 
     @require_admin
     def post(self, name):
-        user = db.master.query(Member).filter_by(username=name).first()
+        user = Member.query.get_first(username=name)
         if not user:
             self.send_error(404)
             return
@@ -145,8 +145,8 @@ class EditMember(DashHandler, DashMixin):
         self.update_model(user, 'email', True)
         self.update_model(user, 'role', True)
         self.update_model(user, 'reputation', True)
-        db.master.add(user)
-        db.master.commit()
+        db.session.add(user)
+        db.session.commit()
         self.reverse_redirect('dashboard')
 
 
@@ -175,38 +175,38 @@ class EditTopic(DashHandler):
             topic.node_id = int(node)
         except:
             pass
-        db.master.add(topic)
-        db.master.commit()
+        db.session.add(topic)
+        db.session.commit()
         self.redirect('/topic/%d' % topic.id)
 
 
 class EditReply(DashHandler):
     @require_admin
     def get(self, id):
-        reply = db.master.query(Reply).filter_by(id=id).first()
+        reply = Reply.query.filter_by(id=id).first()
         if not reply:
             self.send_error(404)
             return
         if self.get_argument('delete', 'false') == 'true':
-            topic = db.master.query(Topic).filter_by(id=reply.topic_id).first()
+            topic = Topic.query.filter_by(id=reply.topic_id).first()
             topic.reply_count -= 1
-            db.master.add(topic)
-            db.master.delete(reply)
-            db.master.commit()
+            db.session.add(topic)
+            db.session.delete(reply)
+            db.session.commit()
             self.reverse_redirect('dashboard')
             return
         self.render('reply.html', reply=reply)
 
     @require_admin
     def post(self, id):
-        reply = db.master.query(Reply).filter_by(id=id).first()
+        reply = Reply.query.get_or_404(id)
         if not reply:
             self.send_error(404)
             return
         content = self.get_argument('content', '')
         reply.content = content
-        db.master.add(reply)
-        db.master.commit()
+        db.session.add(reply)
+        db.session.commit()
         self.reverse_redirect('dashboard')
 
 

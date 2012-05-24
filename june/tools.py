@@ -27,8 +27,8 @@ def create_superuser():
     user = Member(email=email, username=username)
     user.password = Member.create_password(password)
     user.role = 10
-    db.master.add(user)
-    db.master.commit()
+    db.session.add(user)
+    db.session.commit()
     return user
 
 

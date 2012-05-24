@@ -5,8 +5,7 @@ cookie_secret = 'secret'
 
 
 #: sqlalchemy database
-sqlalchemy_master = "sqlite:///june.sqlite"
-sqlalchemy_slaves = {}
+sqlalchemy_engine = "sqlite:///june.sqlite"
 sqlalchemy_kwargs = {"echo": True}
 
 
