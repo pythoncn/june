@@ -15,7 +15,7 @@ from june.account.lib import UserHandler
 from june.account.decorators import require_user
 from june.account.models import Member
 from june.node.models import Node
-from june.util import Pagination, find_mention
+from june.util import find_mention
 
 from .models import Topic, Reply, Vote, TopicLog
 from .lib import get_full_replies
@@ -27,24 +27,10 @@ from .lib import down_impact_for_topic, down_impact_for_user
 class TopicHandler(UserHandler):
     def get(self, id):
         topic = Topic.query.get_or_404(id)
-        page = self.get_argument('p', 1)
-        try:
-            page = int(page)
-        except:
-            self.send_error(404)
-            return
-        if page < 0:
-            self.send_error(404)
-            return
-
-        p = Pagination(page, 50, topic.reply_count)
-        if topic.reply_count and p.page > p.page_count:
-            self.send_error(404)
-            return
-
-        node = Node.query.get_first(id=topic.node_id)
-        q = Reply.query.filter_by(topic_id=topic.id)[p.start:p.end]
-        p.datalist = get_full_replies(q)
+        node = Node.query.get_or_404(topic.node_id)
+        p = self.get_argument('p', 1)
+        pagination = Reply.query.filter_by(topic_id=topic.id).paginate(p, 50)
+        pagination.items = get_full_replies(pagination.items)
 
         if self.current_user:
             vote = Vote.query.get_first(
@@ -54,8 +40,8 @@ class TopicHandler(UserHandler):
 
         logs = TopicLog.query.filter_by(topic_id=topic.id)\
                 .order_by('-id').all()
-        self.render('topic.html', topic=topic, node=node, pagination=p,
-                    vote=vote, logs=logs)
+        self.render('topic.html', topic=topic, node=node,
+                    pagination=pagination, vote=vote, logs=logs)
 
     def post(self, id):
         action = self.get_argument('action', 'hit')

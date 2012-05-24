@@ -12,131 +12,71 @@ from june.node.models import FollowNode, Node
 from june.topic.models import Topic, Reply, Vote
 from june.topic.lib import get_full_topics
 from june.filters import markdown
-from june.util import Pagination
 
 
-class PageHandler(UserHandler):
-    def get_page(self, arg='p'):
-        page = self.get_argument(arg, 1)
-        try:
-            page = int(page)
-        except:
-            return None
-        if page < 0:
-            return None
-        return page
-
-
-class LatestHandler(PageHandler):
+class LatestHandler(UserHandler):
     def head(self):
         pass
 
     def get(self):
         title = 'Latest'
 
-        page = self.get_page()
-        if not page:
-            self.send_error(404)
-            return
-        total = Topic.query.count()
-        perpage = 30
+        p = self.get_argument('p', 1)
+        pagination = Topic.query.order_by('-last_reply_time').paginate(p, 30)
 
-        p = Pagination(page, perpage, total)
-        if total and p.page > p.page_count:
-            self.send_error(404)
-            return
-
-        q = Topic.query.order_by('-last_reply_time')[p.start:p.end]
-        p.datalist = get_full_topics(q)
-        self.render('topic_list.html', title=title, pagination=p)
+        pagination.items = get_full_topics(pagination.items)
+        self.render('topic_list.html', title=title, pagination=pagination)
 
 
-class PopularHandler(PageHandler):
+class PopularHandler(UserHandler):
     def head(self):
         pass
 
     def get(self):
         title = 'Popular'
 
-        page = self.get_page()
-        if not page:
-            self.send_error(404)
-            return
-        total = Topic.query.count()
-        perpage = 30
+        p = self.get_argument('p', 1)
+        pagination = Topic.query.order_by('-impact').paginate(p, 30)
 
-        p = Pagination(page, perpage, total)
-        if total and p.page > p.page_count:
-            self.send_error(404)
-            return
-
-        q = Topic.query.order_by('-impact')[p.start:p.end]
-        p.datalist = get_full_topics(q)
-        self.render('topic_list.html', title=title, pagination=p)
+        pagination.items = get_full_topics(pagination.items)
+        self.render('topic_list.html', title=title, pagination=pagination)
 
 
-class FollowingHandler(PageHandler):
+class FollowingHandler(UserHandler):
     @tornado.web.authenticated
     def get(self):
         title = 'Popular'
 
-        page = self.get_page()
-        if not page:
-            self.send_error(404)
-            return
-
         user_id = self.current_user.id
         fs = FollowNode.query.filter_by(user_id=user_id).values('node_id')
         node_ids = (f[0] for f in fs)
-        q = Topic.query.filter_by(node_id__in=node_ids)
 
-        total = q.count()
-        perpage = 30
+        p = self.get_argument('p', 1)
+        pagination = Topic.query.filter_by(node_id__in=node_ids)\
+                .order_by('-last_reply_time').paginate(p, 30)
 
-        p = Pagination(page, perpage, total)
-        if total and p.page > p.page_count:
-            self.send_error(404)
-            return
-
-        q = q.order_by('-impact')[p.start:p.end]
-        p.datalist = get_full_topics(q)
-        self.render('topic_list.html', title=title, pagination=p)
+        pagination.items = get_full_topics(pagination.items)
+        self.render('topic_list.html', title=title, pagination=pagination)
 
 
-class NodeHandler(PageHandler):
+class NodeHandler(UserHandler):
     def head(self, slug):
         pass
 
     def get(self, slug):
-        page = self.get_page()
-        if not page:
-            self.send_error(404)
-            return
-        node = Node.query.get_first(slug=slug)
-        if not node:
-            self.send_error(404)
-            return
+        node = Node.query.filter_by(slug=slug).first_or_404()
 
-        q = Topic.query.filter_by(node_id=node.id)
-        total = q.count()
-        perpage = 30
+        p = self.get_argument('p', 1)
+        pagination = Topic.query.filter_by(node_id=node.id)\
+                .order_by('-impact').paginate(p, 30)
 
-        p = Pagination(page, perpage, total)
-        if total and p.page > p.page_count:
-            self.send_error(404)
-            return
-
-        q = q.order_by('-impact')[p.start:p.end]
-        p.datalist = get_full_topics(q)
-        self.render('node.html', pagination=p, node=node)
+        pagination.items = get_full_topics(pagination.items)
+        self.render('topic_list.html', node=node, pagination=pagination)
 
 
-class MemberHandler(PageHandler):
+class MemberHandler(UserHandler):
     def get(self, username):
-        user = Member.query.get_first(username=username)
-        if not user:
-            self.send_error(404)
-            return
+        user = Member.query.filter_by(username=username).first_or_404()
 
         q = Topic.query.filter_by(user_id=user.id)
         topics = get_full_topics(q.order_by('-id')[:10])

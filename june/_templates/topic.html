@@ -50,7 +50,7 @@
         {{topic.hits}} {{_("hits")}}
     </div>
     {% set index = 0 %}
-    {% for reply in pagination.datalist %}
+    {% for reply in pagination.items %}
     {% set index += 1 %}
     <div id="reply-{{index}}" class="ui-cell reply fn-clear">
         <a href="/member/{{reply.user.username}}" class="ui-avatar"><img src="{{reply.user.get_avatar(48)}}" width="48" height="48" /></a>
@@ -75,7 +75,7 @@
     {% end %}
     {% if topic.reply_count %}
     <div class="ui-box-footer pagination">
-        {% for p in pagination.page_range %}
+        {% for p in pagination.iter_pages() %}
         <a href="?p={{p}}">{{p}}</a>
         {% end %}
     </div>
