@@ -21,6 +21,10 @@
 </div>
 {% end %}
 
+{% block sidebar %}
+{% include "snippet/feedback.html" %}
+{% end %}
+
 {% block afterjs %}
 <script type="text/javascript">
     $('#move-node-form .node').click(function() {

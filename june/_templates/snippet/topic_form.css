@@ -1,3 +1,6 @@
+#main .wrapper {
+    max-width: none;
+}
 #content {
     width: 50%;
 }

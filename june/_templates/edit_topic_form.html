@@ -56,14 +56,16 @@
     <div class="ui-box-header warn">
         <h4>{{_("Dangerous")}}</h4>
     </div>
-    <form action="/topic/{{topic.id}}" class="ui-box-container" method="post">
+    <div class="ui-box-container">
+        <div>If you don't have a password, <a href="/account/password">request one</a>.</div>
+        <div>Promote a topic will cost 100 reputation.</div>
+    </div>
+    <form action="/topic/{{topic.id}}" class="ui-box-footer" method="post">
         {{ xsrf_form_html() }}
         <div class="fm-item fm-required">
-            <label class="fm-label" for="password">{{ _("Password") }}</label>
-            <input type="password" class="fm-text" name="password" required/>
-            <div class="fm-explain">If you don't have a password, <a href="/account/password">request one</a></div>
+            <input type="password" class="fm-text" name="password" placeholder="Password" required/>
         </div>
-        <div class="fm-item">
+        <div>
             <button class="ui-btn" name="action" value="delete">{{_("Delete")}}</button>
             <button class="ui-btn" name="action" value="promote">{{_("Promote")}}</button>
             <button class="ui-btn" name="action" value="close">{{_("Close")}}</button>
