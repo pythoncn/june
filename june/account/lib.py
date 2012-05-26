@@ -47,6 +47,7 @@ class UserHandler(JulyHandler):
             receiver = Member.query.filter_by(username=receiver).value('id')
 
         if not receiver:
+            self.flash_message('There is no such member', 'error')
             return
         if receiver == self.current_user.id:
             #: can't send notification to oneself

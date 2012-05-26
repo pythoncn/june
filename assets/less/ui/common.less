@@ -48,8 +48,9 @@
     color: lighten(@darkColor, 10%);
 }
 
-/* signin form */
-#signin-box {
+/* overly */
+.ui-overlay-dialog {
+    display: none;
     position: fixed;
     top: -400px;
     left: 50%;
@@ -60,23 +61,27 @@
     z-index: 9999;
     .transition(top 0.2s ease-in);
 }
-.overlay-mode #signin-box {
+.overlay-mode .ui-overlay-dialog {
+    display: block;
     top: 100px;
 }
-#signin-box .ui-box-header {
+.ui-overlay-dialog .ui-box-header {
     color: #fff;
     font-size: 18px;
-    font-family: Georgia, serif;
     text-shadow: 1px 1px 0 #333;
 }
-#signin-box .js-close-overlay {
+.ui-overlay-dialog .js-close-overlay {
     position: absolute;
     top: 6px;
     right: 14px;
     cursor: pointer;
 }
-#signin-box .fm-text {
+.ui-overlay-dialog .fm-text {
     width: 80%;
+}
+.ui-overlay-dialog textarea.fm-text {
+    width: 90%;
+    height: 90px;
 }
 .overlay-mode .ui-overlay {
     position: fixed;
@@ -85,6 +90,7 @@
     top: 0;
     left: 0;
     background: rgba(0,0,0,0.6);
+    z-index: 999;
 }
 
 /* article */

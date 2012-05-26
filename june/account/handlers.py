@@ -10,6 +10,7 @@ from july.database import db
 from july.auth.recaptcha import RecaptchaMixin
 from .lib import UserHandler, get_full_notifications
 from .models import Member, Profile, Notification
+from .decorators import require_user
 from . import validators
 
 
@@ -386,6 +387,20 @@ class PasswordHandler(UserHandler):
         return None
 
 
+class MessageHandler(UserHandler):
+    @require_user
+    def post(self):
+        receiver = self.get_argument('username', None)
+        content = self.get_argument('content', None)
+        if not (receiver and content):
+            self.flash_message('Please fill the required fields', 'error')
+        else:
+            self.create_notification(receiver, content, '', type='message')
+            db.session.commit()
+
+        self.redirect(self.next_url)
+
+
 handlers = [
     ('/signup', SignupHandler),
     ('/signin', SigninHandler),
@@ -396,6 +411,7 @@ handlers = [
     ('/delete', DeleteAccountHandler),
     ('/notification', NotificationHandler),
     ('/password', PasswordHandler),
+    ('/message', MessageHandler),
 ]
 
 

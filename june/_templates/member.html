@@ -37,7 +37,7 @@
         <span>#{{user.id}} {{_("join at")}} {{ user.created.strftime("%Y-%m-%d") }}</span>
         {% if profile and profile.city %}| <span>{{ _("now at") }} <a href="/city/{{profile.city}}">{{profile.city}}</a></span>{% end %}
         {% if user.is_staff %}| <span class="ui-label">Staff</span>{% end %}
-        <a href="#" class="ui-btn">Send Message</a>
+        <a href="/~{{user.username}}" class="js-overlay ui-btn">{{ _("Send Message") }}</a>
     </div>
 </div>
 <div class="ui-box">
@@ -48,9 +48,11 @@
     {% for topic in topics %}
     {% module Template("module/topic_cell.html", topic=topic) %}
     {% end %}
+    {#
     <div class="ui-box-footer">
         <a href="/~{{user.username}}/topics">{{ _("More Topics") }} »</a>
     </div>
+    #}
 </div>
 
 <div class="ui-box">
@@ -62,9 +64,11 @@
     {% module Template("module/topic_cell.html", topic=topic) %}
     {% end %}
 
+    {#
     <div class="ui-box-footer">
         <a href="/~{{user.username}}/likes">{{ _("More Likes") }} »</a>
     </div>
+    #}
 </div>
 
 {% end %}
@@ -80,4 +84,25 @@
     </div>
     {% end %}
 </div>
+{% end %}
+
+{% block afterjs %}
+{% if current_user and current_user.id != user.id %}
+<div class="ui-overlay-dialog">
+    <div class="ui-box-header primary">
+        <strong>{{ _("Send Message") }}</strong>
+        <span class="js-close-overlay icon-cancel"></span>
+    </div>
+    <form class="ui-box-container" action="/account/message" method="post">
+        {{ xsrf_form_html() }}
+        <input type="hidden" name="next" value="{{request.uri}}" />
+        <input type="hidden" name="username" value="{{user.username}}" />
+        <div class="fm-item">
+            <textarea name="content" class="fm-text" placeholder="Message" required></textarea>
+        </div>
+        <button class="ui-btn">{{_("Send")}}</button>
+    </form>
+</div>
+<div class="ui-overlay"></div>
+{% end %}
 {% end %}

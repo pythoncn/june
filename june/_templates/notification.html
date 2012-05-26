@@ -12,6 +12,9 @@
     .notification .unread {
         background: rgba(0, 200, 0, 0.08);
     }
+    .notification p {
+        margin-top: 6px;
+    }
 </style>
 {% end %}
 
@@ -26,7 +29,7 @@
     <div class="ui-cell{% if msg.readed == 'n' %} unread{%end%}">
         <a href="/~{{msg.who.username}}" class="ui-avatar"><img src="{{msg.who.get_avatar(48)}}" width="48" height="48" /></a>
         <div class="fn-wrap">
-            <div class="header">{{ _(msg.type) }} on {{ msg.refer }}</div>
+            <div class="header"><strong>{{ _(msg.type.upper()) }}</strong>{%if msg.refer%} on {{ msg.refer }}{%end%}</div>
             {{ markdown(msg.content) }}
         </div>
     </div>

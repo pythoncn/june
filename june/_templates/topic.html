@@ -99,9 +99,11 @@
             <a href="#" class="js-preview" tabindex="-1">{{ _("Preview") }}</a>
             <a href="#" class="js-upload" tabindex="-1">{{ _("Upload") }}</a>
         </div>
-        <textarea name="content" class="fm-text" required></textarea>
+        <div class="fm-item">
+            <textarea name="content" class="fm-text" required></textarea>
+        </div>
+        <button type="submit" class="ui-btn">{{_("Post")}}</button>
     </div>
-    <button type="submit" class="ui-btn">{{_("Post")}}</button>
 </form>
 {% else %}
 <div class="ui-box-container">
