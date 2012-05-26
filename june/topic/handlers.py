@@ -400,6 +400,11 @@ class ReplyHandler(UserHandler):
         if reply.accepted == 'y':
             self.unaccept(reply)
             return
+
+        refer = '<a href="/topic/%s">%s</a>' % (topic.id, topic.title)
+        self.create_notification(
+            reply.user_id, reply.content, refer, type='accept'
+        )
         self.accept(reply)
 
     @authenticated
@@ -435,6 +440,7 @@ class ReplyHandler(UserHandler):
         replyer = Member.query.get_first(id=reply.user_id)
         replyer.reputation += accept_reply_impact_for_user(user.reputation)
         db.session.add(replyer)
+        db.session.commit()
         self.write({'stat': 'ok', 'data': 'accept'})
 
         #: TODO notification
@@ -448,6 +454,7 @@ class ReplyHandler(UserHandler):
         lose = accept_reply_impact_for_user(self.current_user.reputation)
         replyer.reputation -= lose
         db.session.add(replyer)
+        db.session.commit()
         self.write({'stat': 'ok', 'data': 'unaccept'})
 
 
