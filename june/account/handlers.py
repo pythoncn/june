@@ -1,7 +1,7 @@
 import time
 import datetime
 import hashlib
-import urllib
+import base64
 from tornado.web import authenticated, asynchronous
 from tornado.auth import GoogleMixin
 from tornado.options import options
@@ -275,8 +275,6 @@ class PasswordHandler(UserHandler):
         if token and self._verify_token(token):
             self.render('password.html', token=token)
             return
-        if token:
-            self.flash_message('This link is expired, request again', 'warn')
 
         if not self.current_user:
             self.redirect('/account/signin')
@@ -311,7 +309,7 @@ class PasswordHandler(UserHandler):
 
         token = self._create_token(user)
         url = '%s/account/password?verify=%s' % \
-                (options.siteurl, urllib.quote(token))
+                (options.siteurl, token)
         self.write(url)
         #TODO
 
@@ -334,7 +332,6 @@ class PasswordHandler(UserHandler):
             return
         user = self._verify_token(token)
         if not user:
-            self.flash_message('This link is expired, request again', 'warn')
             self.redirect('/account/password')
             return
         password1 = self.get_argument('password1', None)
@@ -358,25 +355,35 @@ class PasswordHandler(UserHandler):
         salt = user.create_token(8)
         created = str(int(time.time()))
         hsh = hashlib.sha1(salt + created + user.token).hexdigest()
-        return "%s|%s|%s|%s" % (user.email, salt, created, hsh)
+        token = "%s|%s|%s|%s" % (user.email, salt, created, hsh)
+        return base64.b64encode(token)
 
     def _verify_token(self, token):
+        try:
+            token = base64.b64decode(token)
+        except:
+            self.flash_message("Don't be evil", 'error')
+            return None
         splits = token.split('|')
         if len(splits) != 4:
-            return False
+            self.flash_message("Don't be evil", 'error')
+            return None
         email, salt, created, hsh = splits
         delta = time.time() - int(created)
         if delta < 1:
-            return False
+            self.flash_message("Don't be evil", 'error')
+            return None
         if delta > 600:
+            self.flash_message('This link is expired, request again', 'warn')
             # 10 minutes
-            return False
+            return None
         user = Member.query.get_first(email=email)
         if not user:
-            return False
+            return None
         if hsh == hashlib.sha1(salt + created + user.token).hexdigest():
             return user
-        return False
+        self.flash_message("Don't be evil", 'error')
+        return None
 
 
 handlers = [
