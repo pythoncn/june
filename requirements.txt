@@ -4,3 +4,5 @@
 misaka
 pygments
 sqlalchemy
+MySQL-python
+python-memcached
