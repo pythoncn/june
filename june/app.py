@@ -70,8 +70,7 @@ def create_application():
         static_url_prefix=options.static_url_prefix,
     )
     #: init application
-    from june.front.handlers import handlers
-    application = JulyApplication(handlers=handlers, **settings)
+    application = JulyApplication(**settings)
 
     #: register account app
     application.register_app(
@@ -94,10 +93,14 @@ def create_application():
     application.add_handler(('/node/(\w+)/create', CreateNodeTopicHandler))
     application.add_handler(('/reply/(\d+)', ReplyHandler))
 
+    #: register dashboard app
     application.register_app(
         'june.dashboard.handlers.app',
         url_prefix='/dashboard'
     )
+
+    #: register front app
+    application.register_app('june.front.handlers.app', url_prefix='')
 
     for key in ['sitename', 'siteurl', 'sitefeed', 'version']:
         application.register_context(key, options[key].value())

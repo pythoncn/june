@@ -2,6 +2,7 @@ import os.path
 import hashlib
 import tornado.web
 from tornado.options import options
+from july.app import JulyApp
 from july.web import JulyHandler
 from july.util import import_object
 from july.cache import cache
@@ -197,3 +198,6 @@ handlers = [
     ('/~(\w+)', MemberHandler),
     ('/member/(\w+)', RedirectMemberHandler),
 ]
+
+app = JulyApp('front', __name__, handlers=handlers,
+              template_folder='_templates')
