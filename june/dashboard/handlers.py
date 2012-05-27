@@ -11,13 +11,6 @@ from june.node.models import Node
 from june.topic.models import Topic, Reply
 
 
-class DashHandler(UserHandler):
-    app_template = True
-
-    def render(self, name, **kwargs):
-        return super(DashHandler, self).render('admin/' + name, **kwargs)
-
-
 class DashMixin(object):
     def update_model(self, model, attr, required=False):
         value = self.get_argument(attr, '')
@@ -27,7 +20,7 @@ class DashMixin(object):
             setattr(model, attr, value)
 
 
-class EditStorage(DashHandler):
+class EditStorage(UserHandler):
     @require_admin
     def post(self):
         self.set_storage('header', self.get_argument('header', ''))
@@ -37,11 +30,11 @@ class EditStorage(DashHandler):
         self.reverse_redirect('dashboard')
 
 
-class CreateNode(DashHandler):
+class CreateNode(UserHandler):
     @require_admin
     def get(self):
         node = ObjectDict()
-        self.render('node.html', node=node)
+        self.render('admin/node.html', node=node)
 
     @require_admin
     def post(self):
@@ -78,14 +71,14 @@ class CreateNode(DashHandler):
         self.reverse_redirect('dashboard')
 
 
-class EditNode(DashHandler, DashMixin):
+class EditNode(UserHandler, DashMixin):
     @require_admin
     def get(self, slug):
         node = Node.query.filter_by(slug=slug).first()
         if not node:
             self.send_error(404)
             return
-        self.render('node.html', node=node)
+        self.render('admin/node.html', node=node)
 
     @require_admin
     def post(self, slug):
@@ -119,28 +112,22 @@ class EditNode(DashHandler, DashMixin):
         self.redirect('/node/%s' % node.slug)
 
 
-class FlushCache(DashHandler):
+class FlushCache(UserHandler):
     @require_admin
     def get(self):
         cache.flush_all()
         self.write('done')
 
 
-class EditMember(DashHandler, DashMixin):
+class EditMember(UserHandler, DashMixin):
     @require_admin
     def get(self, name):
-        user = Member.query.filter_by(username=name).first()
-        if not user:
-            self.send_error(404)
-            return
-        self.render('member.html', user=user)
+        user = Member.query.filter_by(username=name).first_or_404()
+        self.render('admin/member.html', user=user)
 
     @require_admin
     def post(self, name):
-        user = Member.query.get_first(username=name)
-        if not user:
-            self.send_error(404)
-            return
+        user = Member.query.filter_by(username=name).first_or_404()
         self.update_model(user, 'username', True)
         self.update_model(user, 'email', True)
         self.update_model(user, 'role', True)
@@ -150,21 +137,15 @@ class EditMember(DashHandler, DashMixin):
         self.reverse_redirect('dashboard')
 
 
-class EditTopic(DashHandler):
+class EditTopic(UserHandler):
     @require_admin
     def get(self, id):
-        topic = Topic.query.filter_by(id=id).first()
-        if not topic:
-            self.send_error(404)
-            return
-        self.render('topic.html', topic=topic)
+        topic = Topic.query.get_or_404(id)
+        self.render('admin/topic.html', topic=topic)
 
     @require_admin
     def post(self, id):
-        topic = Topic.query.filter_by(id=id).first()
-        if not topic:
-            self.send_error(404)
-            return
+        topic = Topic.query.get_or_404(id)
         impact = self.get_argument('impact', None)
         node = self.get_argument('node', None)
         try:
@@ -180,13 +161,10 @@ class EditTopic(DashHandler):
         self.redirect('/topic/%d' % topic.id)
 
 
-class EditReply(DashHandler):
+class EditReply(UserHandler):
     @require_admin
     def get(self, id):
-        reply = Reply.query.filter_by(id=id).first()
-        if not reply:
-            self.send_error(404)
-            return
+        reply = Reply.query.get_or_404(id)
         if self.get_argument('delete', 'false') == 'true':
             topic = Topic.query.filter_by(id=reply.topic_id).first()
             topic.reply_count -= 1
@@ -195,7 +173,7 @@ class EditReply(DashHandler):
             db.session.commit()
             self.reverse_redirect('dashboard')
             return
-        self.render('reply.html', reply=reply)
+        self.render('admin/reply.html', reply=reply)
 
     @require_admin
     def post(self, id):
@@ -210,7 +188,7 @@ class EditReply(DashHandler):
         self.reverse_redirect('dashboard')
 
 
-class Dashboard(DashHandler):
+class Dashboard(UserHandler):
     @require_admin
     def get(self):
         user = self.get_argument('user', None)
@@ -223,7 +201,7 @@ class Dashboard(DashHandler):
             self.reverse_redirect('dashboard')
             return
         nodes = Node.query.all()
-        self.render('index.html', nodes=nodes)
+        self.render('admin/index.html', nodes=nodes)
 
 
 handlers = [

@@ -2,26 +2,19 @@
 
 {% block subtitle %} {{ _("Dashboard") }}{% end %}
 
-{% block afterstyle %}
-<style type="text/css">
-    .fm-row .fm-item textarea { width: 96%; }
-</style>
-{% end %}
 
-{% block main %}
-<form action="" method="post" class="fm">
-    {{ xsrf_form_html() }}
-    <div class="fm-row">
+{% block content %}
+<div class="ui-box">
+    <form action="" method="post" class="ui-box-container">
+        {{ xsrf_form_html() }}
         <div class="fm-item">
             <label class="fm-label" for="content">{{ _("Content") }}</label>
-            <textarea name="content" rows="10" class="fm-text" cols="30">{{reply.content}}</textarea>
+            <textarea name="content" class="fm-text">{{reply.content}}</textarea>
         </div>
-    </div>
-    <div class="fm-row">
         <div class="fm-item">
             <button class="ui-btn">{{_("Save")}}</button>
             <a href="?delete=true" class="ui-btn">{{ _("Delete") }}</a>
         </div>
-    </div>
-</form>
+    </form>
+</div>
 {% end %}

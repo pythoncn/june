@@ -72,8 +72,8 @@ class NodeHandler(UserHandler):
                 .order_by('-impact').paginate(p, 30)
 
         pagination.items = get_full_topics(pagination.items)
-        self.render('topic_list.html', node=node, pagination=pagination,
-                    title=title)
+        self.render('topic_list.html', node=node,
+                    pagination=pagination, title=title)
 
 
 class MemberHandler(UserHandler):
