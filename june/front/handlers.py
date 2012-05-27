@@ -65,13 +65,15 @@ class NodeHandler(UserHandler):
 
     def get(self, slug):
         node = Node.query.filter_by(slug=slug).first_or_404()
+        title = node.title
 
         p = self.get_argument('p', 1)
         pagination = Topic.query.filter_by(node_id=node.id)\
                 .order_by('-impact').paginate(p, 30)
 
         pagination.items = get_full_topics(pagination.items)
-        self.render('topic_list.html', node=node, pagination=pagination)
+        self.render('topic_list.html', node=node, pagination=pagination,
+                    title=title)
 
 
 class MemberHandler(UserHandler):
