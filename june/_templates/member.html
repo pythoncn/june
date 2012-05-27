@@ -71,9 +71,6 @@
     #}
 </div>
 
-{% end %}
-
-{% block sidebar %}
 <div class="ui-box">
     <div class="ui-box-header">
         <h4>{{ _("Replies") }}</h4>
@@ -85,6 +82,7 @@
     {% end %}
 </div>
 {% end %}
+
 
 {% block afterjs %}
 {% if current_user and current_user.id != user.id %}
