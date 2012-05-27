@@ -24,19 +24,11 @@
     <div class="ui-box-header">
         <h4>Site Information</h4>
     </div>
-    <form action="/dashboard/storage" method="post" class="ui-box-container">
+    <form action="" method="post" class="ui-box-container">
         {{ xsrf_form_html() }}
         <div class="fm-item">
-            <label class="fm-label">{{ _("Header") }}</label>
-            <textarea name="header" class="fm-text">{{g.header or ''}}</textarea>
-        </div>
-        <div class="fm-item">
             <label class="fm-label">{{ _("Sidebar") }}</label>
-            <textarea name="sidebar" class="fm-text">{{g.sidebar or ''}}</textarea>
-        </div>
-        <div class="fm-item">
-            <label class="fm-label">{{ _("Footer") }}</label>
-            <textarea name="footer" class="fm-text">{{g.footer or ''}}</textarea>
+            <textarea name="sidebar" class="fm-text">{{sidebar or ''}}</textarea>
         </div>
         <div class="fm-item">
             <button class="ui-btn">{{_("Save")}}</button>

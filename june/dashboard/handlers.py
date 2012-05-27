@@ -1,3 +1,4 @@
+from tornado.web import UIModule
 from tornado.web import URLSpec as url
 from july.app import JulyApp
 from july.util import ObjectDict
@@ -9,6 +10,7 @@ from june.account.models import Member
 from june.account.lib import UserHandler
 from june.node.models import Node
 from june.topic.models import Topic, Reply
+from .models import Storage
 
 
 class DashMixin(object):
@@ -18,16 +20,6 @@ class DashMixin(object):
             setattr(model, attr, value)
         elif not required:
             setattr(model, attr, value)
-
-
-class EditStorage(UserHandler):
-    @require_admin
-    def post(self):
-        self.set_storage('header', self.get_argument('header', ''))
-        self.set_storage('sidebar', self.get_argument('sidebar', ''))
-        self.set_storage('footer', self.get_argument('footer', ''))
-        db.commit()
-        self.reverse_redirect('dashboard')
 
 
 class CreateNode(UserHandler):
@@ -198,12 +190,18 @@ class Dashboard(UserHandler):
             self.reverse_redirect('dashboard')
             return
         nodes = Node.query.all()
-        self.render('admin/index.html', nodes=nodes)
+        sidebar = Storage.get('sidebar')
+        self.render('admin/index.html', nodes=nodes, sidebar=sidebar)
+
+    @require_admin
+    def post(self):
+        sidebar = self.get_argument('sidebar', None)
+        Storage.set('sidebar', sidebar)
+        self.reverse_redirect('dashboard')
 
 
 handlers = [
     url('/', Dashboard, name='dashboard'),
-    ('/storage', EditStorage),
     ('/node', CreateNode),
     ('/node/(\w+)', EditNode),
     url('/member/(.*)', EditMember, name='dashboard-member'),
@@ -212,5 +210,34 @@ handlers = [
     ('/flushcache', FlushCache),
 ]
 
-app = JulyApp('dashboard', __name__, handlers=handlers,
-              template_folder='templates')
+
+class SidebarMoudle(UIModule):
+    def render(self):
+        sidebar = Storage.get('sidebar')
+        return sidebar or ''
+
+
+class SiteInfoModule(UIModule):
+    def render(self):
+        _ = self.handler.locale.translate
+        member = Member.query.count()
+        topic = Topic.query.count()
+        node = Node.query.count()
+        reply = Reply.query.count()
+        html = '<ul>'
+        html += '<li>%s: %s</li>' % (_('Member'), member)
+        html += '<li>%s: %s</li>' % (_('Node'), node)
+        html += '<li>%s: %s</li>' % (_('Topic'), topic)
+        html += '<li>%s: %s</li>' % (_('Reply'), reply)
+        html += '</ul>'
+        return html
+
+modules = {
+    'Sidebar': SidebarMoudle,
+    'SiteInfo': SiteInfoModule,
+}
+
+app = JulyApp(
+    'dashboard', __name__, handlers=handlers,
+    ui_modules=modules, template_folder='templates'
+)

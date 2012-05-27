@@ -19,7 +19,7 @@ define('autoescape', None)
 
 # site config
 define('sitename', 'June', type=str)
-define('version', '1.1.0', type=str)
+define('version', '0.9.0', type=str)
 define('siteurl', 'http://lepture.com/project/june/')
 define('sitefeed', '/feed')
 

@@ -3,7 +3,6 @@
     <head>
         <meta charset="UTF-8" />
         <title>{%block title%}{%block subtitle%}{%end%} | {{g.sitename}}{%end%}</title>
-        {{ g.header or '' }}
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0" />
         <link rel="stylesheet" href="{{static_url('css/site.css')}}" />
         <link rel="stylesheet" href="{{static_url('fontello-4d0230b8/fontello-4d0230b8.css')}}" />
@@ -73,7 +72,16 @@
                     {% end %}
                     {% end %}
                     {% block sidebar %}{% end %}
-                    {% block sponors %}{% end %}
+
+                    {% block siteinfo %}
+                    {% module Sidebar() %}
+                    <div class="ui-box">
+                        <div class="ui-box-container">
+                            {% module SiteInfo() %}
+                        </div>
+                    </div>
+                    {% end %}
+
                 </div>
                 {% end %}
             </div>
