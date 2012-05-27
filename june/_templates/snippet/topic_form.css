@@ -14,7 +14,7 @@
         margin: 0;
     }
 }
-textarea {
+#editor textarea {
     width: 90%;
     height: 380px;
 }
