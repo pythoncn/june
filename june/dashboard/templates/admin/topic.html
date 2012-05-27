@@ -2,40 +2,20 @@
 
 {% block subtitle %} {{ _("Dashboard") }}{% end %}
 
-{% block main %}
-<form action="" method="post" class="fm">
-    {{ xsrf_form_html() }}
-    <div class="fm-row">
+{% block content %}
+<div class="ui-box">
+    <div class="ui-box-header">
+        <h4><a href="/topic/{{topic.id}}">{{topic.title}}</a></h4>
+    </div>
+    <form action="" method="post" class="ui-box-container">
+        {{ xsrf_form_html() }}
         <div class="fm-item">
             <label class="fm-label" for="impact">{{ _("Impact") }}</label>
             <input type="number" class="fm-text" name="impact" value="{{topic.impact}}" />
         </div>
-    </div>
-
-    <div class="fm-row">
-        <div class="fm-item">
-            <label class="fm-label" for="node">{{ _("Node") }}</label>
-            <input type="number" class="fm-text" name="node" value="{{topic.node_id}}" />
-        </div>
-    </div>
-
-    <div class="fm-row">
-        <div class="fm-item">
-            <label class="fm-label">up votes</label>
-            <input type="text" class="fm-text" value="{{topic.ups or ''}}" disabled/>
-        </div>
-    </div>
-    <div class="fm-row">
-        <div class="fm-item">
-            <label class="fm-label">down votes</label>
-            <input type="text" class="fm-text" value="{{topic.downs or ''}}" disabled/>
-        </div>
-    </div>
-
-    <div class="fm-row">
         <div class="fm-item">
             <button class="ui-btn">{{_("Save")}}</button>
         </div>
-    </div>
-</form>
+    </form>
+</div>
 {% end %}

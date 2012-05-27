@@ -59,7 +59,7 @@ class CreateNode(UserHandler):
             o.limit_role = 0
 
         if not (o.slug and o.title and o.description):
-            self.create_message('Form Error', 'Please fill the required field')
+            self.flash_message('Please fill the required field', 'error')
             self.render('node.html', node=o)
             return
 
@@ -74,10 +74,7 @@ class CreateNode(UserHandler):
 class EditNode(UserHandler, DashMixin):
     @require_admin
     def get(self, slug):
-        node = Node.query.filter_by(slug=slug).first()
-        if not node:
-            self.send_error(404)
-            return
+        node = Node.query.filter_by(slug=slug).first_or_404()
         self.render('admin/node.html', node=node)
 
     @require_admin
@@ -122,6 +119,8 @@ class FlushCache(UserHandler):
 class EditMember(UserHandler, DashMixin):
     @require_admin
     def get(self, name):
+        if self.current_user.username == name:
+            self.flash_message("Don't change your role", "warn")
         user = Member.query.filter_by(username=name).first_or_404()
         self.render('admin/member.html', user=user)
 
@@ -130,7 +129,10 @@ class EditMember(UserHandler, DashMixin):
         user = Member.query.filter_by(username=name).first_or_404()
         self.update_model(user, 'username', True)
         self.update_model(user, 'email', True)
-        self.update_model(user, 'role', True)
+
+        if self.current_user.id != user.id:
+            self.update_model(user, 'role', True)
+
         self.update_model(user, 'reputation', True)
         db.session.add(user)
         db.session.commit()
@@ -147,13 +149,8 @@ class EditTopic(UserHandler):
     def post(self, id):
         topic = Topic.query.get_or_404(id)
         impact = self.get_argument('impact', None)
-        node = self.get_argument('node', None)
         try:
             topic.impact = int(impact)
-        except:
-            pass
-        try:
-            topic.node_id = int(node)
         except:
             pass
         db.session.add(topic)
@@ -165,8 +162,8 @@ class EditReply(UserHandler):
     @require_admin
     def get(self, id):
         reply = Reply.query.get_or_404(id)
+        topic = Topic.query.get_or_404(reply.topic_id)
         if self.get_argument('delete', 'false') == 'true':
-            topic = Topic.query.filter_by(id=reply.topic_id).first()
             topic.reply_count -= 1
             db.session.add(topic)
             db.session.delete(reply)
