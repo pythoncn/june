@@ -106,8 +106,9 @@ def create_application():
     application.register_context('now', datetime.datetime.utcnow)
 
     from june.filters import markdown, xmldatetime, localtime, timesince
-    from june.filters import topiclink
+    from june.filters import topiclink, normal_markdown
     application.register_filter('markdown', markdown)
+    application.register_filter('normal_markdown', normal_markdown)
     application.register_filter('xmldatetime', xmldatetime)
     application.register_filter('localtime', localtime)
     application.register_filter('timesince', timesince)

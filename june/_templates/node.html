@@ -14,11 +14,11 @@
     <div class="ui-box-header">
         <a href="/">{{g.sitename}}</a> » <a href="/node/{{node.slug}}">{{node.title}}</a>
     </div>
-    {% for topic in pagination.datalist %}
+    {% for topic in pagination.items %}
     {% module Template("module/topic_cell.html", topic=topic) %}
     {% end %}
     <div class="ui-box-footer pagination">
-        {% for p in pagination.page_range %}
+        {% for p in pagination.iter_pages() %}
         <a href="?p={{p}}">{{p}}</a>
         {% end %}
     </div>

@@ -203,6 +203,10 @@ def markdown(text, noclasses=False):
     return md.render(text)
 
 
+def normal_markdown(text):
+    return m.html(text)
+
+
 def xmldatetime(value):
     return value.strftime('%Y-%m-%dT%H:%M:%SZ')
 
