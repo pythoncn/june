@@ -77,11 +77,11 @@
 </div>
 <div class="ui-box">
     <div class="ui-box-header">
-        <h4>Important</h4>
+        <h4>{{_("Important")}}</h4>
     </div>
     <div class="ui-box-container">
         {% if profile %}
-        <p>You have {{ profile.edit_username_count }} chances to edit your username.</p>
+        <p>{{_("You have %s chances to edit your username.") % profile.edit_username_count }}</p>
         {% end %}
     </div>
     {% if profile and profile.edit_username_count == 0 %}

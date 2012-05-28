@@ -61,6 +61,9 @@
 "All Nodes","所有节点"
 "Following Nodes","关注节点"
 
+# account
+"You have %s chances to edit your username.","你有 %s 次机会修改用户名"
+
 # =========== python file ==========
 # timesince
 "%s minutes ago","%s分钟前"
