@@ -54,7 +54,7 @@ define('ga', '')  # google analytics
 define('gcse', '')  # google custom search
 
 # image backend
-define('backend', 'june.backend.local.LocalBackend')
+define('image_backend', 'june.front.backends.LocalBackend')
 
 
 def create_application():

@@ -157,14 +157,17 @@ class UploadHandler(UserHandler):
     @require_user
     @tornado.web.asynchronous
     def post(self):
+        self.set_header('Content-Type', 'application/json; charset=UTF-8')
         image = self.request.files.get('image', None)
         if not image:
             self.write('{"stat": "fail", "msg": "no image"}')
+            self.finish()
             return
         image = image[0]
         content_type = image.get('content_type', '')
         if content_type not in ('image/png', 'image/jpeg'):
             self.write('{"stat": "fail", "msg": "filetype not supported"}')
+            self.finish()
             return
         body = image.get('body', '')
         filename = hashlib.md5(body).hexdigest()
@@ -173,7 +176,7 @@ class UploadHandler(UserHandler):
         else:
             filename += '.jpg'
 
-        backend = import_object(options.backend)()
+        backend = import_object(options.image_backend)
         backend.save(body, filename, self._on_post)
 
     def _on_post(self, result):

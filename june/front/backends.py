@@ -5,14 +5,9 @@ from tornado.options import options
 from tornado import httpclient
 
 
-class Backend(object):
-    @classmethod
-    def save(cls, body, filename, callback=None):
-        raise NotImplemented
-
-
-class LocalBackend(Backend):
-    def save(self, body, filename, callback=None):
+class LocalBackend(object):
+    @staticmethod
+    def save(body, filename, callback=None):
         path = os.path.join(options.local_static_path, filename)
         f = open(path, 'w')
         f.write(body)
@@ -69,8 +64,9 @@ class Upyun(object):
         return
 
 
-class UpyunBackend(Backend):
-    def save(self, body, filename, callback):
+class UpyunBackend(object):
+    @staticmethod
+    def save(body, filename, callback):
         upyun = Upyun(options.upyun_bucket, options.upyun_username,
                       options.upyun_password)
         if hasattr(options, 'upyun_static_url'):

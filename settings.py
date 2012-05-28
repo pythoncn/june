@@ -16,3 +16,7 @@ recaptcha_secret = '6Le9jtESAAAAAO2f24yTcAEnrnzUv35B1ofONIlR'
 google_custom_search = "017842580319746762888:veoakwnpkqq"
 
 emoji_url = 'http://python-china.b0.upaiyun.com/emojis/'
+
+image_backend = 'june.front.backends.LocalBackend'
+local_static_path = '/tmp/'
+local_static_url = 'http://path.to.com/'
