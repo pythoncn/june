@@ -22,6 +22,10 @@
             <label class="fm-label">{{ _("Reputation") }}</label>
             <input type="number" class="fm-text" name="reputation" value="{{user.reputation}}" required />
         </div>
+        <div class="fm-item fm-required">
+            <label class="fm-label">{{ _("Chance") }}</label>
+            <input type="number" class="fm-text" name="edit_username_count" value="{%if profile%}{{profile.edit_username_count}}{%end%}" required />
+        </div>
         <div class="fm-item">
             <button class="ui-btn">{{_("Save")}}</button>
         </div>
