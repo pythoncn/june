@@ -44,6 +44,10 @@ class Member(db.Model):
     token = Column(String(16))
     created = Column(DateTime, default=datetime.utcnow)
 
+    city = Column(String(200))
+    edit_username_count = Column(Integer, default=2)
+    description = Column(Text)
+
     def __init__(self, email, **kwargs):
         self.email = email.lower()
         self.token = self.create_token(16)
@@ -98,14 +102,6 @@ class Member(db.Model):
     @property
     def is_admin(self):
         return self.role > 9
-
-
-class Profile(db.Model):
-    id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, nullable=False, index=True, unique=True)
-    city = Column(String(200))
-    description = Column(Text)
-    edit_username_count = Column(Integer, default=2)
 
 
 class Notification(db.Model):

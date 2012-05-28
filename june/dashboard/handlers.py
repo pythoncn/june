@@ -6,7 +6,7 @@ from july.database import db
 from july.cache import cache
 
 from june.account.decorators import require_admin
-from june.account.models import Member, Profile
+from june.account.models import Member
 from june.account.lib import UserHandler
 from june.node.models import Node
 from june.topic.models import Topic, Reply
@@ -115,18 +115,14 @@ class EditMember(UserHandler, DashMixin):
         if self.current_user.username == name:
             self.flash_message("Don't change your role", "warn")
         user = Member.query.filter_by(username=name).first_or_404()
-        profile = Profile.query.get_first(user_id=user.id)
-        self.render('admin/member.html', user=user, profile=profile)
+        self.render('admin/member.html', user=user)
 
     @require_admin
     def post(self, name):
         user = Member.query.filter_by(username=name).first_or_404()
-        profile = Profile.query.get_first(user_id=user.id)
-        if not profile:
-            profile = Profile(user_id=user.id)
 
         edit = force_int(self.get_argument('edit_username_count', 2), 1)
-        profile.edit_username_count = edit
+        user.edit_username_count = edit
 
         self.update_model(user, 'username', True)
         self.update_model(user, 'email', True)
@@ -136,7 +132,6 @@ class EditMember(UserHandler, DashMixin):
 
         self.update_model(user, 'reputation', True)
         db.session.add(user)
-        db.session.add(profile)
         db.session.commit()
         self.reverse_redirect('dashboard')
 

@@ -11,13 +11,15 @@ from june.topic.models import Topic, Vote
 
 
 def pre_update_topic_table():
-    db.master.execute('alter table topic add column up_count integer')
-    db.master.execute('alter table topic add column down_count integer')
+    db.session.execute('alter table topic add column up_count integer')
+    db.session.execute('alter table topic add column down_count integer')
+    db.session.commit()
 
 
 def post_update_topic_table():
-    db.master.execute('alter table topic delete column ups')
-    db.master.execute('alter table topic delete column downs')
+    db.session.execute('alter table topic delete column ups')
+    db.session.execute('alter table topic delete column downs')
+    db.session.commit()
 
 
 def update_topic():
@@ -31,7 +33,7 @@ def update_topic():
                 if not vote:
                     vote = Vote(user_id=id, topic_id=topic.id)
                 vote.type = 'up'
-                db.master.add(vote)
+                db.session.add(vote)
         else:
             topic.up_count = 0
 
@@ -43,11 +45,27 @@ def update_topic():
                 if not vote:
                     vote = Vote(user_id=id, topic_id=topic.id)
                 vote.type = 'down'
-                db.master.add(vote)
+                db.session.add(vote)
         else:
             topic.down_count = 0
 
-    db.master.commit()
+    db.session.commit()
 
 
-update_topic()
+#update_topic()
+
+
+#: member changes
+
+def pre_update_member_table():
+    db.session.execute('alter table member add column edit_username_count integer')
+    db.session.execute('alter table member add column city varchar(200)')
+    db.session.execute('alter table member add column description text')
+    db.session.commit()
+
+
+def post_update_member_table():
+    db.session.execute('update member set edit_username_count = 2')
+    db.session.commit()
+
+post_update_member_table()

@@ -25,7 +25,7 @@
         {{ xsrf_form_html() }}
         <div class="fm-item fm-required">
             <label class="fm-label" for="username">{{ _("Username") }}</label>
-            {% if profile and profile.edit_username_count < 1 %}
+            {% if current_user.edit_username_count < 1 %}
             <span class="fn-text">{{current_user.username or ''}}</span>
             {% else %}
             <input type="text" class="fm-text" name="username" value="{{current_user.username or ''}}"required />
@@ -39,11 +39,11 @@
         </div>
         <div class="fm-item">
             <label class="fm-label" for="city">{{ _("City") }}</label>
-            <input type="text" class="fm-text" name="city" {%if profile%}value="{{ profile.city or ''}}"{%end%} />
+            <input type="text" class="fm-text" name="city" value="{{ current_user.city or ''}}" />
         </div>
         <div class="fm-item">
             <label class="fm-label" for="description">{{ _("Description") }}</label>
-            <textarea class="fm-text" name="description">{%if profile%}{{profile.description or ''}}{%end%}</textarea>
+            <textarea class="fm-text" name="description">{{current_user.description or ''}}</textarea>
             <div class="fm-explain">Description supports markdown.</div>
         </div>
         <div class="fm-item">
@@ -80,11 +80,9 @@
         <h4>{{_("Important")}}</h4>
     </div>
     <div class="ui-box-container">
-        {% if profile %}
-        <p>{{_("You have %s chances to edit your username.") % profile.edit_username_count }}</p>
-        {% end %}
+        <p>{{_("You have %s chances to edit your username.") % current_user.edit_username_count }}</p>
     </div>
-    {% if profile and profile.edit_username_count == 0 %}
+    {% if current_user.edit_username_count == 0 %}
     <div class="ui-box-footer">
         <a href="/system/feedback" class="ui-btn">{{ _("Request a Chance") }}</a>
     </div>

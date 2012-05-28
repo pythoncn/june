@@ -9,7 +9,7 @@ from july.app import JulyApp
 from july.database import db
 from july.auth.recaptcha import RecaptchaMixin
 from .lib import UserHandler, get_full_notifications
-from .models import Member, Profile, Notification
+from .models import Member, Notification
 from .decorators import require_user
 from . import validators
 
@@ -166,64 +166,47 @@ class DeleteAccountHandler(UserHandler):
 class SettingHandler(UserHandler):
     @authenticated
     def get(self):
-        profile = Profile.query.get_first(user_id=self.current_user.id)
-        self.render('setting.html', profile=profile)
+        self.render('setting.html')
 
     @authenticated
     def post(self):
-        profile = Profile.query.get_first(user_id=self.current_user.id)
         username = self.get_argument('username', None)
         if not username:
             self.flash_message('Please fill the required fields', 'error')
-            self.render('setting.html', profile=profile)
+            self.render('setting.html')
             return
 
         if not validators.username(username):
             self.flash_message('Username is invalid', 'error')
-            self.render('setting.html', profile=profile)
+            self.render('setting.html')
             return
 
         website = self.get_argument('website', '')
         if website and not validators.url(website):
             self.flash_message('Website is invalid', 'error')
-            self.render('setting.html', profile=profile)
+            self.render('setting.html')
             return
-
-        #: edit profile
-        if not profile:
-            profile = Profile(user_id=self.current_user.id,
-                              edit_username_count=2)
-
-        profile.city = self.get_argument('city', '')
-        profile.description = self.get_argument('description', '')
-
-        if self.current_user.username == username:
-            user = Member.query.get(self.current_user.id)
-            user.website = website
-            db.session.add(user)
-            db.session.add(profile)
-            db.session.commit()
-            self.redirect('/account/setting')
-            return
-
-        #: changed username
-        if not profile.edit_username_count:
-            self.flash_message("You can't edit username", 'warn')
-            self.render('setting.html', profile=profile)
-            return
-
-        if Member.query.filter_by(username=username).count() > 0:
-            self.flash_message('Username has been taken', 'error')
-            self.render('setting.html', profile=profile)
-            return
-
-        profile.edit_username_count -= 1
-        db.session.add(profile)
 
         user = Member.query.get(self.current_user.id)
-        user.username = username
+
+        user.city = self.get_argument('city', '')
+        user.description = self.get_argument('description', '')
         user.website = website
-        user.role = 2
+
+        if user.username != username:
+            if not user.edit_username_count:
+                self.flash_message("You can't edit username", 'warn')
+                self.redirect('/account/setting')
+                return
+
+            if Member.query.filter_by(username=username).count() > 0:
+                self.flash_message('Username has been taken', 'error')
+                self.render('setting.html')
+                return
+
+            user.username = username
+            user.edit_username_count -= 1
+
         db.session.add(user)
         db.session.commit()
         self.redirect('/account/setting')
