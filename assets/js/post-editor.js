@@ -25,7 +25,7 @@ $(function(){
             alert(response.msg);
             return
         }
-        var text = '\n![alt](' + response.url + ')'
+        var text = '\n![image description](' + response.url + ')'
         $('#editor textarea').val($('#editor textarea').val() + text).focus();
     }
 
