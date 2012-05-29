@@ -1,7 +1,13 @@
+# Pre-defined settings.py, play with it as you wish.
+
 #: site configuration
 sitename = "June"
 siteurl = ''
 cookie_secret = 'secret'
+password_secret = 'password_secret'
+
+#: Default listening address (defined in July) is 127.0.0.1
+# address = '0.0.0.0'
 
 
 #: sqlalchemy database
