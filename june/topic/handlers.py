@@ -200,6 +200,12 @@ class CreateNodeTopicHandler(UserHandler):
         cache.set(key, url, 100)
         self.redirect(url)
 
+        #: notification
+        refer = '<a href="/topic/%s">%s</a>' % (topic.id, topic.title)
+        for username in set(find_mention(content)):
+            self.create_notification(username, content, refer,
+                                     exception=topic.user_id)
+
         #TODO social networks
 
     def _check_permission(self, node):
