@@ -19,9 +19,12 @@ class require_role(object):
                     url += '?next=' + next_url
                 return handler.redirect(url)
             user = handler.current_user
-            if user.role == 1:
+            if not user.username:
                 return handler.redirect('/account/setting')
-            if user.role == 0:
+            if user.role == 1:
+                handler.flash_message('Please verify your email', 'warn')
+                return handler.redirect('/account/setting')
+            if user.role < 1:
                 return handler.redirect('/doc/guideline')
             if user.role < self.role:
                 return handler.send_error(403)

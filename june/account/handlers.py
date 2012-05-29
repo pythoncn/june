@@ -8,10 +8,51 @@ from tornado.options import options
 from july.app import JulyApp
 from july.database import db
 from july.auth.recaptcha import RecaptchaMixin
+from july.ext import webservice
 from .lib import UserHandler, get_full_notifications
 from .models import Member, Notification
 from .decorators import require_user
 from . import validators
+
+
+class EmailMixin(object):
+    def _create_token(self, user):
+        salt = user.create_token(8)
+        created = str(int(time.time()))
+        hsh = hashlib.sha1(salt + created + user.token).hexdigest()
+        token = "%s|%s|%s|%s" % (user.email, salt, created, hsh)
+        return base64.b64encode(token)
+
+    def _verify_token(self, token):
+        try:
+            token = base64.b64decode(token)
+        except:
+            self.flash_message("Don't be evil", 'error')
+            return None
+        splits = token.split('|')
+        if len(splits) != 4:
+            self.flash_message("Don't be evil", 'error')
+            return None
+        email, salt, created, hsh = splits
+        delta = time.time() - int(created)
+        if delta < 1:
+            self.flash_message("Don't be evil", 'error')
+            return None
+        if delta > 600:
+            self.flash_message('This link is expired, request again', 'warn')
+            # 10 minutes
+            return None
+        user = Member.query.get_first(email=email)
+        if not user:
+            return None
+        if hsh == hashlib.sha1(salt + created + user.token).hexdigest():
+            return user
+        self.flash_message("Don't be evil", 'error')
+        return None
+
+    def send_email(self, email, title, content):
+        dct = dict(user=email, subject=title, body=content, subtype='html')
+        webservice.post('mail/outbox', dct)
 
 
 class SigninHandler(UserHandler):
@@ -90,7 +131,7 @@ class SignoutEverywhereHandler(UserHandler):
         self.redirect(self.next_url)
 
 
-class SignupHandler(UserHandler, RecaptchaMixin):
+class SignupHandler(UserHandler, RecaptchaMixin, EmailMixin):
     def head(self):
         pass
 
@@ -102,6 +143,17 @@ class SignupHandler(UserHandler, RecaptchaMixin):
 
     @asynchronous
     def post(self):
+        if self.current_user and self.get_argument('action') == 'email':
+            if self.current_user.role > 1:
+                self.write({'stat': 'fail', 'msg': 'your account is active'})
+                return
+            self.send_signup_email(self.current_user)
+            self.write({'stat': 'ok'})
+            return
+        if self.current_user:
+            self.redirect(self.next_url)
+            return
+
         email = self.get_argument('email', '')
         password1 = self.get_argument('password1', None)
         password2 = self.get_argument('password2', None)
@@ -144,9 +196,27 @@ class SignupHandler(UserHandler, RecaptchaMixin):
         user.password = user.create_password(password)
         db.session.add(user)
         db.session.commit()
+        self.send_signup_email(user)
         self.set_secure_cookie('user', '%s/%s' % (user.id, user.token))
         self.redirect('/account/setting')  # account information
         return
+
+    def send_signup_email(self, user):
+        token = self._create_token(user)
+        url = '%s/account/signup?verify=%s' % \
+                (options.siteurl, token)
+
+        template = (
+            '<div>Hello <strong>%(email)s</strong></div>'
+            '<br /><div>To active your account, follow'
+            '<a href="%(url)s">this link</a>.<div><br />'
+            "<div>If you can't click on this link, "
+            'copy and paste into your browser with: <br />'
+            '%(url)s </div>'
+        ) % {'email': user.email, 'url': url}
+        self.send_email(user.email, 'Active your account', template)
+        self.flash_message('Please check your email', 'info')
+        self.redirect('/account/setting')
 
 
 class DeleteAccountHandler(UserHandler):
@@ -248,7 +318,7 @@ class NotificationHandler(UserHandler):
         self.write({'stat': 'ok'})
 
 
-class PasswordHandler(UserHandler):
+class PasswordHandler(UserHandler, EmailMixin):
     """Password
 
     - GET: 1. form view 2. verify link from email
@@ -269,6 +339,7 @@ class PasswordHandler(UserHandler):
         action = self.get_argument('action', None)
         if action == 'email':
             self.send_password_email()
+            self.redirect('/account/setting')
             return
         password = self.get_argument('password', None)
         if password:
@@ -294,8 +365,17 @@ class PasswordHandler(UserHandler):
         token = self._create_token(user)
         url = '%s/account/password?verify=%s' % \
                 (options.siteurl, token)
-        self.write(url)
-        #TODO
+
+        template = (
+            '<div>Hello <strong>%(email)s</strong></div>'
+            '<br /><div>Find your password, follow '
+            '<a href="%(url)s">this link</a>.<div><br />'
+            "<div>If you can't click on this link, "
+            'copy and paste into your browser with: <br />'
+            '%(url)s </div>'
+        ) % {'email': user.email, 'url': url}
+        self.flash_message('Please check your email', 'info')
+        self.send_email(user.email, 'Find your password', template)
 
     @authenticated
     def change_password(self):
@@ -334,40 +414,6 @@ class PasswordHandler(UserHandler):
         self.flash_message('Password changed', 'info')
         self.set_secure_cookie('user', '%s/%s' % (user.id, user.token))
         self.redirect('/account/password')
-
-    def _create_token(self, user):
-        salt = user.create_token(8)
-        created = str(int(time.time()))
-        hsh = hashlib.sha1(salt + created + user.token).hexdigest()
-        token = "%s|%s|%s|%s" % (user.email, salt, created, hsh)
-        return base64.b64encode(token)
-
-    def _verify_token(self, token):
-        try:
-            token = base64.b64decode(token)
-        except:
-            self.flash_message("Don't be evil", 'error')
-            return None
-        splits = token.split('|')
-        if len(splits) != 4:
-            self.flash_message("Don't be evil", 'error')
-            return None
-        email, salt, created, hsh = splits
-        delta = time.time() - int(created)
-        if delta < 1:
-            self.flash_message("Don't be evil", 'error')
-            return None
-        if delta > 600:
-            self.flash_message('This link is expired, request again', 'warn')
-            # 10 minutes
-            return None
-        user = Member.query.get_first(email=email)
-        if not user:
-            return None
-        if hsh == hashlib.sha1(salt + created + user.token).hexdigest():
-            return user
-        self.flash_message("Don't be evil", 'error')
-        return None
 
 
 class MessageHandler(UserHandler):

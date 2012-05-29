@@ -99,6 +99,9 @@ def create_application():
         url_prefix='/dashboard'
     )
 
+    #: register mail service
+    application.register_app('july.ext.mail.handlers.app', url_prefix='/mail')
+
     #: register front app
     application.register_app('june.front.handlers.app', url_prefix='')
 
