@@ -9,6 +9,7 @@ def create_db():
     import account.models
     import node.models
     import topic.models
+    import dashboard.models
     db.Model.metadata.create_all(db.engine)
     return
 

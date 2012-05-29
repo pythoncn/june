@@ -57,7 +57,7 @@ install_css:
 	livereload site_css
 
 install_image:
-	if [ ! -d $(STATIC)/img ]; then mkdir $(STATIC)/img; fi
+	if [ ! -d $(STATIC)/img ]; then mkdir -p $(STATIC)/img; fi
 	cp -r assets/img/* $(STATIC)/img/
 
 

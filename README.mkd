@@ -39,6 +39,7 @@ current path.
     * markdown
     * pygments
     * python-memcached
+    * argparse
 
 2. check above, using ``june/tools.py`` to create everything
 
