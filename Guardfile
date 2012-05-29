@@ -18,6 +18,7 @@ def lib_js():
     github = 'https://raw.github.com'
     urls = [
         'assets/js/jquery.extends.js',
+        'assets/js/jquery.uploader.js',
         '%s/jaz303/tipsy/master/src/javascripts/jquery.tipsy.js' % github,
     ]
     for path in urls:
@@ -30,6 +31,7 @@ def editor_js():
     marked = 'https://raw.github.com/chjj/marked/master/lib/marked.js'
     uglifyjs(marked, output)()
     uglifyjs('assets/js/editor.js', output, 'a')()
+    uglifyjs('assets/js/post-editor.js', output, 'a')()
 
 
 def topic_js():
@@ -39,6 +41,7 @@ def topic_js():
     uglifyjs('%s/jquery.caret.js' % github, output)()
     uglifyjs('%s/jquery.atwho.js' % github, output, 'a')()
     uglifyjs('assets/js/topic.js', output, 'a')()
+    uglifyjs('assets/js/post-editor.js', output, 'a')()
 
 
 def site_js():

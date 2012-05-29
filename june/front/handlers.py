@@ -157,7 +157,6 @@ class UploadHandler(UserHandler):
     @require_user
     @tornado.web.asynchronous
     def post(self):
-        self.set_header('Content-Type', 'application/json; charset=UTF-8')
         image = self.request.files.get('image', None)
         if not image:
             self.write('{"stat": "fail", "msg": "no image"}')

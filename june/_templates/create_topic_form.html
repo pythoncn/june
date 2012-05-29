@@ -21,7 +21,7 @@
             <div id="editor-pannel">
                 <a href="#" class="js-write current" tabindex="-1">{{ _("Write") }}</a>
                 <a href="#" class="js-preview" tabindex="-1">{{ _("Preview") }}</a>
-                <a href="#" class="js-upload" tabindex="-1">{{ _("Upload") }}</a>
+                <a href="#" id="june-upload-button" class="js-upload" tabindex="-1">{{ _("Upload") }}</a>
             </div>
             <textarea name="content" class="fm-text" required></textarea>
             <div id="editor-preview"></div>
@@ -31,6 +31,7 @@
         </div>
     </form>
 </div>
+<input type="file" name="image" accept="image/*" />
 {% end %}
 
 {% block sidebar %}
