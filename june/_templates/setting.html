@@ -99,6 +99,19 @@
         <a href="/account/password" class="ui-btn">{{ _("Change Password") }}</a>
     </div>
 </div>
+<div class="ui-box">
+    <div class="ui-box-header warn">
+        <h4>{{_("Account")}}</h4>
+    </div>
+    <div class="ui-box-container">
+        <p>Your account is not active now, please verify your Email right now.</p>
+    </div>
+    <form action="/account/signup" class="ui-box-footer" method="post">
+        {{ xsrf_form_html() }}
+        <input type="hidden" name="action" value="email" />
+        <button class="ui-btn">{{_("Verify Account")}}</button>
+    </form>
+</div>
 {% end %}
 
 {% block notification %}{% end %}

@@ -136,6 +136,17 @@ class SignupHandler(UserHandler, RecaptchaMixin, EmailMixin):
         pass
 
     def get(self):
+        token = self.get_argument('verify', None)
+        if token:
+            user = self._verify_token(token)
+            if user:
+                user.role = 2
+                db.session.add(user)
+                db.session.commit()
+                self.flash_message('Your account is active', 'info')
+            self.redirect('/account/setting')
+            return
+
         if self.current_user:
             return self.redirect(self.next_url)
         recaptcha = self.recaptcha_render()
@@ -144,11 +155,11 @@ class SignupHandler(UserHandler, RecaptchaMixin, EmailMixin):
     @asynchronous
     def post(self):
         if self.current_user and self.get_argument('action') == 'email':
-            if self.current_user.role > 1:
-                self.write({'stat': 'fail', 'msg': 'your account is active'})
-                return
-            self.send_signup_email(self.current_user)
-            self.write({'stat': 'ok'})
+            if self.current_user.role < 1:
+                self.flash_message('Your account is active', 'info')
+            else:
+                self.send_signup_email(self.current_user)
+            self.redirect('/account/setting')
             return
         if self.current_user:
             self.redirect(self.next_url)
@@ -214,9 +225,9 @@ class SignupHandler(UserHandler, RecaptchaMixin, EmailMixin):
             'copy and paste into your browser with: <br />'
             '%(url)s </div>'
         ) % {'email': user.email, 'url': url}
-        self.send_email(user.email, 'Active your account', template)
+        #self.send_email(user.email, 'Active your account', template)
         self.flash_message('Please check your email', 'info')
-        self.redirect('/account/setting')
+        print(url)
 
 
 class DeleteAccountHandler(UserHandler):

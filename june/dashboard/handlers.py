@@ -10,13 +10,17 @@ from june.account.models import Member
 from june.account.lib import UserHandler
 from june.node.models import Node
 from june.topic.models import Topic, Reply
-from june.util import force_int
 from .models import Storage
 
 
 class DashMixin(object):
-    def update_model(self, model, attr, required=False):
+    def update_model(self, model, attr, required=False, to_int=False):
         value = self.get_argument(attr, '')
+        if to_int:
+            try:
+                value = int(value)
+            except:
+                value = 0
         if required and value:
             setattr(model, attr, value)
         elif not required:
@@ -121,16 +125,14 @@ class EditMember(UserHandler, DashMixin):
     def post(self, name):
         user = Member.query.filter_by(username=name).first_or_404()
 
-        edit = force_int(self.get_argument('edit_username_count', 2), 1)
-        user.edit_username_count = edit
-
+        self.update_model(user, 'edit_username_count', True, True)
         self.update_model(user, 'username', True)
         self.update_model(user, 'email', True)
 
         if self.current_user.id != user.id:
-            self.update_model(user, 'role', True)
+            self.update_model(user, 'role', True, True)
 
-        self.update_model(user, 'reputation', True)
+        self.update_model(user, 'reputation', True, True)
         db.session.add(user)
         db.session.commit()
         self.reverse_redirect('dashboard')
