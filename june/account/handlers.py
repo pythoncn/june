@@ -38,9 +38,9 @@ class EmailMixin(object):
         if delta < 1:
             self.flash_message("Don't be evil", 'error')
             return None
-        if delta > 600:
+        if delta > 3600:
+            # 1 hour
             self.flash_message('This link is expired, request again', 'warn')
-            # 10 minutes
             return None
         user = Member.query.get_first(email=email)
         if not user:
@@ -104,6 +104,8 @@ class GoogleSigninHandler(UserHandler, GoogleMixin):
         if not user:
             user = Member(email)
             user.password = '!'
+            #: google account is a valid email
+            user.role = 2
             db.session.add(user)
             db.session.commit()
             self.set_secure_cookie('user', '%s/%s' % (user.id, user.token))
@@ -155,7 +157,7 @@ class SignupHandler(UserHandler, RecaptchaMixin, EmailMixin):
     @asynchronous
     def post(self):
         if self.current_user and self.get_argument('action') == 'email':
-            if self.current_user.role < 1:
+            if self.current_user.role != 1:
                 self.flash_message('Your account is active', 'info')
             else:
                 self.send_signup_email(self.current_user)
@@ -225,9 +227,8 @@ class SignupHandler(UserHandler, RecaptchaMixin, EmailMixin):
             'copy and paste into your browser with: <br />'
             '%(url)s </div>'
         ) % {'email': user.email, 'url': url}
-        #self.send_email(user.email, 'Active your account', template)
+        self.send_email(user.email, 'Active your account', template)
         self.flash_message('Please check your email', 'info')
-        print(url)
 
 
 class DeleteAccountHandler(UserHandler):

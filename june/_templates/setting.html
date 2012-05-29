@@ -99,6 +99,7 @@
         <a href="/account/password" class="ui-btn">{{ _("Change Password") }}</a>
     </div>
 </div>
+{% if current_user.role == 1 %}
 <div class="ui-box">
     <div class="ui-box-header warn">
         <h4>{{_("Account")}}</h4>
@@ -112,6 +113,7 @@
         <button class="ui-btn">{{_("Verify Account")}}</button>
     </form>
 </div>
+{% end %}
 {% end %}
 
 {% block notification %}{% end %}
