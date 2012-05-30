@@ -43,8 +43,8 @@ class Topic(db.Model):
     down_count = Column(Integer, default=0)
 
     #:TODO delete ups, downs
-    ups = Column(Text)  # e.g.  1,2,3,4
-    downs = Column(Text)
+    #ups = Column(Text)  # e.g.  1,2,3,4
+    #downs = Column(Text)
 
     reply_count = Column(Integer, default=0)
     last_reply_by = Column(Integer, default=0)
