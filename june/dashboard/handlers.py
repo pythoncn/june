@@ -208,7 +208,7 @@ class Dashboard(UserHandler):
 
 
 handlers = [
-    url('/', Dashboard, name='dashboard'),
+    url('/*', Dashboard, name='dashboard'),
     ('/node', CreateNode),
     ('/node/(\w+)', EditNode),
     url('/member/(.*)', EditMember, name='dashboard-member'),
