@@ -147,7 +147,7 @@ class SignupHandler(UserHandler, RecaptchaMixin, EmailMixin):
                 user.role = 2
                 db.session.add(user)
                 db.session.commit()
-                self.flash_message('Your account is active', 'info')
+                self.flash_message('Your account is activated', 'info')
             self.redirect('/account/setting')
             return
 
@@ -160,7 +160,7 @@ class SignupHandler(UserHandler, RecaptchaMixin, EmailMixin):
     def post(self):
         if self.current_user and self.get_argument('action') == 'email':
             if self.current_user.role != 1:
-                self.flash_message('Your account is active', 'info')
+                self.flash_message('Your account is activated', 'info')
             else:
                 self.send_signup_email(self.current_user)
             self.redirect('/account/setting')
@@ -223,13 +223,13 @@ class SignupHandler(UserHandler, RecaptchaMixin, EmailMixin):
 
         template = (
             '<div>Hello <strong>%(email)s</strong></div>'
-            '<br /><div>To active your account, follow'
+            '<br /><div>To activate your account, follow'
             '<a href="%(url)s">this link</a>.<div><br />'
             "<div>If you can't click on this link, "
             'copy and paste into your browser with: <br />'
             '%(url)s </div>'
         ) % {'email': user.email, 'url': url}
-        self.send_email(user.email, 'Active your account', template)
+        self.send_email(user.email, 'Activate your account', template)
         self.flash_message('Please check your inbox', 'info')
 
 
