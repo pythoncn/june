@@ -105,7 +105,7 @@ def create_application():
     #: register front app
     application.register_app('june.front.handlers.app', url_prefix='')
 
-    for key in ['sitename', 'siteurl', 'sitefeed', 'version']:
+    for key in ['sitename', 'siteurl', 'sitefeed', 'version', 'ga']:
         application.register_context(key, options[key].value())
 
     import datetime
