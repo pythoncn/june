@@ -23,9 +23,7 @@
             {% if user.website %}
             <div class="website"><a href="{{escape(user.website)}}" rel="nofollow">{{escape(user.website)}}</a></div>
             {% end %}
-            {% if current_user and current_user.id == user.id %}
             <span class="ui-box-label">{{ user.reputation }}</span>
-            {% end %}
         </div>
     </div>
     {% if user.description %}
