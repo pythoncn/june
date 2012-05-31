@@ -474,7 +474,7 @@ class VoteTopicHandler(UserHandler):
             return
         if topic.user_id == self.current_user.id:
             # you can't vote your own topic
-            dct = {'stat': 'fail', 'msg': _("can't vote your own topic")}
+            dct = {'stat': 'fail', 'msg': _("Can't vote your own topic")}
             self.write(dct)
             return
         action = self.get_argument('action', None)
@@ -508,7 +508,7 @@ class VoteTopicHandler(UserHandler):
             return
         #: change vote
         if vote.type == 'down':
-            self.write({'stat': 'fail', 'msg': _("cancel your vote first")})
+            self.write({'stat': 'fail', 'msg': _("Cancel your vote first")})
             return
         #: vote
         vote.type = 'up'
@@ -557,7 +557,7 @@ class VoteTopicHandler(UserHandler):
 
         #: change vote
         if vote.type == 'up':
-            self.write({'stat': 'fail', 'msg': _("cancel your vote first")})
+            self.write({'stat': 'fail', 'msg': _("Cancel your vote first")})
             return
 
         vote.type = 'down'
