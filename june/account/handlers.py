@@ -3,6 +3,7 @@ import datetime
 import hashlib
 import base64
 from tornado.web import authenticated, asynchronous
+from tornado.web import UIModule
 from tornado.auth import GoogleMixin
 from tornado.options import options
 from july.app import JulyApp
@@ -458,4 +459,24 @@ handlers = [
 ]
 
 
-app = JulyApp('account', __name__, handlers=handlers)
+class RecentMembersModule(UIModule):
+    def render(self):
+        users = Member.query.order_by('-id').limit(12)
+        return self.render_string('module/member_cell.html', users=users)
+
+
+modules = {
+    'RecentMembers': RecentMembersModule,
+}
+
+app = JulyApp('account', __name__, handlers=handlers, ui_modules=modules)
+
+
+class MembersHandler(UserHandler):
+    def head(self):
+        pass
+
+    def get(self):
+        p = self.get_argument('p', 1)
+        pagination = Member.query.order_by('-reputation').paginate(p, 80)
+        self.render('member_list.html', pagination=pagination)

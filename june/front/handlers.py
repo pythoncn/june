@@ -60,19 +60,6 @@ class FollowingHandler(UserHandler):
         self.render('topic_list.html', title=title, pagination=pagination)
 
 
-class MembersHandler(UserHandler):
-    def head(self):
-        pass
-
-    def get(self):
-        title = 'Members'
-
-        p = self.get_argument('p', 1)
-        pagination = Member.query.order_by('created').paginate(p, 30)
-
-        self.render('member_list.html', title=title, pagination=pagination)
-
-
 class NodeHandler(UserHandler):
     def head(self, slug):
         pass
@@ -203,7 +190,6 @@ handlers = [
     ('/', LatestHandler),
     ('/following', FollowingHandler),
     ('/popular', PopularHandler),
-    ('/members', MembersHandler),
     ('/preview', PreviewHandler),
     ('/feed', SiteFeedHandler),
     ('/search', SearchHandler),
