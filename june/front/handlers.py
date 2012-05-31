@@ -59,6 +59,7 @@ class FollowingHandler(UserHandler):
         pagination.items = get_full_topics(pagination.items)
         self.render('topic_list.html', title=title, pagination=pagination)
 
+
 class MembersHandler(UserHandler):
     def head(self):
         pass
