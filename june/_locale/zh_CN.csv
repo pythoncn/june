@@ -12,6 +12,7 @@
 
 "Node","节点"
 "Member","会员"
+"Members","会员"
 "Topic","话题"
 "Reply","回复"
 
@@ -84,7 +85,11 @@
 "Password is required","需要填写密码"
 "Topic is deleted","话题已删除"
 #account
+"Don't be evil","别闹了，没用的"
+"This link is expired","这个链接已经失效了"
 "Invalid account or password","账户或密码错误"
+"Google signin failed","Google 账户登录失败"
+"Your account is active","你的账户已经激活"
 "Password doesn't match","密码不匹配"
 "Not a valid email address","邮箱格式不正确"
 "This email is already registered","该邮箱已注册"
@@ -93,3 +98,7 @@
 "Username is invalid","用户名不正确"
 "Website is invalid","个人网站格式不正确"
 "Username has been taken","用户名已被注册"
+"You can't edit username","你不能编辑用户名了"
+"User does not exists","用户不存在"
+"Please check your inbox","请查收邮件"
+"Password changed","密码已更改"
