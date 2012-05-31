@@ -228,7 +228,7 @@ class SignupHandler(UserHandler, RecaptchaMixin, EmailMixin):
             '%(url)s </div>'
         ) % {'email': user.email, 'url': url}
         self.send_email(user.email, 'Active your account', template)
-        self.flash_message('Please check your email', 'info')
+        self.flash_message('Please check your inbox', 'info')
 
 
 class DeleteAccountHandler(UserHandler):
@@ -386,7 +386,7 @@ class PasswordHandler(UserHandler, EmailMixin):
             'copy and paste into your browser with: <br />'
             '%(url)s </div>'
         ) % {'email': user.email, 'url': url}
-        self.flash_message('Please check your email', 'info')
+        self.flash_message('Please check your inbox', 'info')
         self.send_email(user.email, 'Find your password', template)
 
     @authenticated

@@ -1,11 +1,11 @@
 {% extends "layout.html" %}
 
-{% block subtitle%}{{title}}{%end%}
+{% block subtitle%}{{_(title)}}{%end%}
 
 {% block content %}
 <div class="ui-box">
     <div class="ui-box-header">
-        <a href="/">{{g.sitename}}</a> » {{title}}
+        <a href="/">{{g.sitename}}</a> » {{_(title)}}
     </div>
 
     {% for topic in pagination.items %}
