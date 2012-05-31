@@ -11,7 +11,7 @@
     </div>
     <div class="ui-box-footer">
         <a href="/node/{{node.slug}}" class="ui-btn">{{ _("View") }}</a>
-        <a href="/node/{{node.slug}}/create" class="ui-btn">{{ _("Create") }}</a>
+        <a href="/node/{{node.slug}}/create" class="ui-btn" rel="nofollow">{{ _("Create") }}</a>
         {% if following %}
         <a href="/node/{{node.slug}}" class="ui-btn following js-follow-node">{{ _("Following") }}</a>
         {% else %}
