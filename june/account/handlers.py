@@ -351,7 +351,8 @@ class PasswordHandler(UserHandler, EmailMixin):
         action = self.get_argument('action', None)
         if action == 'email':
             self.send_password_email()
-            self.redirect('/account/setting')
+            if not self._finished:
+                self.redirect('/account/setting')
             return
         password = self.get_argument('password', None)
         if password:
