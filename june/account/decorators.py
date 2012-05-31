@@ -20,6 +20,7 @@ class require_role(object):
                 return handler.redirect(url)
             user = handler.current_user
             if not user.username:
+                handler.flash_message('Please setup a username', 'warn')
                 return handler.redirect('/account/setting')
             if user.role == 1:
                 handler.flash_message('Please verify your email', 'warn')
