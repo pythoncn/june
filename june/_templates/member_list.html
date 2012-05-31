@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block subtitle%}{{_(title)}}{%end%}
+
+{% block content %}
+<div class="ui-box">
+    <div class="ui-box-header">
+        <a href="/">{{g.sitename}}</a> » {{_(title)}}
+    </div>
+
+    <div class="ui-box-container">
+    {% for user in pagination.items %}
+    {% module Template("module/member_cell.html", user=user) %}
+    {% end %}
+    </div>
+
+    <div class="ui-box-footer pagination">
+        {% for p in pagination.iter_pages() %}
+        <a href="?p={{p}}">{{p}}</a>
+        {% end %}
+    </div>
+</div>
+{% end %}

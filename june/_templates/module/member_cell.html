@@ -1,0 +1,5 @@
+{% if user.username %}
+<a href="/~{{user.username}}" class="ui-avatar"><img src="{{user.get_avatar(48)}}" width="48" height="48" /></a>
+{% else %}
+<img src="{{user.get_avatar(48)}}" width="48" height="48" />
+{% end %}
