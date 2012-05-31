@@ -43,7 +43,7 @@
 
 <div class="replies ui-box">
     <div class="ui-box-header">
-        {% if topic.last_reply_time%}
+        {% if topic.reply_count %}
         {{_("Last reply at")}} <time datetime="{{xmldatetime(topic.last_reply_time)}}">{{localtime(topic.last_reply_time)}}</time> |
         {% end %}
         {{topic.reply_count}} {{_("replies")}} |
