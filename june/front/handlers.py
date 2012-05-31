@@ -46,7 +46,7 @@ class PopularHandler(UserHandler):
 class FollowingHandler(UserHandler):
     @tornado.web.authenticated
     def get(self):
-        title = 'Popular'
+        title = 'Following'
 
         user_id = self.current_user.id
         fs = FollowNode.query.filter_by(user_id=user_id).values('node_id')
