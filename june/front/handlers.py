@@ -196,8 +196,8 @@ handlers = [
     ('/upload', UploadHandler),
     ('/node/(\w+)', NodeHandler),
     ('/node/(\w+)/feed', NodeFeedHandler),
-    ('/~(\w+)', MemberHandler),
-    ('/member/(\w+)', RedirectMemberHandler),
+    ('/member/(\w+)', MemberHandler),
+    ('/~(\w+)', RedirectMemberHandler),
 ]
 
 app = JulyApp('front', __name__, handlers=handlers,

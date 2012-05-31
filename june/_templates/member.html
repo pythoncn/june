@@ -3,7 +3,7 @@
 {% block subtitle %}{{user.username}}{% end %}
 
 {% block afterstyle %}
-<link rel="canonical" href="{{g.siteurl}}/~{{user.username}}" />
+<link rel="canonical" href="{{g.siteurl}}/member/{{user.username}}" />
 {% if user.website %}<link rel="me" href="{{user.website}}" />{% end %}
 <style type="text/css">
     .widget-profile .ui-box-container { padding: 0 10px; }
@@ -35,7 +35,7 @@
         <span>#{{user.id}} {{_("join at")}} {{ user.created.strftime("%Y-%m-%d") }}</span>
         {% if user.city %}| <span>{{ _("now at") }} <a href="/city/{{user.city}}">{{user.city}}</a></span>{% end %}
         {% if user.is_staff %}| <span class="ui-label">Staff</span>{% end %}
-        <a href="/~{{user.username}}" class="js-overlay ui-btn">{{ _("Send Message") }}</a>
+        <a href="/member/{{user.username}}" class="js-overlay ui-btn">{{ _("Send Message") }}</a>
     </div>
 </div>
 <div class="ui-box">
@@ -48,7 +48,7 @@
     {% end %}
     {#
     <div class="ui-box-footer">
-        <a href="/~{{user.username}}/topics">{{ _("More Topics") }} »</a>
+        <a href="/member/{{user.username}}/topics">{{ _("More Topics") }} »</a>
     </div>
     #}
 </div>
@@ -64,7 +64,7 @@
 
     {#
     <div class="ui-box-footer">
-        <a href="/~{{user.username}}/likes">{{ _("More Likes") }} »</a>
+        <a href="/member/{{user.username}}/likes">{{ _("More Likes") }} »</a>
     </div>
     #}
 </div>
