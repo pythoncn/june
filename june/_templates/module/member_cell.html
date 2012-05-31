@@ -1,0 +1,44 @@
+<div class="ui-box widget-profile">
+    <div class="ui-box-header primary fn-clear">
+        <a href="/member/{{member.username}}" class="ui-avatar"><img src="{{member.get_avatar(48)}}" width="48" height="48" /></a>
+        <div class="member fn-wrap">
+            <div class="username"><strong>{{escape(str(member.username))}}</strong></div>
+            {% if member.website %}
+            <div class="website"><a href="{{escape(member.website)}}" rel="nofollow">{{escape(member.website)}}</a></div>
+            {% end %}
+            <span class="ui-box-label">{{ member.reputation }}</span>
+        </div>
+    </div>
+    {% if member.description %}
+    <div class="ui-box-container fn-clear">
+        {{ markdown(member.description) }}
+    </div>
+    {% end %}
+    <div class="ui-box-footer">
+        <span>#{{member.id}} {{_("join at")}} {{ member.created.strftime("%Y-%m-%d") }}</span>
+        {% if member.city %}| <span>{{ _("now at") }} <a href="/city/{{member.city}}">{{member.city}}</a></span>{% end %}
+        {% if member.is_staff %}| <span class="ui-label">Staff</span>{% end %}
+        <a href="/~{{member.username}}" class="ui-label">{{ _("Send Message") }}</a>
+    </div>
+</div>
+
+{% block afterjs %}
+{% if current_user and current_user.id != member.id %}
+<div class="ui-overlay-dialog">
+    <div class="ui-box-header primary">
+        <strong>{{ _("Send Message") }}</strong>
+        <span class="js-close-overlay icon-cancel"></span>
+    </div>
+    <form class="ui-box-container" action="/account/message" method="post">
+        {{ xsrf_form_html() }}
+        <input type="hidden" name="next" value="{{request.uri}}" />
+        <input type="hidden" name="username" value="{{member.username}}" />
+        <div class="fm-item">
+            <textarea name="content" class="fm-text" placeholder="Message" required></textarea>
+        </div>
+        <button class="ui-btn">{{_("Send")}}</button>
+    </form>
+</div>
+<div class="ui-overlay"></div>
+{% end %}
+{% end %}
