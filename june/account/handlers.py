@@ -97,7 +97,8 @@ class GoogleSigninHandler(UserHandler, GoogleMixin):
 
     def _on_auth(self, user):
         if not user:
-            self.send_error(500)
+            self.flash_message('Google signin failed', 'error')
+            self.redirect('/')
             return
         email = user["email"].lower()
         user = Member.query.filter_by(email=email).first()
