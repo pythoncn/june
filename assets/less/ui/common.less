@@ -50,7 +50,6 @@
 
 /* overly */
 .ui-overlay-dialog {
-    display: none;
     position: fixed;
     top: -400px;
     left: 50%;
@@ -61,8 +60,13 @@
     z-index: 9999;
     .transition(top 0.2s ease-in);
 }
+@media screen and (max-width: 480px) {
+    .ui-overlay-dialog {
+        width: 300px;
+        margin-left: -150px;
+    }
+}
 .overlay-mode .ui-overlay-dialog {
-    display: block;
     top: 100px;
 }
 .ui-overlay-dialog .ui-box-header {
