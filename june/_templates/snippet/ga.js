@@ -1,3 +1,9 @@
+{% if current_user %}
+    var user = {{current_user.to_json()}};
+{% else %}
+    var user = {id: 0};
+{% end %}
+
 {% if g.ga %}
     var _gaq = _gaq || [];
 _gaq.push(['_setAccount', '{{g.ga}}']);
