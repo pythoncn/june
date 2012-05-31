@@ -98,7 +98,7 @@ class MemberHandler(UserHandler):
 
 class RedirectMemberHandler(JulyHandler):
     def get(self, username):
-        self.redirect('/~%s' % username)
+        self.redirect('/member/%s' % username)
 
 
 class SiteFeedHandler(JulyHandler):
