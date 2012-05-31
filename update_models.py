@@ -15,7 +15,7 @@ def change_database():
     db.session.commit()
 
 # 1. change databse
-# change_database()
+#change_database()
 
 # 2. make database
 
@@ -67,6 +67,9 @@ def update_topic():
 def post_update_topic_table():
     db.session.execute('alter table topic drop ups')
     db.session.execute('alter table topic drop downs')
+    db.session.execute('create index ix_topic_impact on topic (impact)')
+    db.session.execute('create index ix_topic_last_reply_time on topic '
+                       '(last_reply_time)')
     db.session.commit()
 
 
@@ -86,4 +89,4 @@ def post_update_member_table():
 #pre_update_member_table()
 #post_update_member_table()
 
-post_update_member_table()
+#post_update_topic_table()

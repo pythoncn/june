@@ -4,7 +4,7 @@
 
 # Variables for June
 CONFIG = tmp.config
-PROJSERVER = linode.lepture.com:/home/lepture/project/june
+PROJSERVER = linode.lepture.com:/home/lepture/www/static
 STATIC = june/_static
 
 
@@ -41,7 +41,7 @@ docs:
 
 # Deployment
 upload:
-	rsync -av --del --exclude=*.pyc june/* $(PROJSERVER)
+	rsync -av --del --exclude=*.pyc june/_static/* $(PROJSERVER)
 
 
 # static, required livereload
