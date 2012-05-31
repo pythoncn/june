@@ -81,6 +81,9 @@ def create_application():
     application.add_handler(
         ('/members', 'june.account.handlers.MembersHandler')
     )
+    application.add_handler(
+        ('/city/(.*)', 'june.account.handlers.CityMembersHandler')
+    )
 
     #: register node app
     application.register_app('june.node.handlers.app', url_prefix='/node')

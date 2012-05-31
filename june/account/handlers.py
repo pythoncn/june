@@ -480,3 +480,14 @@ class MembersHandler(UserHandler):
         p = self.get_argument('p', 1)
         pagination = Member.query.order_by('-reputation').paginate(p, 80)
         self.render('member_list.html', pagination=pagination)
+
+
+class CityMembersHandler(UserHandler):
+    def head(self):
+        pass
+
+    def get(self, city):
+        p = self.get_argument('p', 1)
+        pagination = Member.query.filter_by(city=city)\
+                .order_by('-reputation').paginate(p, 80)
+        self.render('member_list.html', pagination=pagination)
