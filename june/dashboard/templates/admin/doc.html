@@ -2,7 +2,16 @@
 
 {% block subtitle %}{{ _("Document") }}{% end %}
 
-{% block content %}
+{% block afterstyle %}
+<style type="text/css">
+    .fm-item textarea {
+        width: 76%;
+        height: 360px;
+    }
+</style>
+{% end %}
+
+{% block main %}
 <div class="ui-box">
     <form action="" method="post" class="ui-box-container">
         {{ xsrf_form_html() }}
@@ -24,6 +33,3 @@
     </form>
 </div>
 {% end %}
-
-{% block notification %}{% end %}
-{% block siteinfo %}{% end %}

@@ -4,12 +4,6 @@
 
 {% block afterstyle %}
 <link rel="canonical" href="{{g.siteurl}}/doc/{{doc.slug}}" />
-<style type="text/css">
-    #editor textarea {
-        width: 94%;
-        height: 90px;
-    }
-</style>
 {% end %}
 
 {% block content %}
@@ -27,15 +21,4 @@
         </div>
     </div>
 </article>
-
-{% block sidebar %}{% end %}
-
-{% block afterjs %}
-{% if not current_user %}
-{% include "snippet/signinbox.html" %}
 {% end %}
-{% end %}
-
-{% end %}
-
-{% block notification %}{% end %}
