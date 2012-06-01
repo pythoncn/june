@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+
+{% block subtitle %}{{ _("Create Feedback") }}{% end %}
+
+{% block afterstyle %}
+<style type="text/css">
+    {% include "snippet/topic_form.css" %}
+</style>
+{% end %}
+
+{% block content %}
+<div class="ui-box">
+    <form action="" method="post" class="ui-box-container">
+        {{ xsrf_form_html() }}
+        <div class="fm-item fm-required">
+            <input type="text" class="fm-text" name="title" placeholder="{{_('Title')}}" required/>
+        </div>
+        <div id="editor" class="fm-item">
+            <div id="editor-pannel">
+                <a href="#" class="js-write current" tabindex="-1">{{ _("Write") }}</a>
+                <a href="#" class="js-preview" tabindex="-1">{{ _("Preview") }}</a>
+            </div>
+            <textarea name="content" class="fm-text" required></textarea>
+            <div id="editor-preview"></div>
+        </div>
+        <div>
+            <button type="submit" class="ui-btn">{{_("Save")}}</button>
+        </div>
+    </form>
+</div>
+<input type="file" name="image" accept="image/*" />
+{% end %}
+
+{% block sidebar %}
+<div id="markdown-syntax" class="ui-box">
+    <div class="ui-box-header fn-clear">
+        <h4>Markdown Syntax</h4>
+        <a href="#" class="js-toggle"><span class="icon-down-open"></span></a>
+    </div>
+    <div class="ui-box-container fn-hide">
+        {% include "snippet/markdown.html" %}
+    </div>
+</div>
+<div id="markdown-preview" class="ui-box">
+    <div class="ui-box-header">
+        <h4>Markdown Preview</h4>
+    </div>
+    <div id="markdown-preview-container" class="ui-box-container">
+    </div>
+</div>
+{% end %}
+
+{% block afterjs %}
+<script type="text/javascript" src="{{ static_url('js/editor.js') }}"></script>
+{% end %}
+
+{% block notification %}{% end %}
+{% block siteinfo %}{% end %}

@@ -1,5 +1,6 @@
-from sqlalchemy import Column, String, Text, Integer
+from sqlalchemy import Column, String, Text, Integer, DateTime
 from july.database import db
+from datetime import datetime
 
 
 class Storage(db.Model):
@@ -26,3 +27,14 @@ class Storage(db.Model):
         db.session.add(model)
         db.session.commit()
         return value
+
+class Document(db.Model):
+    id = Column(Integer, primary_key=True)
+
+    slug = Column(String(200), nullable=False, index=True)
+    title = Column(String(200), nullable=False)
+    content = Column(Text)
+
+    created = Column(DateTime, default=datetime.utcnow)
+    updated = Column(DateTime, default=datetime.utcnow,
+                     onupdate=datetime.utcnow)

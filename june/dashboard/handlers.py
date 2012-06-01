@@ -10,7 +10,9 @@ from june.account.models import Member
 from june.account.lib import UserHandler
 from june.node.models import Node
 from june.topic.models import Topic, Reply
+from june.feedback.models import Feedback
 from .models import Storage
+from .models import Document
 
 
 class DashMixin(object):
@@ -26,6 +28,51 @@ class DashMixin(object):
         elif not required:
             setattr(model, attr, value)
 
+class CreateDoc(UserHandler):
+    @require_admin
+    def get(self):
+        doc = ObjectDict()
+        self.render('admin/doc.html', doc=doc)
+
+    @require_admin
+    def post(self):
+        o = ObjectDict()
+        o.title = self.get_argument('title', None)
+        o.slug = self.get_argument('slug', None)
+        o.content = self.get_argument('content', None)
+
+        if not (o.title and o.slug and o.content):
+            self.flash_message('Please fill the required field', 'error')
+            self.render('doc.html', doc=o)
+            return
+            
+        doc = Document(**o)
+
+        db.session.add(doc)
+        db.session.commit()
+
+        self.reverse_redirect('dashboard')
+
+class EditDoc(UserHandler, DashMixin):
+    @require_admin
+    def get(self, slug):
+        doc = Document.query.filter_by(slug=slug).first_or_404()
+        self.render('admin/doc.html', doc=doc)
+
+    @require_admin
+    def post(self, slug):
+        doc = Document.query.filter_by(slug=slug).first()
+        if not doc:
+            self.send_error(404)
+            return
+        self.update_model(doc, 'title', True)
+        self.update_model(doc, 'slug', True)
+        self.update_model(doc, 'content', True)
+
+        db.session.add(doc)
+        db.session.commit()
+
+        self.redirect('/doc/%s' % doc.slug)
 
 class CreateNode(UserHandler):
     @require_admin
@@ -183,6 +230,16 @@ class EditReply(UserHandler):
         db.session.commit()
         self.reverse_redirect('dashboard')
 
+class EditFeedback(UserHandler):
+    @require_admin
+    def get(self, id):
+        feedback = Feedback.query.get_or_404(id)
+        self.render('admin/feedback.html', feedback=feedback)
+
+    @require_admin
+    def delete(self, id):
+        feedback = Feedback.query.get_or_404(id)
+        self.reverse_redirect('dashboard')
 
 class Dashboard(UserHandler):
     @require_admin
@@ -197,8 +254,9 @@ class Dashboard(UserHandler):
             self.reverse_redirect('dashboard')
             return
         nodes = Node.query.all()
+        docs = Document.query.all()
         sidebar = Storage.get('sidebar')
-        self.render('admin/index.html', nodes=nodes, sidebar=sidebar)
+        self.render('admin/index.html', nodes=nodes, docs=docs, sidebar=sidebar)
 
     @require_admin
     def post(self):
@@ -215,6 +273,9 @@ handlers = [
     ('/topic/(\d+)', EditTopic),
     ('/reply/(\d+)', EditReply),
     ('/flushcache', FlushCache),
+    ('/doc', CreateDoc),
+    ('/doc/(\w+)', EditDoc),
+    ('/feedback/(\d+)', EditFeedback),
 ]
 
 

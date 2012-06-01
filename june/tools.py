@@ -10,6 +10,7 @@ def create_db():
     import node.models
     import topic.models
     import dashboard.models
+    import feedback.models
     db.Model.metadata.create_all(db.engine)
     return
 
