@@ -10,6 +10,7 @@ from june.account.models import Member
 from june.account.lib import UserHandler
 from june.node.models import Node
 from june.topic.models import Topic, Reply
+from june.feedback.models import Feedback
 from .models import Storage
 from .models import Document
 
@@ -229,6 +230,16 @@ class EditReply(UserHandler):
         db.session.commit()
         self.reverse_redirect('dashboard')
 
+class EditFeedback(UserHandler):
+    @require_admin
+    def get(self, id):
+        feedback = Feedback.query.get_or_404(id)
+        self.render('admin/feedback.html', feedback=feedback)
+
+    @require_admin
+    def delete(self, id):
+        feedback = Feedback.query.get_or_404(id)
+        self.reverse_redirect('dashboard')
 
 class Dashboard(UserHandler):
     @require_admin
@@ -264,6 +275,7 @@ handlers = [
     ('/flushcache', FlushCache),
     ('/doc', CreateDoc),
     ('/doc/(\w+)', EditDoc),
+    ('/feedback/(\d+)', EditFeedback),
 ]
 
 
