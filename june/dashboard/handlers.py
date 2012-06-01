@@ -243,8 +243,9 @@ class Dashboard(UserHandler):
             self.reverse_redirect('dashboard')
             return
         nodes = Node.query.all()
+        docs = Document.query.all()
         sidebar = Storage.get('sidebar')
-        self.render('admin/index.html', nodes=nodes, sidebar=sidebar)
+        self.render('admin/index.html', nodes=nodes, docs=docs, sidebar=sidebar)
 
     @require_admin
     def post(self):
