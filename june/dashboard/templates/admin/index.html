@@ -22,6 +22,19 @@
 </div>
 <div class="ui-box">
     <div class="ui-box-header">
+        <h4>Edit Document</h4>
+    </div>
+    <div class="ui-box-container">
+        {% for doc in docs %}
+        <a class="doc" href="/dashboard/doc/{{doc.slug}}">{{escape(doc.title)}}</a>
+        {% end %}
+    </div>
+    <div class="ui-box-footer">
+        <a href="/dashboard/doc" class="ui-btn">New Node</a>
+    </div>
+</div>
+<div class="ui-box">
+    <div class="ui-box-header">
         <h4>Site Information</h4>
     </div>
     <form action="" method="post" class="ui-box-container">
