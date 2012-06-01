@@ -13,6 +13,7 @@ from june.node.models import FollowNode, Node
 from june.topic.models import Topic, Reply, Vote
 from june.topic.lib import get_full_topics
 from june.filters import markdown
+from june.dashboard.models import Document
 
 
 class LatestHandler(UserHandler):
@@ -152,6 +153,10 @@ class SearchHandler(UserHandler):
         query = self.get_argument('q', '')
         self.render('search.html', query=query)
 
+class DocHandler(UserHandler):
+    def get(self, slug):
+        doc = Document.query.filter_by(slug=slug).first_or_404()
+        self.render('doc.html', doc=doc)
 
 class UploadHandler(UserHandler):
     @require_user
@@ -198,6 +203,7 @@ handlers = [
     ('/node/(\w+)/feed', NodeFeedHandler),
     ('/member/(\w+)', MemberHandler),
     ('/~(\w+)', RedirectMemberHandler),
+    ('/doc/(\w+)', DocHandler),
 ]
 
 app = JulyApp('front', __name__, handlers=handlers,
