@@ -1,5 +1,5 @@
 $(function(){
-    $.sendPost(location.pathname);
+    setTimeout('$.sendPost(location.pathname)', 1500);
     $('.js-up-vote').click(function(){
         var url = location.pathname + '/vote'
         var $this = $(this);
