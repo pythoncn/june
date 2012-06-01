@@ -28,6 +28,7 @@ class Storage(db.Model):
         db.session.commit()
         return value
 
+
 class Document(db.Model):
     id = Column(Integer, primary_key=True)
 

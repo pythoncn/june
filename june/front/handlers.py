@@ -153,10 +153,12 @@ class SearchHandler(UserHandler):
         query = self.get_argument('q', '')
         self.render('search.html', query=query)
 
+
 class DocHandler(UserHandler):
     def get(self, slug):
         doc = Document.query.filter_by(slug=slug).first_or_404()
         self.render('doc.html', doc=doc)
+
 
 class UploadHandler(UserHandler):
     @require_user

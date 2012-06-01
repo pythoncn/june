@@ -13,6 +13,7 @@ from june.account.decorators import require_user
 
 from .models import Feedback
 
+
 class CreateFeedbackHandler(UserHandler):
     @require_user
     def get(self):

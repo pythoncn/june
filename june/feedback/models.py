@@ -1,8 +1,8 @@
-import time
 from datetime import datetime
 from sqlalchemy import Column
 from sqlalchemy import Integer, String, DateTime, Text
 from july.database import db
+
 
 class Feedback(db.Model):
     id = Column(Integer, primary_key=True)
