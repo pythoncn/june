@@ -10,51 +10,52 @@ except ImportError:
     import site
     site.addsitedir(ROOTDIR)
     print('Development of june')
-from tornado.options import define, options
+from tornado.options import options
+from july.util import reset_option
 from july.app import JulyApplication
-from july.web import run_server
+from july.web import init_options, run_server
 
-define('debug', True, type=bool)
-define('autoescape', None)
+reset_option('debug', True, type=bool)
+reset_option('autoescape', None)
 
 # site config
-define('sitename', 'June', type=str)
-define('version', '0.9.0', type=str)
-define('siteurl', 'http://lepture.com/project/june/')
-define('sitefeed', '/feed')
+reset_option('sitename', 'June', type=str)
+reset_option('version', '0.9.0', type=str)
+reset_option('siteurl', 'http://lepture.com/project/june/')
+reset_option('sitefeed', '/feed')
 
-define('static_path', os.path.join(PROJDIR, '_static'))
-define('static_url_prefix', '/static/', type=str)
-define('template_path', os.path.join(PROJDIR, "_templates"))
+reset_option('static_path', os.path.join(PROJDIR, '_static'))
+reset_option('static_url_prefix', '/static/', type=str)
+reset_option('template_path', os.path.join(PROJDIR, "_templates"))
 
-options.locale_path = os.path.join(PROJDIR, '_locale')
-define('login_url', '/account/signin', type=str)
+reset_option('locale_path', os.path.join(PROJDIR, '_locale'))
+reset_option('login_url', '/account/signin', type=str)
 
 # factor config
-define('reply_factor_for_topic', 600, type=int)
-define('reply_time_factor', 1000, type=int)
-define('up_factor_for_topic', 1500, type=int)
-define('up_factor_for_user', 1, type=int)
-define('down_factor_for_topic', 800, type=int)
-define('down_factor_for_user', 1, type=int)
-define('accept_reply_factor_for_user', 1, type=int)
-define('up_max_for_user', 10, type=int)
-define('down_max_for_user', 4, type=int)
-define('vote_max_for_user', 4, type=int)
-define('promote_topic_cost', 100, type=int)
+reset_option('reply_factor_for_topic', 600, type=int)
+reset_option('reply_time_factor', 1000, type=int)
+reset_option('up_factor_for_topic', 1500, type=int)
+reset_option('up_factor_for_user', 1, type=int)
+reset_option('down_factor_for_topic', 800, type=int)
+reset_option('down_factor_for_user', 1, type=int)
+reset_option('accept_reply_factor_for_user', 1, type=int)
+reset_option('up_max_for_user', 10, type=int)
+reset_option('down_max_for_user', 4, type=int)
+reset_option('vote_max_for_user', 4, type=int)
+reset_option('promote_topic_cost', 100, type=int)
 
 # third party support config
-define('gravatar_base_url', "http://www.gravatar.com/avatar/")
-define('gravatar_extra', '')
-define('recaptcha_key', '')
-define('recaptcha_secret', '')
-define('recaptcha_theme', 'clean')
-define('emoji_url', '')
-define('ga', '')  # google analytics
-define('gcse', '')  # google custom search
+reset_option('gravatar_base_url', "http://www.gravatar.com/avatar/")
+reset_option('gravatar_extra', '')
+reset_option('recaptcha_key', '')
+reset_option('recaptcha_secret', '')
+reset_option('recaptcha_theme', 'clean')
+reset_option('emoji_url', '')
+reset_option('ga', '')  # google analytics
+reset_option('gcse', '')  # google custom search
 
 # image backend
-define('image_backend', 'june.front.backends.LocalBackend')
+reset_option('image_backend', 'june.front.backends.LocalBackend')
 
 
 def create_application():
@@ -112,7 +113,8 @@ def create_application():
     application.register_app('june.front.handlers.app', url_prefix='')
 
     #: register feedback app
-    application.register_app('june.feedback.handlers.app', url_prefix='/feedback')
+    application.register_app('june.feedback.handlers.app',
+                             url_prefix='/feedback')
 
     for key in ['sitename', 'siteurl', 'sitefeed', 'version', 'ga']:
         application.register_context(key, options[key].value())
@@ -133,12 +135,7 @@ def create_application():
 
 
 def main():
-    from july.util import parse_config_file
-    from tornado.options import parse_command_line
-    parse_command_line()
-    if options.settings:
-        parse_config_file(options.settings)
-
+    init_options()
     application = create_application()
     run_server(application)
 
