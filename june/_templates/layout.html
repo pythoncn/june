@@ -68,6 +68,15 @@
                     </div>
                     {% end %}
                     {% end %}
+
+                    {% block searchbox %}
+                    <form action="/search" class="ui-box">
+                        <div class="ui-box-container">
+                            <input type="text" class="fm-text" name="q" placeholder="Search .." />
+                        </div>
+                    </form>
+                    {% end %}
+
                     {% block sidebar %}{% end %}
 
                     {% block siteinfo %}

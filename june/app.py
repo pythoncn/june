@@ -115,7 +115,7 @@ def create_application():
     #: register feedback app
     # application.register_app('june.feedback.handlers.app')
 
-    for key in ['sitename', 'siteurl', 'sitefeed', 'version', 'ga']:
+    for key in ['sitename', 'siteurl', 'sitefeed', 'version', 'ga', 'gcse']:
         application.register_context(key, options[key].value())
 
     import datetime
