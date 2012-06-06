@@ -113,8 +113,7 @@ def create_application():
     application.register_app('june.front.handlers.app', url_prefix='')
 
     #: register feedback app
-    application.register_app('june.feedback.handlers.app',
-                             url_prefix='/feedback')
+    # application.register_app('june.feedback.handlers.app')
 
     for key in ['sitename', 'siteurl', 'sitefeed', 'version', 'ga']:
         application.register_context(key, options[key].value())

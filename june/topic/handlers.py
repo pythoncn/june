@@ -434,6 +434,12 @@ class ReplyHandler(UserHandler):
         self.write({'stat': 'fail', 'msg': 'permission denied'})
 
     def accept(self, reply):
+        if self.current_user.id == reply.user_id:
+            self.write({
+                'stat': 'fail',
+                'msg': "you can't accept your own reply"
+            })
+            return
         #: when accept an answer, topic owner pay 1 reputation
         user = Member.query.get_first(id=self.current_user.id)
         user.reputation -= 1
@@ -448,8 +454,6 @@ class ReplyHandler(UserHandler):
         db.session.add(replyer)
         db.session.commit()
         self.write({'stat': 'ok', 'data': 'accept'})
-
-        #: TODO notification
 
     def unaccept(self, reply):
         reply.accepted = 'n'
