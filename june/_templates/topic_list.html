@@ -22,9 +22,12 @@
 
 {% block sidebar %}
 <div class="ui-box widget-feed">
-    <div class="ui-box-container">
+    <div class="ui-box-header">
         <a href="{{g.feed or "/feed"}}"><span class="icon-rss"></span>Latest News</a>
     </div>
+    <form action="/search" class="ui-box-container">
+        <input type="text" class="fm-text" name="q" placeholder="Search .." />
+    </form>
 </div>
 
 {% if current_user %}
