@@ -1,0 +1,30 @@
+#main .wrapper {
+    max-width: none;
+}
+#content {
+    width: 50%;
+}
+#sidebar {
+    width: 48%;
+}
+@media screen and (max-width: 650px) {
+    #content, #sidebar {
+        float: none;
+        width: 100%;
+        margin: 0;
+    }
+}
+#editor textarea {
+    width: 90%;
+    height: 380px;
+}
+#markdown-syntax .ui-box-header h4 {
+    float: left;
+}
+#markdown-syntax .ui-box-header .js-toggle {
+    float: right;
+    text-decoration: none;
+}
+#markdown-syntax .ui-box-header .js-toggle:hover {
+    color: #222;
+}

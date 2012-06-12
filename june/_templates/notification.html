@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+
+{% block subtitle %}{{ _("Notification") }}{% end %}
+{% block afterstyle %}
+<style type="text/css">
+    .notification .header {
+        font-size: 12px;
+    }
+    .notification .header a {
+        font-weight: bold;
+    }
+    .notification .unread {
+        background: rgba(0, 200, 0, 0.08);
+    }
+    .notification p {
+        margin-top: 6px;
+    }
+</style>
+{% end %}
+
+{% block content %}
+<div class="ui-box notification">
+    <div class="ui-box-header">
+        <h4>{{_("Notification")}}</h4>
+    </div>
+    {% set index = 0 %}
+    {% for msg in messages %}
+    {% set index += 1 %}
+    <div class="ui-cell{% if msg.readed == 'n' %} unread{%end%}">
+        <a href="/~{{msg.who.username}}" class="ui-avatar"><img src="{{msg.who.get_avatar(48)}}" width="48" height="48" /></a>
+        <div class="fn-wrap">
+            <div class="header"><strong>{{ _(msg.type.upper()) }}</strong>{%if msg.refer%} on {{ msg.refer }}{%end%}</div>
+            {{ markdown(msg.content) }}
+        </div>
+    </div>
+    {% end %}
+    {% if not index %}
+    <div class="ui-box-container">
+        <p>{{ _("You have no notification") }}</p>
+    </div>
+    {% end %}
+</div>
+{% end %}
+
+{% block sidebar %}
+<div class="ui-box">
+    <div class="ui-box-header warn">
+        <h4>Important</h4>
+    </div>
+    <div class="ui-box-container">
+        <a href="#" class="js-mark ui-btn">Mark all as read</a>
+        <a href="#" class="js-delete ui-btn">Delete all</a>
+    </div>
+</div>
+{% end %}
+
+{% block afterjs %}
+<script type="text/javascript">
+    $('.js-mark').click(function(){
+        $.sendPost('/account/notification', {}, function(){
+            $('.unread').removeClass('unread');
+        });
+        return false;
+    });
+    $('.js-delete').click(function(){
+        $.sendDelete('/account/notification', {}, function(){
+            $('.ui-cell').remove();
+        });
+        return false;
+    });
+</script>
+{% end %}
+
+{% block notification %}{% end %}
+{% block siteinfo %}{% end %}

@@ -1,60 +1,60 @@
-.animation() {
+.animation(@arguments) {
     -webkit-animation: @arguments;
     -moz-animation: @arguments;
     -ms-animation: @arguments;
     -o-animation: @arguments;
     animation: @arguments;
 }
-.animation-delay() {
+.animation-delay(@arguments) {
     -webkit-animation-delay: @arguments;
     -moz-animation-delay: @arguments;
     -ms-animation-delay: @arguments;
     -o-animation-delay: @arguments;
     animation-delay: @arguments;
 }
-.animation-direction() {
+.animation-direction(@arguments) {
     -webkit-animation-direction: @arguments;
     -moz-animation-direction: @arguments;
     -ms-animation-direction: @arguments;
     -o-animation-direction: @arguments;
     animation-direction: @arguments;
 }
-.animation-duration() {
+.animation-duration(@arguments) {
     -webkit-animation-duration: @arguments;
     -moz-animation-duration: @arguments;
     -ms-animation-duration: @arguments;
     -o-animation-duration: @arguments;
     animation-duration: @arguments;
 }
-.animation-iteration-count() {
+.animation-iteration-count(@arguments) {
     -webkit-animation-iteration-count: @arguments;
     -moz-animation-iteration-count: @arguments;
     -ms-animation-iteration-count: @arguments;
     -o-animation-iteration-count: @arguments;
     animation-iteration-count: @arguments;
 }
-.animation-name() {
+.animation-name(@arguments) {
     -webkit-animation-name: @arguments;
     -moz-animation-name: @arguments;
     -ms-animation-name: @arguments;
     -o-animation-name: @arguments;
     animation-name: @arguments;
 }
-.animation-play-state() {
+.animation-play-state(@arguments) {
     -webkit-animation-play-state: @arguments;
     -moz-animation-play-state: @arguments;
     -ms-animation-play-state: @arguments;
     -o-animation-play-state: @arguments;
     animation-play-state: @arguments;
 }
-.animation-timing-function() {
+.animation-timing-function(@arguments) {
     -webkit-animation-timing-function: @arguments;
     -moz-animation-timing-function: @arguments;
     -ms-animation-timing-function: @arguments;
     -o-animation-timing-function: @arguments;
     animation-timing-function: @arguments;
 }
-.appearance() {
+.appearance(@arguments) {
     -webkit-appearance: @arguments;
     -moz-appearance: @arguments;
     -ms-appearance: @arguments;
@@ -66,70 +66,70 @@
     filter: alpha(opacity=@alpha);
     opacity: @opacity;
 }
-.perspective() {
+.perspective(@arguments) {
     -webkit-perspective: @arguments;
     -moz-perspective: @arguments;
     -ms-perspective: @arguments;
     -o-perspective: @arguments;
     perspective: @arguments;
 }
-.perspective-origin() {
+.perspective-origin(@arguments) {
     -webkit-perspective-origin: @arguments;
     -moz-perspective-origin: @arguments;
     -ms-perspective-origin: @arguments;
     -o-perspective-origin: @arguments;
     perspective-origin: @arguments;
 }
-.transition() {
+.transition(@arguments) {
     -webkit-transition: @arguments;
     -moz-transition: @arguments;
     -ms-transition: @arguments;
     -o-transition: @arguments;
     transition: @arguments;
 }
-.transition-delay() {
+.transition-delay(@arguments) {
     -webkit-transition-delay: @arguments;
     -moz-transition-delay: @arguments;
     -ms-transition-delay: @arguments;
     -o-transition-delay: @arguments;
     transition-delay: @arguments;
 }
-.transition-duration() {
+.transition-duration(@arguments) {
     -webkit-transition-duration: @arguments;
     -moz-transition-duration: @arguments;
     -ms-transition-duration: @arguments;
     -o-transition-duration: @arguments;
     transition-duration: @arguments;
 }
-.transition-timing-function() {
+.transition-timing-function(@arguments) {
     -webkit-transition-timing-function: @arguments;
     -moz-transition-timing-function: @arguments;
     -ms-transition-timing-function: @arguments;
     -o-transition-timing-function: @arguments;
     transition-timing-function: @arguments;
 }
-.transform() {
+.transform(@arguments) {
     -webkit-transform: @arguments;
     -moz-transform: @arguments;
     -ms-transform: @arguments;
     -o-transform: @arguments;
     transform: @arguments;
 }
-.transform-origin() {
+.transform-origin(@arguments) {
     -webkit-transform-origin: @arguments;
     -moz-transform-origin: @arguments;
     -ms-transform-origin: @arguments;
     -o-transform-origin: @arguments;
     transform-origin: @arguments;
 }
-.transform-style() {
+.transform-style(@arguments) {
     -webkit-transform-style: @arguments;
     -moz-transform-style: @arguments;
     -ms-transform-style: @arguments;
     -o-transform-style: @arguments;
     transform-style: @arguments;
 }
-.linear-gradient() {
+.linear-gradient(@arguments) {
     background-image: -webkit-linear-gradient(~"@{arguments}");
     background-image: -moz-linear-gradient(~"@{arguments}");
     background-image: -ms-linear-gradient(~"@{arguments}");
@@ -147,7 +147,7 @@
     .linear-gradient("0deg, @{startColor} 0, @{endColor} 100%");
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@{startColor}', endColorstr='@{endColor}', GradientType=1);
 }
-.radial-gradient() {
+.radial-gradient(@arguments) {
     background-image: -webkit-radial-gradient(~"@{arguments}");
     background-image: -moz-radial-gradient(~"@{arguments}");
     background-image: -ms-radial-gradient(~"@{arguments}");

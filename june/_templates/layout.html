@@ -1,0 +1,101 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>{%block title%}{%block subtitle%}{%end%} | {{g.sitename}}{%end%}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0" />
+        <link rel="stylesheet" href="{{static_url('css/site.css')}}" />
+        <link rel="stylesheet" href="{{static_url('fontello/fontello-4d0230b8.css')}}" />
+        {% block afterstyle %}{% end %}
+        <script type="text/javascript">{% include "snippet/ga.js" %}</script>
+        <link rel="alternate" type="application/atom+xml" href="{{g.sitefeed}}" title="{{g.sitename}}" />
+    </head>
+    <body>
+        <header id="header" role="banner">
+        <div class="wrapper fn-clear">
+            <h1><a href="/">{{g.sitename}}</a></h1>
+            <div class="user-box fn-clear">
+                {% if current_user %}
+                <div class="user">
+                    <span class="icon-user"></span>
+                    {% if current_user.username %}
+                    <a href="/member/{{current_user.username}}">{{current_user.username}}</a>
+                    {% end %}
+                </div>
+                <nav class="user-links">
+                {% if current_user.is_admin %}
+                <a href="/dashboard/" title="{{_("Dashboard")}}"><span class="icon-pencil"></span></a>
+                {% end %}
+                <a href="/topic/create" title="{{_("Create Topic")}}"><span class="icon-edit"></span></a>
+                <a href="/account/setting" title="{{_("Setting")}}"><span class="icon-cog"></span></a>
+                <a href="/account/signout" title="{{_("Signout")}}"><span class="icon-logout"></span></a>
+                </nav>
+                {% else %}
+                <a href="/account/signin" title="{{_("Signin")}}"><span class="icon-login"></span></a>
+                {% end %}
+            </div>
+        </div>
+        </header>
+        <nav id="nav" role="navigation">
+        <div class="wrapper">
+            <a href="/"><span class="icon-home"></span>{{ _("Latest") }}</a>
+            <a href="/popular"><span class="icon-fire"></span>{{ _("Popular") }}</a>
+            <a href="/following" rel="nofollow"><span class="icon-star"></span>{{ _("Following") }}</a>
+            <a href="/nodes"><span class="icon-bookmark"></span>{{ _("Nodes") }}</a>
+        </div>
+        </nav>
+        {% for type, message in flash_message() %}
+        <div class="alert alert-{{type}}">
+            {{ _(message) }}
+        </div>
+        {% end %}
+        <div id="main">
+            <div class="wrapper fn-clear">
+                {% block main %}
+                <div id="content">
+                    {% block content %}{% end %}
+                </div>
+                <div id="sidebar">
+                    {% block notification %}
+                    {% if current_user and current_user.get_notification() %}
+                    <div class="ui-box">
+                        <div class="ui-box-header">
+                            <h4>{{ _("Notification") }}</h4>
+                        </div>
+                        <div class="ui-box-container">
+                            <a class="notification" href="/account/notification">{{current_user.get_notification()}} {{_("unread notification")}}</a>
+                        </div>
+                    </div>
+                    {% end %}
+                    {% end %}
+
+                    {% block sidebar %}{% end %}
+
+                    {% block siteinfo %}
+                    {% module Sidebar() %}
+                    <div class="ui-box">
+                        <div class="ui-box-container">
+                            {% module SiteInfo() %}
+                        </div>
+                    </div>
+                    {% end %}
+
+                </div>
+                {% end %}
+            </div>
+        </div>
+        <footer id="footer">
+        <div class="wrapper">
+            <p>Copyright &copy; {{g.sitename}}. All articles &copy; their respective owners.</p>
+            <p class="copyright">Designed by <a href="http://lepture.com">lepture</a>.
+            Powered by <a href="https://github.com/lepture/june">June</a> {{g.version}}.
+            Hosted by <a href="http://www.linode.com/?r=b9e3629fcf78988ff7cc8f6c4ef59c5a2c626b8a" rel="nofollow">Linode</a>
+            </p>
+        </div>
+        </footer>
+        {% block beforejs %}{% end %}
+        <script type="text/javascript" src="{{static_url("js/lib.js")}}"></script>
+        <script type="text/javascript" src="{{static_url("js/site.js")}}"></script>
+        {% block afterjs %}{% end %}
+    </body>
+</html>

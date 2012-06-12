@@ -1,0 +1,40 @@
+#header {
+    background-color: @darkColor;
+    border-bottom: 1px solid darken(@darkColor, 5%);
+    text-shadow: 1px 1px 0 #222;
+}
+#nav {
+    background-color: darken(@darkColor, 4%);
+    border-top: 1px solid darken(@darkColor, 8%);
+    text-align: center;
+    span {
+        padding-right: 4px;
+    }
+}
+#main {
+    min-height: 800px;
+    background: url("../img/main_bg.gif");
+}
+
+#content {
+    float: left;
+    width: 68%;
+    margin-right: 1.5%;
+}
+#sidebar {
+    float: left;
+    width: 30%;
+}
+@media screen and (max-width: 650px) {
+    #content, #sidebar {
+        float: none;
+        width: 100%;
+        margin: 0;
+    }
+}
+#footer {
+    color: lighten(@darkColor, 20%);
+    font: @smallSansFont;
+    border-top: 1px solid #ccc;
+    padding: 10px 0 5px;
+}

@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+
+{% block subtitle%}{{_(title)}}{%end%}
+
+{% block content %}
+<div class="ui-box">
+    <div class="ui-box-header">
+        <a href="/">{{g.sitename}}</a> » {{_(title)}}
+    </div>
+
+    {% for topic in pagination.items %}
+    {% module Template("module/topic_cell.html", topic=topic) %}
+    {% end %}
+
+    <div class="ui-box-footer pagination">
+        {% for p in pagination.iter_pages() %}
+        <a href="?p={{p}}">{{p}}</a>
+        {% end %}
+    </div>
+</div>
+{% end %}
+
+{% block sidebar %}
+<div class="ui-box widget-feed">
+    <div class="ui-box-header">
+        <a href="{{g.feed or "/feed"}}"><span class="icon-rss"></span>Latest News</a>
+    </div>
+    <form action="/search" class="ui-box-container">
+        <input type="text" class="fm-text" name="q" placeholder="Search .." />
+    </form>
+</div>
+
+{% if current_user %}
+<div class="ui-box">
+    <div class="ui-box-header">
+        <h4>Following Nodes</h4>
+    </div>
+    <div class="ui-box-container">
+        {% module FollowingNodes(current_user.id) %}
+    </div>
+</div>
+{% end %}
+
+<div class="ui-box">
+    <div class="ui-box-header">
+        <h4>Recent Nodes</h4>
+    </div>
+    <div class="ui-box-container">
+        {% module RecentAddNodes() %}
+    </div>
+</div>
+
+<div class="ui-box members">
+    <div class="ui-box-header">
+        <h4><a href="/members">{{_("Members")}}</a></h4>
+    </div>
+    <div class="ui-box-container">
+        {% module RecentMembers() %}
+    </div>
+</div>
+{% end %}

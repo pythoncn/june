@@ -5,24 +5,19 @@ from setuptools import setup, find_packages
 
 setup(
     name='june',
-    version='1.0',
-    author='Hsiaoming Young',
+    version='0.9.0',
+    author='Hsiaoming Yang',
     author_email='lepture@me.com',
-    url='http://lepture.com/project/june',
+    url='http://project.lepture.com/june',
     packages=find_packages(),
     description='June: a forum',
-    entry_points={
-        'console_scripts': [
-            'june.server= june.app:run_server',
-            'june.tools= june.tools:main',
-        ],
-    },
     install_requires=[
-        'python-memcached',
-        'markdown',
+        'july',
+        'misaka',
         'pygments',
-        'tornado',
-        'SQLAlchemy',
+        'sqlalchemy',
+        'MySQL-python',
+        'python-memcached',
     ],
     include_package_data=True,
     license='BSD License',

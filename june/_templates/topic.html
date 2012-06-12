@@ -1,0 +1,149 @@
+{% extends "layout.html" %}
+
+{% block subtitle %}{{escape(topic.title)}}{% end %}
+
+{% block afterstyle %}
+<link rel="canonical" href="{{g.siteurl}}/topic/{{topic.id}}" />
+{{ node.header or '' }}
+<style type="text/css">
+    #editor textarea {
+        width: 94%;
+        height: 90px;
+    }
+</style>
+{% end %}
+
+{% block content %}
+<article class="hentry ui-box" data-id="{{topic.id}}">
+    <div class="ui-box-header fn-clear">
+        <h3 class="entry-title"><a href="/topic/{{topic.id}}">{{topic.title}}</a></h3>
+        <div class="entry-vote">
+            {% if topic.status %}<span class="ui-label">{{topic.status}}</span>{% end %}
+            <a href="#" class="js-up-vote{%if vote and vote.type=='up'%} active{%end%}"><span class="icon-thumbs-up"></span><span class="count">{{topic.up_count}}</span></a>
+            <a href="#" class="js-down-vote{%if vote and vote.type=='down'%} active{%end%}"><span class="icon-thumbs-down"></span><span class="count">{{topic.down_count}}</span></a>
+        </div>
+    </div>
+    <div class="ui-box-container entry-content">
+        {{ markdown(topic.content) }}
+    </div>
+    <div class="ui-box-footer fn-clear">
+        <div class="entry-meta">
+            <time class="created" title="Created" datetime="{{xmldatetime(topic.created)}}">{{localtime(topic.created)}}</time> /
+            <time class="updated" title="Updated" datetime="{{xmldatetime(topic.updated)}}">{{localtime(topic.updated)}}</time>
+            {% if current_user and current_user.is_staff %}{{topic.impact}}{% end %}
+        </div>
+        {% if current_user and current_user.id == topic.user_id %}
+        <div class="entry-action">
+            <a href="/topic/{{topic.id}}/edit">{{_("Edit")}}</a>
+            <a href="/topic/{{topic.id}}/move">{{_("Move")}}</a>
+        </div>
+        {% end %}
+    </div>
+</article>
+
+<div class="replies ui-box">
+    <div class="ui-box-header">
+        {% if topic.reply_count and topic.last_reply_time %}
+        {{_("Last reply at")}} <time datetime="{{xmldatetime(topic.last_reply_time)}}">{{localtime(topic.last_reply_time)}}</time> |
+        {% end %}
+        {{topic.reply_count}} {{_("replies")}} |
+        {{topic.hits}} {{_("hits")}}
+    </div>
+    {% set index = 0 %}
+    {% for reply in pagination.items %}
+    {% set index += 1 %}
+    <div id="reply-{{index}}" class="ui-cell reply fn-clear">
+        <a href="/member/{{reply.user.username}}" class="ui-avatar"><img src="{{reply.user.get_avatar(48)}}" width="48" height="48" /></a>
+        <div class="ui-cell-bottom-right{%if reply.accepted == 'y'%} active{%end%}">
+            {% if current_user and current_user.id == reply.user_id %}
+            <a href="#{{reply.id}}" class="js-delete"><span class="icon-trash"></span></a>
+            {% end %}
+            <a href="#{{reply.id}}"{%if current_user and current_user.id == topic.user_id%} class="js-accept"{%end%}><span class="icon-ok"></span></a>
+    
+        </div>
+
+        <div class="reply-content fn-wrap">
+            <div class="reply-meta">
+                <a href="/member/{{reply.user.username}}">{{reply.user.username}}</a> {{_("reply at")}}
+                <time datetime="{{xmldatetime(reply.created)}}">{{timesince(reply.created, locale.code)}}</time> #{{index}}
+            </div>
+            <div class="content">
+                {{markdown(reply.content)}}
+            </div>
+        </div>
+    </div>
+    {% end %}
+    {% if topic.reply_count %}
+    <div class="ui-box-footer pagination">
+        {% for p in pagination.iter_pages() %}
+        <a href="?p={{p}}">{{p}}</a>
+        {% end %}
+    </div>
+    {% else %}
+    <div class="ui-box-footer pagination">
+        {{ _("Use your source") }}
+    </div>
+    {% end %}
+</div>
+<div class="ui-box">
+{% if topic.status == 'close' %}
+<div class="ui-box-container">
+    {{ _("Topic is closed") }}
+</div>
+{% elif current_user %}
+<form action="/topic/{{topic.id}}/reply" class="ui-box-container" method="post">
+    {{ xsrf_form_html() }}
+    <div id="editor">
+        <div id="editor-pannel">
+            <a href="#" class="js-write current" tabindex="-1">{{ _("Write") }}</a>
+            <a href="#" class="js-preview" tabindex="-1">{{ _("Preview") }}</a>
+            <a href="#" id="june-upload-button" class="js-upload" tabindex="-1">{{ _("Upload") }}</a>
+        </div>
+        <div class="fm-item">
+            <textarea name="content" class="fm-text" required></textarea>
+            <div id="editor-preview"></div>
+        </div>
+        <button type="submit" class="ui-btn">{{_("Post")}}</button>
+    </div>
+</form>
+<input type="file" name="image" accept="image/*" />
+{% else %}
+<div class="ui-box-container">
+    {{_("Want to comment ?")}}
+</div>
+<div class="ui-box-footer">
+    <a href="/account/signin" class="ui-btn js-overlay">{{_("Signin")}}</a>
+</div>
+{% end %}
+</div>
+{% end %}
+
+{% block sidebar %}
+
+{% module User(topic.user_id) %}
+
+{% module Node(node=node) %}
+
+{% if logs %}
+<div class="widget-logs ui-box">
+    <div class="ui-box-header">
+        <h4>{{_("Edit History")}}</h4>
+    </div>
+    <div class="ui-box-container">
+        <ul>
+            {% for log in logs %}<li>{{timesince(log.created, locale.code)}}</li>{% end %}
+        </ul>
+    </div>
+</div>
+{% end %}
+
+{% end %}
+
+{% block afterjs %}
+{% if not current_user %}
+{% include "snippet/signinbox.html" %}
+{% end %}
+<script type="text/javascript" src="{{static_url('js/topic.js')}}"></script>
+{% end %}
+
+{% block notification %}{% end %}

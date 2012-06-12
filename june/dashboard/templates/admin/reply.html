@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block subtitle %} {{ _("Dashboard") }}{% end %}
+
+
+{% block content %}
+<div class="ui-box">
+    <form action="" method="post" class="ui-box-container">
+        {{ xsrf_form_html() }}
+        <div class="fm-item">
+            <label class="fm-label" for="content">{{ _("Content") }}</label>
+            <textarea name="content" class="fm-text">{{reply.content}}</textarea>
+        </div>
+        <div class="fm-item">
+            <button class="ui-btn">{{_("Save")}}</button>
+            <a href="?delete=true" class="ui-btn">{{ _("Delete") }}</a>
+        </div>
+    </form>
+</div>
+{% end %}
+
+{% block notification %}{% end %}
+{% block siteinfo %}{% end %}

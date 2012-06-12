@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+
+{% block subtitle %}{{ _("Node") }}{% end %}
+
+{% block content %}
+<div class="ui-box">
+    <form action="" method="post" class="ui-box-container">
+        {{ xsrf_form_html() }}
+        <div class="fm-item fm-required">
+            <label class="fm-label" for="title">{{ _("Title") }}</label>
+            <input type="text" class="fm-text" name="title" value="{{node.title or ""}}" required />
+        </div>
+        <div class="fm-item fm-required">
+            <label class="fm-label" for="slug">{{ _("Slug") }}</label>
+            <input type="text" class="fm-text" name="slug" value="{{node.slug or ""}}" required />
+        </div>
+        <div class="fm-item fm-required">
+            <label class="fm-label" for="description">{{ _("Description") }}</label>
+            <textarea name="description" class="fm-text" required>{{node.description or ""}}</textarea>
+        </div>
+        <div class="fm-item">
+            <label class="fm-label" for="bgcolor">{{ _("Background") }}</label>
+            <input type="text" class="fm-text" name="bgcolor" value="{{node.bgcolor or ""}}" />
+        </div>
+        <div class="fm-item">
+            <label class="fm-label" for="fgcolor">{{ _("Font Color") }}</label>
+            <input type="text" class="fm-text" name="fgcolor" value="{{node.fgcolor or ""}}" />
+        </div>
+        <div class="fm-item">
+            <label class="fm-label" for="header">{{ _("Header") }}</label>
+            <textarea name="header" class="fm-text">{{node.header or ""}}</textarea>
+        </div>
+        <div class="fm-item">
+            <label class="fm-label" for="footer">{{ _("Footer") }}</label>
+            <textarea name="footer" class="fm-text">{{node.footer or ""}}</textarea>
+        </div>
+        <div class="fm-item">
+            <label class="fm-label" for="sidebar">{{ _("Sidebar") }}</label>
+            <textarea name="sidebar" class="fm-text">{{node.sidebar or ""}}</textarea>
+        </div>
+        <div class="fm-item">
+            <label class="fm-label" for="reputation">{{ _("Reputation") }}</label>
+            <input type="number" class="fm-text" name="reputation" value="{{node.limit_reputation or 0}}" />
+            <div class="fm-explain">{{ _("Only member over this reputation can create a topic in this node") }}</div>
+        </div>
+
+        <div class="fm-item">
+            <label class="fm-label" for="role">{{ _("Role") }}</label>
+            <input type="number" class="fm-text" name="role" value="{{node.limit_role or 2}}" />
+            <div class="fm-explain">{{ _("Only member over this role can create a topic in this node") }}</div>
+        </div>
+        <div class="fm-item">
+            <button class="ui-btn">{{_("Save")}}</button>
+        </div>
+    </form>
+</div>
+{% end %}
+
+{% block notification %}{% end %}
+{% block siteinfo %}{% end %}

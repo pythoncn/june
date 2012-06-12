@@ -1,0 +1,39 @@
+<div class="widget-node ui-box">
+    <div class="ui-box-header" style="
+        {%if node.bgcolor%}background-color:{{node.bgcolor}};{%end%}
+        {%if node.fgcolor%}color:{{node.fgcolor}};{%end%}
+        {%if not node.fgcolor and node.bgcolor%}color:#fff;{%end%}
+        ">
+        <h4>{{node.title}}</h4>
+    </div>
+    <div class="ui-box-container">
+        {{node.description}}
+    </div>
+    <div class="ui-box-footer">
+        <a href="/node/{{node.slug}}" class="ui-btn">{{ _("View") }}</a>
+        <a href="/node/{{node.slug}}/create" class="ui-btn" rel="nofollow">{{ _("Create") }}</a>
+        {% if following %}
+        <a href="/node/{{node.slug}}" class="ui-btn following js-follow-node">{{ _("Following") }}</a>
+        {% else %}
+        <a href="/node/{{node.slug}}" class="ui-btn js-follow-node">{{ _("Follow") }}</a>
+        {% end %}
+    </div>
+</div>
+<div class="widget-feed ui-box">
+    <div class="ui-box-container">
+        <a href="/node/{{node.slug}}/feed"><span class="icon-rss"></span>Node Feed</a>
+    </div>
+</div>
+
+{% if node.sidebar %}
+<div class="ui-box">
+    <div class="ui-box-container">
+        {{normal_markdown(node.sidebar)}}
+    </div>
+</div>
+{% end %}
+<script type="text/javascript">
+    var june = june || {}; june.unfollow = "{{_('Unfollow')}}";
+    june.follow = "{{_('Follow')}}";
+    june.following = "{{_('Following')}}";
+</script>

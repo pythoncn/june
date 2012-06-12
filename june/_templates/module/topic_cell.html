@@ -1,0 +1,22 @@
+<div class="ui-cell article">
+    <a href="/member/{{topic.user.username}}" class="ui-avatar"><img src="{{topic.user.get_avatar(48)}}" width="48" height="48" /></a>
+    {% if topic.replyer %}
+    <a href="/member/{{topic.replyer.username}}" class="ui-small-avatar"><img src="{{topic.replyer.get_avatar(24)}}" width="24" height="24" /></a>
+    {% end %}
+
+    <a href="{{topiclink(topic)}}" class="ui-cell-top-right" title="{{topic.reply_count}} {{_("replies")}}">{{topic.reply_count or 0}}</a>
+
+    <div class="article fn-wrap">
+        <h3><a href="{{topiclink(topic)}}">{{topic.title}}</a></h3>
+        <div class="article-meta">
+            by <a href="/member/{{topic.user.username}}">{{topic.user.username}}</a> •
+            in <a href="/node/{{topic.node.slug}}">{{topic.node.title}}</a> •
+            {% if topic.last_reply_time %}
+            <time datetime="{{xmldatetime(topic.last_reply_time)}}" title="replied">{{timesince(topic.last_reply_time, locale.code)}}</time>
+            {% else %}
+            <time datetime="{{xmldatetime(topic.created)}}" title="created">{{timesince(topic.created, locale.code)}}</time>
+            {% end %}
+            • {{topic.hits or 1}} {{_("hits")}}
+        </div>
+    </div>
+</div>

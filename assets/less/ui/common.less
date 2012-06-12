@@ -1,0 +1,158 @@
+.ui-label {
+    background: @darkColor;
+    color: #fff;
+    font-size: 12px;
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+.ui-avatar {
+    float: left;
+    margin-right: 14px;
+    &:hover {
+        opacity: 0.8;
+    }
+    img {
+        border-radius: 4px;
+    }
+}
+.ui-small-avatar {
+    position: absolute;
+    top: 36px;
+    left: 38px;
+    &:hover {
+        opacity: 0.8;
+    }
+    img {
+        border-radius: 3px;
+    }
+}
+
+/* status */
+.status {
+    float: left;
+    border-right: 1px solid #ddd;
+    width: 33%;
+    font-size: 12px;
+    line-height: 1.2;
+    text-align: center;
+    color: lighten(@darkColor, 30%);
+    font-family: "Luxi Sans", "Lucida Grande", "Hiragino Sans GB", sans-serif;
+    margin-top: 6px;
+}
+.status:last-of-type {
+    border-right: 0 none;
+}
+.status strong {
+    display: block;
+    font-size: 16px;
+    color: lighten(@darkColor, 10%);
+}
+
+/* overly */
+.ui-overlay-dialog {
+    position: fixed;
+    top: -400px;
+    left: 50%;
+    width: 400px;
+    margin-left: -200px;
+    background: #fff;
+    border-radius: 4px;
+    z-index: 9999;
+    .transition(top 0.2s ease-in);
+}
+@media screen and (max-width: 480px) {
+    .ui-overlay-dialog {
+        width: 300px;
+        margin-left: -150px;
+    }
+}
+.overlay-mode .ui-overlay-dialog {
+    top: 100px;
+}
+.ui-overlay-dialog .ui-box-header {
+    color: #fff;
+    font-size: 18px;
+    text-shadow: 1px 1px 0 #333;
+}
+.ui-overlay-dialog .js-close-overlay {
+    position: absolute;
+    top: 6px;
+    right: 14px;
+    cursor: pointer;
+}
+.ui-overlay-dialog .fm-text {
+    width: 80%;
+}
+.ui-overlay-dialog textarea.fm-text {
+    width: 90%;
+    height: 90px;
+}
+.overlay-mode .ui-overlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 999;
+}
+
+/* article */
+.ui-cell .article {
+    line-height: 1.8;
+    a {
+        color: @darkColor;
+    }
+    h3 {
+        font-size: 16px;
+        font-weight: normal;
+        width: 95%;
+    }
+}
+.ui-cell .article-meta {
+    color: #999;
+    font-size: 12px;
+    a {
+        color: #666;
+        font-weight: bold;
+    }
+}
+.pagination a {
+    background: @darkColor;
+    color: #fff;
+    padding: 2px 6px;
+    border-radius: 3px;
+    text-decoration: none;
+    &:hover {
+        background: lighten(@darkColor, 10%);
+    }
+}
+/* reply */
+.replies a {
+    font-weight: bold;
+}
+.replies .ui-box-header {
+    color: #999;
+}
+.reply-meta {
+    font-size: 12px;
+    color: #999;
+}
+.reply-content {
+    padding-bottom: 12px;
+}
+.reply p {
+    margin: 4px 0 14px;
+}
+.node {
+    display: inline-block;
+    padding: 2px 12px;
+    margin: 3px;
+    color: white;
+    background-color: rgba(0,0,0,0.2);
+    border-radius: 3px;
+    &:hover {
+        opacity: 0.8;
+        text-decoration: none;
+    }
+}

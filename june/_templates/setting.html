@@ -1,0 +1,120 @@
+{% extends "layout.html" %}
+
+{% block subtitle %}{{_("Account")}}{% end %}
+
+{% block afterstyle %}
+<style type="text/css">
+    textarea {
+        width: 60%;
+        height: 200px;
+    }
+    @media screen and (max-width: 480px) {
+        textarea {
+            width: 90%;
+        }
+    }
+</style>
+{% end %}
+
+{% block content %}
+<div class="ui-box">
+    <div class="ui-box-header">
+        <h4>{{ _("Edit Profile") }}</h4>
+    </div>
+    <form action="" method="post" class="ui-box-container">
+        {{ xsrf_form_html() }}
+        <div class="fm-item fm-required">
+            <label class="fm-label" for="username">{{ _("Username") }}</label>
+            {% if current_user.edit_username_count < 1 %}
+            <span class="fn-text">{{current_user.username or ''}}</span>
+            {% else %}
+            <input type="text" class="fm-text" name="username" value="{{current_user.username or ''}}"required />
+            {% end %}
+            <div class="fm-explain">{{ _("Only English characters and digits are accepted.") }}</div>
+        </div>
+
+        <div class="fm-item">
+            <label class="fm-label" for="website">{{ _("Website") }}</label>
+            <input type="url" class="fm-text" name="website" value="{{current_user.website or ""}}" />
+        </div>
+        <div class="fm-item">
+            <label class="fm-label" for="city">{{ _("City") }}</label>
+            <input type="text" class="fm-text" name="city" value="{{ current_user.city or ''}}" />
+        </div>
+        <div class="fm-item">
+            <label class="fm-label" for="description">{{ _("Description") }}</label>
+            <textarea class="fm-text" name="description">{{current_user.description or ''}}</textarea>
+            <div class="fm-explain">Description supports markdown.</div>
+        </div>
+        <div class="fm-item">
+            <button class="ui-btn">{{_("Save")}}</button>
+        </div>
+    </form>
+</div>
+
+<div class="ui-box">
+    <div class="ui-box-header warn">
+        <h4>{{_("Danger")}}</h4>
+    </div>
+    <div class="ui-box-container">
+        Want to delete your account? This is a one way determination,
+        there is no way to recover your account.
+    </div>
+    <div class="ui-box-footer">
+        <a href="#" class="ui-btn">{{_("Delete")}}</a>
+    </div>
+</div>
+{% end %}
+
+{% block sidebar %}
+<div class="ui-box">
+    <div class="ui-box-header">
+        <h4>{{ _("Avatar") }}</h4>
+    </div>
+    <div class="ui-box-container">
+        Change your avatar at <a href="http://gravatar.com">Gravatar</a>
+    </div>
+</div>
+<div class="ui-box">
+    <div class="ui-box-header">
+        <h4>{{_("Important")}}</h4>
+    </div>
+    <div class="ui-box-container">
+        <p>{{_("You have %s chances to edit your username.") % current_user.edit_username_count }}</p>
+    </div>
+    {% if current_user.edit_username_count == 0 %}
+    <div class="ui-box-footer">
+        <a href="/system/feedback" class="ui-btn">{{ _("Request a Chance") }}</a>
+    </div>
+    {% end %}
+</div>
+<div class="ui-box">
+    <div class="ui-box-header warn">
+        <h4>{{_("Password") }}</h4>
+    </div>
+    <div class="ui-box-container">
+        <p>If you don't have a password, you can request a password by <strong>find password</strong>.</p>
+    </div>
+    <div class="ui-box-footer">
+        <a href="/account/password" class="ui-btn">{{ _("Change Password") }}</a>
+    </div>
+</div>
+{% if current_user.role == 1 %}
+<div class="ui-box">
+    <div class="ui-box-header warn">
+        <h4>{{_("Account")}}</h4>
+    </div>
+    <div class="ui-box-container">
+        <p>Your account is not active now, please verify your Email right now.</p>
+    </div>
+    <form action="/account/signup" class="ui-box-footer" method="post">
+        {{ xsrf_form_html() }}
+        <input type="hidden" name="action" value="email" />
+        <button class="ui-btn">{{_("Verify Account")}}</button>
+    </form>
+</div>
+{% end %}
+{% end %}
+
+{% block notification %}{% end %}
+{% block siteinfo %}{% end %}

@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+{% block subtitle %}{{ _("Member") }}{% end %}
+
+{% block content %}
+<div class="ui-box">
+    <form action="" method="post" class="ui-box-container">
+        {{ xsrf_form_html() }}
+        <div class="fm-item fm-required">
+            <label class="fm-label">{{ _("Username") }}</label>
+            <input type="text" class="fm-text" name="username" value="{{user.username}}" required />
+        </div>
+        <div class="fm-item fm-required">
+            <label class="fm-label">{{ _("Email") }}</label>
+            <input type="email" class="fm-text" name="email" value="{{user.email}}" required />
+        </div>
+        <div class="fm-item fm-required">
+            <label class="fm-label">{{ _("Role") }}</label>
+            <input type="number" class="fm-text" name="role" value="{{user.role}}" required />
+        </div>
+        <div class="fm-item fm-required">
+            <label class="fm-label">{{ _("Reputation") }}</label>
+            <input type="number" class="fm-text" name="reputation" value="{{user.reputation}}" required />
+        </div>
+        <div class="fm-item fm-required">
+            <label class="fm-label">{{ _("Chance") }}</label>
+            <input type="number" class="fm-text" name="edit_username_count" value="{{user.edit_username_count}}" required />
+        </div>
+        <div class="fm-item">
+            <button class="ui-btn">{{_("Save")}}</button>
+        </div>
+    </form>
+</div>
+{% end %}
+
+{% block notification %}{% end %}
+{% block siteinfo %}{% end %}

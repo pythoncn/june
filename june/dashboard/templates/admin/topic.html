@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block subtitle %} {{ _("Dashboard") }}{% end %}
+
+{% block content %}
+<div class="ui-box">
+    <div class="ui-box-header">
+        <h4><a href="/topic/{{topic.id}}">{{topic.title}}</a></h4>
+    </div>
+    <form action="" method="post" class="ui-box-container">
+        {{ xsrf_form_html() }}
+        <div class="fm-item">
+            <label class="fm-label" for="impact">{{ _("Impact") }}</label>
+            <input type="number" class="fm-text" name="impact" value="{{topic.impact}}" />
+        </div>
+        <div class="fm-item">
+            <button class="ui-btn">{{_("Save")}}</button>
+        </div>
+    </form>
+</div>
+{% end %}
+
+{% block notification %}{% end %}
+{% block siteinfo %}{% end %}

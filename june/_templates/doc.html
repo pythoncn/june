@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block subtitle %}{{escape(doc.title)}}{% end %}
+
+{% block afterstyle %}
+<link rel="canonical" href="{{g.siteurl}}/doc/{{doc.slug}}" />
+{% end %}
+
+{% block content %}
+<article class="hentry ui-box" data-id="{{doc.slug}}">
+    <div class="ui-box-header fn-clear">
+        <h3 class="entry-title"><a href="/doc/{{doc.slug}}">{{doc.title}}</a></h3>
+    </div>
+    <div class="ui-box-container entry-content">
+        {{ markdown(doc.content) }}
+    </div>
+    <div class="ui-box-footer fn-clear">
+        <div class="entry-meta">
+            <time class="created" title="Created" datetime="{{xmldatetime(doc.created)}}">{{localtime(doc.created)}}</time> /
+            <time class="updated" title="Updated" datetime="{{xmldatetime(doc.updated)}}">{{localtime(doc.updated)}}</time>
+        </div>
+    </div>
+</article>
+{% end %}

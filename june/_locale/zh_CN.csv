@@ -1,0 +1,107 @@
+# ========== template ===========
+# navigation
+"Latest","最近更新"
+"Popular","热门更新"
+"Following","关注"
+"Nodes","节点"
+"Create Topic","发表话题"
+"Setting","设置"
+"Signin","登录"
+"Signout","登出"
+"Notification","消息"
+
+"Node","节点"
+"Member","会员"
+"Members","会员"
+"Topic","话题"
+"Reply","回复"
+
+# signup signin setting
+"Account","账户"
+"Password","密码"
+"Signup","注册"
+"Don't have an account?","还没有账户？"
+"Email","邮箱"
+"Confirm","确认"
+"Username","用户名"
+"Website","个人网站"
+"Only English characters and digits are accepted.","只允许填写英文字符和数字"
+"Save","保存"
+
+
+# topic
+"Edit","编辑"
+"Move","移动"
+"Delete","删除"
+"Write","编写"
+"Preview","预览"
+"Upload","上传"
+"Post","发布"
+"Want to comment ?","想要评论？"
+"Edit Topic","编辑话题"
+"Title","标题"
+"Cancel","取消"
+"Create Topic","新建话题"
+"This topic is in","这个话题位于"
+"Created at","新建于"
+"Move Topic","移动话题"
+"Choose a node","选择一个节点"
+"Can't find a node?","找不到合适的节点？"
+"Have anything in trouble?"
+"Feedback","反馈"
+"hits","点击"
+"replies","回复"
+"Last reply at","最后回复于"
+"reply at","回复于"
+# topic voting
+"Can't vote your own topic","不能对你自己的主题进行评分"
+"Cancel your vote first","请先取消原来的评分"
+
+# node
+"View","查看"
+"Create","新建"
+"Follow","关注"
+"Unfollow","取消"
+"All Nodes","所有节点"
+"Following Nodes","关注节点"
+
+# account
+"You have %s chances to edit your username.","你有 %s 次机会修改用户名"
+
+# =========== python file ==========
+# timesince
+"%s minutes ago","%s分钟前"
+"%s hours ago","%s小时前"
+"%s days ago","%s天前"
+"%s months ago","%s个月前"
+"%s years ago","%s年前"
+
+# topic/handlers.py
+"reply not found","回复不存在"
+"topic not found","话题不存在"
+"permission denied","没有权限"
+
+# ======= flash message ==========
+# topic
+"Please fill the required fields","请填写以下必填项"
+"You have no permission to create a topic in this node","你没有权限在这个节点里新建话题"
+"Password is required","需要填写密码"
+"Topic is deleted","话题已删除"
+#account
+"Don't be evil","别闹了，没用的"
+"This link is expired","这个链接已经失效了"
+"Invalid account or password","账户或密码错误"
+"Google signin failed","Google 账户登录失败"
+"Your account is activated","你的账户已经激活"
+"Password doesn't match","密码不匹配"
+"Not a valid email address","邮箱格式不正确"
+"This email is already registered","该邮箱已注册"
+"Captcha not valid","验证码不正确"
+"Invalid password","密码不正确"
+"Username is invalid","用户名不正确"
+"Website is invalid","个人网站格式不正确"
+"Username has been taken","用户名已被注册"
+"You can't edit username","你不能编辑用户名了"
+"User does not exists","用户不存在"
+"Please check your inbox","请查收邮件"
+"Password changed","密码已更改"

@@ -1,24 +1,23 @@
 #!/usr/bin/env python
 
 import argparse
-try:
-    import june.app
-except ImportError:
-    import app
-
-from june.lib.util import parse_config_file
+from july.util import parse_config_file
 
 
 def create_db():
-    from june.config import db
-    import june.models
-    db.create_db()
+    from july.database import db
+    import account.models
+    import node.models
+    import topic.models
+    import dashboard.models
+    import feedback.models
+    db.Model.metadata.create_all(db.engine)
     return
 
 
 def create_superuser():
-    from june.config import db
-    from june.models import Member
+    from july.database import db
+    from account.models import Member
     cmd = raw_input('Create superuser?(Y/n): ')
     if cmd == 'n':
         import sys

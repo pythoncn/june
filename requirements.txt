@@ -1,0 +1,9 @@
+# This requirements is for development
+
+-e git+git://github.com/lepture/july.git#egg=july
+misaka
+pygments
+sqlalchemy
+MySQL-python
+python-memcached
+#argparse

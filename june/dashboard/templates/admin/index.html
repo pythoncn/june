@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+
+{% block subtitle %}{{ _("Dashboard") }}{% end %}
+
+{% block content %}
+<div class="ui-box">
+    <div class="ui-box-header">
+        <h4>Edit Node</h4>
+    </div>
+    <div class="ui-box-container">
+        {% for node in nodes %}
+        <a class="node" href="/dashboard/node/{{node.slug}}" style="
+            {%if node.bgcolor%}background-color:{{node.bgcolor}};{%end%}
+            {%if node.fgcolor%}color:{{node.fgcolor}};{%end%}
+            {%if not node.fgcolor and node.bgcolor%}color:#fff;{%end%}
+            ">{{escape(node.title)}}</a>
+        {% end %}
+    </div>
+    <div class="ui-box-footer">
+        <a href="/dashboard/node" class="ui-btn">{{_("New Node")}}</a>
+    </div>
+</div>
+<div class="ui-box">
+    <div class="ui-box-header">
+        <h4>Edit Document</h4>
+    </div>
+    <div class="ui-box-container">
+        {% for doc in docs %}
+        <a class="doc" href="/dashboard/doc/{{doc.slug}}">{{escape(doc.title)}}</a>
+        {% end %}
+    </div>
+    <div class="ui-box-footer">
+        <a href="/dashboard/doc" class="ui-btn">{{_("New Document")}}</a>
+    </div>
+</div>
+<div class="ui-box">
+    <div class="ui-box-header">
+        <h4>Site Information</h4>
+    </div>
+    <form action="" method="post" class="ui-box-container">
+        {{ xsrf_form_html() }}
+        <div class="fm-item">
+            <label class="fm-label">{{ _("Sidebar") }}</label>
+            <textarea name="sidebar" class="fm-text">{{sidebar or ''}}</textarea>
+        </div>
+        <div class="fm-item">
+            <button class="ui-btn">{{_("Save")}}</button>
+        </div>
+    </form>
+</div>
+{% end %}
+
+{% block sidebar %}
+<div class="ui-box">
+    <form action="" class="ui-box-container">
+        <div class="fm-item">
+            <input type="text" name="user" class="fm-text vsep" />
+        </div>
+        <button type="submit" class="ui-btn">{{ _("Member Manage") }}</button>
+    </form>
+</div>
+
+<div class="ui-box">
+    <form action="" class="ui-box-container">
+        <div class="fm-item">
+            <input type="text" name="cache" class="fm-text vsep" />
+        </div>
+        <button type="submit" class="ui-btn">{{ _("Delete Cache") }}</button>
+    </form>
+</div>
+{% end %}
+
+{% block notification %}{% end %}
+{% block siteinfo %}{% end %}

@@ -1,0 +1,51 @@
+<div class="ui-box widget-user">
+    <div class="ui-box-header primary fn-clear">
+        <a href="/member/{{user.username}}" class="ui-avatar"><img src="{{user.get_avatar(48)}}" width="48" height="48" /></a>
+        <div class="user fn-wrap">
+            <div class="username"><strong>{{escape(user.username)}}</strong></div>
+            {% if user.website %}
+            <div class="website"><a href="{{escape(user.website)}}" rel="nofollow">{{escape(user.website)}}</a></div>
+            {% end %}
+            {% if current_user and current_user.id == user.id %}
+            <span class="ui-box-label">You</span>
+            {% end %}
+        </div>
+    </div>
+    <div class="ui-box-container fn-clear">
+        <div class="status status-topic">
+            <strong>{{user.topic_count}}</strong>
+            {{ _("Topics") }}
+        </div>
+        <div class="status status-reply">
+            <strong>{{user.reply_count}}</strong>
+            {{ _("Replies") }}
+        </div>
+        <div class="status status-reputation">
+            <strong>{{user.reputation}}</strong>
+            {{ _("Reputation") }}
+        </div>
+    </div>
+    <div class="ui-box-footer">
+        <a href="/~{{user.username}}" class="ui-btn">{{ _("View Profile") }}</a>
+        <a href="/~{{user.username}}" class="js-overlay ui-btn">{{ _("Send Message") }}</a>
+    </div>
+</div>
+
+{% if current_user and current_user.id != user.id %}
+<div class="ui-overlay-dialog">
+    <div class="ui-box-header primary">
+        <strong>{{ _("Send Message") }}</strong>
+        <span class="js-close-overlay icon-cancel"></span>
+    </div>
+    <form class="ui-box-container" action="/account/message" method="post">
+        {{ xsrf_form_html() }}
+        <input type="hidden" name="next" value="{{request.uri}}" />
+        <input type="hidden" name="username" value="{{user.username}}" />
+        <div class="fm-item">
+            <textarea name="content" class="fm-text" placeholder="Message" required></textarea>
+        </div>
+        <button class="ui-btn">{{_("Send")}}</button>
+    </form>
+</div>
+<div class="ui-overlay"></div>
+{% end %}

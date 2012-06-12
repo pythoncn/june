@@ -1,0 +1,84 @@
+#cse form.gsc-search-box {
+    padding: 16px;
+    width: auto;
+}
+#cse .gsc-input {
+    padding:6px 8px;
+    margin-bottom:2px;
+    color:#333;
+    border-radius:3px;
+}
+#cse .gsc-results {
+    width: 100%;
+}
+#cse .gsc-result {
+    font:14px/1.6 "Luxi Sans","Lucida Grande","Hiragino Sans GB",sans-serif;
+    padding:6px 10px;
+    border-bottom:1px solid #ddd;
+}
+
+#cse input.gsc-search-button {
+    display:inline-block;
+    margin:0 4px 4px 12px;
+    line-height:1.3;
+    background-color:#f4f4f4;
+    color:#333;
+    border:1px solid #d4d4d4;
+    border-radius:3px;
+    font-size:14px;
+    font-weight:bold;
+    text-decoration:none;
+    text-shadow:1px 1px 0 #fff;
+    padding:4px 12px 5px;
+    vertical-align:middle;
+    background-image:-webkit-linear-gradient(#f4f4f4, #ececec);
+    background-image:-moz-linear-gradient(#f4f4f4, #ececec);
+    background-image:-ms-linear-gradient(#f4f4f4, #ececec);
+    background-image:-o-linear-gradient(#f4f4f4, #ececec);
+    filter:progid:dximagetransform.microsoft.gradient(startColorstr='#7c8488', endColorstr='#44484b', GradientType=0);
+    cursor:pointer;
+}
+#cse input.gsc-search-button:active {
+    color:#599bdc;
+}
+#cse input.gsc-search-button:hover {
+    color:white;
+    text-shadow:-1px -1px 0 rgba(0, 0, 0, 0.3);
+    border:1px solid #599bdc;
+    border-bottom-color:#2a65a0;
+    background-color:#599bdc;
+    text-decoration:none;
+    background-image:-webkit-linear-gradient(#599bdc, #2468ab);
+    background-image:-moz-linear-gradient(#599bdc, #2468ab);
+    background-image:-ms-linear-gradient(#599bdc, #2468ab);
+    background-image:-o-linear-gradient(#599bdc, #2468ab);
+    filter:progid:dximagetransform.microsoft.gradient(startColorstr='#7c8488', endColorstr='#44484b', GradientType=0);
+}
+#cse .gsc-branding {
+    display: none;
+}
+#cse .gsc-results .gsc-cursor-box {
+    padding: 10px;
+}
+#cse .gsc-results .gsc-cursor-page {
+    background: #575D60;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 3px;
+    border-bottom: 0 none;
+    text-decoration: none;
+}
+#cse .gs-result .gs-visibleUrl {
+    display: none;
+}
+#cse .gs-result .gs-visibleUrl-long {
+    display: block;
+}
+#cse .gs-result .gs-title, #cse .gs-result .gs-title * {
+    color: #575D60;
+    text-decoration: none;
+    margin-bottom: 10px;
+}
+#cse .gs-result .gs-title:hover {
+    text-decoration: underline;
+}

@@ -1,0 +1,18 @@
+<div class="ui-overlay-dialog">
+    <div class="ui-box-header primary">
+        <strong>Signin</strong>
+        <span class="js-close-overlay icon-cancel"></span>
+    </div>
+    <form class="ui-box-container" action="/account/signin?next={{request.uri}}" method="post">
+        {{ xsrf_form_html() }}
+        <div class="fm-item fm-required">
+            <input type="text" class="fm-text" name="account" placeholder="Username/Email" required />
+        </div>
+        <div class="fm-item fm-required">
+            <input type="password" class="fm-text" name="password" placeholder="Password" required />
+        </div>
+        <button class="ui-btn">{{_("Signin")}}</button>
+        <a class="ui-btn" href="/account/signup">{{_("Signup")}}</a>
+    </form>
+</div>
+<div class="ui-overlay"></div>
