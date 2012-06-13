@@ -11,7 +11,7 @@
         <div class="article-meta">
             by <a href="/member/{{topic.user.username}}">{{topic.user.username}}</a> •
             in <a href="/node/{{topic.node.slug}}">{{topic.node.title}}</a> •
-            {% if topic.last_reply_time %}
+            {% if topic.reply_count %}
             <time datetime="{{xmldatetime(topic.last_reply_time)}}" title="replied">{{timesince(topic.last_reply_time, locale.code)}}</time>
             {% else %}
             <time datetime="{{xmldatetime(topic.created)}}" title="created">{{timesince(topic.created, locale.code)}}</time>
