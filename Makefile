@@ -3,7 +3,7 @@
 .PHONY: clean-pyc clean-build docs
 
 # Variables for June
-CONFIG = tmp.config
+CONFIG = settings-debug.py
 PROJSERVER = linode.lepture.com:/home/lepture/www/static
 STATIC = june/_static
 
@@ -42,23 +42,6 @@ docs:
 # Deployment
 upload:
 	rsync -av --del --exclude=*.pyc june/_static/* $(PROJSERVER)
-
-
-# static, required livereload
-install_static: install_image install_js install_css
-
-install_js:
-	livereload lib_js
-	livereload editor_js
-	livereload site_js
-	livereload topic_js
-
-install_css:
-	livereload site_css
-
-install_image:
-	if [ ! -d $(STATIC)/img ]; then mkdir -p $(STATIC)/img; fi
-	cp -r assets/img/* $(STATIC)/img/
 
 
 # Git

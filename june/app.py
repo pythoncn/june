@@ -120,6 +120,7 @@ def create_application():
 
     import datetime
     application.register_context('now', datetime.datetime.utcnow)
+    application.register_context('debug', options.debug)
 
     from june.filters import markdown, xmldatetime, localtime, timesince
     from june.filters import topiclink, normal_markdown
