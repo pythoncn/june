@@ -5,7 +5,6 @@
 # Variables for June
 CONFIG = settings-debug.py
 PROJSERVER = linode.lepture.com:/home/lepture/www/static
-STATIC = june/_static
 
 
 # Development
