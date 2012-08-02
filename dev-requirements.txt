@@ -1,6 +1,9 @@
 # This requirements is for development
 
+Flask
 misaka
 pygments
+
+Flask-SQLAlchemy
 #MySQL-python
 #python-memcached

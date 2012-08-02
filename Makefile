@@ -7,11 +7,11 @@
 
 # Development
 server:
-	python manage.py runserver
+	python june/app.py
 
 
 database:
-	python manage.py syncdb
+	python syncdb.py
 
 
 # Common Task
@@ -25,7 +25,7 @@ clean-build:
 
 clean-pyc:
 	find . -name '*.pyc' -exec rm -f {} +
-	find . -name '*.pyo' -exec rm -f {rm} +
+	find . -name '*.pyo' -exec rm -f {} +
 	find . -name '*~' -exec rm -f {} +
 
 # Sphinx Documentation
