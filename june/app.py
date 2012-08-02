@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import os
-CONF = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'config')
+CONF = os.path.join(os.path.abspath(os.path.dirname(__file__)), '_config')
 
 from flask import Flask, render_template
 from utils import import_object
