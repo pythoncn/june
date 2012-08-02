@@ -1,0 +1,51 @@
+#main {
+    position: relative;
+    margin-right: 30%;
+}
+#main .container {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 10px 30px;
+}
+#main header {
+    border-bottom: 1px solid #dadada;
+    text-transform: uppercase;
+    font-weight: bold;
+    padding: 10px 0;
+}
+#main header a {
+    border-bottom: 0 none;
+}
+#main nav {
+    border-bottom: 1px solid #ddd;
+    background: #f7f8f5;
+}
+#main nav a {
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-right: 16px;
+    border-bottom: 0 none;
+    font-size: 12px;
+}
+#main nav a:hover {
+    border-bottom: 2px solid;
+}
+#content {
+    padding: 10px 0;
+}
+#side {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 70%;
+    width: 30%;
+    border-left: 1px solid #dadada;
+}
+.widget {
+    padding: 20px;
+}
+.widget-head {
+    font-weight: bold;
+    font-size: 14px;
+    color: #222;
+}

@@ -2,11 +2,37 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}{% endblock %}</title>
+        <title>{% block title %}Python China{% endblock %}</title>
         {% include "_snippet/head.html" %}
     </head>
     <body>
-
+        <div id="main">
+            <header>
+                <div class="container">
+                    <a href="/">Python China</a>
+                </div>
+            </header>
+            <nav role="navigation">
+                <div class="container">
+                    <a href="/">Latest</a>
+                    <a href="/following">Following</a>
+                    <a href="/nodes">Nodes</a>
+                </div>
+            </nav>
+            <div id="content">
+                <div class="container">
+                    hello world
+                </div>
+            </div>
+        </div>
+        <aside id="side">
+            <div class="widget">
+                <header class="widget-head">Head</header>
+                <div class="widget-content">
+                    hello world
+                </div>
+            </div>
+        </aside>
         {% include "_snippet/foot.html" %}
     </body>
 </html>
