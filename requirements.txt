@@ -1,0 +1,6 @@
+# This requirements is for development
+
+misaka
+pygments
+#MySQL-python
+#python-memcached
