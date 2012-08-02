@@ -1,6 +1,4 @@
 from flask import Blueprint
-
-
 app = Blueprint('account', __name__, template_folder='templates')
 
 

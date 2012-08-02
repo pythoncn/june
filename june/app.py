@@ -3,10 +3,14 @@
 import os
 CONF = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'config')
 
-from flask import Flask
+from flask import Flask, render_template
 from utils import import_object
 
-app = Flask(__name__)
+app = Flask(
+    __name__,
+    static_folder='_static',
+    template_folder='_templates'
+)
 app.config.from_pyfile(os.path.join(CONF, 'base.py'))
 
 
@@ -48,7 +52,7 @@ def dev_app():
 
 @app.route('/')
 def hello():
-    return 'Hello World'
+    return render_template('index.html')
 
 
 if __name__ == '__main__':
