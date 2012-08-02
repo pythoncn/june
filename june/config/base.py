@@ -1,6 +1,11 @@
 DEBUG = False
 TESTING = False
 
+#: account
+PASSWORD_SECRET = 'password-secret'
+GRAVATAR_BASE_URL = 'http://www.gravatar.com/avatar/'
+GRAVATAR_EXTRA = ''
+
 #: sqlalchemy
 # SQLALCHEMY_POOL_SIZE = 100
 # SQLALCHEMY_POOL_TIMEOUT = 10
