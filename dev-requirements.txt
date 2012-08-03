@@ -4,6 +4,10 @@ Flask
 misaka
 pygments
 
+# database
 Flask-SQLAlchemy
+# i18n and l10n
+Flask-Babel
+
 #MySQL-python
 #python-memcached

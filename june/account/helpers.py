@@ -1,20 +1,22 @@
 #!/usr/bin/env python
 
-import logging
 import time
 import base64
 import hmac
 import hashlib
 from flask import request
 from .models import Member
+from flask import current_app
 
 
-def get_current_user(app, cookie):
-    value = decode_secret_cookie(app, cookie)
+def get_current_user(app, name, max_age_days=31):
+    value = request.cookies.get(name)
     if not value:
         return None
+    secret = app.config.setdefault('COOKIE_SECRET', 'cookie-secret')
+    value = decode_signed_value(secret, name, value, max_age_days)
     try:
-        uid, token = value.split('|')
+        uid, token = value.split('/')
     except:
         return None
     user = Member.query.filter_by(id=uid).first()
@@ -23,14 +25,6 @@ def get_current_user(app, cookie):
     if user.token != token:
         return None
     return user
-
-
-def decode_secret_cookie(app, name, max_age_days=31):
-    value = request.cookies.get(name)
-    if not value:
-        return None
-    secret = app.config.setdefault('COOKIE_SECRET', 'cookie-secret')
-    return decode_signed_value(secret, name, value, max_age_days)
 
 
 if str is unicode:
@@ -78,6 +72,8 @@ def decode_signed_value(secret, name, value, max_age_days=31):
     parts = utf8(value).split(b("|"))
     if len(parts) != 3:
         return None
+
+    logging = current_app.logger
     signature = _create_signature(secret, name, parts[0], parts[1])
     if not _time_independent_equals(parts[2], signature):
         logging.warning("Invalid cookie signature %r", value)

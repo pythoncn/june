@@ -27,6 +27,11 @@ class Member(db.Model):
     def __init__(self, email, **kwargs):
         self.email = email.lower()
         self.token = self.create_token(16)
+
+        if 'password' in kwargs:
+            raw = kwargs.pop('password')
+            self.password = self.create_password(raw)
+
         for k, v in kwargs.items():
             setattr(self, k, v)
 
@@ -34,8 +39,8 @@ class Member(db.Model):
         if self.avatar:
             return self.avatar
         md5email = hashlib.md5(self.email).hexdigest()
-        query = "%s?s=%s%s" % (md5email, size, db.app.config.GRAVATAR_EXTRA)
-        return db.app.config.GRAVATAR_BASE_URL + query
+        query = "%s?s=%s%s" % (md5email, size, db.app.config['GRAVATAR_EXTRA'])
+        return db.app.config['GRAVATAR_BASE_URL'] + query
 
     def to_json(self):
         data = (
@@ -48,7 +53,7 @@ class Member(db.Model):
     @staticmethod
     def create_password(raw):
         salt = Member.create_token(8)
-        passwd = '%s%s%s' % (salt, raw, db.app.config.PASSWORD_SECRET)
+        passwd = '%s%s%s' % (salt, raw, db.app.config['PASSWORD_SECRET'])
         hsh = hashlib.sha1(passwd).hexdigest()
         return "%s$%s" % (salt, hsh)
 
@@ -64,7 +69,7 @@ class Member(db.Model):
         if '$' not in self.password:
             return False
         salt, hsh = self.password.split('$')
-        passwd = '%s%s%s' % (salt, raw, db.app.config.PASSWORD_SECRET)
+        passwd = '%s%s%s' % (salt, raw, db.app.config['PASSWORD_SECRET'])
         verify = hashlib.sha1(passwd).hexdigest()
         return verify == hsh
 

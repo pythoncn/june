@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container">
+    <form action="{{url_for('account.signup')}}" method="POST">
+        <input type="email" name="email" />
+        <input type="text" name="username" />
+        <input type="password" name="password" />
+        <input type="submit" />
+    </form>
+</div>
+{% endblock %}

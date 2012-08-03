@@ -13,25 +13,31 @@
                 </div>
             </header>
             <nav role="navigation">
+                {% block navigation %}
                 <div class="container">
                     <a href="/">Latest</a>
                     <a href="/following">Following</a>
                     <a href="/nodes">Nodes</a>
                 </div>
+                {% endblock %}
             </nav>
             <div id="content">
+                {% block content %}
                 <div class="container">
                     hello world
                 </div>
+                {% endblock %}
             </div>
         </div>
         <aside id="side">
+            {% block sidebar %}
             <div class="widget">
                 <header class="widget-head">Head</header>
                 <div class="widget-content">
                     hello world
                 </div>
             </div>
+            {% endblock %}
         </aside>
         {% include "_snippet/foot.html" %}
     </body>
