@@ -1,9 +1,5 @@
 #!/usr/bin/env python
 
-import time
-import base64
-import hmac
-import hashlib
 from flask import session
 from .models import Member
 
@@ -23,10 +19,11 @@ def get_current_user():
 
 def login(user):
     if not user:
-        return
+        return None
     session.permanent = True
     session['id'] = user.id
     session['token'] = user.token
+    return user
 
 
 def logout():

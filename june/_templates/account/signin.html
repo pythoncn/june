@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container">
+    <form action="{{ url_for('account.signin') }}" method="POST">
+        <input type="text" name="account" />
+        <input type="submit" />
+    </form>
+</div>
+{% endblock %}
