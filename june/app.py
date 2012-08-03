@@ -3,7 +3,10 @@
 import os
 CONF = os.path.join(os.path.abspath(os.path.dirname(__file__)), '_config')
 
-from flask import Flask, render_template
+from flask import Flask
+from flask import g
+from flask import render_template
+from account.helpers import get_current_user
 from utils import import_object
 
 app = Flask(
@@ -14,7 +17,18 @@ app = Flask(
 app.config.from_pyfile(os.path.join(CONF, 'base.py'))
 
 
-def register(app, blueprint):
+@app.before_request
+def load_current_user():
+    app.config.setdefault('USER_COOKIE_NAME', 'user')
+    g.user = get_current_user(app, app.config['USER_COOKIE_NAME'])
+
+
+#@app.errorhandler(404)
+#def not_found(error):
+#    return render_template('404.html'), 404
+
+
+def register(blueprint):
     """blueprint structure:
 
         {{blueprint}}/
@@ -34,19 +48,12 @@ def register(app, blueprint):
     return app
 
 
-def prepare_app(app):
+def prepare_app():
     #: int account blueprint
-    register(app, 'account')
-    register(app, 'node')
+    register('account')
+    register('node')
 
     #: init topic blueprint
-    return app
-
-
-def dev_app():
-    app.config.from_pyfile(os.path.join(CONF, 'development.py'))
-
-    prepare_app(app)
     return app
 
 
@@ -56,5 +63,6 @@ def hello():
 
 
 if __name__ == '__main__':
-    dev_app()
+    app.config.from_pyfile(os.path.join(CONF, 'development.py'))
+    prepare_app()
     app.run()

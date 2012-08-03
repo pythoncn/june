@@ -1,5 +1,7 @@
 DEBUG = False
 TESTING = False
+COOKIE_SECRET = 'cookie-secret'
+
 
 #: account
 PASSWORD_SECRET = 'password-secret'

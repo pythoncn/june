@@ -1,5 +1,6 @@
 from flask import Blueprint
-app = Blueprint('account', __name__, template_folder='templates')
+from flask import render_template
+app = Blueprint('account', __name__)
 
 
 @app.route('/signin')
@@ -12,6 +13,6 @@ def signout():
     return 'signout'
 
 
-@app.route('signup')
+@app.route('signup', methods=['GET', 'POST'])
 def signup():
-    return 'signup'
+    return render_template('account/signup.html')
