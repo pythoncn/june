@@ -1,6 +1,10 @@
 DEBUG = False
 TESTING = False
 
+#: session
+SESSION_COOKIE_NAME = 'june'
+#SESSION_COOKIE_SECURE = True
+PERMANENT_SESSION_LIFETIME = 3600*24*30
 
 #: account
 PASSWORD_SECRET = 'password-secret'

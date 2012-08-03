@@ -2,17 +2,21 @@ from flask import Blueprint
 from flask import render_template
 from flask import request
 from .models import db, Member
+from .helpers import login, logout
 
 app = Blueprint('account', __name__)
 
 
-@app.route('/signin')
+@app.route('/signin', methods=['GET', 'POST'])
 def signin():
-    return 'signin'
+    user = Member.query.filter_by(id=1).first()
+    login(user)
+    return 'ok'
 
 
 @app.route('/signout')
 def signout():
+    logout()
     return 'signout'
 
 
