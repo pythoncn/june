@@ -6,8 +6,11 @@ pygments
 
 # database
 Flask-SQLAlchemy
+#MySQL-python
+#python-memcached
+
 # i18n and l10n
 Flask-Babel
 
-#MySQL-python
-#python-memcached
+# testing
+nose

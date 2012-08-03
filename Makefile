@@ -37,4 +37,7 @@ docs:
 
 # Git
 github:
-	git push origin django
+	git push origin flask
+
+testing:
+	nosetests -v
