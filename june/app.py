@@ -22,8 +22,7 @@ babel = Babel(app)
 
 @app.before_request
 def load_current_user():
-    app.config.setdefault('USER_COOKIE_NAME', 'user')
-    g.user = get_current_user(app, app.config['USER_COOKIE_NAME'])
+    g.user = get_current_user()
 
 
 #@app.errorhandler(404)
