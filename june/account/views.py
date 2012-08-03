@@ -11,20 +11,23 @@ app = Blueprint('account', __name__)
 def signin():
     if request.method == 'POST':
         account = request.form['account']
+        password = request.form['password']
         if '@' in account:
             user = Member.query.filter_by(email=account).first()
         else:
             user = Member.query.filter_by(username=account).first()
-
-        user = login(user)
-        return 'ok'
+        user = login(user, password)
+        if user:
+            return 'ok'
+        else:
+            return 'error'
     return render_template('account/signin.html')
 
 
 @app.route('/signout')
 def signout():
     logout()
-    return 'signout'
+    return render_template('index.html')
 
 
 @app.route('/signup', methods=['GET', 'POST'])
