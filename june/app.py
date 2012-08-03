@@ -5,7 +5,9 @@ CONF = os.path.join(os.path.abspath(os.path.dirname(__file__)), '_config')
 
 from flask import Flask
 from flask import g
+from flask import request
 from flask import render_template
+from flask.ext.babel import Babel
 from account.helpers import get_current_user
 from utils import import_object
 
@@ -15,6 +17,7 @@ app = Flask(
     template_folder='_templates'
 )
 app.config.from_pyfile(os.path.join(CONF, 'base.py'))
+babel = Babel(app)
 
 
 @app.before_request
@@ -26,6 +29,11 @@ def load_current_user():
 #@app.errorhandler(404)
 #def not_found(error):
 #    return render_template('404.html'), 404
+
+
+@babel.localeselector
+def get_locale():
+    return request.accept_languages.best_match(['en', 'zh'])
 
 
 def register(blueprint):
