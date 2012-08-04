@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container">
+	<form action="{{ url_for('account.setting')}}" method="POST">
+		<input type="text" name="username" value="{{username}}"/>
+		<input type="text" name="website" value="{{website}}"/>
+		<input type="text" name="city" value="{{city}}"/>
+		<textarea name="description">{{description}}</textarea>
+		<input type="submit" />
+	</form>
+</div>
+{% endblock %}
