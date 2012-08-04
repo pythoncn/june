@@ -27,5 +27,7 @@ def login(user, password):
 
 
 def logout():
+    if 'id' not in session:
+        return
     session.pop('id')
     session.pop('token')
