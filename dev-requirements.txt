@@ -7,10 +7,19 @@ pygments
 # database
 Flask-SQLAlchemy
 #MySQL-python
+
+# cache support
+Flask-Cache
 #python-memcached
 
 # i18n and l10n
 Flask-Babel
+
+# form support
+Flask-WTF
+
+# mail support
+Flask-Mail
 
 # testing
 nose

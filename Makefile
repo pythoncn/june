@@ -2,10 +2,10 @@
 
 .PHONY: clean-pyc clean-build docs
 
-# Variables for June
-
-
 # Development
+install:
+	pip install -r dev-requirements.txt
+
 server:
 	python june/app.py
 
