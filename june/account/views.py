@@ -1,6 +1,7 @@
 from flask import Blueprint
 from flask import render_template
-from flask import request
+from flask import request, redirect
+from flask import flash
 from .models import db, Member
 from .helpers import login, logout, get_current_user
 
@@ -26,8 +27,10 @@ def signin():
 
 @app.route('/signout')
 def signout():
+    next_url = request.args.get('next') or '/'
+    flash('You were signed out')
     logout()
-    return render_template('index.html')
+    return redirect(next_url)
 
 
 @app.route('/signup', methods=['GET', 'POST'])
