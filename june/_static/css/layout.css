@@ -1,48 +1,82 @@
-#main {
-    position: relative;
-    margin-right: 30%;
+.container {
+    max-width: 980px;
+    margin: 0 auto;
 }
-#main .container {
-    max-width: 560px;
+#header {
+    font-weight: bold;
+    background: #fcfcfc url('../img/bg-line.jpg') repeat-x;
+    box-shadow: 0 1px 3px #ddd;
+}
+#header .container {
+    max-width: 980px;
     margin: 0 auto;
     padding: 10px 30px;
+    line-height: 40px;
 }
-#main header {
-    border-bottom: 1px solid #dadada;
-    text-transform: uppercase;
-    font-weight: bold;
-    padding: 10px 0;
+#brand {
+    float: left;
 }
-#main header a {
+#brand-name {
+    font-size: 18px;
+}
+#header form {
+    display: inline-block;;
+    margin-left: 8px;
+    padding-left: 6px;
+    border-left: 1px solid #eee;
+}
+#header input {
+    -webkit-appearance: textfield;
+    padding: 4px 0;
+    border: 1px solid #ddd;
+    border-radius: 0;
+    width: 160px;
+}
+#header a {
     border-bottom: 0 none;
 }
-#main nav {
-    border-bottom: 1px solid #ddd;
-    background: #f7f8f5;
+#header nav {
+    float: right;
 }
-#main nav a {
-    font-weight: bold;
+#header nav a {
     text-transform: uppercase;
     margin-right: 16px;
     border-bottom: 0 none;
     font-size: 12px;
 }
-#main nav a:hover {
+#header nav a:hover {
     border-bottom: 2px solid;
 }
+#header .notification {
+    display: inline-block;
+    margin-left: 8px;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    border-radius: 10px;
+    text-align: center;
+    background: #f53477;
+    box-shadow: 0 0 8px #f51d68;
+    color: #fff;
+}
+#header .notification:hover {
+    opacity: 0.8;
+}
+#main {
+    margin-right: 30%;
+    border-right: 1px solid #dadada;
+}
 #content {
-    padding: 10px 0;
+    float: left;
+    width: 100%;
 }
 #side {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 70%;
-    width: 30%;
-    border-left: 1px solid #dadada;
+    float: right;
+    width: 42%;
+    margin-right: -42%;
 }
 .widget {
-    padding: 20px;
+    padding: 10px 20px 30px;
 }
 .widget-head {
     font-weight: bold;
