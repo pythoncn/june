@@ -50,6 +50,6 @@ def setting():
     form = SettingForm(obj=g.user)
     if form.validate_on_submit():
         form.save()
-        flash(_('Account has been updated'))
+        flash(_('Account has been updated'), 'info')
         return redirect(url_for('.setting'))
     return render_template('account/setting.html', form=form)

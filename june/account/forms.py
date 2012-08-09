@@ -33,9 +33,6 @@ class SettingForm(Form):
     username = TextField(
         _('Username'), validators=[Required()]
     )
-    password = PasswordField(
-        _('Password'), validators=[Required()]
-    )
     website = URLField(
         _('Website'), validators=[Optional(), URL()]
     )

@@ -70,8 +70,11 @@
     left: 0;
     text-align: center;
     font-size: 14px;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
 }
-#flash-message span {
+#flash-message li {
     display: inline-block;
     background-color: #89c237;
     color: #fff;
