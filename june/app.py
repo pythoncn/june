@@ -14,7 +14,7 @@ from utils import import_object
 app = Flask(
     __name__,
     static_folder='_static',
-    template_folder='_templates'
+    template_folder='templates'
 )
 app.config.from_pyfile(os.path.join(CONF, 'base.py'))
 babel = Babel(app)

@@ -13,6 +13,9 @@ server:
 database:
 	python syncdb.py
 
+# translate
+extract:
+	pybabel extract -F babel.cfg -o messages.pot june/
 
 # Common Task
 clean: clean-build clean-pyc
