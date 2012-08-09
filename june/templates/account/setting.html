@@ -1,13 +1,12 @@
 {% extends "layout.html" %}
+{% from "snippet/macros.html" import render_field, render_button %}
 
-{% block content %}
-<div class="container">
-	<form action="{{ url_for('account.setting')}}" method="POST">
-		<input type="text" name="username" value="{{username}}"/>
-		<input type="text" name="website" value="{{website}}"/>
-		<input type="text" name="city" value="{{city}}"/>
-		<textarea name="description">{{description}}</textarea>
-		<input type="submit" />
-	</form>
-</div>
+{% block main %}
+<form action="{{ url_for('account.setting')}}" method="post">
+  {{ form.csrf_token }}
+  {{ render_field(form.username) }}
+  {{ render_field(form.website) }}
+
+  {{ render_button(_("Update")) }}
+</form>
 {% endblock %}

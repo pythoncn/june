@@ -1,9 +1,13 @@
 {% extends "layout.html" %}
+{% from "snippet/macros.html" import render_field, render_button %}
 
 {% block main %}
-<form action="{{url_for('account.signup')}}" method="POST">
+<form class="fm-form" method="post" action="{{url_for('account.signup')}}">
   {{ form.csrf_token }}
-  {{ form.username.label }} {{ form.username(size=40) }}
-  <input type="submit" />
+  {{ render_field(form.username) }}
+  {{ render_field(form.email) }}
+  {{ render_field(form.password) }}
+
+  {{ render_button(_("Register")) }}
 </form>
 {% endblock %}

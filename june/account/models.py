@@ -11,7 +11,7 @@ class Member(db.Model):
     username = db.Column(db.String(100), unique=True, index=True)
     email = db.Column(db.String(200), unique=True, nullable=False, index=True)
     password = db.Column(db.String(100), nullable=False)
-    avatar = db.Column(db.String(400))
+    #avatar = db.Column(db.String(400))
     website = db.Column(db.String(400))
 
     role = db.Column(db.Integer, default=1)

@@ -1,0 +1,22 @@
+{% macro render_field(field) %}
+<div class="fm-field">
+  {{ field.label }}
+  {{ field() }}
+  {% if field.description %}
+  <p class="fm-description">{{ field.description }}</p>
+  {% endif %}
+  {% if field.errors %}
+  <ul class="fm-errors">
+    {% for error in field.errors %}
+    <li>{{ error }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</div>
+{% endmacro %}
+
+{% macro render_button(name) %}
+<div class="fm-field">
+  <button class="ui-button">{{ name }}</button>
+</div>
+{% endmacro %}

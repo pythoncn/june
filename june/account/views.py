@@ -1,10 +1,11 @@
 from flask import Blueprint
 from flask import render_template
-from flask import request, redirect
+from flask import request, redirect, url_for
 from flask import flash
+from flask import g
 from flask.ext.babel import gettext as _
-from .models import db, Member
-from .forms import SignupForm
+from .models import Member
+from .forms import SignupForm, SettingForm
 from .helpers import login, logout
 
 app = Blueprint('account', __name__)
@@ -37,15 +38,18 @@ def signout():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    print _("Email")
     form = SignupForm()
     if form.validate_on_submit():
-        #db.session.add(user)
-        #db.session.commit()
-        return 'validate'
+        form.save()
+        return redirect(url_for('.setting'))
     return render_template('account/signup.html', form=form)
 
 
 @app.route('/setting', methods=['GET', 'POST'])
 def setting():
-    return 'settings'
+    form = SettingForm(obj=g.user)
+    if form.validate_on_submit():
+        form.save()
+        flash(_('Account has been updated'))
+        return redirect(url_for('.setting'))
+    return render_template('account/setting.html', form=form)
