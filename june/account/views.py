@@ -2,8 +2,10 @@ from flask import Blueprint
 from flask import render_template
 from flask import request, redirect
 from flask import flash
+from flask.ext.babel import gettext as _
 from .models import db, Member
-from .helpers import login, logout, get_current_user
+from .forms import SignupForm
+from .helpers import login, logout
 
 app = Blueprint('account', __name__)
 
@@ -35,33 +37,15 @@ def signout():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    if request.method == 'POST':
-        username = request.form['username']
-        email = request.form['email']
-        password = request.form['password']
-        user = Member(email=email, username=username, password=password)
-        db.session.add(user)
-        db.session.commit()
-    return render_template('account/signup.html')
+    print _("Email")
+    form = SignupForm()
+    if form.validate_on_submit():
+        #db.session.add(user)
+        #db.session.commit()
+        return 'validate'
+    return render_template('account/signup.html', form=form)
+
 
 @app.route('/setting', methods=['GET', 'POST'])
 def setting():
-    if request.method == 'POST':
-        username = request.form['username']
-        website = request.form['website']
-        city = request.form['city']
-        description = request.form['description']
-        user = get_current_user()
-        if user:
-            user.username = username
-            user.website = website
-            user.city = city
-            user.description = description
-            db.session.commit()
-    user = get_current_user()
-    if user: 
-        username = user.username
-        website = user.website
-        city = user.city
-        description = user.description
-    return render_template('account/setting.html', username = username, website = website, city = city, description = description)
+    return 'settings'

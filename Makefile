@@ -14,8 +14,17 @@ database:
 	python syncdb.py
 
 # translate
-extract:
+babel-extract:
 	pybabel extract -F babel.cfg -o messages.pot june/
+
+babel-init:
+	pybabel init -i messages.pot -d june/translations -l zh
+
+babel-compile:
+	pybabel compile -d june/translations
+
+babel-update:
+	pybabel update -i messages.pot -d june/translations
 
 # Common Task
 clean: clean-build clean-pyc

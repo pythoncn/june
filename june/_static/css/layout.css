@@ -47,7 +47,7 @@
 #header nav a:hover {
     border-bottom: 2px solid;
 }
-#header .notification {
+#indicator {
     display: inline-block;
     margin-left: 8px;
     width: 20px;
@@ -59,9 +59,10 @@
     box-shadow: 0 0 8px #f51d68;
     color: #fff;
 }
-#header .notification:hover {
+#indicator:hover {
     opacity: 0.8;
 }
+/* -------- end header --------*/
 #flash-message {
     position: fixed;
     width: 100%;

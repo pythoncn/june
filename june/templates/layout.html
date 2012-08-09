@@ -29,6 +29,7 @@
     <div id="flash-message"><span class="error">Flash Message</span></div>
 
     <div class="container">
+      {% block main %}
       <div id="main" class="fn-clear">
         <div id="content">
           {% block content %}
@@ -47,6 +48,7 @@
           {% endblock %}
         </aside>
       </div>
+      {% endblock %}
     </div>
     {% include "snippet/foot.html" %}
   </body>

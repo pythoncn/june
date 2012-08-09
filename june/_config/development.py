@@ -8,3 +8,6 @@ DEBUG = True
 SECRET_KEY = 'secret-key-for-development'
 
 SQLALCHEMY_DATABASE_URI = 'sqlite:///%s' % database
+
+# babel settings
+BABEL_DEFAULT_LOCALE = 'zh'
