@@ -15,7 +15,7 @@ database:
 
 # translate
 babel-extract:
-	pybabel extract -F babel.cfg -o messages.pot june/
+	pybabel extract -F babel.cfg -o messages.pot .
 
 babel-init:
 	pybabel init -i messages.pot -d june/translations -l zh

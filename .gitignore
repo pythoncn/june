@@ -17,6 +17,7 @@ CVS
 #################
 # python ignore #
 #################
+wtforms/
 *.py[co]
 
 # Packages
