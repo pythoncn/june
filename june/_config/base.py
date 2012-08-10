@@ -1,6 +1,13 @@
 DEBUG = False
 TESTING = False
 
+#: site
+SITE_TITLE = 'June Forum'
+SITE_URL = '/'
+SITE_FEED = ''
+SITE_LOGO = ''
+SITE_GOOGLE_ANALYTICS = None
+
 #: session
 SESSION_COOKIE_NAME = 'june'
 #SESSION_COOKIE_SECURE = True

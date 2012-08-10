@@ -3,6 +3,9 @@
 import os
 database = os.path.join(os.environ['HOME'], 'june.sqlite')
 
+# site inform
+SITE_TITLE = 'Python China'
+
 # This is a config file for development
 DEBUG = True
 SECRET_KEY = 'secret-key-for-development'
