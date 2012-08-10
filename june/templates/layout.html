@@ -6,7 +6,7 @@
     {% include "snippet/head.html" %}
   </head>
   <body>
-    <header id="header">
+    <header id="site-header">
       <div class="container fn-clear">
         {% block brand %}
         <div id="brand">
@@ -36,7 +36,7 @@
     {% endif %}
     {% endwith %}
 
-    <div class="container">
+    <div id="site-container" class="container">
       {% block main %}
       <div id="main" class="fn-clear">
         <div id="content">

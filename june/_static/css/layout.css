@@ -2,12 +2,12 @@
     max-width: 980px;
     margin: 0 auto;
 }
-#header {
+#site-header {
     font-weight: bold;
     background: #fcfcfc url('../img/bg-line.jpg') repeat-x;
     box-shadow: 0 1px 3px #ddd;
 }
-#header .container {
+#site-header .container {
     max-width: 980px;
     margin: 0 auto;
     padding: 10px 30px;
@@ -19,32 +19,32 @@
 #brand-name {
     font-size: 18px;
 }
-#header form {
+#site-header form {
     display: inline-block;;
     margin-left: 8px;
     padding-left: 6px;
     border-left: 1px solid #eee;
 }
-#header input {
+#site-header input {
     -webkit-appearance: textfield;
     padding: 4px 0;
     border: 1px solid #ddd;
     border-radius: 0;
     width: 160px;
 }
-#header a {
+#site-header a {
     border-bottom: 0 none;
 }
-#header nav {
+#site-header nav {
     float: right;
 }
-#header nav a {
+#site-header nav a {
     text-transform: uppercase;
     margin-right: 16px;
     border-bottom: 0 none;
     font-size: 12px;
 }
-#header nav a:hover {
+#site-header nav a:hover {
     border-bottom: 2px solid;
 }
 #indicator {

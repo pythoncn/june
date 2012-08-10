@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% from "snippet/macros.html" import render_field, render_submit %}
+
+{% block main %}
+<form class="fm-form" method="post" action="">
+  {{ form.csrf_token }}
+  {{ render_field(form.title) }}
+  {{ render_field(form.slug) }}
+  {{ render_field(form.fgcolor) }}
+  {{ render_field(form.bgcolor) }}
+  {{ render_field(form.description, 'fm-textarea') }}
+  {{ render_field(form.header, 'fm-textarea') }}
+  {{ render_field(form.sidebar, 'fm-textarea') }}
+  {{ render_field(form.footer, 'fm-textarea') }}
+  {{ render_field(form.limit_role) }}
+  {{ render_submit(_("Create")) }}
+</form>
+{% endblock %}

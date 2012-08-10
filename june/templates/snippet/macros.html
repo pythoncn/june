@@ -1,5 +1,5 @@
-{% macro render_field(field) %}
-<div class="fm-field{% if field.flags.required %} fm-required{% endif %}">
+{% macro render_field(field, class=None) %}
+<div class="fm-field{% if field.flags.required %} fm-required{% endif %}{% if class %} {{class}}{% endif %}">
   {{ field.label }}
   {{ field() }}
   {% if field.errors %}

@@ -9,9 +9,15 @@
     width: 200px;
     margin-right: 10px;
     text-align: right;
-}
-.fm-required label {
     font-weight: bold;
+}
+.fm-required label:after {
+    content: "*";
+    margin-left: 2px;
+    color: #f53477;
+}
+.fm-textarea label {
+    vertical-align: top;
 }
 .fm-field input {
     font: bold 28px "Georgia", "Hiragino Sans GB", "WenQuanYi Micro Hei", "Microsoft YaHei", sans-serif;
@@ -20,9 +26,18 @@
     border-bottom: 1px solid #ddd;
     width: 400px;
 }
-.fm-field input:focus {
+.fm-field textarea {
+    width: 400px;
+    height: 40px;
+    border: 1px solid #ddd;
+    -webkit-transition: height .2s ease-in;
+}
+.fm-field input:focus, .fm-field textarea:focus {
     color: #01ace2;
     border-color: #44ccf2;
+}
+.fm-field textarea:focus {
+    height: 200px;
 }
 .fm-field .fm-errors, .fm-field .fm-description {
     list-style-type: none;
@@ -45,8 +60,8 @@
         text-align: left;
         width: auto;
     }
-    .fm-field input {
-        width: auto;
+    .fm-field input, .fm-field textarea {
+        width: 90%;
     }
     .fm-field .fm-errors, .fm-field .fm-description, .fm-field .fm-submit {
         margin-left: 0;
