@@ -16,7 +16,8 @@ Flask-Cache
 Flask-Babel
 
 # form support
-Flask-WTF
+#Flask-WTF
+-e git+git://github.com/lepture/flask-wtf.git#egg=Flask-WTF
 
 # mail support
 Flask-Mail
