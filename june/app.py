@@ -1,7 +1,15 @@
 #!/usr/bin/env python
 
 import os
-CONF = os.path.join(os.path.abspath(os.path.dirname(__file__)), '_config')
+PROJDIR = os.path.abspath(os.path.dirname(__file__))
+ROOTDIR = os.path.split(PROJDIR)[0]
+CONFDIR = os.path.join(PROJDIR, '_config')
+try:
+    import june
+    print('Start june version: %s' % june.__version__)
+except ImportError:
+    import site
+    site.addsitedir(ROOTDIR)
 
 from flask import Flask
 from flask import g
@@ -16,7 +24,7 @@ app = Flask(
     static_folder='_static',
     template_folder='templates'
 )
-app.config.from_pyfile(os.path.join(CONF, 'base.py'))
+app.config.from_pyfile(os.path.join(CONFDIR, 'base.py'))
 babel = Babel(app)
 
 
@@ -46,14 +54,10 @@ def register(blueprint):
             models.py
             views.py
     """
-    if __name__ == '__main__':
-        prefix = blueprint
-    else:
-        prefix = 'june.%s' % blueprint
-    models = import_object('%s.models' % prefix)
+    models = import_object('june.%s.models' % blueprint)
     models.db.init_app(app)
     models.db.app = app
-    views = import_object('%s.views' % prefix)
+    views = import_object('june.%s.views' % blueprint)
     app.register_blueprint(views.app, url_prefix='/%s' % blueprint)
     return app
 
@@ -73,6 +77,6 @@ def hello():
 
 
 if __name__ == '__main__':
-    app.config.from_pyfile(os.path.join(CONF, 'development.py'))
+    app.config.from_pyfile(os.path.join(CONFDIR, 'development.py'))
     prepare_app()
     app.run()
