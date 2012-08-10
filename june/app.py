@@ -32,8 +32,10 @@ def load_current_user():
 
 @babel.localeselector
 def get_locale():
-    #return request.accept_languages.best_match(['en', 'zh'])
-    return 'zh'
+    app.config.setdefault('BABEL_SUPPORTED_LOCALES', ['en', 'zh'])
+    match = app.config['BABEL_SUPPORTED_LOCALES']
+    default = app.config['BABEL_DEFAULT_LOCALE']
+    return request.accept_languages.best_match(match, default)
 
 
 def register(blueprint):

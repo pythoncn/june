@@ -14,3 +14,4 @@ SQLALCHEMY_DATABASE_URI = 'sqlite:///%s' % database
 
 # babel settings
 BABEL_DEFAULT_LOCALE = 'zh'
+BABEL_SUPPORTED_LOCALES = ['zh']
