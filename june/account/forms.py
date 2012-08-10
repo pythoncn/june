@@ -48,7 +48,7 @@ class SigninForm(Form):
         if not user:
             raise ValueError(_('Wrong account or password'))
         if user.check_password(field.data):
-            self.model = user
+            self.user = user
             return user
         raise ValueError(_('Wrong account or password'))
 

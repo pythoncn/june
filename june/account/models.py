@@ -42,14 +42,6 @@ class Member(db.Model):
         query = "%s?s=%s%s" % (md5email, size, db.app.config['GRAVATAR_EXTRA'])
         return db.app.config['GRAVATAR_BASE_URL'] + query
 
-    def to_json(self):
-        data = (
-            '{"username":"%s", "avatar":"%s", "website":"%s",'
-            '"reputation":%s, "role":%s}'
-        ) % (self.username, self.get_avatar(), self.website or "",
-             self.reputation, self.role)
-        return data
-
     @staticmethod
     def create_password(raw):
         salt = Member.create_token(8)
@@ -72,11 +64,3 @@ class Member(db.Model):
         passwd = '%s%s%s' % (salt, raw, db.app.config['PASSWORD_SECRET'])
         verify = hashlib.sha1(passwd).hexdigest()
         return verify == hsh
-
-    @property
-    def is_staff(self):
-        return self.role > 6
-
-    @property
-    def is_admin(self):
-        return self.role > 9

@@ -2,7 +2,7 @@
 {% from "snippet/macros.html" import render_field, render_submit %}
 
 {% block main %}
-<form class="fm-form" method="post" action="{{ url_for('account.signin') }}">
+<form class="fm-form" method="post" action="">
   {{ form.csrf_token }}
   {{ render_field(form.account) }}
   {{ render_field(form.password) }}

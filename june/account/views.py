@@ -6,27 +6,26 @@ from flask import g
 from flask.ext.babel import gettext as _
 from .forms import SigninForm, SignupForm, SettingForm
 from .helpers import login, logout
+from .decorators import require_login
 
 app = Blueprint('account', __name__)
 
 
 @app.route('/signin', methods=['GET', 'POST'])
 def signin():
+    next_url = request.args.get('next', '/')
     if g.user:
-        return redirect(url_for('.setting'))
+        return redirect(next_url)
     form = SigninForm()
     if form.validate_on_submit():
-        user = form.model
-        login(user)
-        #TODO
-        return redirect(url_for('.setting'))
+        login(form.user)
+        return redirect(next_url)
     return render_template('account/signin.html', form=form)
 
 
 @app.route('/signout')
 def signout():
-    next_url = request.args.get('next') or '/'
-    flash('You were signed out')
+    next_url = request.args.get('next', '/')
     logout()
     return redirect(next_url)
 
@@ -41,6 +40,7 @@ def signup():
 
 
 @app.route('/setting', methods=['GET', 'POST'])
+@require_login
 def setting():
     form = SettingForm(obj=g.user)
     if form.validate_on_submit():
