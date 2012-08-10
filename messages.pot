@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2012-08-10 20:20+0800\n"
+"POT-Creation-Date: 2012-08-10 20:48+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.6\n"
 
-#: june/account/forms.py:12 june/account/forms.py:57
+#: june/account/forms.py:12 june/account/forms.py:58
 msgid "Username"
 msgstr ""
 
@@ -25,7 +25,7 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
-#: june/account/forms.py:18 june/account/forms.py:37
+#: june/account/forms.py:18 june/account/forms.py:38
 msgid "Password"
 msgstr ""
 
@@ -33,11 +33,15 @@ msgstr ""
 msgid "Account"
 msgstr ""
 
-#: june/account/forms.py:48 june/account/forms.py:52
+#: june/account/forms.py:35
+msgid "Username or email"
+msgstr ""
+
+#: june/account/forms.py:49 june/account/forms.py:53
 msgid "Wrong account or password"
 msgstr ""
 
-#: june/account/forms.py:60
+#: june/account/forms.py:61
 msgid "Website"
 msgstr ""
 

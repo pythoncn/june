@@ -23,7 +23,7 @@ babel-init:
 babel-compile:
 	pybabel compile -d june/translations
 
-babel-update:
+babel-update: babel-extract
 	pybabel update -i messages.pot -d june/translations
 
 # Common Task

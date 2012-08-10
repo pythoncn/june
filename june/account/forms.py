@@ -31,7 +31,8 @@ class SignupForm(Form):
 
 class SigninForm(Form):
     account = TextField(
-        _('Account'), validators=[Required()]
+        _('Account'), validators=[Required()],
+        description=_("Username or email")
     )
     password = PasswordField(
         _('Password'), validators=[Required()]
