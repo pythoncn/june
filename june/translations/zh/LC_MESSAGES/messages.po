@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2012-08-09 21:33+0800\n"
+"POT-Creation-Date: 2012-08-10 20:20+0800\n"
 "PO-Revision-Date: 2012-08-09 20:00+0800\n"
 "Last-Translator: Hsiaoming Yang <lepture@me.com>\n"
 "Language-Team: zh <LL@li.org>\n"
@@ -17,17 +17,45 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.6\n"
 
-#: june/account/forms.py:9
+#: june/account/forms.py:12 june/account/forms.py:57
 msgid "Username"
 msgstr "用户名"
 
-#: june/account/forms.py:10
+#: june/account/forms.py:15
 msgid "Email"
 msgstr "邮箱"
 
-#: june/account/forms.py:11
+#: june/account/forms.py:18 june/account/forms.py:37
 msgid "Password"
 msgstr "密码"
+
+#: june/account/forms.py:34
+msgid "Account"
+msgstr ""
+
+#: june/account/forms.py:48 june/account/forms.py:52
+msgid "Wrong account or password"
+msgstr ""
+
+#: june/account/forms.py:60
+msgid "Website"
+msgstr ""
+
+#: june/account/views.py:48
+msgid "Account has been updated"
+msgstr ""
+
+#: june/templates/account/setting.html:10
+msgid "Update"
+msgstr ""
+
+#: june/templates/account/signin.html:9
+msgid "Login"
+msgstr ""
+
+#: june/templates/account/signup.html:10
+msgid "Register"
+msgstr ""
 
 #: wtforms/wtforms/validators.py:55
 #, python-format
