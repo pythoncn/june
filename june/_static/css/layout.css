@@ -63,33 +63,6 @@
     opacity: 0.8;
 }
 /* -------- end header --------*/
-#flash-message {
-    position: fixed;
-    width: 100%;
-    top: 0;
-    left: 0;
-    text-align: center;
-    font-size: 14px;
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-#flash-message li {
-    display: inline-block;
-    background-color: #89c237;
-    color: #fff;
-    padding: 1px 10px;
-    border-radius: 0 0 4px 4px;
-}
-#flash-message .info {
-    background-color: #89c237;
-}
-#flash-message .warn {
-    background-color: #ff9201;
-}
-#flash-message .error {
-    background-color: #f53477;
-}
 #main {
     margin-right: 30%;
     border-right: 1px solid #dadada;

@@ -14,8 +14,7 @@
     font-weight: bold;
 }
 .fm-field input {
-    font-size: 28px;
-    font-weight: bold;
+    font: bold 28px "Georgia", "Hiragino Sans GB", "WenQuanYi Micro Hei", "Microsoft YaHei", sans-serif;
     color: #222;
     border: 0 none;
     border-bottom: 1px solid #ddd;
@@ -65,4 +64,31 @@
 .fm-button:hover {
     cursor: pointer;
     opacity: 0.8;
+}
+
+#flash-message {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    text-align: center;
+    font-size: 14px;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+#flash-message li {
+    display: inline-block;
+    background-color: #89c237;
+    color: #fff;
+    padding: 1px 10px;
+}
+#flash-message .info {
+    background-color: #89c237;
+}
+#flash-message .warn {
+    background-color: #ff9201;
+}
+#flash-message .error {
+    background-color: #f53477;
 }
