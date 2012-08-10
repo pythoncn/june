@@ -17,3 +17,13 @@ Get involved
     $ git clone git@github.com:/your-name:june
     $ cd june
     $ git checkout flask
+
+
+Get started
+-------------
+
+::
+
+    $ make database
+    $ make babel-compile
+    $ make server
