@@ -1,11 +1,11 @@
 {% extends "layout.html" %}
+{% from "snippet/macros.html" import render_field, render_submit %}
 
-{% block content %}
-<div class="container">
-    <form action="{{ url_for('account.signin') }}" method="POST">
-        <input type="text" name="account" />
-	<input type="password" name="password" />
-	<input type="submit" />
-    </form>
-</div>
+{% block main %}
+<form class="fm-form" method="post" action="{{ url_for('account.signin') }}">
+  {{ form.csrf_token }}
+  {{ render_field(form.account) }}
+  {{ render_field(form.password) }}
+  {{ render_submit(_("Login")) }}
+</form>
 {% endblock %}

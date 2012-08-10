@@ -1,0 +1,68 @@
+.fm-form {
+    padding: 40px 0;
+}
+.fm-field {
+    padding: 10px 0;
+}
+.fm-field label {
+    display: inline-block;
+    width: 200px;
+    margin-right: 10px;
+    text-align: right;
+}
+.fm-required label {
+    font-weight: bold;
+}
+.fm-field input {
+    font-size: 28px;
+    font-weight: bold;
+    color: #222;
+    border: 0 none;
+    border-bottom: 1px solid #ddd;
+    width: 400px;
+}
+.fm-field input:focus {
+    color: #01ace2;
+    border-color: #44ccf2;
+}
+.fm-field .fm-errors, .fm-field .fm-description {
+    list-style-type: none;
+    font-size: 14px;
+    margin: 0 0 0 215px;
+    padding: 0;
+}
+.fm-errors {
+    color: #f53477;
+}
+.fm-description {
+    color: #999;
+}
+.fm-field .fm-submit {
+    margin-left: 215px;
+}
+@media (max-width: 680px) {
+    .fm-field label {
+        display: block;
+        text-align: left;
+        width: auto;
+    }
+    .fm-field input {
+        width: auto;
+    }
+    .fm-field .fm-errors, .fm-field .fm-description, .fm-field .fm-submit {
+        margin-left: 0;
+    }
+}
+.fm-button {
+    display: inline-block;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 12px 18px;
+    border: 0;
+    color: #fff;
+    background-color: #01ace2;
+}
+.fm-button:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}

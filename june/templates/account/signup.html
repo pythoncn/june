@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% from "snippet/macros.html" import render_field, render_button %}
+{% from "snippet/macros.html" import render_field, render_submit %}
 
 {% block main %}
 <form class="fm-form" method="post" action="{{url_for('account.signup')}}">
@@ -7,7 +7,6 @@
   {{ render_field(form.username) }}
   {{ render_field(form.email) }}
   {{ render_field(form.password) }}
-
-  {{ render_button(_("Register")) }}
+  {{ render_submit(_("Register")) }}
 </form>
 {% endblock %}

@@ -17,8 +17,8 @@ def get_current_user():
     return user
 
 
-def login(user, password):
-    if not user or not user.check_password(password):
+def login(user):
+    if not user:
         return None
     session.permanent = True
     session['id'] = user.id

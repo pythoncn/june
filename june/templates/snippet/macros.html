@@ -1,5 +1,5 @@
 {% macro render_field(field) %}
-<div class="fm-field">
+<div class="fm-field{% if field.flags.required %} fm-required{% endif %}">
   {{ field.label }}
   {{ field() }}
   {% if field.description %}
@@ -15,8 +15,10 @@
 </div>
 {% endmacro %}
 
-{% macro render_button(name) %}
+{% macro render_submit(name) %}
 <div class="fm-field">
-  <button class="ui-button">{{ name }}</button>
+  <div class="fm-submit">
+    <button class="fm-button">{{ name }}</button>
+  </div>
 </div>
 {% endmacro %}

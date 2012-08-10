@@ -4,8 +4,7 @@ from flask import request, redirect, url_for
 from flask import flash
 from flask import g
 from flask.ext.babel import gettext as _
-from .models import Member
-from .forms import SignupForm, SettingForm
+from .forms import SigninForm, SignupForm, SettingForm
 from .helpers import login, logout
 
 app = Blueprint('account', __name__)
@@ -13,19 +12,15 @@ app = Blueprint('account', __name__)
 
 @app.route('/signin', methods=['GET', 'POST'])
 def signin():
-    if request.method == 'POST':
-        account = request.form['account']
-        password = request.form['password']
-        if '@' in account:
-            user = Member.query.filter_by(email=account).first()
-        else:
-            user = Member.query.filter_by(username=account).first()
-        user = login(user, password)
-        if user:
-            return 'ok'
-        else:
-            return 'error'
-    return render_template('account/signin.html')
+    if g.user:
+        return redirect(url_for('.setting'))
+    form = SigninForm()
+    if form.validate_on_submit():
+        user = form.model
+        login(user)
+        #TODO
+        return redirect(url_for('.setting'))
+    return render_template('account/signin.html', form=form)
 
 
 @app.route('/signout')
