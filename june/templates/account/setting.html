@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% from "snippet/macros.html" import render_field, render_submit %}
 
-{% block main %}
+{% block content %}
 <form class="fm-form" method="post" action="{{ url_for('account.setting')}}">
   {{ form.csrf_token }}
   {{ render_field(form.username) }}
