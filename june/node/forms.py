@@ -10,7 +10,7 @@ messages = [
 ]
 
 
-class CreateNodeForm(Form):
+class NodeForm(Form):
     title = TextField(
         _('Title'), validators=[Required()]
     )
@@ -35,18 +35,13 @@ class CreateNodeForm(Form):
     )
     limit_role = IntegerField(_('Role Limitation'), default=0)
 
-    def save(self):
-        node = Node(
-            title=self.title.data,
-            slug=self.slug.data,
-            fgcolor=self.fgcolor.data,
-            bgcolor=self.bgcolor.data,
-            description=self.description.data,
-            header=self.header.data,
-            sidebar=self.sidebar.data,
-            footer=self.footer.data,
-            limit_role=self.limit_role.data,
-        )
-        db.session.add(node)
+    def save(self, obj=None):
+        if not obj:
+            obj = Node()
+
+        for name, data in self.data.iteritems():
+            setattr(obj, name, data)
+
+        db.session.add(obj)
         db.session.commit()
-        return node
+        return obj

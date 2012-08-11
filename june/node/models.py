@@ -6,7 +6,7 @@ db = SQLAlchemy()
 class Node(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
-    slug = db.Column(db.String(200), nullable=False, index=True)
+    slug = db.Column(db.String(200), nullable=False, index=True, unique=True)
     avatar = db.Column(db.String(400))
     description = db.Column(db.String(1000))
     fgcolor = db.Column(db.String(40))
