@@ -88,4 +88,4 @@ def hello():
 if __name__ == '__main__':
     app.config.from_pyfile(os.path.join(CONFDIR, 'development.py'))
     prepare_app()
-    app.run()
+    app.run(host='0.0.0.0')
