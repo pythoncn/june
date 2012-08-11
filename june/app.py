@@ -4,6 +4,12 @@ import os
 PROJDIR = os.path.abspath(os.path.dirname(__file__))
 ROOTDIR = os.path.split(PROJDIR)[0]
 CONFDIR = os.path.join(PROJDIR, '_config')
+
+from flask import Flask
+from flask import g
+from flask import request
+from flask import render_template
+from flask.ext.babel import Babel
 try:
     import june
     print('Start june version: %s' % june.__version__)
@@ -11,11 +17,6 @@ except ImportError:
     import site
     site.addsitedir(ROOTDIR)
 
-from flask import Flask
-from flask import g
-from flask import request
-from flask import render_template
-from flask.ext.babel import Babel
 from june.account.helpers import get_current_user
 from june.utils import import_object
 from june.database import db
@@ -61,6 +62,10 @@ def register(blueprint):
             models.py
             views.py
     """
+    #models = import_object('june.%s.models' % blueprint)
+    #models.db.init_app(app)
+    #models.db.app = app
+
     views = import_object('june.%s.views' % blueprint)
     app.register_blueprint(views.app, url_prefix='/%s' % blueprint)
     return app
