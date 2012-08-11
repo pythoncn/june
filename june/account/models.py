@@ -1,9 +1,7 @@
 import hashlib
 from datetime import datetime
 from random import choice
-from flask.ext.sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
+from june.database import db
 
 
 class Member(db.Model):

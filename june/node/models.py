@@ -1,6 +1,5 @@
 from datetime import datetime
-from flask.ext.sqlalchemy import SQLAlchemy
-db = SQLAlchemy()
+from june.database import db
 
 
 class Node(db.Model):

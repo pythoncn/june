@@ -16,8 +16,9 @@ from flask import g
 from flask import request
 from flask import render_template
 from flask.ext.babel import Babel
-from account.helpers import get_current_user
-from utils import import_object
+from june.account.helpers import get_current_user
+from june.utils import import_object
+from june.database import db
 
 app = Flask(
     __name__,
@@ -25,6 +26,12 @@ app = Flask(
     template_folder='templates'
 )
 app.config.from_pyfile(os.path.join(CONFDIR, 'base.py'))
+
+#: prepare for database
+db.init_app(app)
+db.app = app
+
+#: prepare for babel
 babel = Babel(app)
 
 
@@ -54,9 +61,6 @@ def register(blueprint):
             models.py
             views.py
     """
-    models = import_object('june.%s.models' % blueprint)
-    models.db.init_app(app)
-    models.db.app = app
     views = import_object('june.%s.views' % blueprint)
     app.register_blueprint(views.app, url_prefix='/%s' % blueprint)
     return app
