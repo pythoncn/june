@@ -6,6 +6,8 @@
   {{ form.csrf_token }}
   {{ render_field(form.username) }}
   {{ render_field(form.website) }}
+  {{ render_field(form.city) }}
+  {{ render_field(form.description, 'fm-textarea') }}
 
   {{ render_submit(_("Update")) }}
 </form>

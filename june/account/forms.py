@@ -1,6 +1,6 @@
 from flask import g
 from flask.ext.wtf import Form
-from flask.ext.wtf import TextField, PasswordField
+from flask.ext.wtf import TextField, PasswordField, TextAreaField
 from flask.ext.wtf import Required, Email, URL, Optional
 from flask.ext.wtf.html5 import EmailField, URLField
 from flask.ext.babel import lazy_gettext as _
@@ -60,11 +60,18 @@ class SettingForm(Form):
     website = URLField(
         _('Website'), validators=[Optional(), URL()]
     )
+    city = TextField(
+        _('City'), validators=[Optional()]
+    )
+    description = TextAreaField(
+        _('Description'),
+    )
 
     def save(self):
         user = g.user
-        user.username = self.username.data
-        user.website = self.website.data
+        for name, data in self.data.iteritems():
+            setattr(user, name, data)
+
         db.session.add(user)
         db.session.commit()
         return user

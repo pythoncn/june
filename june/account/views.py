@@ -34,7 +34,8 @@ def signout():
 def signup():
     form = SignupForm()
     if form.validate_on_submit():
-        form.save()
+        user = form.save()
+        login(user)
         return redirect(url_for('.setting'))
     return render_template('account/signup.html', form=form)
 
