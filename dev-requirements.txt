@@ -17,7 +17,7 @@ Flask-Babel
 
 # form support
 #Flask-WTF
--e hg+ssh://hg@bitbucket.org/simplecodes/wtforms#egg=WTForms
+-e hg+https://bitbucket.org/simplecodes/wtforms#egg=WTForms
 -e git+git://github.com/lepture/flask-wtf.git#egg=Flask-WTF
 
 # mail support
