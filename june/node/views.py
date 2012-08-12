@@ -8,6 +8,12 @@ from june.account.decorators import require_admin
 app = Blueprint('node', __name__, template_folder='templates')
 
 
+@app.route('/')
+def index():
+    nodes = Node.query.all()
+    return render_template('node/index.html', nodes=nodes)
+
+
 @app.route('/<slug>')
 def view(slug):
     return slug
@@ -24,6 +30,7 @@ def create():
 
 
 @app.route('/<slug>/-edit', methods=['GET', 'POST'])
+@require_admin
 def edit(slug):
     node = Node.query.filter_by(slug=slug).first_or_404()
     form = NodeForm(obj=node)
