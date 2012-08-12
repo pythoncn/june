@@ -15,9 +15,9 @@ def index():
 
 
 @app.route('/<slug>')
-def view(slug):
+def topics(slug):
     node = Node.query.filter_by(slug=slug).first_or_404()
-    return render_template('node/view.html', node=node)
+    return render_template('node/topics.html', node=node)
 
 
 @app.route('/-create', methods=['GET', 'POST'])
@@ -26,7 +26,7 @@ def create():
     form = NodeForm()
     if form.validate_on_submit():
         node = form.save()
-        return redirect(url_for('.view', slug=node.slug))
+        return redirect(url_for('.topics', slug=node.slug))
     return render_template('node/create.html', form=form)
 
 
@@ -37,5 +37,5 @@ def edit(slug):
     form = NodeForm(obj=node)
     if form.validate_on_submit():
         node = form.save(node)
-        return redirect(url_for('.view', slug=node.slug))
+        return redirect(url_for('.topics', slug=node.slug))
     return render_template('node/create.html', form=form)
