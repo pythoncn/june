@@ -3,7 +3,7 @@
 {% block content %}
 <ul>
   {% for node in nodes %}
-  <li><a href="{{ url_for('node.view', slug=node.slug) }}">{{ node.title }}</a></li>
+  <li><a href="{{ url_for('node.topics', slug=node.slug) }}">{{ node.title }}</a></li>
   {% endfor %}
 </ul>
 {% endblock %}
