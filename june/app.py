@@ -54,7 +54,7 @@ def get_locale():
     return request.accept_languages.best_match(match, default)
 
 
-def register(blueprint):
+def register(blueprint, url_prefix=None):
     """blueprint structure:
 
         {{blueprint}}/
@@ -66,8 +66,11 @@ def register(blueprint):
     #models.db.init_app(app)
     #models.db.app = app
 
+    if url_prefix is None:
+        url_prefix = '/%s' % blueprint
+
     views = import_object('june.%s.views' % blueprint)
-    app.register_blueprint(views.app, url_prefix='/%s' % blueprint)
+    app.register_blueprint(views.app, url_prefix=url_prefix)
     return app
 
 

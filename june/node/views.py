@@ -16,7 +16,8 @@ def index():
 
 @app.route('/<slug>')
 def view(slug):
-    return slug
+    node = Node.query.filter_by(slug=slug).first_or_404()
+    return render_template('node/view.html', node=node)
 
 
 @app.route('/-create', methods=['GET', 'POST'])
