@@ -1,7 +1,7 @@
 from flask import g
 from flask.ext.wtf import Form
-from flask.ext.wtf import TextField, PasswordField, TextAreaField
-from flask.ext.wtf import Required, Email, URL, Optional
+from flask.ext.wtf import TextField, PasswordField, TextAreaField, IntegerField
+from flask.ext.wtf import Required, Email, URL, Optional, Length
 from flask.ext.wtf.html5 import EmailField, URLField
 from flask.ext.babel import lazy_gettext as _
 from .models import db, Member
@@ -9,7 +9,7 @@ from .models import db, Member
 
 class SignupForm(Form):
     username = TextField(
-        _('Username'), validators=[Required()]
+        _('Username'), validators=[Required(), Length(min=3, max=20)],
     )
     email = EmailField(
         _('Email'), validators=[Required(), Email()]
@@ -55,7 +55,7 @@ class SigninForm(Form):
 
 class SettingForm(Form):
     username = TextField(
-        _('Username'), validators=[Required()]
+        _('Username'), validators=[Required(), Length(min=3, max=20)],
     )
     website = URLField(
         _('Website'), validators=[Optional(), URL()]
@@ -69,6 +69,30 @@ class SettingForm(Form):
 
     def save(self):
         user = g.user
+        for name, data in self.data.iteritems():
+            setattr(user, name, data)
+
+        db.session.add(user)
+        db.session.commit()
+        return user
+
+
+class EditForm(Form):
+    username = TextField(
+        _('Username'), validators=[Required(), Length(min=3, max=20)],
+    )
+    email = EmailField(
+        _('Email'), validators=[Required(), Email()]
+    )
+    role = IntegerField(_('Role'), default=2)
+    edit_username_count = IntegerField(
+        _('Chance'), default=2, description=_('Chance to edit username'),
+    )
+    description = TextAreaField(
+        _('Description'),
+    )
+
+    def save(self, user):
         for name, data in self.data.iteritems():
             setattr(user, name, data)
 
