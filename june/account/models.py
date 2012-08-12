@@ -62,3 +62,13 @@ class Member(db.Model):
         passwd = '%s%s%s' % (salt, raw, db.app.config['PASSWORD_SECRET'])
         verify = hashlib.sha1(passwd).hexdigest()
         return verify == hsh
+
+    def is_admin(self):
+        if self.id == 1:
+            return True
+        return self.role > 9
+
+    def is_staff(self):
+        if self.id == 1:
+            return True
+        return self.role > 6
