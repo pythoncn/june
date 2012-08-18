@@ -72,11 +72,10 @@ def register(blueprint):
 
 
 def prepare_app():
-    #: int account blueprint
     register('account')
     register('node')
+    register('topic')
 
-    #: init topic blueprint
     return app
 
 
