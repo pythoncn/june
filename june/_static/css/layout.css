@@ -4,8 +4,8 @@
 }
 #site-header {
     font-weight: bold;
-    background: #fcfcfc url('../img/bg-line.jpg') repeat-x;
-    box-shadow: 0 1px 3px #ddd;
+    background: #f5f6f8 url('../img/bg-line.jpg') repeat-x;
+    border-bottom: 1px solid #d8dde1;
 }
 #site-header .container {
     max-width: 980px;
