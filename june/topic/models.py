@@ -46,7 +46,8 @@ class Topic(db.Model):
 
     reply_count = db.Column(db.Integer, default=0)
     last_reply_by = db.Column(db.Integer, default=0)
-    last_reply_time = db.Column(db.DateTime, default=datetime.utcnow, index=True)
+    last_reply_time = db.Column(db.DateTime,
+                                default=datetime.utcnow, index=True)
 
     impact = db.Column(db.Integer, default=get_current_impact, index=True)
 
