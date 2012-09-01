@@ -24,6 +24,7 @@ Get started
 
 ::
 
+    $ pip install -r dev-requirements.txt
     $ make database
     $ make babel-compile
     $ make server
