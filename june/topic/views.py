@@ -7,6 +7,7 @@ from flask import g
 from june.node.models import Node
 from .models import Topic
 
+
 app = Blueprint('topic', __name__, template_folder='templates')
 
 
