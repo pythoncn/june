@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import os
-database = os.path.join(os.environ['HOME'], 'june.sqlite')
+database = os.path.join(os.getcwd(), 'data', 'development.sqlite')
 
 # site inform
 SITE_TITLE = 'Python China'

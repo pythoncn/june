@@ -39,3 +39,6 @@ nose
 
 # lint
 flake8
+
+# documentation
+sphinx

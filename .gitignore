@@ -1,6 +1,3 @@
-#################
-# Common ignore #
-#################
 build
 # Test DB
 *.sqlite
@@ -13,11 +10,6 @@ CVS
 *.swp
 *~
 
-
-#################
-# python ignore #
-#################
-wtforms/
 *.py[co]
 
 # Packages
@@ -46,9 +38,6 @@ pip-log.txt
 .mr.developer.cfg
 
 
-##############
-# Mac ignore #
-##############
 .DS_Store
 
 tmp.*

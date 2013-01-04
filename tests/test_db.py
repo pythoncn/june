@@ -1,10 +1,11 @@
 import os
 import tempfile
-from june.app import app
+from june.app import create_app
 
 
 class TestDatabase(object):
     def setUp(self):
+        app = create_app()
         self.db_fd, self.db_path = tempfile.mkstemp()
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///%s' % self.db_path
         app.config['TESTING'] = True

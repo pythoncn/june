@@ -10,11 +10,11 @@ install:
 	@pip install -r dev-reqs.txt
 
 server:
-	@python june/app.py
+	@python manager.py runserver
 
 
 database:
-	@python syncdb.py
+	@python manager.py createdb
 
 # translate
 babel-extract:

@@ -9,36 +9,42 @@ from flask import Flask
 from flask import request
 from flask.ext.babel import Babel
 from .models import db
+from .views import front
 
 
-app = Flask(
-    __name__,
-    static_folder='_static',
-    template_folder='templates'
-)
-app.config.from_pyfile(os.path.join(CONFDIR, 'base.py'))
+def create_app(config=None):
+    app = Flask(
+        __name__,
+        static_folder='_static',
+        template_folder='templates'
+    )
+    app.config.from_pyfile(os.path.join(CONFDIR, 'base.py'))
+    if config:
+        app.config.from_pyfile(config)
 
-#: prepare for database
-db.init_app(app)
-db.app = app
+    #: prepare for database
+    db.init_app(app)
+    db.app = app
 
-#: prepare for babel
-babel = Babel(app)
+    #: register blueprints
+    app.register_blueprint(front.bp, url_prefix='')
 
+    @app.before_request
+    def load_current_user():
+        pass
 
-@app.before_request
-def load_current_user():
-    pass
+    #@app.errorhandler(404)
+    #def not_found(error):
+    #    return render_template('404.html'), 404
 
+    #: prepare for babel
+    babel = Babel(app)
 
-#@app.errorhandler(404)
-#def not_found(error):
-#    return render_template('404.html'), 404
+    @babel.localeselector
+    def get_locale():
+        app.config.setdefault('BABEL_SUPPORTED_LOCALES', ['en', 'zh'])
+        match = app.config['BABEL_SUPPORTED_LOCALES']
+        default = app.config['BABEL_DEFAULT_LOCALE']
+        return request.accept_languages.best_match(match, default)
 
-
-@babel.localeselector
-def get_locale():
-    app.config.setdefault('BABEL_SUPPORTED_LOCALES', ['en', 'zh'])
-    match = app.config['BABEL_SUPPORTED_LOCALES']
-    default = app.config['BABEL_DEFAULT_LOCALE']
-    return request.accept_languages.best_match(match, default)
+    return app
