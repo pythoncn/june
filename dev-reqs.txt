@@ -6,7 +6,7 @@ pygments
 
 # database
 Flask-SQLAlchemy
-#MySQL-python
+MySQL-python
 
 # cache support
 Flask-Cache
@@ -17,7 +17,7 @@ Flask-Babel
 
 # form support
 #Flask-WTF
--e hg+https://bitbucket.org/simplecodes/wtforms#egg=WTForms
+WTForms
 -e git+git://github.com/lepture/flask-wtf.git#egg=Flask-WTF
 
 # mail support
@@ -25,3 +25,6 @@ Flask-Mail
 
 # testing
 nose
+
+# lint
+flake8
