@@ -36,6 +36,7 @@ Flask-Script
 # testing
 Flask-Testing
 nose
+nose-cov
 
 # lint
 flake8

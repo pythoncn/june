@@ -47,6 +47,14 @@ files := $(shell find . -name '*.py' ! -path "*__init__.py*" ! -path "*docs/*")
 lint:
 	@flake8 ${files}
 
+testing:
+	@nosetests -v
+
+coverage:
+	@rm .coverage
+	@nosetests --with-cov --cov june tests/
+	@rm .coverage
+
 # Sphinx Documentation
 docs:
 	@$(MAKE) -C docs html
@@ -57,6 +65,3 @@ docs:
 # Git
 github:
 	@git push origin flask
-
-testing:
-	@nosetests -v
