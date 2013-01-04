@@ -1,9 +1,0 @@
-{% extends "layout.html" %}
-
-{% block content %}
-<ul>
-  {% for node in nodes %}
-  <li><a href="{{ url_for('node.topics', slug=node.slug) }}">{{ node.title }}</a></li>
-  {% endfor %}
-</ul>
-{% endblock %}

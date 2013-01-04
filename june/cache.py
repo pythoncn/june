@@ -4,6 +4,7 @@ from june.app import app
 
 __all__ = ['cache', 'cache_decorator']
 
+
 class _Cache(object):
     """python-memcahe compatable instance cache
     """
@@ -15,7 +16,8 @@ class _Cache(object):
         if hasattr(cls, '_instance'):
             return cls._instance
 
-        if hasattr(app.config, 'memcache_clients') and app.config['memcache_clients']:
+        if hasattr(app.config, 'memcache_clients') and \
+                app.config['memcache_clients']:
             try:
                 import pylibmc
                 cache = pylibmc.Client(app.config['memcache_clients'],

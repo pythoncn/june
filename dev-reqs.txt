@@ -3,6 +3,7 @@
 Flask
 misaka
 pygments
+gevent
 
 # database
 Flask-SQLAlchemy
@@ -23,7 +24,17 @@ WTForms
 # mail support
 Flask-Mail
 
+# login support
+Flask-Login
+
+# admin site
+Flask-Admin
+
+# command line tools
+Flask-Script
+
 # testing
+Flask-Testing
 nose
 
 # lint

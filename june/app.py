@@ -6,20 +6,10 @@ ROOTDIR = os.path.split(PROJDIR)[0]
 CONFDIR = os.path.join(PROJDIR, '_config')
 
 from flask import Flask
-from flask import g
 from flask import request
-from flask import render_template
 from flask.ext.babel import Babel
-try:
-    import june
-    print('Start june version: %s' % june.__version__)
-except ImportError:
-    import site
-    site.addsitedir(ROOTDIR)
+from .models import db
 
-from june.account.helpers import get_current_user
-from june.utils import import_object
-from june.database import db
 
 app = Flask(
     __name__,
@@ -38,7 +28,7 @@ babel = Babel(app)
 
 @app.before_request
 def load_current_user():
-    g.user = get_current_user()
+    pass
 
 
 #@app.errorhandler(404)
@@ -52,42 +42,3 @@ def get_locale():
     match = app.config['BABEL_SUPPORTED_LOCALES']
     default = app.config['BABEL_DEFAULT_LOCALE']
     return request.accept_languages.best_match(match, default)
-
-
-def register(blueprint, url_prefix=None):
-    """blueprint structure:
-
-        {{blueprint}}/
-            __init__.py
-            models.py
-            views.py
-    """
-    #models = import_object('june.%s.models' % blueprint)
-    #models.db.init_app(app)
-    #models.db.app = app
-
-    if url_prefix is None:
-        url_prefix = '/%s' % blueprint
-
-    views = import_object('june.%s.views' % blueprint)
-    app.register_blueprint(views.app, url_prefix=url_prefix)
-    return app
-
-
-def prepare_app():
-    register('account')
-    register('node')
-    register('topic')
-
-    return app
-
-
-@app.route('/')
-def hello():
-    return render_template('index.html')
-
-
-if __name__ == '__main__':
-    app.config.from_pyfile(os.path.join(CONFDIR, 'development.py'))
-    prepare_app()
-    app.run(host='0.0.0.0')
