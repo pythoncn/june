@@ -4,7 +4,7 @@ import hashlib
 import random
 from datetime import datetime
 from werkzeug import cached_property
-from flask.ext.principal import Permission, UserNeed
+from flask.ext.principal import Permission, UserNeed, RoleNeed
 from ._base import db, JuneQuery, SessionMixin
 
 __all__ = ['Account']
@@ -62,21 +62,12 @@ class Account(db.Model, SessionMixin):
         return db.app.config['GRAVATAR_BASE_URL'] + query
 
     @cached_property
-    def comment_service_name(self):
-        if self.comment_service:
-            return self.comment_service.split('-')[0]
-        return None
-
-    @cached_property
-    def comment_service_id(self):
-        if self.comment_service:
-            bits = self.comment_service.split('-')
-            return '-'.join(bits[1:])
-        return None
-
-    @cached_property
     def permission_write(self):
-        return Permission(UserNeed(self.id))
+        return Permission(UserNeed(self.id), RoleNeed('admin'))
+
+    @cached_property
+    def permission_admin(self):
+        return Permission(RoleNeed('admin'))
 
     @staticmethod
     def create_password(raw):

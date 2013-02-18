@@ -6,20 +6,21 @@ gevent.monkey.patch_all()
 from flask.ext.script import Manager
 from june.app import create_app
 
+#CONFIG = os.path.abspath('./etc/config.py')
 CONFIG = '_config/development.py'
 
-manager = Manager(create_app())
+app = create_app(CONFIG)
+manager = Manager(app)
 
 
 @manager.command
-def runserver(port=5000, config=CONFIG):
+def runserver(port=5000):
     """Runs a development server."""
     from gevent.wsgi import WSGIServer
     from werkzeug.serving import run_with_reloader
     from werkzeug.debug import DebuggedApplication
 
     port = int(port)
-    app = create_app(config)
 
     @run_with_reloader
     def run_server():
@@ -31,10 +32,9 @@ def runserver(port=5000, config=CONFIG):
 
 
 @manager.command
-def createdb(config=CONFIG):
+def createdb():
     """Create a database."""
     from june.models import db
-    create_app(config)
     db.create_all()
 
 
