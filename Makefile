@@ -2,9 +2,9 @@
 .PHONY: clean-pyc clean-build docs
 
 # Development
-all: install
-	@pip install -r data/dev-reqs.txt
-	@cp data/githooks/* .git/hooks/
+all:
+	@pip install -r conf/reqs-dev.txt
+	@cp conf/githooks/* .git/hooks/
 	@chmod -R +x .git/hooks/
 
 
@@ -18,7 +18,7 @@ database:
 
 # translate
 babel-extract:
-	@pybabel extract -F data/babel.cfg -o data/messages.pot .
+	@pybabel extract -F conf/babel.cfg -o data/messages.pot .
 
 babel-init:
 	@pybabel init -i data/messages.pot -d june/translations -l zh

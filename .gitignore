@@ -1,44 +1,24 @@
-build
-# Test DB
-*.sqlite
-# Test
-test.*
-.hg
-.svn
-CVS
-*~.nib
-*.swp
-*~
-
-*.py[co]
-
-# Packages
-*.egg
+*.pyc
+*.pyo
 *.egg-info
+*.mo
+*.log
+*.tmp.*
+*.iml
+.idea/
+__pycache__
+bin
+build
+develop-eggs
 dist
 eggs
 parts
-bin
-var
-sdist
-develop-eggs
+.DS_Store
 .installed.cfg
-
-# Installer logs
-pip-log.txt
-
-# Unit test / coverage reports
-.coverage
+docs/_build
 .tox
 
-# Translations
-*.mo
+data/
+etc/
 
-# Mr Developer
-.mr.developer.cfg
-
-
-.DS_Store
-
-tmp.*
-_build/
+june/_static/sea-modules/
