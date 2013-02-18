@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{{config.SITE_TITLE}} - {% block subtitle %}{% endblock %}{% endblock %}</title>
+    {%- block afterstyle %}{% endblock %}
+  </head>
+  <body>
+    <header id="header">
+      {%- from "macro/utils.html" import flash_messages %}
+
+      {%- with messages = get_flashed_messages(with_categories=true) %}
+      {{ flash_messages(messages) }}
+      {%- endwith %}
+    </header>
+    {%- block mainbody %}
+    <div class="white-paper">
+      <div class="container fn-clear">
+        {% block whitepaper %}{% endblock %}
+      </div>
+    </div>
+    {%- endblock %}
+    <footer id="footer">
+      <div class="container">
+      </div>
+    </footer>
+  </body>
+</html>
