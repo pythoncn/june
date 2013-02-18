@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+
+{% block whitepaper %}
+{% if g.user %}
+<a href="{{url_for('account.signout')}}">sign out</a>
+{% else %}
+<a href="{{url_for('account.signin')}}">sign in</a> /
+<a href="{{url_for('account.signup')}}">sign up</a>
+{% endif %}
+{% endblock %}
