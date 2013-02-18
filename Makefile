@@ -51,9 +51,9 @@ testing:
 	@nosetests -v
 
 coverage:
-	@rm .coverage
+	@rm -f .coverage
 	@nosetests --with-cov --cov june tests/
-	@rm .coverage
+	@rm -f .coverage
 
 # Sphinx Documentation
 docs:
