@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% from "macro/form.html" import render_field, render_errors %}
+
+{% block subtitle %}{{_('Settings')}}{% endblock %}
+
+{% block whitepaper %}
+<form class="single" method="post" action="">
+  {{ form.csrf_token }}
+  {{ render_field(form.screen_name, 'long') }}
+  {{ render_field(form.description, 'long') }}
+
+  <div class="form-submit">
+    <button class="classy">Submit</button>
+  </div>
+</form>
+{% endblock %}

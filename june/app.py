@@ -6,10 +6,11 @@ ROOTDIR = os.path.split(PROJDIR)[0]
 CONFDIR = os.path.join(PROJDIR, '_config')
 
 from flask import Flask
-from flask import request
+from flask import request, g
 from flask.ext.babel import Babel
+from .helpers import get_current_user
 from .models import db
-from .views import front
+from .views import front, account
 
 
 def create_app(config=None):
@@ -29,11 +30,12 @@ def create_app(config=None):
     db.app = app
 
     #: register blueprints
+    app.register_blueprint(account.bp, url_prefix='/account')
     app.register_blueprint(front.bp, url_prefix='')
 
     @app.before_request
     def load_current_user():
-        pass
+        g.user = get_current_user()
 
     #: prepare for babel
     babel = Babel(app)

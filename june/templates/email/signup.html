@@ -1,0 +1,21 @@
+{% extends "email/layout.html" %}
+
+{% block content %}
+<p>Hello <strong>{{user.name}}</strong>:</p>
+<p>
+{% trans -%}
+Thanks for the registration. Follow the link below to activate your account.
+{%- endtrans %}
+</p>
+<a href="{{link}}">{{_('Activate your account')}}.</a>
+<br />
+<br />
+{% trans -%}
+You can copy and paste the link to your browser address bar:
+{%- endtrans %}
+<br />
+<p>{{link}}</p>
+<br />
+<br />
+<em>{% trans %}This link will expire in 24 hours.{% endtrans %}</em>
+{% endblock %}

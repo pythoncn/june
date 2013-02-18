@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% from "macro/form.html" import render_field %}
+
+{% block subtitle%}{{_('Signup')}}{% endblock %}
+
+{% block whitepaper %}
+<form class="single" method="post" action="">
+  {{ form.csrf_token }}
+  {{ render_field(form.username, 'long') }}
+  {{ render_field(form.email, 'long') }}
+  {{ render_field(form.password, 'long') }}
+
+  <div class="form-submit">
+    <button class="classy">{{_('Submit')}}</button>
+  </div>
+</form>
+{% endblock %}
