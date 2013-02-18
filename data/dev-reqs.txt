@@ -17,15 +17,14 @@ Flask-Cache
 Flask-Babel
 
 # form support
-#Flask-WTF
+Flask-WTF
 WTForms
--e git+git://github.com/lepture/flask-wtf.git#egg=Flask-WTF
 
 # mail support
 Flask-Mail
 
 # login support
-Flask-Login
+Flask-Principal
 
 # admin site
 Flask-Admin
@@ -34,7 +33,6 @@ Flask-Admin
 Flask-Script
 
 # testing
-Flask-Testing
 nose
 nose-cov
 

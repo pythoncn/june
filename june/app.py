@@ -19,7 +19,9 @@ def create_app(config=None):
         template_folder='templates'
     )
     app.config.from_pyfile(os.path.join(CONFDIR, 'base.py'))
-    if config:
+    if config and isinstance(config, dict):
+        app.config.update(config)
+    elif config:
         app.config.from_pyfile(config)
 
     #: prepare for database
@@ -33,16 +35,13 @@ def create_app(config=None):
     def load_current_user():
         pass
 
-    #@app.errorhandler(404)
-    #def not_found(error):
-    #    return render_template('404.html'), 404
-
     #: prepare for babel
     babel = Babel(app)
 
     @babel.localeselector
     def get_locale():
         app.config.setdefault('BABEL_SUPPORTED_LOCALES', ['en', 'zh'])
+        app.config.setdefault('BABEL_DEFAULT_LOCALE', 'en')
         match = app.config['BABEL_SUPPORTED_LOCALES']
         default = app.config['BABEL_DEFAULT_LOCALE']
         return request.accept_languages.best_match(match, default)
