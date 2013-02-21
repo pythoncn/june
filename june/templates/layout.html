@@ -2,27 +2,62 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>{% block title %}{{config.SITE_TITLE}} - {% block subtitle %}{% endblock %}{% endblock %}</title>
-    {%- block afterstyle %}{% endblock %}
+    <title>{% block title %}{{ config.SITE_TITLE }}{% endblock %}</title>
+    {% include "snippet/head.html" %}
   </head>
   <body>
-    <header id="header">
-      {%- from "macro/utils.html" import flash_messages %}
-
-      {%- with messages = get_flashed_messages(with_categories=true) %}
-      {{ flash_messages(messages) }}
-      {%- endwith %}
-    </header>
-    {%- block mainbody %}
-    <div class="white-paper">
+    <header id="site-header">
       <div class="container fn-clear">
-        {% block whitepaper %}{% endblock %}
+        {% block brand %}
+        <div id="brand">
+          <a id="brand-name" href="/">{{ config.SITE_TITLE }}</a>
+          <a id="indicator" href="#" title="You have 1 message">1</a>
+          <form action="">
+            <input type="search" />
+          </form>
+        </div>
+        {% endblock %}
+        <nav role="navigation">
+          {% block navigation %}
+          <a href="/">Latest</a>
+          <a href="/following">Following</a>
+          <a href="/nodes">Nodes</a>
+          {% endblock %}
+        </nav>
       </div>
+    </header>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <ul id="flash-message">
+      {% for category, message in messages %}
+      <li class="{{category}}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+
+    <div id="site-container" class="container">
+      {% block main %}
+      <div id="main" class="fn-clear">
+        <div id="content">
+          {% block content %}
+          
+          {% endblock %}
+        </div>
+
+        <aside id="sidebar">
+          {% block sidebar %}
+          <div class="widget">
+            <header class="widget-head">Head</header>
+            <div class="widget-content">
+              hello world
+            </div>
+          </div>
+          {% endblock %}
+        </aside>
+      </div>
+      {% endblock %}
     </div>
-    {%- endblock %}
-    <footer id="footer">
-      <div class="container">
-      </div>
-    </footer>
+    {% include "snippet/foot.html" %}
   </body>
 </html>
