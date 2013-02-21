@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block whitepaper %}
+{% block content %}
 {% if g.user %}
 <a href="{{url_for('account.signout')}}">sign out</a>
 {% else %}
