@@ -3,11 +3,10 @@
 Flask
 misaka
 pygments
-gevent
+gevent==0.13.8
 
 # database
 Flask-SQLAlchemy
-MySQL-python
 
 # cache support
 Flask-Cache
@@ -40,4 +39,4 @@ nose-cov
 flake8
 
 # documentation
-sphinx
+#sphinx
