@@ -3,7 +3,7 @@ June
 
 This is a forum project.
 
-Before start:
+Installation
 -------------
 
 Make sure you have python2.7, pip and virtualenv installed.
@@ -11,9 +11,11 @@ Make sure you have python2.7, pip and virtualenv installed.
 Development
 -----------
 
-To start development server:
+You should read the Contribution Guide first.
 
-    $ git checkout https://github.com/ekzhu/june.git
+To start development server::
+
+    $ git checkout your_fork_of_june
     $ cd june
     $ virtualenv --distribute venv
     $ source venv/bin/activate
@@ -28,6 +30,6 @@ Trouble shooting
 
 If you encounter build failure when trying to install gevent and get error saying "event.h" not found. You need to install libevent before installing gevent again. 
 
-On Mac OS X with homebrew, you can simply do:
+On Mac OS X with homebrew, you can simply do::
 
     brew install libevent
