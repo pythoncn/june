@@ -7,8 +7,9 @@ from flask.ext.babel import gettext as _
 from ..models import Account
 from ..helpers import login_user, logout_user, require_login
 from ..helpers import verify_auth_token
-from ..forms import SignupForm, SigninForm, SettingForm, FindForm
-from ..tasks import signup_mail
+from ..forms import SignupForm, SigninForm, SettingForm
+from ..forms import FindForm, ResetForm
+from ..tasks import signup_mail, find_mail
 
 __all__ = ['bp']
 
@@ -87,4 +88,26 @@ def find():
             return msg.html
         flash(_('We have sent you an email, check your inbox.'), 'info')
         return redirect(url_for('.find'))
-    return render_template('find.html', form=form)
+    return render_template('account/find.html', form=form)
+
+
+@bp.route('/reset', methods=['GET', 'POST'])
+def reset():
+    if g.user:
+        return redirect('/')
+    token = request.values.get('token')
+    if not token:
+        flash(_('Token is missing.'), 'error')
+        return redirect('/')
+    user = verify_auth_token(token, expires=1)
+    if not user:
+        flash(_('Invalid or expired token.'), 'error')
+        return redirect(url_for('.find'))
+    form = ResetForm()
+    if form.validate_on_submit():
+        user.password = user.create_password(form.password.data)
+        user.save()
+        login_user(user)
+        flash(_('Your password is updated.'), 'info')
+        return redirect(url_for('.setting'))
+    return render_template('account/reset.html', form=form, token=token)

@@ -11,7 +11,10 @@ from ._base import BaseForm
 from ..models import Account
 
 
-__all__ = ['SignupForm', 'SigninForm', 'SettingForm', 'FindForm']
+__all__ = [
+    'SignupForm', 'SigninForm', 'SettingForm',
+    'FindForm', 'ResetForm',
+]
 
 
 RESERVED_WORDS = [
@@ -104,7 +107,14 @@ class FindForm(BaseForm):
         if '@' in account:
             user = Account.query.filter_by(email=account).first()
         else:
-            user = Account.query.filter_by(name=account).first()
+            user = Account.query.filter_by(username=account).first()
         if not user:
             raise ValueError(_('This account does not exist.'))
         self.user = user
+
+
+class ResetForm(BaseForm):
+    password = PasswordField(
+        _('Password'), validators=[Required()],
+        description=_('Remember your password')
+    )

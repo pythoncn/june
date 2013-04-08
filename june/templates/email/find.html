@@ -1,0 +1,12 @@
+{% extends "email/layout.html" %}
+
+{% block content %}
+<h3>Welcome, {{user}}</h3>
+
+<p class="lead">
+You have submitted a find password request, follow the link below to find your password. If you didn't make the request, ignore this email.
+</p>
+<p><a class="btn" href="{{link}}">{{_('Find Password')}}</a></p>
+
+<p>This link will expire in 24 hours.</p>
+{% endblock %}

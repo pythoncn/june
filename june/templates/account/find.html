@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% from "macro/form.html" import render_field %}
+
+{% block subtitle %}{{_('Find Password')}}{% endblock %}
+
+{% block main %}
+<form method="post" action="">
+  {{ form.csrf_token }}
+  {{ render_field(form.account, 'long') }}
+  <div class="form-submit">
+    <button class="classy">{{_('Send')}}</button>
+  </div>
+</form>
+{% endblock %}
