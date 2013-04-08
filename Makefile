@@ -48,7 +48,7 @@ lint:
 	@flake8 ${files}
 
 testing:
-	@nosetests -v
+	@nosetests -s
 
 coverage:
 	@rm -f .coverage

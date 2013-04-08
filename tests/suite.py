@@ -8,7 +8,7 @@ from june.models import db
 
 class BaseSuite(object):
     def setUp(self):
-        config = {'TESTING': True}
+        config = {'TESTING': True, 'CSRF_ENABLED': False}
         config['SECRET_KEY'] = 'secret-key-for-test'
 
         self.db_fd, self.db_file = tempfile.mkstemp()
