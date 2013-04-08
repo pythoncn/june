@@ -1,5 +1,6 @@
 # coding: utf-8
 
+from flask import current_app
 from flask.ext.wtf import TextField, PasswordField, BooleanField
 from flask.ext.wtf import TextAreaField
 from flask.ext.wtf.html5 import EmailField
@@ -9,13 +10,20 @@ from flask.ext.babel import lazy_gettext as _
 from ._base import BaseForm
 from ..models import Account
 
+
+__all__ = ['SignupForm', 'SigninForm', 'SettingForm', 'FindForm']
+
+
 RESERVED_WORDS = [
     'root', 'admin', 'bot', 'robot', 'master', 'webmaster',
     'account', 'people', 'user', 'users', 'project', 'projects',
+    'search', 'action', 'favorite', 'like', 'love',
     'team', 'teams', 'group', 'groups', 'organization',
     'organizations', 'package', 'packages', 'org', 'com', 'net',
     'help', 'doc', 'docs', 'document', 'documentation', 'blog',
     'bbs', 'forum', 'forums', 'static', 'assets', 'repository',
+
+    'public', 'private',
     'mac', 'windows', 'ios', 'lab',
 ]
 
@@ -23,7 +31,8 @@ RESERVED_WORDS = [
 class SignupForm(BaseForm):
     username = TextField(
         _('Username'), validators=[
-            Required(), Length(min=3, max=20), Regexp('[a-z0-9A-Z]+')
+            Required(), Length(min=3, max=20),
+            Regexp(r'^[a-z0-9A-Z]+$')
         ], description=_('English Characters Only.'),
     )
     email = EmailField(
@@ -34,9 +43,12 @@ class SignupForm(BaseForm):
     )
 
     def validate_username(self, field):
-        if field.data.lower() in RESERVED_WORDS:
+        data = field.data.lower()
+        if data in RESERVED_WORDS:
             raise ValueError(_('This name is a reserved name.'))
-        if Account.query.filter_by(username=field.data.lower()).count():
+        if data in current_app.config.get('RESERVED_WORDS', []):
+            raise ValueError(_('This name is a reserved name.'))
+        if Account.query.filter_by(username=data).count():
             raise ValueError(_('This name has been registered.'))
 
     def validate_email(self, field):
@@ -79,3 +91,20 @@ class SettingForm(BaseForm):
         _('Description'), validators=[Optional(), Length(max=400)],
         description=_('Markdown is supported.')
     )
+
+
+class FindForm(BaseForm):
+    account = TextField(
+        _('Account'), validators=[Required(), Length(min=3, max=20)],
+        description=_('Username or email address')
+    )
+
+    def validate_account(self, field):
+        account = field.data
+        if '@' in account:
+            user = Account.query.filter_by(email=account).first()
+        else:
+            user = Account.query.filter_by(name=account).first()
+        if not user:
+            raise ValueError(_('This account does not exist.'))
+        self.user = user

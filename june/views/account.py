@@ -1,13 +1,13 @@
 # coding: utf-8
 
 from flask import Blueprint
-from flask import g, request, flash
+from flask import g, request, flash, current_app
 from flask import render_template, redirect, url_for
 from flask.ext.babel import gettext as _
 from ..models import Account
 from ..helpers import login_user, logout_user, require_login
 from ..helpers import verify_auth_token
-from ..forms import SignupForm, SigninForm, SettingForm
+from ..forms import SignupForm, SigninForm, SettingForm, FindForm
 from ..tasks import signup_mail
 
 __all__ = ['bp']
@@ -35,7 +35,9 @@ def signup():
         user = form.save()
         login_user(user)
         # send signup mail to user
-        signup_mail(user)
+        msg = signup_mail(user)
+        if current_app.debug:
+            return msg.html
         flash(_('We have sent you an activate email, check your inbox.'),
               'info')
         return redirect(next_url)
@@ -72,3 +74,17 @@ def setting():
         user.save()
         return redirect(next_url)
     return render_template('account/setting.html', form=form)
+
+
+@bp.route('/find', methods=['GET', 'POST'])
+def find():
+    if g.user:
+        return redirect('/')
+    form = FindForm()
+    if form.validate_on_submit():
+        msg = find_mail(form.user)
+        if current_app.debug:
+            return msg.html
+        flash(_('We have sent you an email, check your inbox.'), 'info')
+        return redirect(url_for('.find'))
+    return render_template('find.html', form=form)

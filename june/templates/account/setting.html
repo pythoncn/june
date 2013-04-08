@@ -3,8 +3,8 @@
 
 {% block subtitle %}{{_('Settings')}}{% endblock %}
 
-{% block whitepaper %}
-<form class="single" method="post" action="">
+{% block main %}
+<form method="post" action="">
   {{ form.csrf_token }}
   {{ render_field(form.screen_name, 'long') }}
   {{ render_field(form.description, 'long') }}
