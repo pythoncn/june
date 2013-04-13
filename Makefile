@@ -3,8 +3,8 @@
 
 # Development
 all:
-	@pip install -r conf/reqs-dev.txt
-	@cp conf/githooks/* .git/hooks/
+	@pip install -r etc/reqs-dev.txt
+	@cp etc/githooks/* .git/hooks/
 	@chmod -R +x .git/hooks/
 
 
@@ -18,7 +18,7 @@ database:
 
 # translate
 babel-extract:
-	@pybabel extract -F conf/babel.cfg -o data/messages.pot .
+	@pybabel extract -F etc/babel.cfg -o data/messages.pot .
 
 babel-init:
 	@pybabel init -i data/messages.pot -d june/translations -l zh

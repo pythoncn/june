@@ -19,7 +19,4 @@ docs/_build
 .tox
 
 data/
-etc/
-
-june/_static/sea-modules/
-venv
+venv/
