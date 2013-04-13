@@ -1,9 +1,0 @@
-{%- macro flash_messages(messages) %}
-{%- if messages %}
-<ul class=flashes>
-  {%- for category, message in messages %}
-  <li class="{{ category }}">{{ message }} <span class="close">×</span></li>
-  {%- endfor %}
-</ul>
-{%- endif %}
-{%- endmacro %}

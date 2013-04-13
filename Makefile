@@ -43,9 +43,11 @@ clean-pyc:
 	@find . -name '*.pyo' -exec rm -f {} +
 	@find . -name '*~' -exec rm -f {} +
 
-files := $(shell find . -name '*.py' ! -path "*__init__.py*" ! -path "*docs/*")
+june_files := $(shell find june -name '*.py' ! -path "*__init__.py")
+test_files := $(shell find tests -name '*.py' ! -path "*__init__.py")
 lint:
-	@flake8 ${files}
+	@flake8 ${june_files}
+	@flake8 ${test_files}
 
 testing:
 	@nosetests -s

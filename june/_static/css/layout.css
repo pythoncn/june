@@ -1,0 +1,116 @@
+html, body {
+  padding: 0;
+  margin: 0;
+}
+.container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: white;
+}
+
+.wrapper-inner {
+  position: relative;
+  padding: 50px 20px;
+}
+.flash-messages {
+  position: absolute;
+  top: 0;
+  right: 8px;
+}
+.flash-messages li {
+  position: relative;
+  list-style-type: none;
+  font-weight: 700;
+  margin-bottom: 6px;
+  padding: 8px 20px;
+  border-radius: 3px;
+  box-shadow: 2px 2px 9px #999;
+  background: #000;
+  color: #dededf;
+}
+.flash-messages li:before {
+  position: absolute;
+  top: 0;
+  left: 5px;
+  content: '•';
+}
+.flash-messages .info:before {
+  color: green;
+}
+
+.cover {
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  background-color: #232326;
+}
+.cover footer {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  padding: 50px 10%;
+  width: 100%;
+  box-sizing: border-box;
+}
+.cover .action-wrapper {
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.26);
+}
+.cover .action {
+  font: 500 14px/40px "Avenir", "Helvetica Neue", sans-serif;
+  display: inline-block;
+  background-color: #dadadc;
+  border: none;
+  border-radius: 3px;
+  padding: 0 30px;
+  color: #5c5c5f;
+  margin: 4px 20px 4px 0;
+  text-decoration: none;
+  text-shadow: none;
+}
+.cover .action:hover {
+  cursor: pointer;
+  background-color: #cdcece;
+}
+.cover .action-wrapper .login {
+  color: white;
+  background-color: #6b9c17;
+  text-shadow: 0 1px 0 #537a10;
+}
+.cover .action-wrapper .login:hover {
+  background-color: #537a10;
+}
+
+/* responsive */
+@media (min-width: 980px) {
+  .sidebar {
+    position: absolute;
+    bottom: 0;
+  }
+  .cover {
+    position: fixed;
+    border-right: 1px solid #000;
+  }
+  .sidebar, .cover {
+    top: 0;
+    left: 0;
+    width: 30%;
+    height: 100%;
+    max-width: 500px;
+  }
+  .wrapper {
+    width: 58%;
+    max-width: 640px;
+    margin-left: 36%;
+    overflow: hidden;
+  }
+}
+@media (max-width: 980px) {
+  .sidebar, .cover {
+    position: relative;
+    width: 100%;
+    min-height: 200px;
+  }
+}
