@@ -3,7 +3,7 @@
 
 {% block subtitle %}{{_('Signin')}}{% endblock %}
 
-{% block main %}
+{% block content %}
 <form class="single" method="post" action="">
   {{ form.csrf_token }}
   {{ render_field(form.account, 'long') }}
@@ -15,6 +15,7 @@
 
   <div class="form-submit">
     <button class="classy">Submit</button>
+    <a href="{{url_for('.find')}}">{{_('Forget Password?')}}</a>
   </div>
 </form>
 {% endblock %}

@@ -54,9 +54,7 @@ class Account(db.Model, SessionMixin):
     def __repr__(self):
         return '<Account: %s>' % self.username
 
-    @cached_property
-    def avatar(self):
-        size = 48
+    def avatar(self, size=48):
         md5email = hashlib.md5(self.email).hexdigest()
         query = "%s?s=%s%s" % (md5email, size, db.app.config['GRAVATAR_EXTRA'])
         return db.app.config['GRAVATAR_BASE_URL'] + query

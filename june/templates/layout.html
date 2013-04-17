@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <title>{% block title %}{{ config.SITE_TITLE }}{% endblock %}</title>
     <link rel="stylesheet" href="{{url_for('static', filename='css/layout.css')}}" />
+    <link rel="stylesheet" href="{{url_for('static', filename='css/forms.css')}}" />
   </head>
   <body>
+    {%- from "macro/ui.html" import render_messages, render_avatar %}
     <div class="container">
+      {%- block main %}
       {%- block sidebar %}
       <aside class="cover">
         {%- block cover %}
@@ -15,8 +18,9 @@
           <div class="action-wrapper">
             {%- if g.user %}
             <a class="action" href="#">{{_('Create a topic')}}</a>
+            <a class="signout" href="{{url_for('account.signout')}}">{{_('Sign Out')}}</a>
             {%- else %}
-            <a class="action login" href="{{url_for('account.signin')}}">{{_('Sign In')}}</a>
+            <a class="action signin" href="{{url_for('account.signin')}}">{{_('Sign In')}}</a>
             <a class="action" href="{{url_for('account.signup')}}">{{_('Sign Up')}}</a>
             {%- endif %}
           </div>
@@ -28,16 +32,14 @@
         <div class="wrapper-inner">
 
           {%- with messages = get_flashed_messages(with_categories=true) %}
-          {%- from "macro/ui.html" import render_messages %}
           {{- render_messages(messages) }}
           {%- endwith %}
 
-          {%- block main %}
           {%- block content %}
-          {%- endblock %}
           {%- endblock %}
         </div>
       </div>
+      {%- endblock %}
     </div>
   </body>
 </html>

@@ -1,6 +1,7 @@
 html, body {
   padding: 0;
   margin: 0;
+  font-family: "Georgia", "Xin Gothic", "Hiragino Sans GB", "WenQuanYi Micro Hei", "Microsoft YaHei", "SimSun", sans-serif;
 }
 .container {
   position: absolute;
@@ -42,9 +43,9 @@ html, body {
 }
 
 .cover {
-  color: #fff;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  background-color: #232326;
+  position: relative;
+  background: #f9f9f7;
+  color: #333;
 }
 .cover footer {
   position: absolute;
@@ -56,10 +57,10 @@ html, body {
 }
 .cover .action-wrapper {
   padding-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.26);
+  border-top: 1px solid #dadada;
+  font: 500 14px/40px "Avenir", "Xin Gothic", "Hiragino Sans GB", "WenQuanYi Micro Hei", "Microsoft YaHei", "SimSun", sans-serif;
 }
 .cover .action {
-  font: 500 14px/40px "Avenir", "Helvetica Neue", sans-serif;
   display: inline-block;
   background-color: #dadadc;
   border: none;
@@ -74,13 +75,20 @@ html, body {
   cursor: pointer;
   background-color: #cdcece;
 }
-.cover .action-wrapper .login {
+.cover .signin {
   color: white;
   background-color: #6b9c17;
   text-shadow: 0 1px 0 #537a10;
 }
-.cover .action-wrapper .login:hover {
+.cover .signin:hover {
   background-color: #537a10;
+}
+.cover .signout {
+  color: #333; 
+  display: inline-block;
+  font-size: 12px;
+  line-height: 30px;
+  vertical-align: bottom;
 }
 
 /* responsive */
@@ -91,7 +99,7 @@ html, body {
   }
   .cover {
     position: fixed;
-    border-right: 1px solid #000;
+    border-right: 1px solid #ddd;
   }
   .sidebar, .cover {
     top: 0;
@@ -112,5 +120,6 @@ html, body {
     position: relative;
     width: 100%;
     min-height: 200px;
+    border-bottom: 1px solid #ddd;
   }
 }
