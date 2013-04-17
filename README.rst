@@ -20,7 +20,7 @@ To start development server::
     $ virtualenv --distribute venv
     $ source venv/bin/activate
     (venv)$ pip install -r conf/reqs-dev.txt
-    (venv)$ python manager.py creatdb
+    (venv)$ python manager.py createdb
     (venv)$ python manager.py runserver
 
 It should be running at localhost:5000.
