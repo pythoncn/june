@@ -6,13 +6,9 @@ from flask.ext.sqlalchemy import SQLAlchemy, BaseQuery
 
 __all__ = [
     'db', 'JuneQuery', 'SessionMixin',
-    'model_created', 'model_updated', 'model_deleted',
 ]
 
 signals = Namespace()
-model_created = signals.signal('model-created')
-model_updated = signals.signal('model-updated')
-model_deleted = signals.signal('model-deleted')
 
 db = SQLAlchemy()
 
@@ -50,17 +46,11 @@ class SessionMixin(object):
         return dct
 
     def save(self):
-        if self.id:
-            emitter = model_updated
-        else:
-            emitter = model_created
         db.session.add(self)
         db.session.commit()
-        emitter.send(self, model=self)
         return self
 
     def delete(self):
         db.session.delete(self)
-        model_deleted.send(self, model=self)
         db.session.commit()
         return self
