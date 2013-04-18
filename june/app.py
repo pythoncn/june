@@ -5,6 +5,7 @@ PROJDIR = os.path.abspath(os.path.dirname(__file__))
 ROOTDIR = os.path.split(PROJDIR)[0]
 CONFDIR = os.path.join(PROJDIR, '_config')
 
+import datetime
 from flask import Flask
 from flask import request, g
 from flask.ext.babel import Babel
@@ -22,10 +23,16 @@ def create_app(config=None):
         template_folder='templates'
     )
     app.config.from_pyfile(os.path.join(CONFDIR, 'base.py'))
+
+    if 'JUNE_SETTINGS' in os.environ:
+        app.config.from_envvar('JUNE_SETTINGS')
+
     if config and isinstance(config, dict):
         app.config.update(config)
     elif config:
         app.config.from_pyfile(config)
+
+    app.config.update({'SITE_TIME': datetime.datetime.utcnow()})
 
     #: prepare for database
     db.init_app(app)

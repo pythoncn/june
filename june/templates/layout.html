@@ -12,20 +12,30 @@
       {%- block main %}
       {%- block sidebar %}
       <aside class="cover">
-        {%- block cover %}
-        <footer>
+        {%- if g.user %}
+        <div class="profile">
+          <a href="#"><img src="{{g.user.avatar(160)}}" alt="" /></a>
+          <h3>{{g.user}}</h3>
+          {%- if g.user.description %}
+          <p>{{g.user.description}}</p>
+          {%- endif %}
+        </div>
+        {%- endif %}
+        <div class="cover-inner">
           <p>Python China is ....</p>
-          <div class="action-wrapper">
+          <div class="actions">
             {%- if g.user %}
-            <a class="action" href="#">{{_('Create a topic')}}</a>
+            <a class="action" href="#">{{_('View Profile')}}</a>
             <a class="signout" href="{{url_for('account.signout')}}">{{_('Sign Out')}}</a>
             {%- else %}
             <a class="action signin" href="{{url_for('account.signin')}}">{{_('Sign In')}}</a>
             <a class="action" href="{{url_for('account.signup')}}">{{_('Sign Up')}}</a>
             {%- endif %}
           </div>
+        </div>
+        <footer>
+          &copy; <time datetime="{{config.SITE_TIME}}">{{config.SITE_TIME.year}}</time> {{config.SITE_TITLE}}
         </footer>
-        {%- endblock %}
       </aside>
       {%- endblock %}
       <div class="wrapper">
