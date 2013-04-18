@@ -1,7 +1,6 @@
 # coding: utf-8
 
 import hashlib
-import random
 from datetime import datetime
 from werkzeug import cached_property, security
 from flask.ext.principal import Permission, UserNeed, RoleNeed
@@ -80,3 +79,8 @@ class Account(db.Model, SessionMixin):
     def check_password(self, raw):
         passwd = '%s%s' % (raw, db.app.config['PASSWORD_SECRET'])
         return security.check_password_hash(self.password, passwd)
+
+    def change_password(self, raw):
+        self.password = self.create_password(raw)
+        self.token = self.create_token()
+        return self

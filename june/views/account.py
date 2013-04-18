@@ -105,8 +105,7 @@ def reset():
         return redirect(url_for('.find'))
     form = ResetForm()
     if form.validate_on_submit():
-        user.password = user.create_password(form.password.data)
-        user.save()
+        user.change_password(form.password.data).save()
         login_user(user)
         flash(_('Your password is updated.'), 'info')
         return redirect(url_for('.setting'))
