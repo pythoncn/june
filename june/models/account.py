@@ -26,6 +26,7 @@ class Account(db.Model, SessionMixin):
 
     # for user: 1 - not verified, 2 - verified, > 20 staff > 40 admin
     role = db.Column(db.Integer, default=1)
+    active = db.Column(db.DateTime, default=datetime.utcnow)
 
     created = db.Column(db.DateTime, default=datetime.utcnow)
     token = db.Column(db.String(20))
