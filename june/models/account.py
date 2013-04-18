@@ -3,7 +3,7 @@
 import hashlib
 import random
 from datetime import datetime
-from werkzeug import cached_property
+from werkzeug import cached_property, security
 from flask.ext.principal import Permission, UserNeed, RoleNeed
 from ._base import db, JuneQuery, SessionMixin
 
@@ -70,26 +70,13 @@ class Account(db.Model, SessionMixin):
 
     @staticmethod
     def create_password(raw):
-        salt = Account.create_token(8)
-        passwd = '%s%s%s' % (salt, raw,
-                             db.app.config['PASSWORD_SECRET'])
-        hsh = hashlib.sha1(passwd).hexdigest()
-        return "%s$%s" % (salt, hsh)
+        passwd = '%s%s' % (raw, db.app.config['PASSWORD_SECRET'])
+        return security.generate_password_hash(passwd)
 
     @staticmethod
     def create_token(length=16):
-        chars = ('0123456789'
-                 'abcdefghijklmnopqrstuvwxyz'
-                 'ABCDEFGHIJKLMNOPQRSTUVWXYZ')
-        salt = ''.join([random.choice(chars) for i in range(length)])
-        return salt
+        return security.gen_salt(length)
 
     def check_password(self, raw):
-        if not self.password:
-            return False
-        if '$' not in self.password:
-            return False
-        salt, hsh = self.password.split('$')
-        passwd = '%s%s%s' % (salt, raw, db.app.config['PASSWORD_SECRET'])
-        verify = hashlib.sha1(passwd).hexdigest()
-        return verify == hsh
+        passwd = '%s%s' % (raw, db.app.config['PASSWORD_SECRET'])
+        return security.check_password_hash(self.password, passwd)
