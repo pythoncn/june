@@ -49,13 +49,12 @@ lint:
 	@flake8 ${june_files}
 	@flake8 ${test_files}
 
-testing:
+test:
 	@nosetests -s
 
 coverage:
 	@rm -f .coverage
-	@nosetests --with-cov --cov june tests/
-	@rm -f .coverage
+	@nosetests --with-coverage --cover-package=june --cover-html
 
 # Sphinx Documentation
 docs:
