@@ -3,11 +3,11 @@
 import gevent.monkey
 gevent.monkey.patch_all()
 
+import os
 from flask.ext.script import Manager
 from june.app import create_app
 
-#CONFIG = os.path.abspath('./etc/config.py')
-CONFIG = '_config/development.py'
+CONFIG = os.path.abspath('./etc/dev_config.py')
 
 app = create_app(CONFIG)
 manager = Manager(app)

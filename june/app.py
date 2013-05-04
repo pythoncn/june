@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 
 import os
-PROJDIR = os.path.abspath(os.path.dirname(__file__))
-ROOTDIR = os.path.split(PROJDIR)[0]
-CONFDIR = os.path.join(PROJDIR, '_config')
+PROJDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+CONFDIR = os.path.join(PROJDIR, 'etc')
 
 import datetime
 from flask import Flask
@@ -19,17 +18,16 @@ from .views import front, account, admin
 def create_app(config=None):
     app = Flask(
         __name__,
-        static_folder='_static',
+        static_url_path='/_static',
+        static_folder=os.path.join(PROJDIR, 'static'),
         template_folder='templates'
     )
-    app.config.from_pyfile(os.path.join(CONFDIR, 'base.py'))
+    app.config.from_pyfile(os.path.join(CONFDIR, 'base_config.py'))
 
     if 'JUNE_SETTINGS' in os.environ:
         app.config.from_envvar('JUNE_SETTINGS')
 
-    if config and isinstance(config, dict):
-        app.config.update(config)
-    elif config:
+    if config:
         app.config.from_pyfile(config)
 
     app.config.update({'SITE_TIME': datetime.datetime.utcnow()})

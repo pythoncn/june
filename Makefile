@@ -31,6 +31,7 @@ babel-update: babel-extract
 
 # Common Task
 clean: clean-build clean-pyc
+	@rm -fr cover/
 
 clean-build:
 	@rm -fr build/
@@ -42,6 +43,7 @@ clean-pyc:
 	@find . -name '*.pyc' -exec rm -f {} +
 	@find . -name '*.pyo' -exec rm -f {} +
 	@find . -name '*~' -exec rm -f {} +
+
 
 june_files := $(shell find june -name '*.py' ! -path "*__init__.py")
 test_files := $(shell find tests -name '*.py' ! -path "*__init__.py")
