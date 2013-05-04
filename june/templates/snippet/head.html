@@ -1,5 +1,3 @@
-{% if config.DEBUG %}
-<link rel="stylesheet" href="{{url_for('static', filename='css/base.css')}}" />
-<link rel="stylesheet" href="{{url_for('static', filename='css/layout.css')}}" />
-<link rel="stylesheet" href="{{url_for('static', filename='css/ui.css')}}" />
-{% endif %}
+{% assets "june.css" %}
+<link rel="stylesheet" href="{{ ASSET_URL }}" />
+{% endassets %}

@@ -7,9 +7,6 @@ CONFDIR = os.path.join(PROJDIR, 'etc')
 import datetime
 from flask import Flask
 from flask import request, g
-from flask.ext.babel import Babel
-from flask.ext.principal import Principal, Identity, identity_loaded
-from flask.ext.principal import UserNeed, RoleNeed
 from .helpers import get_current_user
 from .models import db
 from .views import front, account, admin
@@ -36,17 +33,25 @@ def create_app(config=None):
     db.init_app(app)
     db.app = app
 
-    admin.admin.init_app(app)
-
-    #: register blueprints
-    app.register_blueprint(account.bp, url_prefix='/account')
-    app.register_blueprint(front.bp, url_prefix='')
-
     @app.before_request
     def load_current_user():
         g.user = get_current_user()
 
-    #: prepare for babel
+
+    init_babel(app)
+    init_principal(app)
+    init_assets(app)
+
+    admin.admin.init_app(app)
+    #: register blueprints
+    app.register_blueprint(account.bp, url_prefix='/account')
+    app.register_blueprint(front.bp, url_prefix='')
+    return app
+
+
+def init_babel(app):
+    from flask.ext.babel import Babel
+
     babel = Babel(app)
 
     @babel.localeselector
@@ -56,6 +61,11 @@ def create_app(config=None):
         match = app.config['BABEL_SUPPORTED_LOCALES']
         default = app.config['BABEL_DEFAULT_LOCALE']
         return request.accept_languages.best_match(match, default)
+
+
+def init_principal(app):
+    from flask.ext.principal import Principal, Identity, identity_loaded
+    from flask.ext.principal import UserNeed, RoleNeed
 
     princi = Principal(app)
 
@@ -83,4 +93,15 @@ def create_app(config=None):
 
         if g.user.role > 20:
             identity.provides.add(RoleNeed('admin'))
-    return app
+
+
+def init_assets(app):
+    from flask.ext.assets import Environment, Bundle
+    assets = Environment(app)
+
+    assets.register('june.css', Bundle(
+        'css/layout.css',
+        'css/forms.css',
+        'css/yue.css',
+        output='css/june.min.css'
+    ))

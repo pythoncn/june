@@ -3,8 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <title>{% block title %}{{ config.SITE_TITLE }}{% endblock %}</title>
-    <link rel="stylesheet" href="{{url_for('static', filename='css/layout.css')}}" />
-    <link rel="stylesheet" href="{{url_for('static', filename='css/forms.css')}}" />
+    {% include "snippet/head.html" %}
   </head>
   <body>
     {%- from "macro/ui.html" import render_messages, render_avatar %}

@@ -2,7 +2,6 @@
 
 Flask
 misaka
-pygments
 gevent==0.13.8
 
 # database
@@ -30,6 +29,9 @@ Flask-Admin
 
 # command line tools
 Flask-Script
+
+# assets
+Flask-Assets
 
 # testing
 nose
