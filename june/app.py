@@ -37,7 +37,6 @@ def create_app(config=None):
     def load_current_user():
         g.user = get_current_user()
 
-
     init_babel(app)
     init_principal(app)
     init_assets(app)
@@ -100,6 +99,7 @@ def init_assets(app):
     assets = Environment(app)
 
     assets.register('june.css', Bundle(
+        'css/normalize.css',
         'css/layout.css',
         'css/forms.css',
         'css/yue.css',
