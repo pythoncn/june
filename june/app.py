@@ -24,7 +24,9 @@ def create_app(config=None):
     if 'JUNE_SETTINGS' in os.environ:
         app.config.from_envvar('JUNE_SETTINGS')
 
-    if config:
+    if isinstance(config, dict):
+        app.config.update(config)
+    else:
         app.config.from_pyfile(config)
 
     app.config.update({'SITE_TIME': datetime.datetime.utcnow()})
