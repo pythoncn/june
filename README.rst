@@ -1,6 +1,9 @@
 June
 =====
 
+.. image:: https://travis-ci.org/pythoncn/june.png?branch=master
+        :target: https://travis-ci.org/pythoncn/june
+
 This is a forum project.
 
 Installation
