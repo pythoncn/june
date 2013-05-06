@@ -37,7 +37,7 @@ html, body {
 
 #wrap {
   background-color: #fff;
-  min-height: 80%;
+  min-height: 90%;
 }
 #wrap .container {
   padding: 60px 0;
@@ -47,6 +47,7 @@ html, body {
   height: 60px;
 }
 #footer .credit, #footer .links {
+  font-size: 13px;
   margin-top: 20px;
 }
 @media (max-width: 979px) {
@@ -55,6 +56,7 @@ html, body {
   }
   #wrap {
     padding-top: 20px;
+    min-height: 80%;
   }
   .navbar-fixed-top {
     margin-bottom: 0;
