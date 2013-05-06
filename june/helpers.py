@@ -39,6 +39,8 @@ class require_role(object):
 
 require_login = require_role(None)
 require_user = require_role(2)
+require_staff = require_role(20)
+require_admin = require_role(40)
 
 
 def get_current_user():

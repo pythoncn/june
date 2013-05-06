@@ -4,7 +4,7 @@ from datetime import datetime
 from werkzeug import cached_property
 from ._base import db, JuneQuery, SessionMixin
 
-__all__ = ['Node']
+__all__ = ['Node', 'NodeStatus']
 
 
 class Node(db.Model, SessionMixin):
