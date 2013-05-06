@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% from "macro/form.html" import horizontal_field, horizontal_form_button %}
+
+{% block subtitle %}{{_('Edit Node')}}{% endblock %}
+
+{% block content %}
+<form class="form-horizontal" method="post" action="">
+  {{ form.csrf_token }}
+
+  {{ horizontal_field(form.title, 'input-block-level') }}
+  {{ horizontal_field(form.urlname, 'input-block-level') }}
+  {{ horizontal_field(form.description, 'input-block-level') }}
+  {{ horizontal_field(form.role, 'input-block-level') }}
+
+  {{ horizontal_form_button(_('Update'), 'btn-success') }}
+</form>
+{% endblock %}

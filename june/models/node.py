@@ -25,7 +25,7 @@ class Node(db.Model, SessionMixin):
     )
 
     def __str__(self):
-        return self.urlname
+        return self.title
 
     def __repr__(self):
         return '<Node: %s>' % self.urlname

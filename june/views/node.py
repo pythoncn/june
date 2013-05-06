@@ -41,7 +41,7 @@ def view(urlname):
     return render_template('node/view.html', node=node)
 
 
-@bp.route('/<urlname>/edit')
+@bp.route('/<urlname>/edit', methods=['GET', 'POST'])
 @require_staff
 def edit(urlname):
     """
@@ -49,4 +49,10 @@ def edit(urlname):
 
     :param urlname: the urlname of the Node model
     """
-    pass
+    node = Node.query.filter_by(urlname=urlname).first_or_404()
+    form = NodeForm(obj=node)
+    if form.validate_on_submit():
+        form.populate_obj(node)
+        node.save()
+        return redirect(url_for('.view', urlname=node.urlname))
+    return render_template('node/edit.html', form=form, node=node)
