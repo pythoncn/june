@@ -39,7 +39,6 @@ def create_app(config=None):
 
     init_babel(app)
     init_principal(app)
-    init_assets(app)
 
     admin.admin.init_app(app)
     #: register blueprints
@@ -92,16 +91,3 @@ def init_principal(app):
 
         if g.user.role > 20:
             identity.provides.add(RoleNeed('admin'))
-
-
-def init_assets(app):
-    from flask.ext.assets import Environment, Bundle
-    assets = Environment(app)
-
-    assets.register('june.css', Bundle(
-        'css/normalize.css',
-        'css/layout.css',
-        'css/forms.css',
-        'css/yue.css',
-        output='css/june.min.css'
-    ))
