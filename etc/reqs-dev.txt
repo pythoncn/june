@@ -30,9 +30,6 @@ Flask-Admin
 # command line tools
 Flask-Script
 
-# assets
-Flask-Assets
-
 # testing
 nose
 nose-cov
