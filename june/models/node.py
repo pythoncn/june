@@ -25,10 +25,10 @@ class Node(db.Model, SessionMixin):
     )
 
     def __str__(self):
-        return self.slug
+        return self.urlname
 
     def __repr__(self):
-        return '<Node: %s>' % self.slug
+        return '<Node: %s>' % self.urlname
 
     @cached_property
     def html(self):
