@@ -43,6 +43,9 @@ def create_app(config=None):
 
     admin.admin.init_app(app)
     register_routes(app)
+
+    if app.debug:
+        register_static(app)
     return app
 
 
@@ -51,6 +54,18 @@ def register_routes(app):
     app.register_blueprint(node.bp, url_prefix='/node')
     app.register_blueprint(account.bp, url_prefix='/account')
     app.register_blueprint(front.bp, url_prefix='')
+    return app
+
+
+def register_static(app):
+    from flask import send_file
+
+    def _register(name):
+        func = lambda: send_file(os.path.join(PROJDIR, 'static', name))
+        return app.add_url_rule('/%s' % name, name, view_func=func)
+
+    _register('robots.txt')
+    _register('humans.txt')
     return app
 
 
