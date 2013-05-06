@@ -29,7 +29,7 @@
               <ul class="dropdown-menu" role="menu">
                 <li><a>{{g.user}}</a></li>
                 <li class="divider"></li>
-                <li><a href="">{{_('Settings')}}</a></li>
+                <li><a href="{{url_for('account.setting')}}">{{_('Settings')}}</a></li>
                 <li><a href="{{url_for('account.signout')}}">{{_('Sign Out')}}</a></li>
               </ul>
               </li>
@@ -46,12 +46,16 @@
       <div class="container">
       {%- block main %}
       <div class="row-fluid">
-        <div class="span8">8</div>
+        <div class="span8">
+          {%- block content %}{% endblock %}
+        </div>
         <div class="span4">
+          {%- block sidebar %}
           <div class="module">
             <div class="module-header">4</div>
             <div class="module-body">hello</div>
           </div>
+          {%- endblock %}
         </div>
       </div>
       {%- endblock %}

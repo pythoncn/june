@@ -9,7 +9,7 @@ from flask import Flask
 from flask import request, g
 from .helpers import get_current_user
 from .models import db
-from .views import front, account, admin
+from .views import admin
 
 
 def create_app(config=None):
@@ -42,7 +42,12 @@ def create_app(config=None):
     init_babel(app)
 
     admin.admin.init_app(app)
-    #: register blueprints
+    register_routes(app)
+    return app
+
+
+def register_routes(app):
+    from .views import front, account
     app.register_blueprint(account.bp, url_prefix='/account')
     app.register_blueprint(front.bp, url_prefix='')
     return app

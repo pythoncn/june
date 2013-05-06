@@ -5,5 +5,17 @@
     Twitter: @lepture
     From: Hangzhou, China
 
+    Web Design: Hsiaoming Yang
+    Software: Hsiaoming Yang
+
 
 # THANKS
+
+    Project: Flask
+    Website: http://flask.pocoo.org/
+
+    Project: Bootstrap
+    Website: http://twitter.github.io/bootstrap/
+
+    Translator:
+    Language: zh_CN
