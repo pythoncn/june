@@ -40,7 +40,6 @@ def create_app(config=None):
         g.user = get_current_user()
 
     init_babel(app)
-    init_principal(app)
 
     admin.admin.init_app(app)
     #: register blueprints
@@ -61,35 +60,3 @@ def init_babel(app):
         match = app.config['BABEL_SUPPORTED_LOCALES']
         default = app.config['BABEL_DEFAULT_LOCALE']
         return request.accept_languages.best_match(match, default)
-
-
-def init_principal(app):
-    from flask.ext.principal import Principal, Identity, identity_loaded
-    from flask.ext.principal import UserNeed, RoleNeed
-
-    princi = Principal(app)
-
-    @princi.identity_loader
-    def load_identity():
-        return Identity('june')
-
-    @identity_loaded.connect_via(app)
-    def on_identity_loaded(sender, identity):
-        identity.user = g.user
-        if not g.user:
-            return
-        identity.provides.add(UserNeed(g.user.id))
-        if g.user.id == 1:
-            identity.provides.add(RoleNeed('superuser'))
-            identity.provides.add(RoleNeed('admin'))
-            identity.provides.add(RoleNeed('staff'))
-            identity.provides.add(RoleNeed('member'))
-
-        if g.user.role > 2:
-            identity.provides.add(RoleNeed('member'))
-
-        if g.user.role > 10:
-            identity.provides.add(RoleNeed('staff'))
-
-        if g.user.role > 20:
-            identity.provides.add(RoleNeed('admin'))

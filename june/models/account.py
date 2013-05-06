@@ -2,8 +2,7 @@
 
 import hashlib
 from datetime import datetime
-from werkzeug import cached_property, security
-from flask.ext.principal import Permission, UserNeed, RoleNeed
+from werkzeug import security
 from ._base import db, JuneQuery, SessionMixin
 
 __all__ = ['Account']
@@ -58,14 +57,6 @@ class Account(db.Model, SessionMixin):
         md5email = hashlib.md5(self.email).hexdigest()
         query = "%s?s=%s%s" % (md5email, size, db.app.config['GRAVATAR_EXTRA'])
         return db.app.config['GRAVATAR_BASE_URL'] + query
-
-    @cached_property
-    def permission_write(self):
-        return Permission(UserNeed(self.id), RoleNeed('admin'))
-
-    @cached_property
-    def permission_admin(self):
-        return Permission(RoleNeed('admin'))
 
     @staticmethod
     def create_password(raw):
