@@ -1,6 +1,13 @@
 # coding: utf-8
 
 from flask.ext.wtf import Form
+from flask.ext.wtf import Required
+from flask.ext.babel import lazy_gettext as _
+
+
+# because we need lazy gettext
+required = Required(message=_('This field is required.'))
+# TODO: more validators
 
 
 class BaseForm(Form):
