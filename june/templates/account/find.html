@@ -3,12 +3,10 @@
 
 {% block subtitle %}{{_('Find Password')}}{% endblock %}
 
-{% block content %}
+{% block main %}
 <form method="post" action="">
   {{ form.csrf_token }}
   {{ render_field(form.account, 'long') }}
-  <div class="form-submit">
-    <button class="classy">{{_('Send')}}</button>
-  </div>
+  <button class="btn">{{_('Send')}}</button>
 </form>
 {% endblock %}

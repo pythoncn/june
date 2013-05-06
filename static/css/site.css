@@ -18,6 +18,23 @@ html, body {
   vertical-align: top;
 }
 
+/* module */
+.module {
+  position: relative;
+  text-shadow: 0 1px 0 #fff;
+  border: 1px solid #eee;
+  border-color: rgba(0, 0, 0, .1);
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+.module .module-header {
+  background-color: #f9f9f9;
+  padding: 12px;
+  line-height: 16px;
+  border-radius: 5px 5px 0 0;
+  border-bottom: 1px solid #e8e8e8;
+}
+
 #wrap {
   background-color: #fff;
   min-height: 80%;
@@ -32,12 +49,23 @@ html, body {
 #footer .credit, #footer .links {
   margin-top: 20px;
 }
+@media (max-width: 979px) {
+  #wrap .container {
+    padding-top: 0;
+  }
+  #wrap {
+    padding-top: 20px;
+  }
+  .navbar-fixed-top {
+    margin-bottom: 0;
+  }
+}
 @media (max-width: 767px) {
-  #footer {
+  #footer, #wrap {
     margin-left: -20px;
     margin-right: -20px;
   }
-  #footer .container {
+  #footer .container, #wrap .container {
     padding: 0 20px;
   }
 }
