@@ -21,7 +21,7 @@ def create():
 
 
 @bp.route('/<urlname>')
-def urlname(urlname):
+def view(urlname):
     """
     The view page of the Node.
 
@@ -33,7 +33,7 @@ def urlname(urlname):
 
     node = Node.query.filter_by(urlname=urlname).first_or_404()
     # TODO
-    return render_template('node/urlname.html', node=node)
+    return render_template('node/view.html', node=node)
 
 
 @bp.route('/<urlname>/edit')
@@ -41,17 +41,6 @@ def urlname(urlname):
 def edit(urlname):
     """
     Edit a node by staff members.
-
-    :param urlname: the urlname of the Node model
-    """
-    pass
-
-
-@bp.route('/<urlname>/newtopic')
-@require_user
-def newtopic(urlname):
-    """
-    Create a topic in the node by an activated user.
 
     :param urlname: the urlname of the Node model
     """
