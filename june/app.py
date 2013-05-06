@@ -47,7 +47,8 @@ def create_app(config=None):
 
 
 def register_routes(app):
-    from .views import front, account
+    from .views import front, account, node
+    app.register_blueprint(node.bp, url_prefix='/node')
     app.register_blueprint(account.bp, url_prefix='/account')
     app.register_blueprint(front.bp, url_prefix='')
     return app

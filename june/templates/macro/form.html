@@ -19,3 +19,26 @@
   {{ render_errors(field.errors) }}
 </fieldset>
 {%- endmacro %}
+
+
+{%- macro horizontal_field(field, class='') %}
+<div class="control-group {% if field.flags.required %} required{% endif %}{% if field.errors %} error{% endif %}">
+  {{field.label(class_='control-label')}}
+  <div class="controls">
+    {%- if field.description %}
+    {{field(class_=class, placeholder=field.description)}}
+    {%- else %}
+    {{field(class_=class)}}
+    {%- endif %}
+    {{ render_errors(field.errors) }}
+  </div>
+</div>
+{%- endmacro %}
+
+{%- macro horizontal_form_button(text, class='') %}
+<div class="control-group">
+  <div class="controls">
+    <button class="btn {{class}}">{{text}}</button>
+  </div>
+</div>
+{%- endmacro %}
