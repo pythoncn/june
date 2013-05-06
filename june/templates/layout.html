@@ -2,53 +2,57 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>{% block title %}{{ config.SITE_TITLE }}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% block subtitle %}{% endblock %} &middot; {{ config.SITE_TITLE }}{% endblock %}</title>
     {% include "snippet/head.html" %}
+    {% block afterstyle %}{% endblock %}
   </head>
   <body>
-    {%- from "macro/ui.html" import render_messages, render_avatar %}
-    <div class="container">
-      {%- block main %}
-      {%- block sidebar %}
-      <aside class="cover">
-        {%- if g.user %}
-        <div class="profile">
-          <a href="#"><img src="{{g.user.avatar(160)}}" alt="" /></a>
-          <h3>{{g.user}}</h3>
-          {%- if g.user.description %}
-          <p>{{g.user.description}}</p>
-          {%- endif %}
-        </div>
-        {%- endif %}
-        <div class="cover-inner">
-          <p>Python China is ....</p>
-          <div class="actions">
-            {%- if g.user %}
-            <a class="action" href="#">{{_('View Profile')}}</a>
-            <a class="signout" href="{{url_for('account.signout')}}">{{_('Sign Out')}}</a>
-            {%- else %}
-            <a class="action signin" href="{{url_for('account.signin')}}">{{_('Sign In')}}</a>
-            <a class="action" href="{{url_for('account.signup')}}">{{_('Sign Up')}}</a>
-            {%- endif %}
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="/">Home</a></li>
+              <li><a href="#about">About</a></li>
+              <li><a href="#contact">Contact</a></li>
+            </ul>
+            <ul class="nav pull-right">
+              {%- if g.user %}
+              <li class="dropdown">
+              <a href="#">Me</a>
+              </li>
+              {%- else %}
+              <li><a href="{{url_for('account.signup')}}">{{_('Sign Up')}}</a></li>
+              <li><a href="{{url_for('account.signin')}}">{{_('Sign In')}}</a></li>
+              {%- endif %}
+            </ul>
           </div>
         </div>
-        <footer>
-          &copy; <time datetime="{{config.SITE_TIME}}">{{config.SITE_TIME.year}}</time> {{config.SITE_TITLE}}
-        </footer>
-      </aside>
+      </div>
+    </div>
+    <div id="wrap">
+      <div class="container">
+      {%- block main %}
       {%- endblock %}
-      <div class="wrapper">
-        <div class="wrapper-inner">
-
-          {%- with messages = get_flashed_messages(with_categories=true) %}
-          {{- render_messages(messages) }}
-          {%- endwith %}
-
-          {%- block content %}
-          {%- endblock %}
+      </div>
+    </div>
+    {%- block footer %}
+    <footer id="footer">
+      <div class="container clearfix">
+        <p class="muted credit pull-left">
+        &copy; <time datetime="{{config.SITE_TIME}}">{{config.SITE_TIME.year}}</time> {{config.SITE_TITLE}}
+        </p>
+        <div class="links pull-right">
+          <a href="/humans.txt">Authors</a>
         </div>
       </div>
-      {%- endblock %}
-    </div>
+    </footer>
+    {%- endblock %}
   </body>
 </html>
