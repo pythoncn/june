@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% from "macro/form.html" import render_field %}
+{% from "macro/form.html" import vertical_field %}
 
 {% block subtitle%}{{_('Sign Up')}}{% endblock %}
 
@@ -34,9 +34,9 @@
 <form class="form-signup" method="post" action="">
   <h2>{{ config.SITE_TITLE}}</h2>
   {{ form.csrf_token }}
-  {{ render_field(form.username, 'input-block-level') }}
-  {{ render_field(form.email, 'input-block-level') }}
-  {{ render_field(form.password, 'input-block-level') }}
+  {{ vertical_field(form.username, 'input-block-level') }}
+  {{ vertical_field(form.email, 'input-block-level') }}
+  {{ vertical_field(form.password, 'input-block-level') }}
 
   <div class="form-submit">
     <button class="btn btn-success">{{_('Sign Up')}}</button>

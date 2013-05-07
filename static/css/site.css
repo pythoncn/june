@@ -21,26 +21,30 @@ html, body {
 /* module */
 .module {
   position: relative;
+  background-color: #f9f9f7;
   text-shadow: 0 1px 0 #fff;
   border: 1px solid #eee;
   border-color: rgba(0, 0, 0, .1);
-  border-radius: 6px;
+  border-radius: 3px;
   margin-bottom: 10px;
 }
-.module .module-header {
-  background-color: #f9f9f9;
+.module .inner {
   padding: 12px;
+}
+.module .module-header {
+  background-color: #f2f2f1;
   line-height: 16px;
-  border-radius: 5px 5px 0 0;
-  border-bottom: 1px solid #e8e8e8;
+  border-radius: 3px 3px 0 0;
+  border-bottom: 1px solid #ddd;
 }
-
+.module form.inner {
+  padding-top: 30px;
+  padding-right: 30px;
+}
 #wrap {
-  background-color: #fff;
-  min-height: 90%;
-}
-#wrap .container {
-  padding: 60px 0;
+  background: url('../img/bg.png');
+  padding-top: 60px;
+  min-height: 80%;
 }
 #footer {
   border-top: 1px solid #ddd;
@@ -51,9 +55,6 @@ html, body {
   margin-top: 20px;
 }
 @media (max-width: 979px) {
-  #wrap .container {
-    padding-top: 0;
-  }
   #wrap {
     padding-top: 20px;
     min-height: 80%;

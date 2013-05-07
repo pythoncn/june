@@ -8,7 +8,7 @@
 {%- endif %}
 {%- endmacro %}
 
-{%- macro render_field(field, class='') %}
+{%- macro vertical_field(field, class='') %}
 <fieldset class="form{% if field.flags.required %} required{% endif %}{% if field.errors %} error{% endif %}">
   {{field.label}}
   {%- if field.description %}

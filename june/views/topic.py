@@ -2,7 +2,8 @@
 
 from flask import Blueprint
 from flask import render_template
-from ..helpers import require_staff, require_user
+from ..helpers import require_user
+from ..models import Node
 
 
 __all__ = ['bp']
@@ -18,7 +19,9 @@ def create(urlname):
 
     :param urlname: the urlname of the Node model
     """
-    pass
+    node = Node.query.filter_by(urlname=urlname).first_or_404()
+    # TopicForm
+    return render_template('topic/create.html', node=node)
 
 
 @bp.route('/<int:uid>')

@@ -1,16 +1,19 @@
 {% extends "layout.html" %}
-{% from "macro/form.html" import render_field, render_errors %}
+{% from "macro/form.html" import horizontal_field, horizontal_form_button %}
 
 {% block subtitle %}{{_('Settings')}}{% endblock %}
 
 {% block content %}
-<form method="post" action="">
-  {{ form.csrf_token }}
-  {{ render_field(form.screen_name, 'long') }}
-  {{ render_field(form.description, 'long') }}
-
-  <div class="form-submit">
-    <button class="btn">{{_('Update')}}</button>
+<div class="module">
+  <div class="module-header inner">
+    <strong>{{_('Edit Profile')}}</strong>
   </div>
-</form>
+  <form class="form-horizontal inner" method="post" action="">
+    {{ form.csrf_token }}
+    {{ horizontal_field(form.screen_name, 'input-block-level') }}
+    {{ horizontal_field(form.description, 'input-block-level') }}
+
+    {{ horizontal_form_button(_('Update'), 'btn-success') }}
+  </form>
+</div>
 {% endblock %}

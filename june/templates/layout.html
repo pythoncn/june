@@ -8,57 +8,24 @@
     {% block afterstyle %}{% endblock %}
   </head>
   <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <div class="nav-collapse collapse">
-            <ul class="nav">
-              <li class="active"><a href="/">Home</a></li>
-              <li><a href="#about">About</a></li>
-              <li><a href="#contact">Contact</a></li>
-            </ul>
-            <ul class="nav pull-right">
-              {%- if g.user %}
-              <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Me <b class="caret"></b></a>
-              <ul class="dropdown-menu" role="menu">
-                <li><a>{{g.user}}</a></li>
-                <li class="divider"></li>
-                <li><a href="{{url_for('account.setting')}}">{{_('Settings')}}</a></li>
-                <li><a href="{{url_for('account.signout')}}">{{_('Sign Out')}}</a></li>
-              </ul>
-              </li>
-              {%- else %}
-              <li><a href="{{url_for('account.signup')}}">{{_('Sign Up')}}</a></li>
-              <li><a href="{{url_for('account.signin')}}">{{_('Sign In')}}</a></li>
-              {%- endif %}
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
+    {%- include "snippet/nav.html" %}
     <div id="wrap">
-      <div class="container">
-      {%- block main %}
-      <div class="row-fluid">
-        <div class="span8">
-          {%- block content %}{% endblock %}
-        </div>
-        <div class="span4">
-          {%- block sidebar %}
-          <div class="module">
-            <div class="module-header">4</div>
-            <div class="module-body">hello</div>
+      <div class="main container">
+        {%- block main %}
+        <div class="row-fluid">
+          <div class="span8">
+            {%- block content %}{% endblock %}
           </div>
-          {%- endblock %}
+          <div class="span4">
+            {%- block sidebar %}
+            <div class="module">
+              <div class="module-header inner">4</div>
+              <div class="module-body inner">hello</div>
+            </div>
+            {%- endblock %}
+          </div>
         </div>
-      </div>
-      {%- endblock %}
+        {%- endblock %}
       </div>
     </div>
     {%- block footer %}
