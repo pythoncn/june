@@ -3,31 +3,8 @@
 
 {% block subtitle %}{{_('Signin')}}{% endblock %}
 
-{% block afterstyle %}
-<style type="text/css">
-  .form-signin {
-    background-color: #fff;
-    max-width: 340px;
-    padding: 20px;
-    margin: 60px auto;
-    border: 1px solid #e5e5e5;
-    border-radius: 5px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
-  }
-  .form-signin h2 {
-    padding: 0 0 10px;
-    margin: 0 0 20px;
-    border-bottom: 1px solid #eee;
-  }
-  .form-submit a {
-    font-size: 13px;
-    margin-left: 14px;
-  }
-</style>
-{% endblock %}
-
 {% block main %}
-<form class="form-signin" method="post" action="">
+<form class="form-single" method="post" action="">
   <h2>{{ config.SITE_TITLE}}</h2>
   {{ form.csrf_token }}
   {{ vertical_field(form.account, 'input-block-level') }}
