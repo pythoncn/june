@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block subtitle %}{{topic}}{% endblock %}
+
+{% block content %}
+<div class="module">
+  <div class="module-header inner">
+    <strong>{{topic}}</strong>
+  </div>
+  <div class="module-body inner">
+    {{topic.html}}
+  </div>
+</div>
+{% endblock %}

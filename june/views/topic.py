@@ -1,9 +1,10 @@
 # coding: utf-8
 
-from flask import Blueprint
-from flask import render_template
+from flask import Blueprint, g
+from flask import render_template, redirect, url_for
 from ..helpers import require_user
-from ..models import Node
+from ..models import Node, Topic
+from ..forms import TopicForm
 
 
 __all__ = ['bp']
@@ -20,8 +21,11 @@ def create(urlname):
     :param urlname: the urlname of the Node model
     """
     node = Node.query.filter_by(urlname=urlname).first_or_404()
-    # TopicForm
-    return render_template('topic/create.html', node=node)
+    form = TopicForm()
+    if form.validate_on_submit():
+        topic = form.save(g.user)
+        return redirect(url_for('.view', uid=topic.id))
+    return render_template('topic/create.html', node=node, form=form)
 
 
 @bp.route('/<int:uid>')
@@ -31,7 +35,8 @@ def view(uid):
 
     :param uid: the id of a topic.
     """
-    pass
+    topic = Topic.query.get_or_404(uid)
+    return render_template('topic/view.html', topic=topic)
 
 
 @bp.route('/<int:uid>/edit', methods=['GET', 'POST', 'DELETE'])

@@ -11,7 +11,7 @@
     {{node.html}}
   </div>
   <div class="inner">
-    <a class="btn btn-success" href="#">{{_('Create a topic')}}</a>
+    <a class="btn btn-success" href="{{url_for('topic.create', urlname=node.urlname)}}">{{_('Create a topic')}}</a>
     {%- if g.user and g.user.is_staff %}
     <a class="btn-link" href="{{url_for('node.edit', urlname=node.urlname)}}">{{_('Edit this node')}}</a>
     {%- endif %}
