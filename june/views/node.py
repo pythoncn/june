@@ -12,6 +12,12 @@ __all__ = ['bp']
 bp = Blueprint('node', __name__)
 
 
+@bp.route('/')
+def nodes():
+    nodes = Node.query.all()
+    return render_template('node/nodes.html', nodes=nodes)
+
+
 @bp.route('/create', methods=['GET', 'POST'])
 @require_staff
 def create():

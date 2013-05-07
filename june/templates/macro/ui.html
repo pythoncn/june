@@ -7,3 +7,10 @@
 </ul>
 {%- endif %}
 {%- endmacro %}
+
+{%- macro nav(current='home') %}
+<ul class="nav">
+  <li{% if current == 'home' %} class="active"{% endif %}><a href="/">{{_('Home')}}</a></li>
+  <li{% if current == 'node' %} class="active"{% endif %}><a href="{{url_for('node.nodes')}}">{{_('Nodes')}}</a></li>
+</ul>
+{%- endmacro %}

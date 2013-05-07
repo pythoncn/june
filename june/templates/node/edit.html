@@ -4,14 +4,19 @@
 {% block subtitle %}{{_('Edit Node')}}{% endblock %}
 
 {% block content %}
-<form class="form-horizontal" method="post" action="">
-  {{ form.csrf_token }}
+<div class="module">
+  <div class="module-header inner">
+    <strong>{{_('Edit Node')}}</strong>
+  </div>
+  <form class="form-horizontal inner" method="post" action="">
+    {{ form.csrf_token }}
 
-  {{ horizontal_field(form.title, 'input-block-level') }}
-  {{ horizontal_field(form.urlname, 'input-block-level') }}
-  {{ horizontal_field(form.description, 'input-block-level') }}
-  {{ horizontal_field(form.role, 'input-block-level') }}
+    {{ horizontal_field(form.title, 'input-block-level') }}
+    {{ horizontal_field(form.urlname, 'input-block-level') }}
+    {{ horizontal_field(form.description, 'input-block-level') }}
+    {{ horizontal_field(form.role, 'input-block-level') }}
 
-  {{ horizontal_form_button(_('Update'), 'btn-success') }}
-</form>
+    {{ horizontal_form_button(_('Create'), 'btn-success') }}
+  </form>
+</div>
 {% endblock %}

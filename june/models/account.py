@@ -67,6 +67,10 @@ class Account(db.Model, SessionMixin):
     def create_token(length=16):
         return security.gen_salt(length)
 
+    @property
+    def is_staff(self):
+        return self.role > 19 or self.id == 1
+
     def check_password(self, raw):
         passwd = '%s%s' % (raw, db.app.config['PASSWORD_SECRET'])
         return security.check_password_hash(self.password, passwd)
