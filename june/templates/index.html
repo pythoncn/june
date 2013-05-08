@@ -3,13 +3,10 @@
 {% block title %}{{config.SITE_TITLE}}{% endblock %}
 
 {% block content %}
+{% from "macro/ui.html" import topic_list %}
 <div class="module">
-  <div class="module-body inner">
-    <ul>
-      {% for topic in topics %}
-      <li><a href="{{url_for('topic.view', uid=topic.id)}}">{{topic}}</a></li>
-      {% endfor %}
-    </ul>
+  <div class="module-body">
+    {{ topic_list(topics) }}
   </div>
 </div>
 {% endblock %}

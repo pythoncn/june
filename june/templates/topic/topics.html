@@ -3,17 +3,13 @@
 {% block subtitle %}{{_('Topics')}}{% endblock %}
 
 {% block content %}
+{% from "macro/ui.html" import topic_list, pagination %}
 <div class="module">
-  <div class="module-body inner">
-    <ul>
-      {% for topic in paginator.items %}
-      <li><a href="{{url_for('topic.view', uid=topic.id)}}">{{topic}}</a></li>
-      {% endfor %}
-    </ul>
+  <div class="module-body">
+    {{ topic_list(paginator.items) }}
   </div>
   {% if paginator.pages > 1 %}
   <div class="module-footer inner">
-    {% from "macro/ui.html" import pagination %}
     {{ pagination(paginator, url_for('topic.topics')) }}
   </div>
   {% endif %}

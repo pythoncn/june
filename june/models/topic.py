@@ -18,6 +18,7 @@ class Topic(db.Model, SessionMixin):
     content = db.Column(db.Text)
 
     hits = db.Column(db.Integer, default=0)
+    reply_count = db.Column(db.Integer, default=0)
 
     created = db.Column(db.DateTime, default=datetime.utcnow)
     updated = db.Column(
