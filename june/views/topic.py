@@ -1,8 +1,8 @@
 # coding: utf-8
 
-from flask import Blueprint, g
-from flask import render_template, redirect, url_for
-from ..helpers import require_user
+from flask import Blueprint, g, request
+from flask import render_template, redirect, url_for, abort
+from ..helpers import require_user, force_int
 from ..models import Node, Topic
 from ..forms import TopicForm
 
@@ -10,6 +10,18 @@ from ..forms import TopicForm
 __all__ = ['bp']
 
 bp = Blueprint('topic', __name__)
+
+
+@bp.route('/')
+def topics():
+    """
+    The topics list page.
+    """
+    page = force_int(request.args.get('page', 1), 0)
+    if not page:
+        return abort(404)
+    paginator = Topic.query.paginate(page)
+    return render_template('topic/topics.html', paginator=paginator)
 
 
 @bp.route('/create/<urlname>', methods=['GET', 'POST'])
