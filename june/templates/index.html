@@ -1,3 +1,15 @@
 {% extends "layout.html" %}
 
 {% block title %}{{config.SITE_TITLE}}{% endblock %}
+
+{% block content %}
+<div class="module">
+  <div class="module-body inner">
+    <ul>
+      {% for topic in topics %}
+      <li><a href="{{url_for('topic.view', uid=topic.id)}}">{{topic}}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}
