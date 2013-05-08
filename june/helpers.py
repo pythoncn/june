@@ -111,3 +111,10 @@ def verify_auth_token(token, expires=30):
     if hsh == _hsh.hexdigest():
         return user
     return None
+
+
+def force_int(value, default=1):
+    try:
+        return int(value)
+    except:
+        return default

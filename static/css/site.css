@@ -59,6 +59,15 @@ html, body {
   border-radius: 3px 3px 0 0;
   border-bottom: 1px solid #ddd;
 }
+.module .module-footer {
+  background-color: #f2f2f1;
+  line-height: 16px;
+  border-radius:  0 0 3px 3px;
+  border-top: 1px solid #ddd;
+}
+.module-footer .pagination {
+  margin: 0;
+}
 .module form.inner {
   padding-top: 30px;
   padding-right: 30px;

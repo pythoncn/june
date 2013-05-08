@@ -1,10 +1,10 @@
 # coding: utf-8
 
-from flask import Blueprint
-from flask import render_template, redirect, url_for
-from ..models import Node
+from flask import Blueprint, request
+from flask import render_template, redirect, url_for, abort
+from ..models import Node, Topic
 from ..forms import NodeForm
-from ..helpers import require_staff
+from ..helpers import require_staff, force_int
 
 
 __all__ = ['bp']
@@ -43,8 +43,13 @@ def view(urlname):
     """
 
     node = Node.query.filter_by(urlname=urlname).first_or_404()
-    # TODO
-    return render_template('node/view.html', node=node)
+    page = force_int(request.args.get('page', 1), 0)
+    if not page:
+        return abort(404)
+    paginator = Topic.query.paginate(page)
+    return render_template(
+        'node/view.html', node=node, paginator=paginator
+    )
 
 
 @bp.route('/<urlname>/edit', methods=['GET', 'POST'])

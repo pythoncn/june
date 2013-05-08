@@ -14,3 +14,21 @@
   <li{% if current == 'node' %} class="active"{% endif %}><a href="{{url_for('node.nodes')}}">{{_('Nodes')}}</a></li>
 </ul>
 {%- endmacro %}
+
+{% macro pagination(paginator, url) %}
+<div class="pagination pagination-centered">
+  <ul>
+    {% for page in paginator.iter_pages() %}
+      {% if page %}
+        {% if page == paginator.page %}
+          <li class="active"><span>{{page}}</span></li>
+        {% else %}
+          <li><a href="{{url}}?page={{page}}">{{page}}</a></li>
+        {% endif %}
+      {% else %}
+      <li class="disabled"><span class="ellipsis">…</span></li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+</div>
+{% endmacro %}
