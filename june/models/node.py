@@ -15,6 +15,7 @@ class Node(db.Model, SessionMixin):
     urlname = db.Column(db.String(40), unique=True, index=True)
 
     description = db.Column(db.Text)
+    count = db.Column(db.Integer, default=0)
     role = db.Column(db.Integer, default=1)
 
     created = db.Column(db.DateTime, default=datetime.utcnow)

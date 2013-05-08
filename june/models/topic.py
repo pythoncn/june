@@ -12,6 +12,7 @@ class Topic(db.Model, SessionMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     account_id = db.Column(db.Integer, nullable=False, index=True)
+    node_id = db.Column(db.Integer, nullable=False, index=True)
 
     title = db.Column(db.String(100), nullable=False)
     content = db.Column(db.Text)

@@ -1,14 +1,12 @@
 # coding: utf-8
 
 import datetime
-from flask.signals import Namespace
 from flask.ext.sqlalchemy import SQLAlchemy, BaseQuery
 
 __all__ = [
     'db', 'JuneQuery', 'SessionMixin',
 ]
 
-signals = Namespace()
 
 db = SQLAlchemy()
 
