@@ -1,15 +1,27 @@
 # coding: utf-8
 # flake8: noqa
 
+import gevent
+import datetime
 from ._base import *
 from .account import *
 from .node import *
 from .topic import *
-import datetime
-
+from flask import Flask, current_app
 from flask.ext.sqlalchemy import models_committed
 
-def _committed(model, operation):
+
+def _committed(sender, changes):
+    def _run(config):
+        app = Flask('june')
+        app.config = config
+        with app.test_request_context():
+            map(lambda o: _listen(*o), changes)
+
+    gevent.spawn(_run, current_app.config)
+
+
+def _listen(model, operation):
     if isinstance(model, Topic):
         # update user's last active time
         user = Account.query.get(model.account_id)

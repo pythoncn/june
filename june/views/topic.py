@@ -23,7 +23,7 @@ def create(urlname):
     node = Node.query.filter_by(urlname=urlname).first_or_404()
     form = TopicForm()
     if form.validate_on_submit():
-        topic = form.save(g.user)
+        topic = form.save(g.user, node)
         return redirect(url_for('.view', uid=topic.id))
     return render_template('topic/create.html', node=node, form=form)
 

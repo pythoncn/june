@@ -14,8 +14,9 @@ class TopicForm(BaseForm):
     )
     content = TextAreaField(_('Content'))
 
-    def save(self, user):
+    def save(self, user, node):
         topic = Topic(**self.data)
         topic.account_id = user.id
+        topic.node_id = node.id
         topic.save()
         return topic
