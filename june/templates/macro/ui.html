@@ -36,6 +36,7 @@
 
 
 {% macro topic_list(items, show_user=True, show_node=True) %}
+{% if items %}
 <div class="topic-list">
   {% for item in items %}
   <div class="topic-item hentry">
@@ -53,6 +54,15 @@
   </div>
   {% endfor %}
 </div>
+{% else %}
+<div class="inner">
+  <div class="alert alert-info">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Oops!</strong>
+    There is no topics.
+  </div>
+</div>
+{% endif %}
 {% endmacro %}
 
 

@@ -1,8 +1,8 @@
 # coding: utf-8
 
-from flask import Blueprint, request
+from flask import Blueprint, request, g
 from flask import render_template, redirect, url_for, abort
-from ..models import Node, Topic
+from ..models import Node, NodeStatus, Topic, fill_topics
 from ..forms import NodeForm
 from ..helpers import require_staff, force_int
 
@@ -47,8 +47,15 @@ def view(urlname):
     if not page:
         return abort(404)
     paginator = Topic.query.filter_by(node_id=node.id).paginate(page)
+    paginator.items = fill_topics(paginator.items)
+
+    status = None
+    if g.user:
+        status = NodeStatus.query.filter_by(
+            account_id=g.user.id, node_id=node.id
+        ).first()
     return render_template(
-        'node/view.html', node=node, paginator=paginator
+        'node/view.html', node=node, paginator=paginator, status=status
     )
 
 

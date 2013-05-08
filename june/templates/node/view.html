@@ -2,18 +2,39 @@
 
 {% block subtitle %}{{node}}{% endblock %}
 
+{% block afterstyle %}
+<style type="text/css">
+  .status-item {
+    float: left;
+    width: 50%;
+    color: #999;
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 10px;
+  }
+  .status-list .first {
+    margin-left: -1px;
+    border-right: 1px solid #ddd;
+  }
+  .status-item .wrap {
+    padding: 7px 12px;
+  }
+  .status-item strong {
+    display: block;
+    color: #333;
+    font-size: 16px;
+  }
+</style>
+{% endblock %}
+
 {% block content %}
+{% from "macro/ui.html" import topic_list, pagination %}
 <div class="module">
-  <div class="module-body inner">
-    <ul>
-      {% for topic in paginator.items %}
-      <li><a href="{{url_for('topic.view', uid=topic.id)}}">{{topic}}</a></li>
-      {% endfor %}
-    </ul>
+  <div class="module-body">
+    {{ topic_list(paginator.items) }}
   </div>
   {% if paginator.pages > 1 %}
   <div class="module-footer inner">
-    {% from "macro/ui.html" import pagination %}
     {{ pagination(paginator, url_for('node.view', urlname=node.urlname)) }}
   </div>
   {% endif %}
@@ -28,11 +49,30 @@
   <div class="module-body inner">
     {{node.html}}
   </div>
-  <div class="inner">
-    <a class="btn btn-success" href="{{url_for('topic.create', urlname=node.urlname)}}">{{_('Create a topic')}}</a>
+  <div class="inner clearfix">
+    <a class="btn btn-success pull-left" href="{{url_for('topic.create', urlname=node.urlname)}}">{{_('Create a topic')}}</a>
     {%- if g.user and g.user.is_staff %}
-    <a class="btn-link" href="{{url_for('node.edit', urlname=node.urlname)}}">{{_('Edit this node')}}</a>
+    <a class="btn pull-right" href="{{url_for('node.edit', urlname=node.urlname)}}">{{_('Edit this node')}}</a>
     {%- endif %}
   </div>
 </div>
+
+{% if status %}
+<div class="module">
+  <div class="module-header inner">
+    <strong>{{'Activities'}}</strong>
+  </div>
+  <div class="module-body status-list clearfix">
+    <div class="status-item first">
+      <div class="wrap"><strong>{{status.topic_count}}</strong> {{_('Topics')}}</div>
+    </div>
+    <div class="status-item">
+      <div class="wrap"><strong>{{status.reply_count}}</strong> {{_('Replies')}}</div>
+    </div>
+  </div>
+  <div class="module-footer inner">
+    {{ status.updated|timesince }}
+  </div>
+</div>
+{% endif %}
 {% endblock %}

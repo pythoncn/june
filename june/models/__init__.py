@@ -36,6 +36,9 @@ def get_nodes(uids):
 
 
 def get_by_ids(model, uids):
+    if not len(uids):
+        return {}
+
     if len(uids) == 1:
         data = model.query.get(uids.pop())
         return {data.id: data}
