@@ -2,7 +2,7 @@
 
 from flask import Blueprint
 from flask import render_template
-from ..models import Topic, fill_topics
+from ..models import Node, Topic, fill_topics
 
 
 bp = Blueprint('front', __name__)
@@ -12,4 +12,6 @@ bp = Blueprint('front', __name__)
 def home():
     topics = Topic.query.order_by(Topic.id.desc()).limit(16)
     topics = fill_topics(topics)
-    return render_template('index.html', topics=topics)
+
+    nodes = Node.query.order_by(Node.id.desc()).limit(10)
+    return render_template('index.html', topics=topics, nodes=nodes)

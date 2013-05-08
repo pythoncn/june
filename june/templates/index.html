@@ -3,10 +3,15 @@
 {% block title %}{{config.SITE_TITLE}}{% endblock %}
 
 {% block content %}
-{% from "macro/ui.html" import topic_list %}
+{% from "macro/ui.html" import topic_list, node_list %}
 <div class="module">
+  <div class="module-header inner">
+    <strong>{{_('Recent Topics')}}</strong>
+  </div>
   <div class="module-body">
     {{ topic_list(topics) }}
   </div>
 </div>
+
+{{ node_list(nodes) }}
 {% endblock %}

@@ -8,16 +8,6 @@
 {%- endblock %}
 
 {%- block content %}
-<div class="module">
-  <div class="module-header inner">
-    <strong>{{_('Nodes')}}</strong>
-  </div>
-  <div class="module-body inner">
-    <ul>
-      {% for node in nodes %}
-      <li><a href="{{url_for('node.view', urlname=node.urlname)}}">{{node}}</a></li>
-      {% endfor %}
-    </ul>
-  </div>
-</div>
+{% from "macro/ui.html" import node_list %}
+{{ node_list(nodes) }}
 {%- endblock %}

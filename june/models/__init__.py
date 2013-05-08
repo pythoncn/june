@@ -75,7 +75,7 @@ def _listen(model, operation):
         if operation == 'insert':
             # node count increase
             node = Node.query.get(model.node_id)
-            node.count += 1
+            node.topic_count += 1
             db.session.add(node)
 
             # user status in this node
@@ -93,7 +93,7 @@ def _listen(model, operation):
 
         elif operation == 'delete':
             node = Node.query.get(model.node_id)
-            node.count -= 1
+            node.topic_count -= 1
             db.session.add(node)
 
             ns = NodeStatus.query.filter_by(

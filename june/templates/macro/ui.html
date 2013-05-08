@@ -38,18 +38,30 @@
 {% macro topic_list(items, show_user=True, show_node=True) %}
 <div class="topic-list">
   {% for item in items %}
-  <div class="topic-item">
+  <div class="topic-item hentry">
     <h3 class="title"><a href="{{url_for('topic.view', uid=item.id)}}">{{item}}</a></h3>
     <div class="meta">
       <a href="{{url_for('topic.view', uid=item.id)}}#replies">discuss ({{item.reply_count}})</a>
       {% if show_node %}
       / <a href="{{url_for('node.view', urlname=item.node.urlname)}}">{{item.node}}</a>
       {% endif %}
-      @ {{item.created.strftime('%Y-%m-%d %H:%M')}}
+      @ <time datetime="{{item.created|xmldatetime}}" pubdate>{{item.created|timesince}}</time>
     </div>
     {% if show_user %}
     <a class="avatar" href="#" title="{{item.user}}"><img src="{{item.user.avatar(24)}}" /></a>
     {% endif %}
+  </div>
+  {% endfor %}
+</div>
+{% endmacro %}
+
+
+{% macro node_list(items) %}
+<div class="node-list clearfix">
+  {% for item in items %}
+  <div class="node-item">
+    <a title="{{_('Topics in this node')}}" class="count" href="{{url_for('node.view', urlname=item.urlname)}}">{{item.topic_count}}</a>
+    <a title="{{_('Create a Topic')}}" class="title" href="{{url_for('topic.create', urlname=item.urlname)}}">{{item}}</a>
   </div>
   {% endfor %}
 </div>

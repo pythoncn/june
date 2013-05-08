@@ -7,6 +7,7 @@ CONFDIR = os.path.join(PROJDIR, 'etc')
 import datetime
 from flask import Flask
 from flask import request, g
+from flask.ext.babel import gettext as _
 from .helpers import get_current_user
 from .models import db
 from .views import admin
@@ -40,6 +41,7 @@ def create_app(config=None):
         g.user = get_current_user()
 
     init_babel(app)
+    register_filters(app)
 
     admin.admin.init_app(app)
     register_routes(app)
@@ -69,6 +71,30 @@ def register_static(app):
     _register('humans.txt')
     return app
 
+
+def register_filters(app):
+
+    @app.template_filter('timesince')
+    def timesince(value):
+        now = datetime.datetime.utcnow()
+        delta = now - value
+        if delta.days > 365:
+            return _('%(num)i years ago' % {'num': delta.days / 365})
+        if delta.days > 30:
+            return _('%(num)i months ago' % {'num': delta.days / 30})
+        if delta.days > 0:
+            return _('%(num)i days ago' % {'num': delta.days})
+        if delta.seconds > 3600:
+            return _('%(num)i hours ago' % {'num': delta.seconds / 3600})
+        if delta.seconds > 60:
+            return _('%(num)i minutes ago' % {'num': delta.seconds / 60})
+        return _('just now')
+
+    @app.template_filter('xmldatetime')
+    def xmldatetime(value):
+        if not isinstance(value, datetime.datetime):
+            return value
+        return value.strftime('%Y-%m-%dT%H:%M:%SZ')
 
 def init_babel(app):
     from flask.ext.babel import Babel
