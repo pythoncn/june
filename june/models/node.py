@@ -47,6 +47,9 @@ class NodeStatus(db.Model, SessionMixin):
     node_id = db.Column(db.Integer, primary_key=True)
     account_id = db.Column(db.Integer, primary_key=True)
 
+    topic_count = db.Column(db.Integer, default=0)
+    reply_count = db.Column(db.Integer, default=0)
+
     updated = db.Column(
         db.DateTime,
         default=datetime.utcnow,
