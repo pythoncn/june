@@ -3,7 +3,7 @@
 from flask import Blueprint, g, request
 from flask import render_template, redirect, url_for, abort
 from ..helpers import require_user, force_int
-from ..models import Node, Topic
+from ..models import Node, Topic, fill_topics
 from ..forms import TopicForm
 
 
@@ -21,6 +21,7 @@ def topics():
     if not page:
         return abort(404)
     paginator = Topic.query.paginate(page)
+    paginator.items = fill_topics(paginator.items)
     return render_template('topic/topics.html', paginator=paginator)
 
 
