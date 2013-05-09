@@ -1,14 +1,12 @@
 {% extends "layout.html" %}
 
-{% block subtitle %}{{_('Nodes')}}{% endblock %}
+{% block subtitle %}{{_('Users')}}{% endblock %}
 
 {% from "macro/ui.html" import nav %}
 
 {% block nav %}
-{{ nav('node') }}
+{{ nav('user') }}
 {% endblock %}
 
 {% block content %}
-{% from "macro/ui.html" import node_list %}
-{{ node_list(nodes) }}
 {% endblock %}

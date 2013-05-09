@@ -6,6 +6,26 @@ html, body {
 .container {
   max-width: 980px;
 }
+.nav .account-group {
+  margin-left: 42px;
+}
+.nav .dropdown-menu a {
+  position: relative;
+}
+.nav .account-group img {
+  position: absolute;
+  top: 6px;
+  left: 20px;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+}
+.nav .account-group .meta {
+  display: block;
+  color: #999;
+  font-size: 11px;
+  font-family: 'Optima', 'Georgia', serif;
+}
 #wrap {
   background: url('../img/bg.png');
   padding-top: 60px;

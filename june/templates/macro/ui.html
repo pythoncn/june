@@ -13,6 +13,7 @@
   <li{% if current == 'home' %} class="active"{% endif %}><a href="/">{{_('Home')}}</a></li>
   <li{% if current == 'topic' %} class="active"{% endif %}><a href="{{url_for('topic.topics')}}">{{_('Topics')}}</a></li>
   <li{% if current == 'node' %} class="active"{% endif %}><a href="{{url_for('node.nodes')}}">{{_('Nodes')}}</a></li>
+  <li{% if current == 'user' %} class="active"{% endif %}><a href="{{url_for('user.users')}}">{{_('Users')}}</a></li>
 </ul>
 {%- endmacro %}
 

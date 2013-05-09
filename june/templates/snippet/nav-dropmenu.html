@@ -3,7 +3,13 @@
   <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown">Me <b class="caret"></b></a>
   <ul class="dropdown-menu" role="menu">
-    <li><a>{{g.user}}</a></li>
+    <li><a href="{{url_for('user.view', username=g.user.username)}}">
+      <div class="account-group">
+        <img src="{{g.user.avatar(48)}}" alt="{{g.user}}" />
+        <strong>{{g.user}}</strong>
+        <small class="meta">{{_('View Profile')}}</small>
+      </div>
+    </a></li>
     <li class="divider"></li>
     {%- if g.user.is_staff %}
     <li class="nav-header">{{_('Staff Power')}}</li>
