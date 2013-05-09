@@ -45,7 +45,7 @@ def get_by_ids(model, uids):
         data = model.query.get(uids.pop())
         return {data.id: data}
 
-    data = model.query.filter_by(model.id.in_(uids)).all()
+    data = model.query.filter(model.id.in_(uids)).all()
     ret = {}
     for item in data:
         ret[item.id] = item
@@ -73,44 +73,46 @@ def _committed(sender, changes):
 
 def _listen(model, operation):
     if isinstance(model, Topic):
-        # update user's last active time
-        user = Account.query.get(model.account_id)
-        user.active = datetime.datetime.utcnow()
-        db.session.add(user)
-        if operation == 'insert':
-            # node count increase
-            node = Node.query.get(model.node_id)
-            node.topic_count += 1
-            db.session.add(node)
+        _listen_topic(model, Topic)
 
-            # user status in this node
-            ns = NodeStatus.query.filter_by(
-                node_id=model.node_id, account_id=model.account_id
-            ).first()
-            if not ns:
-                ns = NodeStatus(
-                    node_id=model.node_id,
-                    account_id=model.account_id,
-                    topic_count=0,
-                )
-            ns.topic_count += 1
+
+def _listen_topic(model, operation):
+    # update user's last active time
+    user = Account.query.get(model.account_id)
+    user.active = datetime.datetime.utcnow()
+    db.session.add(user)
+    if operation == 'insert':
+        # node count increase
+        node = Node.query.get(model.node_id)
+        node.topic_count += 1
+        db.session.add(node)
+
+        # user status in this node
+        ns = NodeStatus.query.filter_by(
+            node_id=model.node_id, account_id=model.account_id
+        ).first()
+        if not ns:
+            ns = NodeStatus(
+                node_id=model.node_id,
+                account_id=model.account_id,
+                topic_count=0,
+            )
+        ns.topic_count += 1
+        db.session.add(ns)
+
+    elif operation == 'delete':
+        node = Node.query.get(model.node_id)
+        node.topic_count -= 1
+        db.session.add(node)
+
+        ns = NodeStatus.query.filter_by(
+            node_id=model.node_id, account_id=model.account_id
+        ).first()
+        if ns and ns.topic_count:
+            ns.topic_count -= 1
             db.session.add(ns)
 
-        elif operation == 'delete':
-            node = Node.query.get(model.node_id)
-            node.topic_count -= 1
-            db.session.add(node)
+    db.session.commit()
 
-            ns = NodeStatus.query.filter_by(
-                node_id=model.node_id, account_id=model.account_id
-            ).first()
-            if ns and ns.topic_count:
-                ns.topic_count -= 1
-                db.session.add(ns)
-
-        db.session.commit()
-
-    elif isinstance(model, Reply):
-        pass
 
 models_committed.connect(_committed)

@@ -96,6 +96,7 @@ def register_filters(app):
             return value
         return value.strftime('%Y-%m-%dT%H:%M:%SZ')
 
+
 def init_babel(app):
     from flask.ext.babel import Babel
 
