@@ -34,11 +34,14 @@
   </div>
   <div class="module-footer inner muted">
     <time datetime="{{topic.created|xmldatetime}}" pubdate>{{topic.created|timesince}}</time>
+    &middot;
+    <a href="{{url_for('node.view', urlname=node.urlname)}}">{{node}}</a>
   </div>
 </div>
 
 <div class="module">
   <div class="module-body item-list">
+    {% if paginator.items %}
     {% for item in paginator.items %}
     <div class="item hentry">
       <div class="content">{{item.html|safe}}</div>
@@ -49,6 +52,11 @@
       <a class="avatar" href="#" title="{{item.user}}"><img src="{{item.user.avatar(24)}}" /></a>
     </div>
     {% endfor %}
+    {% else %}
+    <div class="inner">
+      <div class="alert alert-info">{{_('No replies yet.')}}</div>
+    </div>
+    {% endif %}
   </div>
 
   {% if paginator.pages > 1 %}
@@ -73,5 +81,26 @@
     <a href="{{url_for('account.signin')}}" class="btn btn-success">{{_('Sign In')}}</a>
   </div>
   {% endif %}
+</div>
+{% endblock %}
+
+
+{% block sidebar %}
+<div class="module">
+  <div class="module-header inner">
+    <strong>{{author}}</strong>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header inner">
+    <strong>{{node}}</strong>
+  </div>
+  <div class="module-body inner">
+    {{node.html|safe}}
+  </div>
+  <div class="module-footer inner">
+    <a class="btn btn-info" href="{{url_for('node.view', urlname=node.urlname)}}">{{_('Topics in this node')}}</a>
+  </div>
 </div>
 {% endblock %}

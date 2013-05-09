@@ -3,7 +3,8 @@
 from flask import Blueprint, g, request, flash
 from flask import render_template, redirect, url_for, abort
 from ..helpers import require_user, force_int
-from ..models import Node, Topic, Reply, fill_topics, fill_with_users
+from ..models import Node, Topic, Reply, Account
+from ..models import fill_topics, fill_with_users
 from ..forms import TopicForm, ReplyForm
 
 
@@ -53,6 +54,8 @@ def view(uid):
         return abort(404)
 
     topic = Topic.query.get_or_404(uid)
+    node = Node.query.get_or_404(topic.node_id)
+    author = Account.query.get_or_404(topic.account_id)
 
     paginator = Reply.query.filter_by(topic_id=uid).paginate(page)
     paginator.items = fill_with_users(paginator.items)
@@ -62,7 +65,8 @@ def view(uid):
         form = ReplyForm()
 
     return render_template(
-        'topic/view.html', topic=topic, form=form, paginator=paginator
+        'topic/view.html', topic=topic, node=node, author=author,
+        form=form, paginator=paginator
     )
 
 
