@@ -2,13 +2,16 @@
 
 from datetime import datetime
 from werkzeug import cached_property
-from ._base import db, JuneQuery, SessionMixin
+from ._base import db, JuneQuery
 from ..markdown import rich_markdown
+from .account import Account
+from .node import Node, NodeStatus
+
 
 __all__ = ['Topic', 'Reply']
 
 
-class Topic(db.Model, SessionMixin):
+class Topic(db.Model):
     query_class = JuneQuery
 
     id = db.Column(db.Integer, primary_key=True)
@@ -40,8 +43,63 @@ class Topic(db.Model, SessionMixin):
             return ''
         return rich_markdown(self.content)
 
+    def save(self, user=None, node=None):
+        if self.id:
+            # update topic
+            db.session.add(self)
+            db.session.commit()
+            return self
 
-class Reply(db.Model, SessionMixin):
+        # insert a topic
+        if user:
+            self.account_id = user.id
+            user.active = datetime.utcnow()
+            db.session.add(user)
+        if node:
+            self.node_id = node.id
+            node.topic_count += 1
+            db.session.add(node)
+
+            ns = NodeStatus.query.filter_by(
+                node_id=self.node_id, account_id=self.account_id
+            ).first()
+            if not ns:
+                ns = NodeStatus(
+                    node_id=self.node_id,
+                    account_id=self.account_id,
+                    topic_count=0,
+                )
+            ns.topic_count += 1
+            db.session.add(ns)
+
+        db.session.add(self)
+        db.session.commit()
+        return self
+
+    def delete(self, user=None, node=None):
+        if not user:
+            user = Account.query.get(self.account_id)
+        if not node:
+            node = Node.query.get(self.node_id)
+
+        user.active = datetime.utcnow()
+        db.session.add(user)
+
+        node.topic_count -= 1
+        db.session.add(node)
+
+        ns = NodeStatus.query.filter_by(
+            node_id=self.node_id, account_id=self.account_id
+        ).first()
+        if ns and ns.topic_count:
+            ns.topic_count -= 1
+            db.session.add(ns)
+        db.session.delete(self)
+        db.session.commit()
+        return self
+
+
+class Reply(db.Model):
     query_class = JuneQuery
 
     id = db.Column(db.Integer, primary_key=True)
@@ -60,3 +118,52 @@ class Reply(db.Model, SessionMixin):
         if self.content is None:
             return ''
         return rich_markdown(self.content)
+
+    def save(self, user=None, topic=None):
+        if self.id:
+            # update
+            db.session.add(self)
+            db.session.commit()
+            return self
+
+        if user:
+            self.account_id = user.id
+            user.active = datetime.utcnow()
+            db.session.add(user)
+        if topic:
+            self.topic_id = topic.id
+            topic.reply_count += 1
+            db.session.add(topic)
+
+            ns = NodeStatus.query.filter_by(
+                node_id=topic.node_id, account_id=self.account_id
+            ).first()
+            if not ns:
+                ns = NodeStatus(
+                    node_id=topic.node_id,
+                    account_id=self.account_id,
+                    reply_count=0,
+                )
+            ns.reply_count += 1
+            db.session.add(ns)
+
+        db.session.add(self)
+        db.session.commit()
+        return self
+
+    def delete(self, user=None, topic=None):
+        if not topic:
+            topic = Topic.query.get(self.topic_id)
+
+        topic.reply_count -= 1
+        db.session.add(topic)
+
+        ns = NodeStatus.query.filter_by(
+            node_id=topic.node_id, account_id=self.account_id
+        ).first()
+        if ns and ns.reply_count:
+            ns.reply_count -= 1
+            db.session.add(ns)
+        db.session.delete(self)
+        db.session.commit()
+        return self
