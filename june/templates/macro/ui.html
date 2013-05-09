@@ -37,9 +37,9 @@
 
 {% macro topic_list(items, show_user=True, show_node=True) %}
 {% if items %}
-<div class="topic-list">
+<div class="item-list">
   {% for item in items %}
-  <div class="topic-item hentry">
+  <div class="item hentry">
     <h3 class="title"><a href="{{url_for('topic.view', uid=item.id)}}">{{item}}</a></h3>
     <div class="meta">
       <a href="{{url_for('topic.view', uid=item.id)}}#replies">discuss ({{item.reply_count}})</a>
@@ -57,7 +57,6 @@
 {% else %}
 <div class="inner">
   <div class="alert alert-info">
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>Oops!</strong>
     There is no topics.
   </div>

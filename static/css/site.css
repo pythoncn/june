@@ -117,39 +117,39 @@ html, body {
 }
 
 /* topics */
-.topic-item {
+.item-list .item {
   position: relative;
   padding: 10px 20px;
   border-top: 1px solid #ddd;
 }
-.topic-item:first-of-type {
+.item-list .item:first-of-type {
   border-top: none;
 }
-.topic-item:hover {
+.item-list .item:hover {
   background-color: #ffe;
 }
-.topic-item .title {
+.item-list .title {
   padding: 0;
   margin: 0;
   font-weight: 500;
   line-height: 1.5;
   font-size: 1.3em;
 }
-.topic-item .meta {
+.item-list .meta {
   font-size: 12px;
   font-family: 'Optima', 'Georgia', serif;
   color: #999;
 }
-.topic-item .meta a {
+.item-list .meta a {
   color: #999;
 }
-.topic-item .avatar {
+.item-list .avatar {
   position: absolute;
   top: 10px;
   right: 20px;
   display: inline-block;
 }
-.topic-item .avatar img {
+.item-list .avatar img {
   border-radius: 12px;
 }
 

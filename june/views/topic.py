@@ -3,7 +3,7 @@
 from flask import Blueprint, g, request, flash
 from flask import render_template, redirect, url_for, abort
 from ..helpers import require_user, force_int
-from ..models import Node, Topic, fill_topics
+from ..models import Node, Topic, Reply, fill_topics, fill_with_users
 from ..forms import TopicForm, ReplyForm
 
 
@@ -48,13 +48,22 @@ def view(uid):
 
     :param uid: the id of a topic.
     """
+    page = force_int(request.args.get('page', 1), 0)
+    if not page:
+        return abort(404)
+
     topic = Topic.query.get_or_404(uid)
+
+    paginator = Reply.query.filter_by(topic_id=uid).paginate(page)
+    paginator.items = fill_with_users(paginator.items)
 
     form = None
     if g.user:
         form = ReplyForm()
 
-    return render_template('topic/view.html', topic=topic, form=form)
+    return render_template(
+        'topic/view.html', topic=topic, form=form, paginator=paginator
+    )
 
 
 @bp.route('/<int:uid>/edit', methods=['GET', 'POST', 'DELETE'])

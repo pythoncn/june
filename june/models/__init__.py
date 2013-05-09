@@ -15,24 +15,26 @@ def fill_topics(items, user=None, node=None):
     if user:
         items = map(lambda o: _attach_user(o, user), items)
     else:
-        uids = set(map(lambda o: o.account_id, items))
-        users = get_users(uids)
-        items = map(lambda o: _attach_user(o, users[o.account_id]), items)
+        items = fill_with_users(items)
     if node:
         items = map(lambda o: _attach_node(o, node), items)
     else:
-        uids = set(map(lambda o: o.node_id, items))
-        nodes = get_nodes(uids)
-        items = map(lambda o: _attach_node(o, nodes[o.node_id]), items)
+        items = fill_with_nodes(items)
     return items
 
 
-def get_users(uids):
-    return get_by_ids(Account, uids)
+def fill_with_users(items):
+    uids = set(map(lambda o: o.account_id, items))
+    users = get_by_ids(Account, uids)
+    items = map(lambda o: _attach_user(o, users[o.account_id]), items)
+    return items
 
 
-def get_nodes(uids):
-    return get_by_ids(Node, uids)
+def fill_with_nodes(items):
+    uids = set(map(lambda o: o.node_id, items))
+    nodes = get_by_ids(Node, uids)
+    items = map(lambda o: _attach_node(o, nodes[o.node_id]), items)
+    return items
 
 
 def get_by_ids(model, uids):

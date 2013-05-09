@@ -2,6 +2,7 @@
 
 {% block subtitle %}{{topic}}{% endblock %}
 {% from "macro/form.html" import render_field %}
+{% from "macro/ui.html" import topic_list, pagination %}
 
 {% block content %}
 <div class="module">
@@ -14,6 +15,24 @@
 </div>
 
 <div class="module">
+  <div class="module-body item-list">
+    {% for item in paginator.items %}
+    <div class="item hentry">
+      <div class="content">{{item.html}}</div>
+      <div class="meta">
+        <a href="#">{{item.user}}</a>
+        @ <time datetime="{{item.created|xmldatetime}}" pubdate>{{item.created|timesince}}</time>
+      </div>
+      <a class="avatar" href="#" title="{{item.user}}"><img src="{{item.user.avatar(24)}}" /></a>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% if paginator.pages > 1 %}
+  <div class="module-footer inner">
+    {{ pagination(paginator, url_for('topic.topics')) }}
+  </div>
+  {% endif %}
 </div>
 
 <div class="module">
