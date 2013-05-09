@@ -1,10 +1,10 @@
 # coding: utf-8
 
-from flask import Blueprint, g, request
+from flask import Blueprint, g, request, flash
 from flask import render_template, redirect, url_for, abort
 from ..helpers import require_user, force_int
 from ..models import Node, Topic, fill_topics
-from ..forms import TopicForm
+from ..forms import TopicForm, ReplyForm
 
 
 __all__ = ['bp']
@@ -41,7 +41,7 @@ def create(urlname):
     return render_template('topic/create.html', node=node, form=form)
 
 
-@bp.route('/<int:uid>')
+@bp.route('/<int:uid>', methods=['GET', 'POST'])
 def view(uid):
     """
     View a topic with the given id.
@@ -49,7 +49,12 @@ def view(uid):
     :param uid: the id of a topic.
     """
     topic = Topic.query.get_or_404(uid)
-    return render_template('topic/view.html', topic=topic)
+
+    form = None
+    if g.user:
+        form = ReplyForm()
+
+    return render_template('topic/view.html', topic=topic, form=form)
 
 
 @bp.route('/<int:uid>/edit', methods=['GET', 'POST', 'DELETE'])
@@ -77,4 +82,10 @@ def reply(uid):
 
     :param uid: the id of the topic
     """
-    pass
+    topic = Topic.query.get_or_404(uid)
+    form = ReplyForm()
+    if form.validate_on_submit():
+        form.save(g.user, topic)
+    else:
+        flash(_('Missing content'), 'error')
+    return redirect(url_for('.view', uid=uid))

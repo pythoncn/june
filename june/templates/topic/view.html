@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 
 {% block subtitle %}{{topic}}{% endblock %}
+{% from "macro/form.html" import render_field %}
 
 {% block content %}
 <div class="module">
@@ -10,5 +11,25 @@
   <div class="module-body inner">
     {{topic.html}}
   </div>
+</div>
+
+<div class="module">
+</div>
+
+<div class="module">
+  {% if form %}
+  <form class="module-body inner" action="{{url_for('topic.reply', uid=topic.id)}}" method="post">
+    {{ form.csrf_token }}
+    {{ render_field(form.content, 'input-block-level') }}
+    <div class="form-submit clearfix">
+      <button class="btn btn-success pull-right">{{_('Send a Reply')}}</button>
+    </div>
+  </form>
+  {% else %}
+  <div class="inner">
+    <div class="alert alert-info">{{_('Login is required.')}}</div>
+    <a href="{{url_for('account.signin')}}" class="btn btn-success">{{_('Sign In')}}</a>
+  </div>
+  {% endif %}
 </div>
 {% endblock %}

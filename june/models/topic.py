@@ -48,8 +48,6 @@ class Reply(db.Model, SessionMixin):
     content = db.Column(db.Text)
 
     created = db.Column(db.DateTime, default=datetime.utcnow)
-    # attitude: like, hate
-    attitude = db.Column(db.String(10))
     flags = db.Column(db.Integer, default=0)
 
     def __str__(self):

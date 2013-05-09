@@ -8,15 +8,19 @@
 {%- endif %}
 {%- endmacro %}
 
+{% macro render_field(field, class='') %}
+{%- if field.description %}
+{{field(class_=class, placeholder=field.description)}}
+{%- else %}
+{{field(class_=class)}}
+{%- endif %}
+{{ render_errors(field.errors) }}
+{% endmacro %}
+
 {%- macro vertical_field(field, class='') %}
 <fieldset class="form{% if field.flags.required %} required{% endif %}{% if field.errors %} error{% endif %}">
   {{field.label}}
-  {%- if field.description %}
-  {{field(class_=class, placeholder=field.description)}}
-  {%- else %}
-  {{field(class_=class)}}
-  {%- endif %}
-  {{ render_errors(field.errors) }}
+  {{ render_field(field, class) }}
 </fieldset>
 {%- endmacro %}
 
@@ -25,12 +29,7 @@
 <div class="control-group {% if field.flags.required %} required{% endif %}{% if field.errors %} error{% endif %}">
   {{field.label(class_='control-label')}}
   <div class="controls">
-    {%- if field.description %}
-    {{field(class_=class, placeholder=field.description)}}
-    {%- else %}
-    {{field(class_=class)}}
-    {%- endif %}
-    {{ render_errors(field.errors) }}
+    {{ render_field(field, class) }}
   </div>
 </div>
 {%- endmacro %}
