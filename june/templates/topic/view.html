@@ -2,7 +2,7 @@
 
 {% block subtitle %}{{topic}}{% endblock %}
 {% from "macro/form.html" import render_field %}
-{% from "macro/ui.html" import topic_list, pagination %}
+{% from "macro/ui.html" import topic_list, pagination, user_module %}
 
 {% block afterstyle %}
 <style type="text/css">
@@ -86,12 +86,7 @@
 
 
 {% block sidebar %}
-<div class="module">
-  <div class="module-header inner">
-    <strong>{{author}}</strong>
-  </div>
-</div>
-
+{{ user_module(author) }}
 <div class="module">
   <div class="module-header inner">
     <strong>{{node}}</strong>

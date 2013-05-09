@@ -74,6 +74,9 @@ def register_static(app):
 
 
 def register_filters(app):
+    from .markdown import plain_markdown
+
+    app.jinja_env.filters['markdown'] = plain_markdown
 
     @app.template_filter('timesince')
     def timesince(value):

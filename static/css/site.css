@@ -117,6 +117,7 @@ html, body {
   padding: 12px;
 }
 .module .module-header {
+  position: relative;
   background-color: #f2f2f1;
   line-height: 16px;
   border-radius: 3px 3px 0 0;
@@ -134,6 +135,24 @@ html, body {
 .module form.inner {
   padding-top: 30px;
   padding-right: 30px;
+}
+.user-module .account-group {
+  margin-left: 48px;
+}
+.user-module .account-group img {
+  position: absolute;
+  top: 12px;
+  left: 14px;
+  width: 36px;
+  height: 36px;
+  border-radius: 4px;
+}
+.user-module .account-group .meta {
+  display: block;
+  margin-top: 4px;
+  color: #999;
+  font-size: 11px;
+  font-family: 'Optima', 'Georgia', serif;
 }
 
 /* topics */

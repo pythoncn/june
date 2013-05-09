@@ -1,5 +1,6 @@
 # coding: utf-8
 
+import re
 import misaka as m
 
 
@@ -57,4 +58,10 @@ def rich_markdown(text):
         m.EXT_TABLES | m.EXT_STRIKETHROUGH
     )
     md = m.Markdown(renderer, extensions=ext)
+    return md.render(text)
+
+
+def plain_markdown(text):
+    renderer = m.HtmlRenderer(flags=m.HTML_ESCAPE)
+    md = m.Markdown(renderer)
     return md.render(text)

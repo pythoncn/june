@@ -76,3 +76,16 @@
   {% endfor %}
 </div>
 {% endmacro %}
+
+{% macro user_module(user) %}
+<div class="module user-module">
+  <div class="module-header inner">
+    <div class="account-group">
+      <a href="{{url_for('user.view', username=user.username)}}"><img src="{{ user.avatar(48)}}" alt="{{user}}" /></a>
+      <strong>{{user}}</strong>
+      <time class="meta">{{ user.created.strftime('%Y-%m-%d') }}</time>
+    </div>
+  </div>
+  <div class="inner">{{user.description|markdown|safe}}</div>
+</div>
+{% endmacro %}
