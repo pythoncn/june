@@ -4,13 +4,36 @@
 {% from "macro/form.html" import render_field %}
 {% from "macro/ui.html" import topic_list, pagination %}
 
+{% block afterstyle %}
+<style type="text/css">
+  .hentry {
+    font-size: 15px;
+  }
+  .hentry h1 {
+    margin: 0;
+    font-size: 20px;
+    line-height: 1;
+  }
+  .hentry .module-footer {
+    font-size: 12px;
+  }
+  .reply-form textarea {
+    max-width: 100%;
+    height: 100px;
+  }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="module">
+<div class="module hentry">
   <div class="module-header inner">
-    <strong>{{topic}}</strong>
+    <h1>{{topic}}</h1>
   </div>
   <div class="module-body inner">
     {{topic.html|safe}}
+  </div>
+  <div class="module-footer inner muted">
+    <time datetime="{{topic.created|xmldatetime}}" pubdate>{{topic.created|timesince}}</time>
   </div>
 </div>
 
@@ -37,7 +60,7 @@
 
 <div class="module">
   {% if form %}
-  <form class="module-body inner" action="{{url_for('topic.reply', uid=topic.id)}}" method="post">
+  <form class="reply-form inner" action="{{url_for('topic.reply', uid=topic.id)}}" method="post">
     {{ form.csrf_token }}
     {{ render_field(form.content, 'input-block-level') }}
     <div class="form-submit clearfix">

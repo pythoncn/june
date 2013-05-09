@@ -10,9 +10,12 @@ from ..models import db, Topic, Reply
 class TopicForm(BaseForm):
     title = TextField(
         _('Title'), validators=[required],
-        description=_('The title of the topic')
+        description=_('Title of the topic')
     )
-    content = TextAreaField(_('Content'))
+    content = TextAreaField(
+        _('Content'),
+        description=_('Content of the topic')
+    )
 
     def save(self, user, node):
         topic = Topic(**self.data)

@@ -47,7 +47,7 @@
     <strong>{{node}}</strong>
   </div>
   <div class="module-body inner">
-    {{node.html}}
+    {{node.html|safe}}
   </div>
   <div class="inner clearfix">
     <a class="btn btn-success pull-left" href="{{url_for('topic.create', urlname=node.urlname)}}">{{_('Create a topic')}}</a>

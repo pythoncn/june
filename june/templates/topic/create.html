@@ -1,20 +1,68 @@
 {% extends "layout.html" %}
-{% from "macro/form.html" import horizontal_field, horizontal_form_button %}
+{% from "macro/form.html" import render_field %}
 
 {% block subtitle %}{{_('Create Topic')}}{% endblock %}
 
+{% block afterstyle %}
+<style type="text/css">
+  .form {
+    margin: 0;
+  }
+  .form .input-block-level {
+    margin-bottom: 10px;
+    border: none;
+    background-color: transparent;
+    box-shadow: none;
+    outline: none;
+  }
+  .form .input-block-level:focus {
+    outline: none;
+    box-shadow: none;
+  }
+  #title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+  }
+  .form textarea {
+    min-height: 350px;
+    max-width: 100%;
+  }
+</style>
+{% endblock %}
+
+
 {% block content %}
-<div class="module">
+<div class="module writing">
   <div class="module-header inner">
     <strong>{{_('Create Topic')}}</strong>
   </div>
-  <form class="form-horizontal inner" method="post" action="">
+  <form class="form" method="post" action="">
+    <div class="inner">
     {{ form.csrf_token }}
 
-    {{ horizontal_field(form.title, 'input-block-level') }}
-    {{ horizontal_field(form.content, 'input-block-level') }}
-
-    {{ horizontal_form_button(_('Create'), 'btn-success') }}
+    {{ render_field(form.title, 'input-block-level') }}
+    {{ render_field(form.content, 'input-block-level') }}
+    </div>
+    <div class="module-footer inner clearfix">
+      <button class="btn btn-success pull-right">{{_('Create')}}</button>
+    </div>
   </form>
+</div>
+<div class="module">
+  <div class="inner">
+    {% include "snippet/markdown-help.html" %}
+  </div>
+</div>
+{% endblock %}
+
+{% block sidebar %}
+<div class="module">
+  <div class="module-header inner">
+    <strong>{{node}}</strong>
+  </div>
+  <div class="module-body inner">
+    {{node.html|safe}}
+  </div>
 </div>
 {% endblock %}

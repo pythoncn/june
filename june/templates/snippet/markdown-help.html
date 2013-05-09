@@ -1,0 +1,137 @@
+{% raw %}
+<h5>Strong and Emphasize</h5>
+
+<pre><code>*emphasize*    **strong**
+_emphasize_    __strong__
+</code></pre>
+
+<h5>Links</h5>
+
+<p>Inline links:</p>
+
+<pre><code>[link text](http://url.com/ "title")
+[link text](http://url.com/)
+&lt;http://url.com&gt;
+</code></pre>
+
+<p>Reference-style links:</p>
+
+<pre><code>[link text][id]
+
+    [id]: http://url.com "title"
+</code></pre>
+
+<h5>Images</h5>
+
+<p>Inline images:</p>
+
+<pre><code>![alt text](http://path/to/img.jpg "title")
+![alt text](http://path/to/img.jpg)
+</code></pre>
+
+<p>Reference-style links:</p>
+
+<pre><code>![alt text][id]
+
+    [id]: http://path/to/img.jpg "title"
+</code></pre>
+
+<h5>Headers</h5>
+
+<p>Atx-style headers:</p>
+
+<pre><code># h1
+## h2
+### h5
+…
+</code></pre>
+
+<p>Closing # are optional.</p>
+
+<pre><code># h1 #
+## h2 ##
+…
+</code></pre>
+
+<h5>Lists</h5>
+
+<p>Ordered list without paragraphs:</p>
+
+<pre><code>1. foo
+2. bar
+</code></pre>
+
+<p>Unordered list with paragraphs:</p>
+
+<pre><code>* A list item.
+
+  With multiple paragraphs.
+
+* bar
+</code></pre>
+
+<p>You can nest them:</p>
+
+<pre><code>* Abacus
+  * anser
+* Bubbles
+  1. bunk
+  2. bupkis
+     * bar
+  3. burper
+* Cunning
+</code></pre>
+
+
+<h5>Blockquotes</h5>
+
+<pre><code>&gt; Email-style angle brackets
+&gt; are used for blockquotes.
+
+&gt; &gt; And, they can be nested.
+
+&gt; #### Headers in blockquotes
+&gt; 
+&gt; * You can quote a list.
+&gt; * Etc.
+</code></pre>
+
+<h5>Code Spans</h5>
+
+<pre><code>`&lt;code&gt;` spans are delimited
+by backticks.
+
+You can include literal backticks
+like `` `this` ``.
+</code></pre>
+
+<h5>Code Blocks</h5>
+
+<p>Indent at least 4 spaces or 1 tab.</p>
+
+<pre><code>This is a normal paragraph
+
+    this is code block
+</code></pre>
+
+<p>Fenced code block with three `.</p>
+<pre><code>This is a normal paragraph
+
+```
+this is code block
+```
+
+```python
+def foo():
+    return True
+```
+</code></pre>
+
+<h5>Manual Line Breaks</h5>
+
+<p>End a line with two or more spaces:</p>
+
+<pre><code>Roses are red, [space][space]
+Violets are blue. [space][space]
+</code></pre>
+{% endraw %}
