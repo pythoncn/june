@@ -10,7 +10,7 @@
     <strong>{{topic}}</strong>
   </div>
   <div class="module-body inner">
-    {{topic.html}}
+    {{topic.html|safe}}
   </div>
 </div>
 
@@ -18,7 +18,7 @@
   <div class="module-body item-list">
     {% for item in paginator.items %}
     <div class="item hentry">
-      <div class="content">{{item.html}}</div>
+      <div class="content">{{item.html|safe}}</div>
       <div class="meta">
         <a href="#">{{item.user}}</a>
         @ <time datetime="{{item.created|xmldatetime}}" pubdate>{{item.created|timesince}}</time>

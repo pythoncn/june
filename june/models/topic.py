@@ -3,6 +3,7 @@
 from datetime import datetime
 from werkzeug import cached_property
 from ._base import db, JuneQuery, SessionMixin
+from ..markdown import rich_markdown
 
 __all__ = ['Topic', 'Reply']
 
@@ -35,8 +36,9 @@ class Topic(db.Model, SessionMixin):
 
     @cached_property
     def html(self):
-        #TODO
-        return self.content
+        if self.content is None:
+            return ''
+        return rich_markdown(self.content)
 
 
 class Reply(db.Model, SessionMixin):
@@ -55,5 +57,6 @@ class Reply(db.Model, SessionMixin):
 
     @cached_property
     def html(self):
-        #TODO
-        return self.content
+        if self.content is None:
+            return ''
+        return rich_markdown(self.content)
