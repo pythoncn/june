@@ -1,15 +1,15 @@
 # coding: utf-8
 
-from flask.ext.wtf import TextField, TextAreaField
+from flask.ext.wtf import TextField, TextAreaField, DataRequired
 from flask.ext.babel import lazy_gettext as _
 
-from ._base import BaseForm, required
+from ._base import BaseForm
 from ..models import Topic, Reply
 
 
 class TopicForm(BaseForm):
     title = TextField(
-        _('Title'), validators=[required],
+        _('Title'), validators=[DataRequired()],
         description=_('Title of the topic')
     )
     content = TextAreaField(
@@ -23,7 +23,7 @@ class TopicForm(BaseForm):
 
 
 class ReplyForm(BaseForm):
-    content = TextAreaField(_('Content'), validators=[required])
+    content = TextAreaField(_('Content'), validators=[DataRequired()])
 
     def save(self, user, topic):
         item = Reply(**self.data)

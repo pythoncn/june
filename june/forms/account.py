@@ -3,8 +3,9 @@
 from flask import current_app
 from flask.ext.wtf import TextField, PasswordField, BooleanField
 from flask.ext.wtf import TextAreaField
-from flask.ext.wtf.html5 import EmailField
-from flask.ext.wtf import Required, Email, Length, Regexp, Optional
+from flask.ext.wtf.html5 import EmailField, URLField
+from flask.ext.wtf import DataRequired, Email, Length, Regexp
+from flask.ext.wtf import Optional, URL
 from flask.ext.babel import lazy_gettext as _
 
 from ._base import BaseForm
@@ -34,15 +35,15 @@ RESERVED_WORDS = [
 class SignupForm(BaseForm):
     username = TextField(
         _('Username'), validators=[
-            Required(), Length(min=3, max=20),
+            DataRequired(), Length(min=3, max=20),
             Regexp(r'^[a-z0-9A-Z]+$')
         ], description=_('English Characters Only.'),
     )
     email = EmailField(
-        _('Email'), validators=[Required(), Email()]
+        _('Email'), validators=[DataRequired(), Email()]
     )
     password = PasswordField(
-        _('Password'), validators=[Required()]
+        _('Password'), validators=[DataRequired()]
     )
 
     def validate_username(self, field):
@@ -67,11 +68,11 @@ class SignupForm(BaseForm):
 class SigninForm(BaseForm):
     account = TextField(
         _('Account'),
-        validators=[Required(), Length(min=3, max=20)],
+        validators=[DataRequired(), Length(min=3, max=20)],
         description=_('Username or Email')
     )
     password = PasswordField(
-        _('Password'), validators=[Required()]
+        _('Password'), validators=[DataRequired()]
     )
     permanent = BooleanField(_('Remember me for a month.'))
 
@@ -92,6 +93,8 @@ class SigninForm(BaseForm):
 
 class SettingForm(BaseForm):
     screen_name = TextField(_('Display Name'), validators=[Length(max=80)])
+    website = URLField(_('Website'), validators=[URL(), Optional()])
+    city = TextField(_('City'), description=_('Where are you living'))
     description = TextAreaField(
         _('Description'), validators=[Optional(), Length(max=400)],
         description=_('Markdown is supported.')
@@ -100,7 +103,7 @@ class SettingForm(BaseForm):
 
 class FindForm(BaseForm):
     account = TextField(
-        _('Account'), validators=[Required(), Length(min=3, max=20)],
+        _('Account'), validators=[DataRequired(), Length(min=3, max=20)],
         description=_('Username or email address')
     )
 
@@ -117,6 +120,6 @@ class FindForm(BaseForm):
 
 class ResetForm(BaseForm):
     password = PasswordField(
-        _('Password'), validators=[Required()],
+        _('Password'), validators=[DataRequired()],
         description=_('Remember your password')
     )

@@ -50,7 +50,7 @@
       @ <time datetime="{{item.created|xmldatetime}}" pubdate>{{item.created|timesince}}</time>
     </div>
     {% if show_user %}
-    <a class="avatar" href="#" title="{{item.user}}"><img src="{{item.user.avatar(24)}}" /></a>
+    <a class="avatar" href="{{url_for('user.view', username=item.user.username)}}" title="{{item.user}}"><img src="{{item.user.avatar(24)}}" /></a>
     {% endif %}
   </div>
   {% endfor %}

@@ -54,7 +54,7 @@
         <a href="#">{{item.user}}</a>
         @ <time datetime="{{item.created|xmldatetime}}" pubdate>{{item.created|timesince}}</time>
       </div>
-      <a class="avatar" href="#" title="{{item.user}}"><img src="{{item.user.avatar(24)}}" /></a>
+      <a class="avatar" href="{{ url_for('user.view', username=item.user.username) }}" title="{{item.user}}"><img src="{{item.user.avatar(24)}}" /></a>
     </div>
     {% endfor %}
     {% else %}
@@ -66,7 +66,7 @@
 
   {% if paginator.pages > 1 %}
   <div class="module-footer inner">
-    {{ pagination(paginator, url_for('topic.topics')) }}
+    {{ pagination(paginator, url_for('topic.view', uid=topic.id)) }}
   </div>
   {% endif %}
 </div>

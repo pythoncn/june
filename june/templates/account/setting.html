@@ -11,6 +11,8 @@
   <form class="form-horizontal inner" method="post" action="">
     {{ form.csrf_token }}
     {{ horizontal_field(form.screen_name, 'input-block-level') }}
+    {{ horizontal_field(form.website, 'input-block-level') }}
+    {{ horizontal_field(form.city, 'input-block-level') }}
     {{ horizontal_field(form.description, 'input-block-level') }}
 
     {{ horizontal_form_button(_('Update'), 'btn-success') }}
