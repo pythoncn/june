@@ -2,6 +2,14 @@
 
 {% block subtitle %}{{node}}{% endblock %}
 
+{% from "macro/ui.html" import nav %}
+
+{% block nav %}
+{{ nav('node') }}
+{% endblock %}
+
+
+
 {% block afterstyle %}
 <style type="text/css">
   .status-item {

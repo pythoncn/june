@@ -10,5 +10,12 @@
 
 {% block content %}
 {% from "macro/ui.html" import node_list %}
-{{ node_list(nodes) }}
+<div class="module">
+  <div class="module-header inner">
+    <strong>{{_('Recent Nodes')}}</strong>
+  </div>
+  <div class="module-body">
+    {{ node_list(nodes) }}
+  </div>
+</div>
 {% endblock %}

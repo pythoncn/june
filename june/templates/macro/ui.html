@@ -67,11 +67,16 @@
 
 
 {% macro node_list(items) %}
-<div class="node-list clearfix">
+<div class="item-list">
   {% for item in items %}
-  <div class="node-item">
-    <a title="{{_('Topics in this node')}}" class="count" href="{{url_for('node.view', urlname=item.urlname)}}">{{item.topic_count}}</a>
-    <a title="{{_('Create a Topic')}}" class="title" href="{{url_for('topic.create', urlname=item.urlname)}}">{{item}}</a>
+  <div class="item hentry">
+    <h3 class="title"><a href="{{url_for('node.view', urlname=item.urlname)}}">{{item}}</a></h3>
+    <div class="meta">
+      <a href="{{url_for('node.view', urlname=item.urlname)}}">topics ({{item.topic_count}})</a>
+      / <time datetime="{{item.updated|xmldatetime}}">{{item.updated|timesince}}</time>
+      &middot;
+      <a href="{{url_for('topic.create', urlname=item.urlname)}}">new topic</a>
+    </div>
   </div>
   {% endfor %}
 </div>

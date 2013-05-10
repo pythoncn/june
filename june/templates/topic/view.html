@@ -2,7 +2,12 @@
 
 {% block subtitle %}{{topic}}{% endblock %}
 {% from "macro/form.html" import render_field %}
-{% from "macro/ui.html" import topic_list, pagination, user_module %}
+{% from "macro/ui.html" import topic_list, pagination, user_module, nav %}
+
+{% block nav %}
+{{ nav('topic') }}
+{% endblock %}
+
 
 {% block afterstyle %}
 <style type="text/css">
