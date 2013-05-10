@@ -20,7 +20,12 @@ def users():
     if not page:
         return abort(404)
     paginator = Account.query.order_by(Account.id.desc()).paginate(page)
-    return render_template('user/users.html', paginator=paginator)
+    staffs = Account.query.filter(Account.role.in_(('staff', 'admin'))).all()
+    return render_template(
+        'user/users.html',
+        paginator=paginator,
+        staffs=staffs
+    )
 
 
 @bp.route('/<username>')

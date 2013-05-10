@@ -82,6 +82,27 @@
 </div>
 {% endmacro %}
 
+{% macro user_list(items, show_badge=True) %}
+<div class="item-list user-list">
+  {% for user in items %}
+  <div class="item">
+    <a href="{{url_for('user.view', username=user.username)}}">
+      <div class="account-group">
+        <img src="{{ user.avatar(48)}}" alt="{{user}}" />
+        <strong>{{user}}</strong>
+        <div class="meta">
+          <time>{{ user.created.strftime('%Y-%m-%d') }}</time>
+        </div>
+      </div>
+    </a>
+    {% if show_badge and user.is_staff %}
+    <span class="label label-success">staff</span>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+{% endmacro %}
+
 {% macro user_module(user) %}
 <div class="module user-module">
   <div class="module-header inner">

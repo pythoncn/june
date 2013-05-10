@@ -3,6 +3,9 @@ html, body {
   background-color: #f5f5f5;
   height: 100%;
 }
+a img:hover {
+  opacity: 0.8;
+}
 .container {
   max-width: 980px;
 }
@@ -191,44 +194,23 @@ html, body {
 .item-list .avatar img {
   border-radius: 12px;
 }
-
-/* nodes */
-.node-item {
-  float: left;
+.user-list a {
+  text-decoration: none;
+}
+.user-list .account-group {
+  margin-left: 46px;
+}
+.user-list .account-group img {
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  width: 32px;
+  height: 32px;
   border-radius: 3px;
-  width: 32%;
-  margin-right: 2%;
-  margin-bottom: 2%;
 }
-.node-item:nth-of-type(3n+3) {
-  margin-right: 0;
-}
-.node-item .count {
-  display: block;
-  background-color: #2ecc71;
-  color: white;
-  height: 100px;
-  line-height: 100px;
-  font-size: 56px;
-  text-align: center;
-  border-radius: 3px 3px 0 0;
-}
-.node-item .count:hover {
-  background-color: #27ae60;
-  text-decoration: none;
-}
-.node-item .title {
-  display: block;
-  padding: 6px 10px;
-  text-align: center;
-  font-size: 16px;
-  font-weight: 400;
+.user-list .label {
   text-transform: uppercase;
-  background-color: #e74c3c;
-  border-radius: 0 0 3px 3px;
-  color: #fff;
-}
-.node-item .title:hover {
-  background-color: #c0392b;
-  text-decoration: none;
+  position: absolute;
+  top: 10px;
+  right: 20px;
 }

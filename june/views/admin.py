@@ -14,7 +14,9 @@ class BaseView(ModelView):
     def is_accessible(self):
         if not g.user:
             return False
-        return g.user.permission_admin.can()
+        if g.user.id == 1:
+            return True
+        return g.user.role == 'admin'
 
 
 class HomeView(AdminIndexView):
@@ -27,15 +29,13 @@ class HomeView(AdminIndexView):
             return False
         if g.user.id == 1:
             return True
-        if g.user.account_type != 'user':
-            return False
-        return g.user.role > 40
+        return g.user.role == 'admin'
 
 
 class UserView(BaseView):
     can_edit = True
     column_exclude_list = ('password', 'token', 'description')
-    form_excluded_columns = ('password', 'created', 'token')
+    form_excluded_columns = ('password', 'created', 'token', 'active')
 
 
 admin = Admin(name='Yuan', index_view=HomeView())

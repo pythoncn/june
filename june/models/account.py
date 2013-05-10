@@ -22,8 +22,7 @@ class Account(db.Model, SessionMixin):
     city = db.Column(db.String(200))
     website = db.Column(db.String(400))
 
-    # for user: 1 - not verified, 2 - verified, > 20 staff > 40 admin
-    role = db.Column(db.Integer, default=1)
+    role = db.Column(db.String(10), default='new')
     active = db.Column(db.DateTime, default=datetime.utcnow)
 
     created = db.Column(db.DateTime, default=datetime.utcnow)
@@ -69,7 +68,9 @@ class Account(db.Model, SessionMixin):
 
     @property
     def is_staff(self):
-        return self.role > 19 or self.id == 1
+        if self.id == 1:
+            return True
+        return self.role == 'staff' or self.role == 'admin'
 
     def check_password(self, raw):
         passwd = '%s%s' % (raw, db.app.config['PASSWORD_SECRET'])

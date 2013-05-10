@@ -25,7 +25,7 @@ def signup():
         if not user:
             flash(_('Invalid or expired token.'), 'error')
             return redirect(next_url)
-        user.role = 2
+        user.role = 'user'
         user.save()
         login_user(user)
         flash(_('This account is verified.'), 'info')

@@ -2,11 +2,30 @@
 
 {% block subtitle %}{{_('Users')}}{% endblock %}
 
-{% from "macro/ui.html" import nav %}
+{% from "macro/ui.html" import nav, user_list %}
 
 {% block nav %}
 {{ nav('user') }}
 {% endblock %}
 
 {% block content %}
+<div class="module">
+  <div class="module-header inner">
+    <strong>{{_('Recent Joins')}}</strong>
+  </div>
+  <div class="module-body">
+    {{ user_list(paginator.items) }}
+  </div>
+</div>
+{% endblock %}
+
+{% block sidebar %}
+<div class="module">
+  <div class="module-header inner">
+    <strong>{{_('Staffs')}}</strong>
+  </div>
+  <div class="module-body">
+    {{ user_list(staffs, False) }}
+  </div>
+</div>
 {% endblock %}

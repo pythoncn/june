@@ -25,22 +25,23 @@ class require_role(object):
             if g.user.id == 1:
                 # this is superuser, have no limitation
                 return method(*args, **kwargs)
-            if g.user.role == 1:
+            if g.user.role == 'admin':
+                return method(*args, **kwargs)
+            if g.user.role == 'new':
                 flash(_('Please verify your email'), 'warn')
                 return redirect('/account/settings')
-            if g.user.role < 1:
-                #TODO
+            if g.user.role == 'spam':
                 return redirect('/doc/guideline')
-            if g.user.role < self.role:
+            if g.user.role == self.role:
                 return abort(403)
             return method(*args, **kwargs)
         return wrapper
 
 
 require_login = require_role(None)
-require_user = require_role(2)
-require_staff = require_role(20)
-require_admin = require_role(40)
+require_user = require_role('user')
+require_staff = require_role('staff')
+require_admin = require_role('admin')
 
 
 def get_current_user():
