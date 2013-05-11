@@ -9,7 +9,7 @@ from flask import Flask
 from flask import request, g
 from flask.ext.babel import gettext as _
 from .helpers import get_current_user
-from .models import db
+from .models import db, cache
 from .views import admin
 
 
@@ -37,11 +37,14 @@ def create_app(config=None):
     db.init_app(app)
     db.app = app
 
+    #: prepare for cache
+    cache.init_app(app)
+
     @app.before_request
     def load_current_user():
         g.user = get_current_user()
 
-    init_babel(app)
+    register_babel(app)
 
     admin.admin.init_app(app)
     register_routes(app)
@@ -107,7 +110,7 @@ def register_jinja(app):
         return value.strftime('%Y-%m-%dT%H:%M:%SZ')
 
 
-def init_babel(app):
+def register_babel(app):
     from flask.ext.babel import Babel
 
     babel = Babel(app)

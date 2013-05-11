@@ -4,9 +4,6 @@ TESTING = False
 #: site
 SITE_TITLE = 'June Forum'
 SITE_URL = '/'
-SITE_FEED = ''
-SITE_LOGO = ''
-SITE_GOOGLE_ANALYTICS = None
 SITE_STYLES = [
     '/_static/css/bootstrap.css',
     '/_static/css/bootstrap-responsive.css',
@@ -31,3 +28,6 @@ GRAVATAR_EXTRA = ''
 # SQLALCHEMY_POOL_SIZE = 100
 # SQLALCHEMY_POOL_TIMEOUT = 10
 # SQLALCHEMY_POOL_RECYCEL = 3600
+
+#: cache
+# find options on http://pythonhosted.org/Flask-Cache/

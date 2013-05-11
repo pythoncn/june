@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
 import os
-database = os.path.join(os.getcwd(), 'data', 'development.sqlite')
+rootdir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+database = os.path.join(rootdir, 'data', 'development.sqlite')
 
 # site inform
 SITE_TITLE = 'Python China'
@@ -17,6 +18,10 @@ DEBUG = True
 SECRET_KEY = 'secret-key-for-development'
 
 SQLALCHEMY_DATABASE_URI = 'sqlite:///%s' % database
+
+# cache
+CACHE_TYPE = 'filesystem'
+CACHE_DIR = os.path.join(rootdir, 'data', 'cache')
 
 # babel settings
 BABEL_DEFAULT_LOCALE = 'zh'
