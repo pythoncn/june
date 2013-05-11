@@ -11,7 +11,7 @@ from ..helpers import create_auth_token
 def send_mail(config, msg):
     if not config.get('DEFAULT_MAIL_SENDER', None):
         return
-    app = Flask('yuan')
+    app = Flask('june')
     app.config = config
     with app.test_request_context():
         mail = Mail(app)
