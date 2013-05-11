@@ -31,6 +31,7 @@ def create_app(config=None):
         app.config.from_pyfile(config)
 
     app.config.update({'SITE_TIME': datetime.datetime.utcnow()})
+    register_jinja(app)
 
     #: prepare for database
     db.init_app(app)
@@ -41,7 +42,6 @@ def create_app(config=None):
         g.user = get_current_user()
 
     init_babel(app)
-    register_filters(app)
 
     admin.admin.init_app(app)
     register_routes(app)
@@ -73,8 +73,14 @@ def register_static(app):
     return app
 
 
-def register_filters(app):
+def register_jinja(app):
     from .markdown import plain_markdown
+    from .htmlcompress import HTMLCompress
+    from werkzeug.datastructures import ImmutableDict
+
+    app.jinja_options = ImmutableDict(
+        extensions=['jinja2.ext.autoescape', 'jinja2.ext.with_', HTMLCompress]
+    )
 
     app.jinja_env.filters['markdown'] = plain_markdown
 

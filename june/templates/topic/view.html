@@ -39,7 +39,7 @@
   </div>
   <div class="module-footer inner muted">
     <time datetime="{{topic.created|xmldatetime}}" pubdate>{{topic.created|timesince}}</time>
-    &middot;
+    <span class="sep">&middot;</span>
     <a href="{{url_for('node.view', urlname=node.urlname)}}">{{node}}</a>
   </div>
 </div>
@@ -51,8 +51,9 @@
     <div class="item hentry">
       <div class="content">{{item.html|safe}}</div>
       <div class="meta">
-        <a href="#">{{item.user}}</a>
-        @ <time datetime="{{item.created|xmldatetime}}" pubdate>{{item.created|timesince}}</time>
+        <a href="{{url_for('user.view', username=item.user.username)}}">{{item.user}}</a>
+        <span class="sep">@</span>
+        <time datetime="{{item.created|xmldatetime}}" pubdate>{{item.created|timesince}}</time>
       </div>
       <a class="avatar" href="{{ url_for('user.view', username=item.user.username) }}" title="{{item.user}}"><img src="{{item.user.avatar(24)}}" /></a>
     </div>

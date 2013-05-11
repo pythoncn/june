@@ -10,10 +10,10 @@
 
 {%- macro nav(current='home') %}
 <ul class="nav">
-  <li{% if current == 'home' %} class="active"{% endif %}><a href="/">{{_('Home')}}</a></li>
-  <li{% if current == 'topic' %} class="active"{% endif %}><a href="{{url_for('topic.topics')}}">{{_('Topics')}}</a></li>
-  <li{% if current == 'node' %} class="active"{% endif %}><a href="{{url_for('node.nodes')}}">{{_('Nodes')}}</a></li>
-  <li{% if current == 'user' %} class="active"{% endif %}><a href="{{url_for('user.users')}}">{{_('Users')}}</a></li>
+  <li {% if current == 'home' %}class="active"{% endif %}><a href="/">{{_('Home')}}</a></li>
+  <li {% if current == 'topic' %}class="active"{% endif %}><a href="{{url_for('topic.topics')}}">{{_('Topics')}}</a></li>
+  <li {% if current == 'node' %}class="active"{% endif %}><a href="{{url_for('node.nodes')}}">{{_('Nodes')}}</a></li>
+  <li {% if current == 'user' %}class="active"{% endif %}><a href="{{url_for('user.users')}}">{{_('Users')}}</a></li>
 </ul>
 {%- endmacro %}
 
@@ -45,9 +45,11 @@
     <div class="meta">
       <a href="{{url_for('topic.view', uid=item.id)}}#replies">discuss ({{item.reply_count}})</a>
       {% if show_node %}
-      / <a href="{{url_for('node.view', urlname=item.node.urlname)}}">{{item.node}}</a>
+      <span class="sep">/</span>
+      <a href="{{url_for('node.view', urlname=item.node.urlname)}}">{{item.node}}</a>
       {% endif %}
-      @ <time datetime="{{item.created|xmldatetime}}" pubdate>{{item.created|timesince}}</time>
+      <span class="sep">@</span>
+      <time datetime="{{item.created|xmldatetime}}" pubdate>{{item.created|timesince}}</time>
     </div>
     {% if show_user %}
     <a class="avatar" href="{{url_for('user.view', username=item.user.username)}}" title="{{item.user}}"><img src="{{item.user.avatar(24)}}" /></a>
@@ -73,7 +75,8 @@
     <h3 class="title"><a href="{{url_for('node.view', urlname=item.urlname)}}">{{item}}</a></h3>
     <div class="meta">
       <a href="{{url_for('node.view', urlname=item.urlname)}}">topics ({{item.topic_count}})</a>
-      / <time datetime="{{item.updated|xmldatetime}}">{{item.updated|timesince}}</time>
+      <span class="sep">/</span>
+      <time datetime="{{item.updated|xmldatetime}}">{{item.updated|timesince}}</time>
     </div>
     {% if show_button %}
     <a class="btn btn-success" href="{{url_for('topic.create', urlname=item.urlname)}}">{{_('New Topic')}}</a>

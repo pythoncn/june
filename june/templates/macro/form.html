@@ -17,8 +17,18 @@
 {{ render_errors(field.errors) }}
 {% endmacro %}
 
+{% macro field_class(classes, field) %}
+{% if field.flags.required %}
+{% set classes = classes + ' required' %}
+{% endif %}
+{% if field.errors %}
+{% set classes = classes + ' error' %}
+{% endif %}
+{{ classes }}
+{% endmacro %}
+
 {%- macro vertical_field(field, class='') %}
-<fieldset class="form{% if field.flags.required %} required{% endif %}{% if field.errors %} error{% endif %}">
+<fieldset class="{{ field_class('form', field) }}">
   {{field.label}}
   {{ render_field(field, class) }}
 </fieldset>
@@ -26,7 +36,7 @@
 
 
 {%- macro horizontal_field(field, class='') %}
-<div class="control-group {% if field.flags.required %} required{% endif %}{% if field.errors %} error{% endif %}">
+<div class="{{ field_class('control-group', field) }}">
   {{field.label(class_='control-label')}}
   <div class="controls">
     {{ render_field(field, class) }}
@@ -35,9 +45,10 @@
 {%- endmacro %}
 
 {%- macro horizontal_form_button(text, class='') %}
+{% set class = class + ' btn' %}
 <div class="control-group">
   <div class="controls">
-    <button class="btn {{class}}">{{text}}</button>
+    <button class="{{class}}">{{text}}</button>
   </div>
 </div>
 {%- endmacro %}
