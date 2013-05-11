@@ -2,7 +2,7 @@
 
 from flask import Blueprint, g, request, flash
 from flask import render_template, redirect, url_for, abort
-from ..helpers import require_user, force_int
+from ..helpers import require_user, force_int, limit_request
 from ..models import Node, Topic, Reply, Account
 from ..models import fill_topics, fill_with_users
 from ..forms import TopicForm, ReplyForm
@@ -82,6 +82,7 @@ def edit(uid):
 
 
 @bp.route('/<int:uid>/reply', methods=['POST', 'DELETE'])
+@limit_request(5, redirect_url=lambda uid: url_for('.view', uid=uid))
 @require_user
 def reply(uid):
     """

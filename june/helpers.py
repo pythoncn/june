@@ -1,11 +1,11 @@
-import functools
 import time
-import hashlib
 import base64
+import hashlib
+import functools
 from flask import g, request, session, current_app
 from flask import flash, url_for, redirect, abort
 from flask.ext.babel import lazy_gettext as _
-from .models import Account
+from .models import Account, cache
 
 
 class require_role(object):
@@ -42,6 +42,49 @@ require_login = require_role(None)
 require_user = require_role('user')
 require_staff = require_role('staff')
 require_admin = require_role('admin')
+
+
+class limit_request(object):
+    """
+    Limitations on user requests.
+
+    :param method: the method of the request
+    :param seconds: next request should be after N seconds
+    """
+
+    def __init__(self, seconds=0, prefix=None, method='POST',
+                 redirect_url=None):
+        self.seconds = seconds
+        self.prefix = prefix
+        self.method = method
+        self.redirect_url = redirect_url
+
+    def __call__(self, method):
+        @functools.wraps(method)
+        def wrapper(*args, **kwargs):
+            if request.method != self.method:
+                return method(*args, **kwargs)
+
+            if not g.user:
+                return abort(403)
+
+            prefix = self.prefix
+            if prefix is None:
+                prefix = request.path
+
+            key = '%s-%s-%i' % (prefix, self.method, g.user.id)
+
+            now = time.time()
+            last_cached = cache.get(key)
+            if last_cached and (now - last_cached) < self.seconds:
+                flash(_('Too many requests in a time'), 'warn')
+                redirect_url = self.redirect_url or request.url
+                if callable(redirect_url):
+                    redirect_url = redirect_url(*args, **kwargs)
+                return redirect(redirect_url)
+            cache.set(key, now)
+            return method(*args, **kwargs)
+        return wrapper
 
 
 def get_current_user():
