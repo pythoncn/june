@@ -10,6 +10,7 @@
     {% block afterstyle %}{% endblock %}
   </head>
   <body>
+    {% from "macro/ui.html" import nav, alerts %}
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
@@ -20,7 +21,6 @@
           </button>
           <div class="nav-collapse collapse">
             {%- block nav %}
-            {%- from "macro/ui.html" import nav %}
             {{ nav() }}
             {%- endblock %}
             {%- include "snippet/nav-dropmenu.html" %}
@@ -31,6 +31,11 @@
 
     <div id="wrap">
       <div class="main container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {{ alerts(messages) }}
+        {% endif %}
+        {% endwith %}
         {% block main %}
         <div class="row-fluid">
           <div class="span8">

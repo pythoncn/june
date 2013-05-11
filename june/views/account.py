@@ -28,7 +28,7 @@ def signup():
         user.role = 'user'
         user.save()
         login_user(user)
-        flash(_('This account is verified.'), 'info')
+        flash(_('This account is verified.'), 'success')
         return redirect(next_url)
 
     form = SignupForm()
