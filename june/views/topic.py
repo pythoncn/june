@@ -21,7 +21,7 @@ def topics():
     page = force_int(request.args.get('page', 1), 0)
     if not page:
         return abort(404)
-    paginator = Topic.query.order_by(Topic.id.desc()).paginate(page)
+    paginator = Topic.query.order_by(Topic.updated.desc()).paginate(page)
     paginator.items = fill_topics(paginator.items)
     return render_template('topic/topics.html', paginator=paginator)
 

@@ -14,7 +14,7 @@ bp = Blueprint('node', __name__)
 
 @bp.route('/')
 def nodes():
-    nodes = Node.query.all()
+    nodes = Node.query.order_by(Node.updated.desc()).all()
     return render_template('node/nodes.html', nodes=nodes)
 
 

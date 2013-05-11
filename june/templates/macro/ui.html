@@ -66,17 +66,18 @@
 {% endmacro %}
 
 
-{% macro node_list(items) %}
-<div class="item-list">
+{% macro node_list(items, show_button=True) %}
+<div class="node-list item-list">
   {% for item in items %}
   <div class="item hentry">
     <h3 class="title"><a href="{{url_for('node.view', urlname=item.urlname)}}">{{item}}</a></h3>
     <div class="meta">
       <a href="{{url_for('node.view', urlname=item.urlname)}}">topics ({{item.topic_count}})</a>
       / <time datetime="{{item.updated|xmldatetime}}">{{item.updated|timesince}}</time>
-      &middot;
-      <a href="{{url_for('topic.create', urlname=item.urlname)}}">new topic</a>
     </div>
+    {% if show_button %}
+    <a class="btn btn-success" href="{{url_for('topic.create', urlname=item.urlname)}}">{{_('New Topic')}}</a>
+    {% endif %}
   </div>
   {% endfor %}
 </div>

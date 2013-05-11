@@ -28,7 +28,8 @@ class Topic(db.Model):
     updated = db.Column(
         db.DateTime,
         default=datetime.utcnow,
-        onupdate=datetime.utcnow
+        onupdate=datetime.utcnow,
+        index=True,
     )
 
     def __str__(self):
