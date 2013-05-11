@@ -6,6 +6,12 @@ database = os.path.join(os.getcwd(), 'data', 'development.sqlite')
 # site inform
 SITE_TITLE = 'Python China'
 
+SITE_SCRIPTS = [
+    '/_static/js/jquery.min.js',
+    '/_static/js/bootstrap.js',
+]
+
+
 # This is a config file for development
 DEBUG = True
 SECRET_KEY = 'secret-key-for-development'

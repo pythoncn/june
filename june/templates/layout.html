@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% block subtitle %}{% endblock %} &middot; {{ config.SITE_TITLE }}{% endblock %}</title>
-    {% include "snippet/head.html" %}
+    {% for url in config.SITE_STYLES %}
+    <link rel="stylesheet" href="{{url}}" />
+    {% endfor %}
     {% block afterstyle %}{% endblock %}
   </head>
   <body>
@@ -29,20 +31,20 @@
 
     <div id="wrap">
       <div class="main container">
-        {%- block main %}
+        {% block main %}
         <div class="row-fluid">
           <div class="span8">
-            {%- block content %}{% endblock %}
+            {% block content %}{% endblock %}
           </div>
           <div class="span4">
-            {%- block sidebar %}
-            {%- endblock %}
+            {% block sidebar %}
+            {% endblock %}
           </div>
         </div>
-        {%- endblock %}
+        {% endblock %}
       </div>
     </div>
-    {%- block footer %}
+    {% block footer %}
     <footer id="footer">
       <div class="container clearfix">
         <div class="muted links pull-left">
@@ -55,6 +57,9 @@
         </p>
       </div>
     </footer>
-    {%- endblock %}
+    {% endblock %}
+    {% for url in config.SITE_SCRIPTS %}
+    <script src="{{url}}"></script>
+    {% endfor %}
   </body>
 </html>
