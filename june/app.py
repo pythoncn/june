@@ -27,7 +27,7 @@ def create_app(config=None):
 
     if isinstance(config, dict):
         app.config.update(config)
-    else:
+    elif config:
         app.config.from_pyfile(config)
 
     app.config.update({'SITE_TIME': datetime.datetime.utcnow()})
