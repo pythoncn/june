@@ -48,8 +48,13 @@ class limit_request(object):
     """
     Limitations on user requests.
 
-    :param method: the method of the request
     :param seconds: next request should be after N seconds
+    :param prefix: cache key prefix
+    :param method: the method of the request
+    :param redirect_url: redirect when exceeding limited time
+
+    The redirect_url can be a string or function. When it is a function,
+    it accepts the same parameters as the wrapped methods.
     """
 
     def __init__(self, seconds=0, prefix=None, method='POST',

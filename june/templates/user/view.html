@@ -4,9 +4,14 @@
 
 {% from "macro/ui.html" import nav %}
 
+
 {% block nav %}
 {{ nav('user') }}
 {% endblock %}
 
-{% block content %}
+
+{% block main %}
+<div class="module">
+  <img src="{{user.avatar(180)}}" alt="{{user}}" />
+</div>
 {% endblock %}
