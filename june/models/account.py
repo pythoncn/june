@@ -72,6 +72,10 @@ class Account(db.Model, SessionMixin):
             return True
         return self.role == 'staff' or self.role == 'admin'
 
+    @property
+    def is_admin(self):
+        return self.id == 1 or self.role == 'admin'
+
     def check_password(self, raw):
         passwd = '%s%s' % (raw, db.app.config['PASSWORD_SECRET'])
         return security.check_password_hash(self.password, passwd)

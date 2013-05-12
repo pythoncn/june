@@ -11,11 +11,14 @@
       </div>
     </a></li>
     <li class="divider"></li>
-    {%- if g.user.is_staff %}
+    {% if g.user.is_staff %}
     <li class="nav-header">{{_('Staff Power')}}</li>
     <li><a href="{{url_for('node.create')}}">{{_('Create Node')}}</a></li>
+    {% if g.user.is_admin %}
+    <li><a href="/admin/">{{_('Administration')}}</a></li>
+    {% endif %}
     <li class="divider"></li>
-    {%- endif %}
+    {% endif %}
     <li><a href="{{url_for('account.setting')}}">{{_('Settings')}}</a></li>
     <li><a href="{{url_for('account.signout')}}">{{_('Sign Out')}}</a></li>
   </ul>

@@ -14,9 +14,7 @@ class BaseView(ModelView):
     def is_accessible(self):
         if not g.user:
             return False
-        if g.user.id == 1:
-            return True
-        return g.user.role == 'admin'
+        return g.user.is_admin
 
 
 class HomeView(AdminIndexView):
@@ -27,9 +25,7 @@ class HomeView(AdminIndexView):
     def is_accessible(self):
         if not g.user:
             return False
-        if g.user.id == 1:
-            return True
-        return g.user.role == 'admin'
+        return g.user.is_admin
 
 
 class UserView(BaseView):
