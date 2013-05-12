@@ -10,6 +10,7 @@ SITE_TITLE = 'Python China'
 SITE_SCRIPTS = [
     '/_static/js/jquery.min.js',
     '/_static/js/bootstrap.js',
+    '/_static/js/site.js',
 ]
 
 

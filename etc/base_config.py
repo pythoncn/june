@@ -12,6 +12,7 @@ SITE_STYLES = [
 SITE_SCRIPTS = [
     'http://lib.sinaapp.com/js/jquery/1.9.1/jquery-1.9.1.min.js',
     '/_static/js/bootstrap.js',
+    '/_static/js/site.js',
 ]
 
 #: session

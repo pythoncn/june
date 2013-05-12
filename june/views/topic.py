@@ -1,7 +1,9 @@
 # coding: utf-8
 
 from flask import Blueprint, g, request, flash
-from flask import render_template, redirect, url_for, abort
+from flask import render_template, redirect, abort, jsonify
+from flask import url_for
+from flask.ext.babel import gettext as _
 from ..helpers import require_user, force_int, limit_request
 from ..models import Node, Topic, Reply, Account
 from ..models import fill_topics, fill_with_users
@@ -78,7 +80,13 @@ def edit(uid):
 
     :param uid: the id of the topic
     """
-    pass
+    topic = Topic.query.get_or_404(uid)
+    form = TopicForm(obj=topic)
+    if form.validate_on_submit():
+        form.populate_obj(topic)
+        topic.save()
+        return redirect(url_for('.view', uid=uid))
+    return render_template('topic/edit.html', topic=topic, form=form)
 
 
 @bp.route('/<int:uid>/reply', methods=['POST', 'DELETE'])
@@ -96,6 +104,20 @@ def reply(uid):
 
     :param uid: the id of the topic
     """
+    if request.method == 'DELETE':
+        reply_id = force_int(request.args.get('reply', 0), 0)
+        if not reply_id:
+            return abort(404)
+        reply = Reply.query.get_or_404(reply_id)
+        if not reply:
+            return abort(404)
+        if reply.topic_id != uid:
+            return abort(404)
+        if g.user.is_staff or g.user.id == reply.account_id:
+            reply.delete()
+            return jsonify(status='success')
+        return abort(403)
+
     topic = Topic.query.get_or_404(uid)
     form = ReplyForm()
     if form.validate_on_submit():

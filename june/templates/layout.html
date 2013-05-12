@@ -66,5 +66,6 @@
     {% for url in config.SITE_SCRIPTS %}
     <script src="{{url}}"></script>
     {% endfor %}
+    {% block afterscript %}{% endblock %}
   </body>
 </html>
