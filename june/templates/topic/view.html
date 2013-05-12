@@ -48,7 +48,11 @@
     <span class="sep">&middot;</span>
     <a href="{{url_for('node.view', urlname=node.urlname)}}">{{node}}</a>
     {% if g.user and (g.user.is_staff or g.user.id == topic.account_id) %}
-    <a class="pull-right" href="{{url_for('topic.edit', uid=topic.id)}}">Edit</a>
+    <span class="pull-right">
+      <a href="{{url_for('topic.edit', uid=topic.id)}}">{{_('Edit')}}</a>
+      <span class="sep">&middot;</span>
+      <a href="{{url_for('topic.move', uid=topic.id)}}">{{_('Move')}}</a>
+    </span>
     {% endif %}
   </div>
 </div>

@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% from "macro/form.html" import horizontal_form_button %}
+
+{% block subtitle %}{{_('Move Topic')}}{% endblock %}
+
+{% block content %}
+<div class="module">
+  <div class="module-header inner">
+    <strong>{{topic.title}}</strong>
+  </div>
+  <form class="form-horizontal inner" method="post" action="">
+    <div class="control-group">
+      <label class="control-label" for="node-urlname">Node</label>
+      <div class="controls">
+        <input class="input-block-level" id="node-urlname" name="node" type="text">
+      </div>
+    </div>
+    {{ horizontal_form_button(_('Move'), 'btn-success') }}
+  </form>
+</div>
+{% endblock %}

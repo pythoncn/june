@@ -72,7 +72,7 @@ def view(uid):
     )
 
 
-@bp.route('/<int:uid>/edit', methods=['GET', 'POST', 'DELETE'])
+@bp.route('/<int:uid>/edit', methods=['GET', 'POST'])
 @require_user
 def edit(uid):
     """
@@ -87,6 +87,34 @@ def edit(uid):
         topic.save()
         return redirect(url_for('.view', uid=uid))
     return render_template('topic/edit.html', topic=topic, form=form)
+
+
+@bp.route('/<int:uid>/move', methods=['GET', 'POST'])
+@require_user
+def move(uid):
+    """
+    Move a topic to another node.
+
+    :param uid: the id of the topic
+    """
+    topic = Topic.query.get_or_404(uid)
+    if g.user.id != topic.account_id and not g.user.is_staff:
+        return abort(403)
+
+    if request.method == 'GET':
+        return render_template('topic/move.html', topic=topic)
+
+    urlname = request.form.get('node', None)
+    if not urlname:
+        return redirect(url_for('.view', uid=uid))
+    node = Node.query.filter_by(urlname=urlname).first()
+    if node:
+        topic.node_id = node.id
+        topic.save()
+        flash(_('Move topic success.'), 'success')
+    else:
+        flash(_('Node not found.'), 'error')
+    return redirect(url_for('.view', uid=uid))
 
 
 @bp.route('/<int:uid>/reply', methods=['POST', 'DELETE'])
