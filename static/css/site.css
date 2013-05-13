@@ -47,25 +47,6 @@ a img:hover {
   font-size: 13px;
   margin-top: 20px;
 }
-@media (max-width: 979px) {
-  #wrap {
-    padding-top: 20px;
-    min-height: 80%;
-  }
-  .navbar-fixed-top {
-    margin-bottom: 0;
-  }
-}
-@media (max-width: 767px) {
-  #footer, #wrap {
-    margin-left: -20px;
-    margin-right: -20px;
-  }
-  #footer .container, #wrap .container {
-    padding: 0 20px;
-  }
-}
-
 /* form */
 .required label {
   font-weight: bold;
@@ -78,6 +59,10 @@ a img:hover {
   display: inline;
   vertical-align: middle;
   margin-right: 20px;
+}
+textarea.input-block-level {
+  min-height: 100px;
+  max-width: 100%;
 }
 .checkbox-form {
   margin: 6px 0 18px;
@@ -181,6 +166,11 @@ a img:hover {
   font-weight: 500;
   line-height: 1.5;
   font-size: 1.3em;
+  margin-right: 20px;
+}
+.item-list .content {
+  margin-right: 24px;
+  word-wrap: break-word;
 }
 .item-list .meta {
   font-size: 12px;
@@ -223,4 +213,23 @@ a img:hover {
   position: absolute;
   top: 10px;
   right: 20px;
+}
+
+@media (max-width: 979px) {
+  #wrap {
+    padding-top: 20px;
+    min-height: 80%;
+  }
+  .navbar-fixed-top {
+    margin-bottom: 0;
+  }
+}
+@media (max-width: 767px) {
+  #footer, #wrap {
+    margin-left: -20px;
+    margin-right: -20px;
+  }
+  #footer .container, #wrap .container {
+    padding: 0 20px;
+  }
 }
