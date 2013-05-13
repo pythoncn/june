@@ -8,39 +8,12 @@
 {{ nav('topic') }}
 {% endblock %}
 
-
-{% block afterstyle %}
-<style type="text/css">
-  .hentry {
-    font-size: 15px;
-  }
-  .hentry h1 {
-    margin: 0;
-    font-size: 20px;
-    line-height: 1;
-  }
-  .hentry .module-footer {
-    font-size: 12px;
-  }
-  .reply-form textarea {
-    max-width: 100%;
-    height: 100px;
-  }
-  .reply-list .delete {
-    visibility: hidden;
-  }
-  .reply-list .item:hover .delete {
-    visibility: visible;
-  }
-</style>
-{% endblock %}
-
 {% block content %}
 <div class="module hentry">
   <div class="module-header inner">
     <h1>{{topic}}</h1>
   </div>
-  <div class="module-body inner">
+  <div class="module-body inner entry-content">
     {{topic.html|safe}}
   </div>
   <div class="module-footer inner muted clearfix">
@@ -64,7 +37,7 @@
     <div class="item hentry">
       <div class="content">{{item.html|safe}}</div>
       <div class="meta clearfix">
-        <a href="{{url_for('user.view', username=item.user.username)}}">{{item.user}}</a>
+        <a href="{{url_for('user.view', username=item.user.username)}}">{{item.user.username}}</a>
         <span class="sep">@</span>
         <time datetime="{{item.created|xmldatetime}}" pubdate>{{item.created|timesince}}</time>
 
