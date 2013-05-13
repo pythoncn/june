@@ -12,21 +12,21 @@ class Account(db.Model, SessionMixin):
     query_class = JuneQuery
 
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.Unicode(40), unique=True, index=True,
+    username = db.Column(db.String(40), unique=True, index=True,
                          nullable=False)
-    email = db.Column(db.Unicode(200), unique=True, index=True)
-    password = db.Column(db.Unicode(100))
+    email = db.Column(db.String(200), unique=True, index=True)
+    password = db.Column(db.String(100))
 
-    screen_name = db.Column(db.Unicode(80))
-    description = db.Column(db.Unicode(400))
-    city = db.Column(db.Unicode(200))
-    website = db.Column(db.Unicode(400))
+    screen_name = db.Column(db.String(80))
+    description = db.Column(db.String(400))
+    city = db.Column(db.String(200))
+    website = db.Column(db.String(400))
 
-    role = db.Column(db.Unicode(10), default=u'new')
+    role = db.Column(db.String(10), default='new')
     active = db.Column(db.DateTime, default=datetime.utcnow)
 
     created = db.Column(db.DateTime, default=datetime.utcnow)
-    token = db.Column(db.Unicode(20))
+    token = db.Column(db.String(20))
 
     def __init__(self, **kwargs):
         self.token = self.create_token(16)
