@@ -5,7 +5,7 @@
     var self = $(this);
     var replyId = self.attr('href').slice(1);
     $.ajax({
-      url: location.pathname + '/reply',
+      url: location.pathname + '/reply?reply=' + replyId,
       method: 'DELETE',
       success: function() {
         self.parents('.item').fadeOut();
