@@ -1,7 +1,6 @@
 # coding: utf-8
 
 from flask.ext.wtf import Form
-from flask.ext.babel import lazy_gettext as _
 
 
 class BaseForm(Form):

@@ -46,7 +46,8 @@ def view(urlname):
     page = force_int(request.args.get('page', 1), 0)
     if not page:
         return abort(404)
-    paginator = Topic.query.filter_by(node_id=node.id).paginate(page)
+    paginator = Topic.query.filter_by(node_id=node.id).\
+            order_by(Topic.id.desc()).paginate(page)
     paginator.items = fill_topics(paginator.items)
 
     status = None

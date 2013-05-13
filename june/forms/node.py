@@ -1,6 +1,6 @@
 # coding: utf-8
 
-from flask.ext.wtf import TextField, TextAreaField, IntegerField
+from flask.ext.wtf import TextField, TextAreaField, SelectField
 from flask.ext.wtf import DataRequired
 from flask.ext.babel import lazy_gettext as _
 
@@ -18,7 +18,15 @@ class NodeForm(BaseForm):
         description=_('The url name of the node')
     )
     description = TextAreaField(_('Description'))
-    role = TextField(description=_('Required role'), default='user')
+    role = SelectField(
+        description=_('Required role'),
+        choices=[
+            ('user', _('User')),
+            ('staff', _('Staff')),
+            ('admin', _('Admin'))
+        ],
+        default='user',
+    )
 
     def validate_urlname(self, field):
         if self._obj and self._obj.urlname == field.data:
