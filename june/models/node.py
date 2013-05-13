@@ -12,12 +12,12 @@ class Node(db.Model, SessionMixin):
     query_class = JuneQuery
 
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
-    urlname = db.Column(db.String(40), unique=True, index=True)
+    title = db.Column(db.Unicode(100), nullable=False)
+    urlname = db.Column(db.Unicode(40), unique=True, index=True)
 
-    description = db.Column(db.Text)
+    description = db.Column(db.UnicodeText)
     topic_count = db.Column(db.Integer, default=0)
-    role = db.Column(db.Integer, default=1)
+    role = db.Column(db.Unicode(10), default=u'user')
 
     created = db.Column(db.DateTime, default=datetime.utcnow)
     updated = db.Column(

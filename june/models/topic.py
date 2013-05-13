@@ -18,8 +18,8 @@ class Topic(db.Model):
     account_id = db.Column(db.Integer, nullable=False, index=True)
     node_id = db.Column(db.Integer, nullable=False, index=True)
 
-    title = db.Column(db.String(100), nullable=False)
-    content = db.Column(db.Text)
+    title = db.Column(db.Unicode(100), nullable=False)
+    content = db.Column(db.UnicodeText)
 
     hits = db.Column(db.Integer, default=0)
     reply_count = db.Column(db.Integer, default=0)
@@ -106,7 +106,7 @@ class Reply(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     account_id = db.Column(db.Integer, nullable=False)
     topic_id = db.Column(db.Integer, index=True)
-    content = db.Column(db.Text)
+    content = db.Column(db.UnicodeText)
 
     created = db.Column(db.DateTime, default=datetime.utcnow)
     flags = db.Column(db.Integer, default=0)
