@@ -59,8 +59,10 @@ class SignupForm(BaseForm):
         if Account.query.filter_by(email=field.data.lower()).count():
             raise ValueError(_('This email has been registered.'))
 
-    def save(self):
+    def save(self, role=None):
         user = Account(**self.data)
+        if role:
+            user.role = role
         user.save()
         return user
 

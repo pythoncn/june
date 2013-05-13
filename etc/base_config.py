@@ -1,5 +1,6 @@
 DEBUG = False
 TESTING = False
+VERIFY_EMAIL = True
 
 #: site
 SITE_TITLE = 'June Forum'

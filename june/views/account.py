@@ -33,6 +33,11 @@ def signup():
 
     form = SignupForm()
     if form.validate_on_submit():
+        verify_email = current_app.config.get('VERIFY_EMAIL', True)
+        if not verify_email:
+            user = form.save('user')
+            login_user(user)
+            return redirect(next_url)
         user = form.save()
         login_user(user)
         # send signup mail to user
