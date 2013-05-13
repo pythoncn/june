@@ -37,6 +37,15 @@ def create(urlname):
     :param urlname: the urlname of the Node model
     """
     node = Node.query.filter_by(urlname=urlname).first_or_404()
+
+    if node.role == 'staff' and not g.user.is_staff:
+        flash(_('You have no permission in this node.'), 'warn')
+        return redirect(url_for('node.view', urlname=urlname))
+
+    if node.role == 'admin' and not g.user.is_admin:
+        flash(_('You have no permission in this node.'), 'warn')
+        return redirect(url_for('node.view', urlname=urlname))
+
     form = TopicForm()
     if form.validate_on_submit():
         topic = form.save(g.user, node)
