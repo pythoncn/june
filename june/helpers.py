@@ -32,7 +32,7 @@ class require_role(object):
                 return redirect('/account/settings')
             if g.user.role == 'spam':
                 return redirect('/doc/guideline')
-            if g.user.role == self.role:
+            if g.user.role != self.role:
                 return abort(403)
             return method(*args, **kwargs)
         return wrapper
