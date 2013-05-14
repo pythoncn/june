@@ -264,6 +264,26 @@ textarea.input-block-level {
 .reply-list .item:hover .delete {
   visibility: visible;
 }
+.status-item {
+  float: left;
+  width: 50%;
+  color: #999;
+  text-transform: uppercase;
+  text-align: center;
+  font-size: 10px;
+}
+.status-list .first {
+  margin-left: -1px;
+  border-right: 1px solid #ddd;
+}
+.status-item .wrap {
+  padding: 7px 12px;
+}
+.status-item strong {
+  display: block;
+  color: #333;
+  font-size: 16px;
+}
 
 @media (max-width: 979px) {
   #wrap {
