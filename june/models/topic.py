@@ -77,6 +77,36 @@ class Topic(db.Model):
         db.session.commit()
         return self
 
+    def move(self, node=None):
+        if self.node_id == node.id:
+            return self
+
+        # clear status in pre node
+        pre = Node.query.get(self.node_id)
+        pre.topic_count -= 1
+        db.session.add(pre)
+        pre_ns = NodeStatus.query.filter_by(
+            node_id=self.node_id, account_id=self.account_id
+        ).first()
+        pre_ns.topic_count -= 1
+        db.session.add(pre_ns)
+
+        # increase status in post node
+        node.topic_count += 1
+        db.session.add(node)
+        ns = NodeStatus.query.filter_by(
+            node_id=node.id, account_id=self.account_id
+        ).first()
+        ns.topic_count += 1
+        db.session.add(ns)
+
+        #TODO NodeStatus of replies
+
+        self.node_id = node.id
+        db.session.add(self)
+        db.session.commit()
+        return self
+
     def delete(self, user=None, node=None):
         if not user:
             user = Account.query.get(self.account_id)

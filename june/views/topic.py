@@ -118,8 +118,7 @@ def move(uid):
         return redirect(url_for('.view', uid=uid))
     node = Node.query.filter_by(urlname=urlname).first()
     if node:
-        topic.node_id = node.id
-        topic.save()
+        topic.move(node)
         flash(_('Move topic success.'), 'success')
     else:
         flash(_('Node not found.'), 'error')
