@@ -100,8 +100,6 @@ class Topic(db.Model):
         ns.topic_count += 1
         db.session.add(ns)
 
-        #TODO NodeStatus of replies
-
         self.node_id = node.id
         db.session.add(self)
         db.session.commit()
@@ -166,18 +164,6 @@ class Reply(db.Model):
             topic.reply_count += 1
             db.session.add(topic)
 
-            ns = NodeStatus.query.filter_by(
-                node_id=topic.node_id, account_id=self.account_id
-            ).first()
-            if not ns:
-                ns = NodeStatus(
-                    node_id=topic.node_id,
-                    account_id=self.account_id,
-                    reply_count=0,
-                )
-            ns.reply_count += 1
-            db.session.add(ns)
-
         db.session.add(self)
         db.session.commit()
         return self
@@ -188,13 +174,6 @@ class Reply(db.Model):
 
         topic.reply_count -= 1
         db.session.add(topic)
-
-        ns = NodeStatus.query.filter_by(
-            node_id=topic.node_id, account_id=self.account_id
-        ).first()
-        if ns and ns.reply_count:
-            ns.reply_count -= 1
-            db.session.add(ns)
         db.session.delete(self)
         db.session.commit()
         return self
