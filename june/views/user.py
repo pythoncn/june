@@ -39,6 +39,7 @@ def view(username):
     if not page:
         return abort(404)
     user = Account.query.filter_by(username=username).first_or_404()
-    topics = Topic.query.order_by(Topic.id.desc()).limit(16)
+    topics = Topic.query.filter_by(account_id=user.id)\
+            .order_by(Topic.id.desc()).limit(16)
     topics = fill_with_nodes(topics)
     return render_template('user/view.html', user=user, topics=topics)
