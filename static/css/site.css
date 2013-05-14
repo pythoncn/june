@@ -13,6 +13,9 @@ a img:hover {
   margin-left: 5px;
   margin-right: 5px;
 }
+.meta {
+  font-family: 'Optima', 'Georgia', serif;
+}
 .nav .account-group {
   margin-left: 42px;
 }
@@ -31,7 +34,6 @@ a img:hover {
   display: block;
   color: #999;
   font-size: 11px;
-  font-family: 'Optima', 'Georgia', serif;
 }
 #wrap {
   background: url('../img/bg.png');
@@ -171,7 +173,6 @@ textarea.input-block-level {
   margin-top: 4px;
   color: #999;
   font-size: 11px;
-  font-family: 'Optima', 'Georgia', serif;
 }
 
 /* topics */
@@ -201,7 +202,6 @@ textarea.input-block-level {
 }
 .item-list .meta {
   font-size: 12px;
-  font-family: 'Optima', 'Georgia', serif;
   color: #999;
 }
 .item-list .meta a {
@@ -264,6 +264,8 @@ textarea.input-block-level {
 .reply-list .item:hover .delete {
   visibility: visible;
 }
+
+/* node view page */
 .status-item {
   float: left;
   width: 50%;
@@ -283,6 +285,20 @@ textarea.input-block-level {
   display: block;
   color: #333;
   font-size: 16px;
+}
+
+/* user's profile page */
+.profile .account-group {
+  position: relative;
+}
+.profile .account-group .label {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+.profile .account-group img {
+  border-radius: 5px;
+  margin-right: 14px;
 }
 
 @media (max-width: 979px) {

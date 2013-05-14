@@ -4,14 +4,39 @@
 
 {% from "macro/ui.html" import nav %}
 
-
 {% block nav %}
 {{ nav('user') }}
 {% endblock %}
 
-
-{% block main %}
-<div class="module">
-  <img src="{{user.avatar(180)}}" alt="{{user}}" />
+{% block content %}
+<div class="module profile">
+  <div class="account-group inner clearfix">
+    <img class="pull-left" src="{{user.avatar(86)}}" alt="{{user}}" width="86" height="86" />
+    <div class="account-inner pull-left">
+      <strong>{{user}}</strong>
+      <div class="meta muted">
+        <small>#{{user.id}}</small>
+        <span class="sep">@</span>
+        <time>{{user.created.strftime('%Y-%m-%d')}}</time>
+      </div>
+      <div style="margin-top:8px">
+        {% if user.city %}
+        <a href="/user/in/{{user.city}}">@{{user.city}}</a>
+        <span class="sep">&middot;</span>
+        {% endif %}
+        {% if user.website %}
+        <a href="{{user.website}}">{{user.website}}</a>
+        {% endif %}
+      </div>
+      {% if user.is_staff %}
+      <span class="label label-success">staff</span>
+      {% endif %}
+    </div>
+  </div>
+  {% if user.description %}
+  <div class="inner" style="border-top:1px solid #ddd">
+    {{user.description|markdown|safe}}
+  </div>
+  {% endif %}
 </div>
 {% endblock %}
