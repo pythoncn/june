@@ -2,7 +2,7 @@
 
 {% block subtitle %}{{user}}{% endblock %}
 
-{% from "macro/ui.html" import nav %}
+{% from "macro/ui.html" import nav, topic_list %}
 
 {% block nav %}
 {{ nav('user') }}
@@ -38,5 +38,13 @@
     {{user.description|markdown|safe}}
   </div>
   {% endif %}
+</div>
+<div class="module">
+  <div class="module-header inner">
+    <strong>{{_('Recent Topics')}}</strong>
+  </div>
+  <div class="module-body">
+    {{ topic_list(topics, False) }}
+  </div>
 </div>
 {% endblock %}
