@@ -301,6 +301,13 @@ textarea.input-block-level {
   margin-right: 14px;
 }
 
+.site-status th, .site-status td {
+  padding: 1px 6px;
+}
+.site-status th {
+  text-align: right;
+}
+
 @media (max-width: 979px) {
   #wrap {
     padding-top: 20px;

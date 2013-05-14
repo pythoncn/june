@@ -5,6 +5,7 @@ from ._base import *
 from .account import *
 from .node import *
 from .topic import *
+from flask.ext.sqlalchemy import models_committed
 
 
 def fill_topics(items, user=None, node=None):
@@ -48,10 +49,50 @@ def get_by_ids(model, uids):
     return ret
 
 
+def get_site_status():
+    account, node, topic, reply = cache.get_many(
+        'status-account', 'status-node', 'status-topic', 'status-reply'
+    )
+    if not account:
+        account = Account.query.count()
+        cache.set('status-account', account)
+    if not node:
+        node = Node.query.count()
+        cache.set('status-node', node)
+    if not topic:
+        topic = Topic.query.count()
+        cache.set('status-topic', topic)
+    if not reply:
+        reply = Reply.query.count()
+        cache.set('status-reply', reply)
+    return dict(
+        account=account,
+        node=node,
+        topic=topic,
+        reply=reply,
+    )
+
+
 def _attach_user(item, user):
     item.user = user
     return item
 
+
 def _attach_node(item, node):
     item.node = node
     return item
+
+
+def _clear_cache(sender, changes):
+    for model, operation in changes:
+        if isinstance(model, Account) and operation != 'update':
+            cache.delete('status-account')
+        if isinstance(model, Node) and operation != 'update':
+            cache.delete('status-node')
+        if isinstance(model, Topic) and operation != 'update':
+            cache.delete('status-topic')
+        if isinstance(model, Reply) and operation != 'update':
+            cache.delete('status-reply')
+
+
+models_committed.connect(_clear_cache)

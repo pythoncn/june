@@ -9,7 +9,7 @@ from flask import Flask
 from flask import request, g
 from flask.ext.babel import gettext as _
 from .helpers import get_current_user
-from .models import db, cache
+from .models import db, cache, get_site_status
 from .views import admin
 
 
@@ -86,6 +86,12 @@ def register_jinja(app):
     )
 
     app.jinja_env.filters['markdown'] = plain_markdown
+
+    @app.context_processor
+    def register_context():
+        return dict(
+            get_site_status=get_site_status,
+        )
 
     @app.template_filter('timesince')
     def timesince(value):

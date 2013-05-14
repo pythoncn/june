@@ -44,6 +44,36 @@
           <div class="span4">
             {% block sidebar %}
             {% endblock %}
+
+            {% block sitestatus %}
+            <div class="module">
+              <div class="module-header inner">
+                <strong>{{_('Site Status')}}</strong>
+              </div>
+              <div class="module-body inner">
+                {% with status = get_site_status() %}
+                <table class="site-status">
+                  <tr>
+                    <th>Member</th>
+                    <td>{{status.account}}</td>
+                  </tr>
+                  <tr>
+                    <th>Node</th>
+                    <td>{{status.node}}</td>
+                  </tr>
+                  <tr>
+                    <th>Topic</th>
+                    <td>{{status.topic}}</td>
+                  </tr>
+                  <tr>
+                    <th>Reply</th>
+                    <td>{{status.reply}}</td>
+                  </tr>
+                </table>
+                {% endwith %}
+              </div>
+            </div>
+            {% endblock %}
           </div>
         </div>
         {% endblock %}
