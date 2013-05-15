@@ -40,8 +40,11 @@
   {% endif %}
 </div>
 <div class="module">
-  <div class="module-header inner">
+  <div class="module-header inner clearfix">
     <strong>{{_('Recent Topics')}}</strong>
+    {% if topics %}
+    <a class="pull-right muted" href="{{url_for('user.topics', username=user.username)}}"><small>{{_('More topics')}}</small></a>
+    {% endif %}
   </div>
   <div class="module-body">
     {{ topic_list(topics, False) }}

@@ -35,11 +35,29 @@ def view(username):
 
     :param username: the username of a user.
     """
+    user = Account.query.filter_by(username=username).first_or_404()
+    topics = Topic.query.filter_by(
+        account_id=user.id).order_by(Topic.id.desc()).limit(16)
+    topics = fill_with_nodes(topics)
+    return render_template('user/view.html', user=user, topics=topics)
+
+
+@bp.route('/<username>/topics')
+def topics(username):
+    """
+    View topics of a user.
+
+    :param username: the username of a user.
+    """
     page = force_int(request.args.get('page', 1), 0)
     if not page:
         return abort(404)
+
     user = Account.query.filter_by(username=username).first_or_404()
-    topics = Topic.query.filter_by(account_id=user.id)\
-            .order_by(Topic.id.desc()).limit(16)
-    topics = fill_with_nodes(topics)
-    return render_template('user/view.html', user=user, topics=topics)
+
+    paginator = Topic.query.filter_by(
+        account_id=user.id).order_by(Topic.id.desc()).paginate(page)
+    paginator.items = fill_with_nodes(paginator.items)
+    return render_template(
+        'user/topics.html', user=user, paginator=paginator
+    )

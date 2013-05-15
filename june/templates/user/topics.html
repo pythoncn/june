@@ -1,11 +1,11 @@
 {% extends "layout.html" %}
 
-{% block subtitle %}{{_('Topics')}}{% endblock %}
+{% block subtitle %}{{user}}{% endblock %}
 
-{% from "macro/ui.html" import nav %}
+{% from "macro/ui.html" import nav, topic_list, pagination, user_module %}
 
 {% block nav %}
-{{ nav('topic') }}
+{{ nav('user') }}
 {% endblock %}
 
 
@@ -16,7 +16,7 @@
     <strong>{{_('Topics')}}</strong>
   </div>
   <div class="module-body">
-    {{ topic_list(paginator.items) }}
+    {{ topic_list(paginator.items, False) }}
   </div>
   {% if paginator.pages > 1 %}
   <div class="module-footer inner">
@@ -24,4 +24,8 @@
   </div>
   {% endif %}
 </div>
+{% endblock %}
+
+{% block sidebar %}
+{{ user_module(user) }}
 {% endblock %}
