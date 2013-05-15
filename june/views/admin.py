@@ -7,7 +7,7 @@ from flask.ext.wtf import TextField, SelectField
 from flask.ext.wtf.html5 import EmailField
 from flask.ext.wtf import DataRequired, Email, Length, Regexp
 from flask.ext.babel import lazy_gettext as _
-from ..helpers import force_int, require_admin
+from ..helpers import force_int, require_staff, require_admin
 from ..models import Account
 from ..forms import SettingForm
 
@@ -40,7 +40,7 @@ class UserForm(SettingForm):
 
 
 @bp.route('/', methods=['GET', 'POST'])
-@require_admin
+@require_staff
 def dashboard():
     """
     The dashboard page of admin site.

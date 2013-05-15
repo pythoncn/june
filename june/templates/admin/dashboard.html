@@ -33,7 +33,9 @@
             {% endif %}
           </div>
         </div>
+        {% if g.user.is_admin %}
         <a class="label label-success" href="{{ url_for('admin.user', uid=user.id) }}">{{_('Edit')}}</a>
+        {% endif %}
       </div>
       {% endfor %}
     </div>
