@@ -24,12 +24,4 @@ Flask-Mail
 # command line tools
 Flask-Script
 
-# testing
-nose
-nose-cov
-
-# lint
-flake8
-
-# documentation
-#sphinx
+gunicorn
