@@ -82,14 +82,14 @@ class Topic(db.Model):
             return self
 
         # clear status in pre node
-        pre = Node.query.get(self.node_id)
-        pre.topic_count -= 1
-        db.session.add(pre)
-        pre_ns = NodeStatus.query.filter_by(
+        node1 = Node.query.get(self.node_id)
+        node1.topic_count -= 1
+        db.session.add(node1)
+        ns1 = NodeStatus.query.filter_by(
             node_id=self.node_id, account_id=self.account_id
         ).first()
-        pre_ns.topic_count -= 1
-        db.session.add(pre_ns)
+        ns1.topic_count -= 1
+        db.session.add(ns1)
 
         # increase status in post node
         node.topic_count += 1
@@ -97,6 +97,12 @@ class Topic(db.Model):
         ns = NodeStatus.query.filter_by(
             node_id=node.id, account_id=self.account_id
         ).first()
+        if not ns:
+            ns = NodeStatus(
+                node_id=self.node_id,
+                account_id=self.account_id,
+                topic_count=0,
+            )
         ns.topic_count += 1
         db.session.add(ns)
 
