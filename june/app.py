@@ -77,6 +77,7 @@ def register_static(app):
 def register_jinja(app):
     from .markdown import plain_markdown
     from .htmlcompress import HTMLCompress
+    from .views.admin import load_sidebar
     from werkzeug.datastructures import ImmutableDict
 
     app.jinja_options = ImmutableDict(
@@ -89,6 +90,7 @@ def register_jinja(app):
     def register_context():
         return dict(
             get_site_status=get_site_status,
+            get_site_sidebar=load_sidebar,
         )
 
     @app.template_filter('timesince')

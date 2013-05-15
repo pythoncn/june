@@ -15,6 +15,8 @@ SITE_SCRIPTS = [
     '/_static/js/bootstrap.js',
     '/_static/js/site.js',
 ]
+#: sidebar is a absolute path
+# SITE_SIDEBAR = '/path/to/sidebar.html'
 
 #: session
 SESSION_COOKIE_NAME = 'june'
@@ -33,3 +35,9 @@ GRAVATAR_EXTRA = ''
 
 #: cache
 # find options on http://pythonhosted.org/Flask-Cache/
+# CACHE_TYPE = 'filesystem'
+# CACHE_DIR = os.path.join(rootdir, 'data', 'cache')
+
+# babel settings
+# BABEL_DEFAULT_LOCALE = 'zh'
+# BABEL_SUPPORTED_LOCALES = ['zh']

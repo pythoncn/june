@@ -7,6 +7,15 @@
 {% block content %}
 <div class="module">
   <div class="module-header inner">
+    <strong>{{_('Sidebar')}}</strong>
+  </div>
+  <form class="form inner" action="" method="post">
+    <textarea name="content" placeholder="sidebar html" class="input-block-level" rows="15">{% if sidebar %}{{ sidebar }}{% endif %}</textarea>
+    <button class="btn-success btn">{{_('Update')}}</button>
+  </form>
+</div>
+<div class="module">
+  <div class="module-header inner">
     <strong>{{_('Members')}}</strong>
   </div>
   <div class="module-body">

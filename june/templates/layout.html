@@ -46,6 +46,11 @@
             {% endblock %}
 
             {% block sitestatus %}
+            {% with site_sidebar = get_site_sidebar() %}
+            {% if site_sidebar %}
+            {{ site_sidebar|safe }}
+            {% endif %}
+            {% endwith %}
             <div class="module">
               <div class="module-header inner">
                 <strong>{{_('Site Status')}}</strong>
