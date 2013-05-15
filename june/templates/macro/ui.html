@@ -43,7 +43,7 @@
   <div class="item hentry">
     <h3 class="title"><a href="{{url_for('topic.view', uid=item.id)}}">{{item}}</a></h3>
     <div class="meta">
-      <a href="{{url_for('topic.view', uid=item.id)}}#replies">discuss ({{item.reply_count}})</a>
+      <a href="{{url_for('topic.view', uid=item.id)}}">discuss ({{item.reply_count}})</a>
       {% if show_node %}
       <span class="sep">/</span>
       <a href="{{url_for('node.view', urlname=item.node.urlname)}}">{{item.node}}</a>
