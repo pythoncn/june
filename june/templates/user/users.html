@@ -2,7 +2,7 @@
 
 {% block subtitle %}{{_('Users')}}{% endblock %}
 
-{% from "macro/ui.html" import nav, user_list %}
+{% from "macro/ui.html" import nav, user_list, pagination %}
 
 {% block nav %}
 {{ nav('user') }}
@@ -16,6 +16,11 @@
   <div class="module-body">
     {{ user_list(paginator.items) }}
   </div>
+  {% if paginator.pages > 1 %}
+  <div class="module-footer inner">
+    {{ pagination(paginator, url_for('user.users')) }}
+  </div>
+  {% endif %}
 </div>
 {% endblock %}
 

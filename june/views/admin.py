@@ -1,38 +1,66 @@
 # coding: utf-8
 
-from flask import g
-from flask.ext.admin import Admin, AdminIndexView, expose
-from flask.ext.admin.contrib.sqlamodel import ModelView
-from ..models import db, Account
+from flask import Blueprint, request
+from flask import render_template, abort, redirect, url_for
+from flask.ext.wtf import TextField, SelectField
+from flask.ext.wtf.html5 import EmailField
+from flask.ext.wtf import DataRequired, Email, Length, Regexp
+from flask.ext.babel import lazy_gettext as _
+from ..helpers import force_int, require_admin
+from ..models import Account
+from ..forms import SettingForm
 
 
-class BaseView(ModelView):
-    column_display_pk = True
-    can_create = False
-    can_edit = False
+__all__ = ['bp']
 
-    def is_accessible(self):
-        if not g.user:
-            return False
-        return g.user.is_admin
+bp = Blueprint('admin', __name__)
 
 
-class HomeView(AdminIndexView):
-    @expose('/')
-    def index(self):
-        return self.render('admin/index.html')
+class UserForm(SettingForm):
+    username = TextField(
+        _('Username'), validators=[
+            DataRequired(), Length(min=3, max=20),
+            Regexp(r'^[a-z0-9A-Z]+$')
+        ], description=_('English Characters Only.'),
+    )
+    email = EmailField(
+        _('Email'), validators=[DataRequired(), Email()]
+    )
+    role = SelectField(
+        description=_('Role'),
+        choices=[
+            ('spam', _('Spam')),
+            ('user', _('User')),
+            ('staff', _('Staff')),
+            ('admin', _('Admin'))
+        ],
+        default='user',
+    )
 
-    def is_accessible(self):
-        if not g.user:
-            return False
-        return g.user.is_admin
+
+@bp.route('/')
+@require_admin
+def dashboard():
+    """
+    The user list page.
+    """
+    page = force_int(request.args.get('page', 1), 0)
+    if not page:
+        return abort(404)
+    paginator = Account.query.order_by(Account.id.desc()).paginate(page)
+    return render_template(
+        'admin/dashboard.html',
+        paginator=paginator,
+    )
 
 
-class UserView(BaseView):
-    can_edit = True
-    column_exclude_list = ('password', 'token', 'description')
-    form_excluded_columns = ('password', 'created', 'token', 'active')
-
-
-admin = Admin(name='Yuan', index_view=HomeView())
-admin.add_view(UserView(Account, db.session))
+@bp.route('/user/<int:uid>', methods=['GET', 'POST'])
+@require_admin
+def user(uid):
+    user = Account.query.get_or_404(uid)
+    form = UserForm(obj=user)
+    if form.validate_on_submit():
+        form.populate_obj(user)
+        user.save()
+        return redirect(url_for('.user', uid=uid))
+    return render_template('admin/user.html', form=form, user=user)

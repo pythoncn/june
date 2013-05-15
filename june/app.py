@@ -10,7 +10,6 @@ from flask import request, g
 from flask.ext.babel import gettext as _
 from .helpers import get_current_user
 from .models import db, cache, get_site_status
-from .views import admin
 
 
 def create_app(config=None):
@@ -45,8 +44,6 @@ def create_app(config=None):
         g.user = get_current_user()
 
     register_babel(app)
-
-    admin.admin.init_app(app)
     register_routes(app)
 
     if app.debug:
@@ -55,11 +52,12 @@ def create_app(config=None):
 
 
 def register_routes(app):
-    from .views import front, account, node, topic, user
-    app.register_blueprint(node.bp, url_prefix='/node')
-    app.register_blueprint(user.bp, url_prefix='/user')
-    app.register_blueprint(topic.bp, url_prefix='/topic')
+    from .views import front, account, node, topic, user, admin
     app.register_blueprint(account.bp, url_prefix='/account')
+    app.register_blueprint(node.bp, url_prefix='/node')
+    app.register_blueprint(topic.bp, url_prefix='/topic')
+    app.register_blueprint(user.bp, url_prefix='/user')
+    app.register_blueprint(admin.bp, url_prefix='/admin')
     app.register_blueprint(front.bp, url_prefix='')
     return app
 

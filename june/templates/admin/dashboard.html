@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block subtitle %}{{_('Dashboard')}}{% endblock %}
+
+{% from "macro/ui.html" import nav, user_list %}
+
+{% block content %}
+<div class="module">
+  <div class="module-header inner">
+    <strong>{{_('Members')}}</strong>
+  </div>
+  <div class="module-body">
+    <div class="item-list user-list">
+      {% for user in paginator.items %}
+      <div class="item">
+        <div class="account-group">
+          <img src="{{ user.avatar(48)}}" alt="{{user}}" />
+          <a href="{{url_for('user.view', username=user.username)}}"><strong>{{user}}</strong></a>
+          <div class="meta">
+            <time>{{ user.created.strftime('%Y-%m-%d') }}</time>
+            {% if user.city %}
+            <span class="sep">&middot;</span>
+            <a href="{{ url_for('user.city', city=user.city) }}">{{user.city}}</a>
+            {% endif %}
+          </div>
+        </div>
+        <a class="label label-success" href="{{ url_for('admin.user', uid=user.id) }}">{{_('Edit')}}</a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}
