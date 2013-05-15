@@ -28,6 +28,18 @@ def users():
     )
 
 
+@bp.route('/in/<city>')
+def city(city):
+    """
+    Users in a city.
+    """
+    page = force_int(request.args.get('page', 1), 0)
+    if not page:
+        return abort(404)
+    paginator = Account.query.filter_by(city=city).paginate(page)
+    return render_template('user/city.html', paginator=paginator, city=city)
+
+
 @bp.route('/<username>')
 def view(username):
     """

@@ -21,7 +21,7 @@
       </div>
       <div style="margin-top:8px">
         {% if user.city %}
-        <a href="/user/in/{{user.city}}">@{{user.city}}</a>
+        <a href="{{ url_for('user.city', city=user.city) }}">@{{user.city}}</a>
         <span class="sep">&middot;</span>
         {% endif %}
         {% if user.website %}

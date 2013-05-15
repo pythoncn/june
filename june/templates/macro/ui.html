@@ -90,15 +90,17 @@
 <div class="item-list user-list">
   {% for user in items %}
   <div class="item">
-    <a href="{{url_for('user.view', username=user.username)}}">
       <div class="account-group">
         <img src="{{ user.avatar(48)}}" alt="{{user}}" />
-        <strong>{{user}}</strong>
+        <a href="{{url_for('user.view', username=user.username)}}"><strong>{{user}}</strong></a>
         <div class="meta">
           <time>{{ user.created.strftime('%Y-%m-%d') }}</time>
+          {% if user.city %}
+          <span class="sep">&middot;</span>
+          <a href="{{ url_for('user.city', city=user.city) }}">{{user.city}}</a>
+          {% endif %}
         </div>
       </div>
-    </a>
     {% if show_badge and user.is_staff %}
     <span class="label label-success">staff</span>
     {% endif %}
