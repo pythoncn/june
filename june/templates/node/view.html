@@ -11,6 +11,9 @@
 {% block content %}
 {% from "macro/ui.html" import topic_list, pagination %}
 <div class="module">
+  <div class="module-header inner">
+    <strong>{{_('Topics')}}</strong>
+  </div>
   <div class="module-body">
     {{ topic_list(paginator.items) }}
   </div>

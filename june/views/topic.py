@@ -25,6 +25,36 @@ def topics():
         return abort(404)
     paginator = Topic.query.order_by(Topic.updated.desc()).paginate(page)
     paginator.items = fill_topics(paginator.items)
+    g.nav = 'update'
+    return render_template('topic/topics.html', paginator=paginator)
+
+
+@bp.route('/latest')
+def latest():
+    """
+    Topics ordered by created time.
+    """
+    page = force_int(request.args.get('page', 1), 0)
+    if not page:
+        return abort(404)
+    paginator = Topic.query.order_by(Topic.id.desc()).paginate(page)
+    paginator.items = fill_topics(paginator.items)
+    g.nav = 'latest'
+    return render_template('topic/topics.html', paginator=paginator)
+
+
+@bp.route('/desert')
+def desert():
+    """
+    Topics without any replies.
+    """
+    page = force_int(request.args.get('page', 1), 0)
+    if not page:
+        return abort(404)
+    paginator = Topic.query.filter_by(
+        reply_count=0).order_by(Topic.id.desc()).paginate(page)
+    paginator.items = fill_topics(paginator.items)
+    g.nav = 'desert'
     return render_template('topic/topics.html', paginator=paginator)
 
 

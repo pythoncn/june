@@ -12,8 +12,18 @@
 {% block content %}
 {% from "macro/ui.html" import topic_list, pagination %}
 <div class="module">
-  <div class="module-header inner">
-    <strong>{{_('Topics')}}</strong>
+  <div class="module-header clearfix">
+    <ul class="pull-right nav nav-pills">
+      {% if g.nav == 'update'%}<li class="active">{% else %}<li>{% endif %}
+      <a href="{{url_for('topic.topics')}}">{{_('Update')}}</a>
+      </li>
+      {% if g.nav == 'latest'%}<li class="active">{% else %}<li>{% endif %}
+      <a href="{{url_for('topic.latest')}}">{{_('Latest')}}</a>
+      </li>
+      {% if g.nav == 'desert'%}<li class="active">{% else %}<li>{% endif %}
+      <a href="{{url_for('topic.desert')}}">{{_('Desert')}}</a>
+      </li>
+    </ul>
   </div>
   <div class="module-body">
     {{ topic_list(paginator.items) }}
