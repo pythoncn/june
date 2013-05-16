@@ -14,8 +14,8 @@ class Account(db.Model, SessionMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(40), unique=True, index=True,
                          nullable=False)
-    email = db.Column(db.String(200), unique=True, index=True)
-    password = db.Column(db.String(100))
+    email = db.Column(db.String(200), nullable=False, unique=True, index=True)
+    password = db.Column(db.String(100), nullable=False)
 
     screen_name = db.Column(db.String(80))
     description = db.Column(db.String(400))

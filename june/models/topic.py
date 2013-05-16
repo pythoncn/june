@@ -139,7 +139,7 @@ class Reply(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     account_id = db.Column(db.Integer, nullable=False)
-    topic_id = db.Column(db.Integer, index=True)
+    topic_id = db.Column(db.Integer, index=True, nullable=False)
     content = db.Column(db.Text)
 
     created = db.Column(db.DateTime, default=datetime.utcnow)
