@@ -25,8 +25,8 @@ def topics():
         return abort(404)
     paginator = Topic.query.order_by(Topic.updated.desc()).paginate(page)
     paginator.items = fill_topics(paginator.items)
-    g.nav = 'update'
-    return render_template('topic/topics.html', paginator=paginator)
+    return render_template('topic/topics.html', paginator=paginator,
+                           endpoint='topic.topics')
 
 
 @bp.route('/latest')
@@ -39,8 +39,8 @@ def latest():
         return abort(404)
     paginator = Topic.query.order_by(Topic.id.desc()).paginate(page)
     paginator.items = fill_topics(paginator.items)
-    g.nav = 'latest'
-    return render_template('topic/topics.html', paginator=paginator)
+    return render_template('topic/topics.html', paginator=paginator,
+                           endpoint='topic.latest')
 
 
 @bp.route('/desert')
@@ -54,8 +54,8 @@ def desert():
     paginator = Topic.query.filter_by(
         reply_count=0).order_by(Topic.id.desc()).paginate(page)
     paginator.items = fill_topics(paginator.items)
-    g.nav = 'desert'
-    return render_template('topic/topics.html', paginator=paginator)
+    return render_template('topic/topics.html', paginator=paginator,
+                           endpoint='topic.desert')
 
 
 @bp.route('/create/<urlname>', methods=['GET', 'POST'])
