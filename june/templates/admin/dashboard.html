@@ -2,7 +2,7 @@
 
 {% block subtitle %}{{_('Dashboard')}}{% endblock %}
 
-{% from "macro/ui.html" import nav, user_list %}
+{% from "macro/ui.html" import nav, pagination %}
 
 {% block content %}
 <div class="module">
@@ -31,6 +31,10 @@
             <span class="sep">&middot;</span>
             <a href="{{ url_for('user.city', city=user.city) }}">{{user.city}}</a>
             {% endif %}
+            {% if user.is_staff %}
+            <span class="sep">&middot;</span>
+            <span>staff</span>
+            {% endif %}
           </div>
         </div>
         {% if g.user.is_admin %}
@@ -40,5 +44,10 @@
       {% endfor %}
     </div>
   </div>
+  {% if paginator.pages > 1 %}
+  <div class="module-footer inner">
+    {{ pagination(paginator, url_for('admin.dashboard')) }}
+  </div>
+  {% endif %}
 </div>
 {% endblock %}
