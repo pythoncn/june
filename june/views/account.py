@@ -18,6 +18,9 @@ bp = Blueprint('account', __name__)
 
 @bp.route('/signup', methods=['GET', 'POST'])
 def signup():
+    """Sign up page. If the request has an token arguments, it is not
+    for registeration, it is for verifying the token.
+    """
     next_url = request.args.get('next', url_for('.setting'))
     token = request.args.get('token')
     if token:
@@ -35,6 +38,8 @@ def signup():
     if form.validate_on_submit():
         verify_email = current_app.config.get('VERIFY_EMAIL', True)
         if not verify_email:
+            # if no need for verify email
+            # we should save the role as user
             user = form.save('user')
             login_user(user)
             return redirect(next_url)
@@ -52,6 +57,7 @@ def signup():
 
 @bp.route('/signin', methods=['GET', 'POST'])
 def signin():
+    """Sign in page."""
     next_url = request.args.get('next', '/')
     if g.user:
         return redirect(next_url)
@@ -64,6 +70,7 @@ def signin():
 
 @bp.route('/signout')
 def signout():
+    """Sign out, and redirect."""
     next_url = request.args.get('next', '/')
     logout_user()
     return redirect(next_url)
@@ -72,6 +79,7 @@ def signout():
 @bp.route('/setting', methods=['GET', 'POST'])
 @require_login
 def setting():
+    """Settings page of current user."""
     form = SettingForm(obj=g.user)
     next_url = request.args.get('next', url_for('.setting'))
     if form.validate_on_submit():
@@ -84,6 +92,8 @@ def setting():
 
 @bp.route('/find', methods=['GET', 'POST'])
 def find():
+    """Find password page, when user forgot his password, he can
+    find the password via email."""
     if g.user:
         return redirect('/')
     form = FindForm()
@@ -98,6 +108,8 @@ def find():
 
 @bp.route('/reset', methods=['GET', 'POST'])
 def reset():
+    """Reset password page. User launch this page via the link in
+    the find password email."""
     if g.user:
         return redirect('/')
     token = request.values.get('token')
