@@ -14,6 +14,7 @@ bp = Blueprint('node', __name__)
 
 @bp.route('/')
 def nodes():
+    """Nodes pages."""
     nodes = Node.query.order_by(Node.updated.desc()).all()
     return render_template('node/nodes.html', nodes=nodes)
 
@@ -46,8 +47,8 @@ def view(urlname):
     page = force_int(request.args.get('page', 1), 0)
     if not page:
         return abort(404)
-    paginator = Topic.query.filter_by(node_id=node.id).\
-            order_by(Topic.id.desc()).paginate(page)
+    paginator = Topic.query.filter_by(
+        node_id=node.id).order_by(Topic.id.desc()).paginate(page)
     paginator.items = fill_topics(paginator.items)
 
     status = None
