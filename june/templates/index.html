@@ -4,6 +4,16 @@
 {% from "macro/ui.html" import topic_list, node_list %}
 
 {% block content %}
+{% if blogs %}
+<div class="module">
+  <div class="module-header inner">
+    <strong>{{_('Blogs')}}</strong>
+  </div>
+  <div class="module-body">
+    {{ topic_list(blogs) }}
+  </div>
+</div>
+{% endif %}
 <div class="module">
   <div class="module-header inner">
     <strong>{{_('Recent Topics')}}</strong>
