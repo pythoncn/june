@@ -66,6 +66,13 @@ class JuneRenderer(m.HtmlRenderer, m.SmartyPants):
 
         return '<a href="%s" rel="nofollow">%s</a>' % (link, title)
 
+    def paragraph(self, text):
+        pattern = re.compile(r'\s@(\w+)')
+        text = pattern.sub(r'@<a href="/user/\1">\1</a> ', text)
+        pattern = re.compile(r'^@(\w+)')
+        text = pattern.sub(r'@<a href="/user/\1">\1</a> ', text)
+        return '<p>%s</p>' % text
+
 
 def rich_markdown(text):
     if text is None:
