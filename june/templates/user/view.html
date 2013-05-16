@@ -19,15 +19,12 @@
         <span class="sep">@</span>
         <time>{{user.created.strftime('%Y-%m-%d')}}</time>
       </div>
-      <div style="margin-top:8px">
-        {% if user.city %}
-        <a href="{{ url_for('user.city', city=user.city) }}">@{{user.city}}</a>
-        <span class="sep">&middot;</span>
-        {% endif %}
-        {% if user.website %}
-        <a href="{{user.website}}">{{user.website}}</a>
-        {% endif %}
-      </div>
+      {% if user.city %}
+      <div><a href="{{ url_for('user.city', city=user.city) }}">@{{user.city}}</a></div>
+      {% endif %}
+      {% if user.website %}
+      <div><a href="{{user.website}}">{{user.website}}</a></div>
+      {% endif %}
       {% if user.is_staff %}
       <span class="label label-success">staff</span>
       {% endif %}
