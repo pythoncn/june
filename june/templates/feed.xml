@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title><![CDATA[{{ config.SITE_TITLE }}]]></title>
+    <link href="{{ url_for('front.feed', _external=True) }}" rel="self" />
+    <link href="{{ url_for('front.home', _external=True) }}" />
+    <updated>{{ now|xmldatetime }}</updated>
+    <id>{{ url_for('front.home', _external=True) }}</id>
+    {% for topic in topics %}
+    <entry>
+        <title type="html"><![CDATA[{{ topic.title }}]]></title>
+        <author>
+            <name>{{ topic.user }}</name>
+            <uri>{{ url_for('user.view', username=topic.user.username, _external=True) }}</uri>
+        </author>
+        <link href="{{ url_for('topic.view', uid=topic.id, _external=True) }}"/>
+        <updated>{{ topic.updated|xmldatetime }}</updated>
+        <published>{{ topic.created|xmldatetime }}</published>
+        <id>{{topic.id}}</id>
+        <category scheme="{{url_for('node.view', urlname=topic.node.urlname, _external=True)}}" term="{{topic.node.urlname}}" label="{{ topic.node }}" />
+        <content type="html" xml:base="{{ config.SITE_URL }}" xml:lang="en">
+            <![CDATA[ {{ topic.html|safe }} ]]>
+        </content>
+    </entry>
+    {% endfor %}
+</feed>

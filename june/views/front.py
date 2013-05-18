@@ -1,9 +1,10 @@
 # coding: utf-8
 
-from flask import Blueprint
-from flask import render_template
+import datetime
+from flask import Blueprint, url_for
+from flask import render_template, Response
 from ..helpers import require_user
-from ..models import Node, Topic, fill_topics
+from ..models import Node, Topic, fill_topics, cache
 
 
 bp = Blueprint('front', __name__)
@@ -27,6 +28,19 @@ def home():
     return render_template(
         'index.html', topics=topics, nodes=nodes, blog=blog, blogs=blogs
     )
+
+
+@bp.route('/feed')
+def feed():
+    html = cache.get('sitefeed')
+    if not html:
+        topics = Topic.query.order_by(Topic.id.desc()).limit(16)
+        topics = fill_topics(topics)
+        now = datetime.datetime.now()
+        html = render_template('feed.xml', topics=topics, now=now)
+        cache.set('sitefeed', html, 1800)
+
+    return Response(html, content_type='text/xml; charset=utf-8')
 
 
 @bp.route('/upload', methods=['POST'])
