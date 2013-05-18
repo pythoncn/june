@@ -49,6 +49,10 @@ a img:hover {
   font-size: 13px;
   margin-top: 20px;
 }
+#footer .links a {
+  font-weight: 500;
+  color: #666;
+}
 #footer .credit time {
   margin-right: 4px;
 }

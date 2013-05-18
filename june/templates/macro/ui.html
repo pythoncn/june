@@ -81,7 +81,7 @@
       <time datetime="{{item.updated|xmldatetime}}">{{item.updated|timesince}}</time>
     </div>
     {% if show_button %}
-    <a class="btn btn-success" href="{{url_for('topic.create', urlname=item.urlname)}}">{{_('New Topic')}}</a>
+    <a class="btn btn-success btn-mini" href="{{url_for('topic.create', urlname=item.urlname)}}">{{_('New Topic')}}</a>
     {% endif %}
   </div>
   {% endfor %}
