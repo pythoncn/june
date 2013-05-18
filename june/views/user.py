@@ -19,7 +19,7 @@ def users():
     page = force_int(request.args.get('page', 1), 0)
     if not page:
         return abort(404)
-    paginator = Account.query.order_by(Account.id.desc()).paginate(page)
+    paginator = Account.query.order_by(Account.active.desc()).paginate(page)
     staffs = Account.query.filter(Account.role.in_(('staff', 'admin'))).all()
     return render_template(
         'user/users.html',
