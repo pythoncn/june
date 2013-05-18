@@ -9,7 +9,7 @@ from ..helpers import create_auth_token
 
 
 def send_mail(config, msg):
-    if not config.get('DEFAULT_MAIL_SENDER', None):
+    if not config.get('MAIL_DEFAULT_SENDER', None):
         return
     app = Flask('june')
     app.config = config
