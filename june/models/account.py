@@ -5,7 +5,7 @@ from datetime import datetime
 from werkzeug import security
 from ._base import db, JuneQuery, SessionMixin
 
-__all__ = ['Account', 'NonAccount']
+__all__ = ['Account', 'NonAccount', 'SocialAccount']
 
 
 class Account(db.Model, SessionMixin):
@@ -100,3 +100,17 @@ class NonAccount(object):
 
     def __repr__(self):
         return '<NonAccount: none>' % self.username
+
+
+class SocialAccount(db.Model, SessionMixin):
+    """The social collections."""
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(40), nullable=False)
+    account_id = db.Column(db.Integer, nullable=False, index=True)
+    access_token = db.Column(db.String(200))
+    # in OAuth1, alt_token is access_token_secret
+    # in OAuth2, alt_token is refresh_token
+    alt_token = db.Column(db.String(200))
+    # token expires
+    expires_in = db.Column(db.Integer, default=0)
