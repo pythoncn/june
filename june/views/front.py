@@ -25,7 +25,7 @@ def home():
         blogs = None
 
     return render_template(
-        'index.html', topics=topics, nodes=nodes, blogs=blogs
+        'index.html', topics=topics, nodes=nodes, blog=blog, blogs=blogs
     )
 
 
