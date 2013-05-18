@@ -28,7 +28,6 @@ class Topic(db.Model):
     updated = db.Column(
         db.DateTime,
         default=datetime.utcnow,
-        onupdate=datetime.utcnow,
         index=True,
     )
 
@@ -168,6 +167,7 @@ class Reply(db.Model):
         if topic:
             self.topic_id = topic.id
             topic.reply_count += 1
+            topic.updated = datetime.utcnow()
             db.session.add(topic)
 
         db.session.add(self)

@@ -46,9 +46,11 @@
       <a href="{{url_for('topic.view', uid=item.id)}}">discuss ({{item.reply_count}})</a>
       {% if show_node %}
       <span class="sep">/</span>
+      {{ item.hits }}
+      <span class="sep">&middot;</span>
       <a href="{{url_for('node.view', urlname=item.node.urlname)}}">{{item.node}}</a>
       {% endif %}
-      <span class="sep">@</span>
+      <span class="sep">&middot;</span>
       <time datetime="{{item.created|xmldatetime}}" pubdate>{{item.created|timesince}}</time>
     </div>
     {% if show_user %}

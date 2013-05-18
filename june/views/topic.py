@@ -90,6 +90,13 @@ def view(uid):
 
     :param uid: the id of a topic.
     """
+    if request.method == 'POST':
+        # record hits
+        topic = Topic.query.get_or_404(uid)
+        topic.hits += 1
+        topic.save()
+        return jsonify(hits=topic.hits)
+
     page = force_int(request.args.get('page', 1), 0)
     if not page:
         return abort(404)
