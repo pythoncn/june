@@ -98,15 +98,15 @@ def register_jinja(app):
         now = datetime.datetime.utcnow()
         delta = now - value
         if delta.days > 365:
-            return _('%(num)i years ago' % {'num': delta.days / 365})
+            return _('%(num)i years ago', num=delta.days / 365)
         if delta.days > 30:
-            return _('%(num)i months ago' % {'num': delta.days / 30})
+            return _('%(num)i months ago', num=delta.days / 30)
         if delta.days > 0:
-            return _('%(num)i days ago' % {'num': delta.days})
+            return _('%(num)i days ago', num=delta.days)
         if delta.seconds > 3600:
-            return _('%(num)i hours ago' % {'num': delta.seconds / 3600})
+            return _('%(num)i hours ago', num=delta.seconds / 3600)
         if delta.seconds > 60:
-            return _('%(num)i minutes ago' % {'num': delta.seconds / 60})
+            return _('%(num)i minutes ago', num=delta.seconds / 60)
         return _('just now')
 
     @app.template_filter('xmldatetime')
