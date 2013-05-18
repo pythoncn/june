@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% block subtitle %}{% endblock %} &middot; {{ config.SITE_TITLE }}{% endblock %}</title>
+    {% include "snippet/google-analytics.html" %}
     {% for url in config.SITE_STYLES %}
     <link rel="stylesheet" href="{{url}}" />
     {% endfor %}

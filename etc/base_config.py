@@ -17,6 +17,7 @@ SITE_SCRIPTS = [
 ]
 #: sidebar is a absolute path
 # SITE_SIDEBAR = '/path/to/sidebar.html'
+# SITE_ANALYTICS = 'UA-xxx-xxx'
 
 #: session
 SESSION_COOKIE_NAME = 'june'

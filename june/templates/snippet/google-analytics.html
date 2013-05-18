@@ -1,0 +1,16 @@
+{% if config.SITE_ANALYTICS %}
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', '{{config.SITE_ANALYTICS}}']);
+_gaq.push(['_trackPageview']);
+_gaq.push(['_trackPageLoadTime']);
+{% if g.user %}
+_gaq.push(['_setCustomVar', 1, 'UserType', 'Member', 2]);
+{% endif %}
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ga.src = 'https://ssl.google-analytics.com/ga.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+{% endif %}
