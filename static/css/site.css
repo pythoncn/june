@@ -328,7 +328,10 @@ textarea.input-block-level {
     margin-left: -20px;
     margin-right: -20px;
   }
-  #footer .container, #wrap .container {
+  #footer .container {
     padding: 0 20px;
+  }
+  #wrap .container {
+    padding: 0 5px;
   }
 }
