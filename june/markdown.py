@@ -89,9 +89,9 @@ class JuneRenderer(m.HtmlRenderer, m.SmartyPants):
 
     def paragraph(self, text):
         pattern = re.compile(r'\s@(\w+)')
-        text = pattern.sub(r'@<a href="/user/\1">\1</a> ', text)
+        text = pattern.sub(r' @<a href="/user/\1">\1</a>', text)
         pattern = re.compile(r'^@(\w+)')
-        text = pattern.sub(r'@<a href="/user/\1">\1</a> ', text)
+        text = pattern.sub(r'@<a href="/user/\1">\1</a>', text)
         return '<p>%s</p>' % text
 
 
