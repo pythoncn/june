@@ -5,7 +5,7 @@ from datetime import datetime
 from werkzeug import security
 from ._base import db, JuneQuery, SessionMixin
 
-__all__ = ['Account']
+__all__ = ['Account', 'NonAccount']
 
 
 class Account(db.Model, SessionMixin):
@@ -84,3 +84,19 @@ class Account(db.Model, SessionMixin):
         self.password = self.create_password(raw)
         self.token = self.create_token()
         return self
+
+
+class NonAccount(object):
+    """Non Account is a model designed for the deleted account.
+    Since the account is deleted, the topics and replies will has no
+    account related to them, in such cases, a `NonAccount` is used."""
+
+    username = 'none'
+    is_staff = False
+    is_admin = False
+
+    def __str__(self):
+        return 'none'
+
+    def __repr__(self):
+        return '<NonAccount: none>' % self.username

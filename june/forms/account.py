@@ -21,7 +21,7 @@ __all__ = [
 RESERVED_WORDS = [
     'root', 'admin', 'bot', 'robot', 'master', 'webmaster',
     'account', 'people', 'user', 'users', 'project', 'projects',
-    'search', 'action', 'favorite', 'like', 'love',
+    'search', 'action', 'favorite', 'like', 'love', 'none',
     'team', 'teams', 'group', 'groups', 'organization',
     'organizations', 'package', 'packages', 'org', 'com', 'net',
     'help', 'doc', 'docs', 'document', 'documentation', 'blog',
