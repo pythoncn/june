@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  0.1.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-05-18 23:08+0800\n"
+"POT-Creation-Date: 2013-05-18 23:33+0800\n"
 "PO-Revision-Date: 2013-05-18 23:01+0800\n"
 "Last-Translator: Hsiaoming Yang <me@lepture.com>\n"
 "Language-Team: zh <LL@li.org>\n"
@@ -140,15 +140,15 @@ msgstr "节点的标题"
 
 #: june/forms/node.py:17
 msgid "URL"
-msgstr ""
+msgstr "链接"
 
 #: june/forms/node.py:18
 msgid "The url name of the node"
-msgstr ""
+msgstr "节点的链接名"
 
 #: june/forms/node.py:22
 msgid "Required role"
-msgstr ""
+msgstr "权限控制"
 
 #: june/forms/node.py:24 june/views/admin.py:34
 msgid "User"
@@ -168,7 +168,7 @@ msgstr "节点已存在"
 
 #: june/forms/topic.py:13
 msgid "Title of the topic"
-msgstr ""
+msgstr "话题标题"
 
 #: june/forms/topic.py:16 june/forms/topic.py:26
 msgid "Content"
@@ -176,7 +176,7 @@ msgstr "内容"
 
 #: june/forms/topic.py:17
 msgid "Content of the topic"
-msgstr ""
+msgstr "话题内容"
 
 #: june/tasks/mail.py:24
 #, python-format
@@ -197,7 +197,7 @@ msgid "Recent Nodes"
 msgstr "最近的节点"
 
 #: june/templates/account/find.html:4 june/templates/account/find.html:8
-#: june/templates/email/find.html:9
+#: june/templates/email/find.html:11
 msgid "Find Password"
 msgstr "找回密码"
 
@@ -257,7 +257,7 @@ msgstr "后台"
 
 #: june/templates/admin/dashboard.html:10
 msgid "Sidebar"
-msgstr ""
+msgstr "侧边栏"
 
 #: june/templates/admin/dashboard.html:19
 msgid "Members"
@@ -267,23 +267,36 @@ msgstr "成员"
 msgid "Edit"
 msgstr "编辑"
 
+#: june/templates/email/find.html:4
+msgid "Welcome,"
+msgstr "欢迎，"
+
+#: june/templates/email/find.html:7
+msgid ""
+"You have submitted a find password request, follow the link below to find"
+" your password. If you didn't make the request, ignore this email."
+msgstr ""
+"你提交了找回密码的请求，点击下面的链接就可以找回密码。
+"
+"如果这不是你发起的请求，请忽略该邮件。"
+
+#: june/templates/email/find.html:14 june/templates/email/signup.html:13
+msgid "You can copy and paste the link to your browser address bar:"
+msgstr "你可以复制粘贴下面的链接到浏览器地址栏中："
+
+#: june/templates/email/find.html:18 june/templates/email/signup.html:20
+msgid "This link will expire in 24 hours."
+msgstr "该链接 24 小时内有效。"
+
 #: june/templates/email/signup.html:6
 msgid ""
 "Thanks for the registration. Follow the link below to activate your "
 "account."
-msgstr ""
+msgstr "感谢你的注册。点击下面的链接激活你的账户。"
 
 #: june/templates/email/signup.html:10
 msgid "Activate your account"
 msgstr "激活你的账户"
-
-#: june/templates/email/signup.html:13
-msgid "You can copy and paste the link to your browser address bar:"
-msgstr ""
-
-#: june/templates/email/signup.html:20
-msgid "This link will expire in 24 hours."
-msgstr ""
 
 #: june/templates/macro/ui.html:13
 msgid "Home"
@@ -331,7 +344,7 @@ msgstr "编辑节点"
 
 #: june/templates/node/view.html:54
 msgid "Reputation"
-msgstr ""
+msgstr "声望"
 
 #: june/templates/snippet/nav-dropmenu.html:10
 msgid "View Profile"
@@ -456,3 +469,4 @@ msgstr "节点没找到。"
 #: june/views/topic.py:218
 msgid "Missing content"
 msgstr "缺少内容"
+
