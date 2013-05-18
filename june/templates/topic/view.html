@@ -17,6 +17,8 @@
     {{topic.html|safe}}
   </div>
   <div class="module-footer inner muted clearfix">
+    {{ topic.hits }}
+    <span class="sep">&middot;</span>
     <time datetime="{{topic.created|xmldatetime}}" pubdate>{{topic.created|timesince}}</time>
     <span class="sep">&middot;</span>
     <a href="{{url_for('node.view', urlname=node.urlname)}}">{{node}}</a>
