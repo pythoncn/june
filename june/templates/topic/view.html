@@ -37,7 +37,7 @@
     {% if paginator.items %}
     {% for item in paginator.items %}
     <div class="item hentry">
-      <div class="content">{{item.html|safe}}</div>
+      <div class="entry-content">{{item.html|safe}}</div>
       <div class="meta clearfix">
         <a href="{{url_for('user.view', username=item.user.username)}}" title="{{item.user}}">{{item.user.username}}</a>
         <span class="sep">@</span>

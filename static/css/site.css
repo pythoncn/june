@@ -205,7 +205,7 @@ textarea.input-block-level {
   font-size: 1.2em;
   word-wrap: break-word;
 }
-.item-list .content {
+.item-list .entry-content {
   margin-right: 24px;
   word-wrap: break-word;
 }
@@ -247,7 +247,9 @@ textarea.input-block-level {
   top: 10px;
   right: 20px;
 }
-
+.hentry {
+  line-height: 1.6;
+}
 .hentry .entry-content {
   font-size: 15px;
 }
