@@ -1,0 +1,458 @@
+# Chinese translations for june.
+# Copyright (C) 2013 Hsiaoming Yang.
+# This file is distributed under the same license as the june project.
+# Hsiaoming Yang <me@lepture.com>, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version:  0.1.0\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2013-05-18 23:08+0800\n"
+"PO-Revision-Date: 2013-05-18 23:01+0800\n"
+"Last-Translator: Hsiaoming Yang <me@lepture.com>\n"
+"Language-Team: zh <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.6\n"
+
+#: june/app.py:101
+#, python-format
+msgid "%(num)i years ago"
+msgstr "%(num)i 年前"
+
+#: june/app.py:103
+#, python-format
+msgid "%(num)i months ago"
+msgstr "%(num)i 月前"
+
+#: june/app.py:105
+#, python-format
+msgid "%(num)i days ago"
+msgstr "%(num)i 天前"
+
+#: june/app.py:107
+#, python-format
+msgid "%(num)i hours ago"
+msgstr "%(num)i 小时前"
+
+#: june/app.py:109
+#, python-format
+msgid "%(num)i minutes ago"
+msgstr "%(num)i 分钟前"
+
+#: june/app.py:110
+msgid "just now"
+msgstr "刚刚"
+
+#: june/helpers.py:31
+msgid "Please verify your email"
+msgstr "请验证你的邮箱"
+
+#: june/helpers.py:85
+msgid "Too many requests in a time"
+msgstr "多次重复请求"
+
+#: june/forms/account.py:37 june/views/admin.py:22
+msgid "Username"
+msgstr "用户名"
+
+#: june/forms/account.py:40 june/views/admin.py:25
+msgid "English Characters Only."
+msgstr "只允许英语字母"
+
+#: june/forms/account.py:43 june/views/admin.py:28
+msgid "Email"
+msgstr "邮箱"
+
+#: june/forms/account.py:46 june/forms/account.py:77 june/forms/account.py:125
+msgid "Password"
+msgstr "密码"
+
+#: june/forms/account.py:52 june/forms/account.py:54
+msgid "This name is a reserved name."
+msgstr "这是一个被保留的名字。"
+
+#: june/forms/account.py:56
+msgid "This name has been registered."
+msgstr "这个名字已经被注册。"
+
+#: june/forms/account.py:60
+msgid "This email has been registered."
+msgstr "这个邮箱已经被注册。"
+
+#: june/forms/account.py:72 june/forms/account.py:108
+msgid "Account"
+msgstr "账户"
+
+#: june/forms/account.py:74 june/forms/account.py:109
+msgid "Username or Email"
+msgstr "用户名或邮箱"
+
+#: june/forms/account.py:79
+msgid "Remember me for a month."
+msgstr "一个月内免登录。"
+
+#: june/forms/account.py:89 june/forms/account.py:93
+msgid "Wrong account or password"
+msgstr "账户或者密码错误"
+
+#: june/forms/account.py:97
+msgid "Display Name"
+msgstr "显示名称"
+
+#: june/forms/account.py:98
+msgid "Website"
+msgstr "网站"
+
+#: june/forms/account.py:99
+msgid "City"
+msgstr "城市"
+
+#: june/forms/account.py:99
+msgid "Where are you living"
+msgstr "你住在哪里"
+
+#: june/forms/account.py:101 june/forms/node.py:20
+msgid "Description"
+msgstr "简介"
+
+#: june/forms/account.py:102
+msgid "Markdown is supported."
+msgstr "支持 Markdown。"
+
+#: june/forms/account.py:119
+msgid "This account does not exist."
+msgstr "该账户不存在。"
+
+#: june/forms/account.py:126
+msgid "Remember your password"
+msgstr "请记住自己的密码"
+
+#: june/forms/node.py:13 june/forms/topic.py:12
+msgid "Title"
+msgstr "标题"
+
+#: june/forms/node.py:14
+msgid "The screen title of the node"
+msgstr "节点的标题"
+
+#: june/forms/node.py:17
+msgid "URL"
+msgstr ""
+
+#: june/forms/node.py:18
+msgid "The url name of the node"
+msgstr ""
+
+#: june/forms/node.py:22
+msgid "Required role"
+msgstr ""
+
+#: june/forms/node.py:24 june/views/admin.py:34
+msgid "User"
+msgstr "用户"
+
+#: june/forms/node.py:25 june/views/admin.py:35
+msgid "Staff"
+msgstr "管理员"
+
+#: june/forms/node.py:26 june/views/admin.py:36
+msgid "Admin"
+msgstr "管理者"
+
+#: june/forms/node.py:35
+msgid "The node exists"
+msgstr "节点已存在"
+
+#: june/forms/topic.py:13
+msgid "Title of the topic"
+msgstr ""
+
+#: june/forms/topic.py:16 june/forms/topic.py:26
+msgid "Content"
+msgstr "内容"
+
+#: june/forms/topic.py:17
+msgid "Content of the topic"
+msgstr ""
+
+#: june/tasks/mail.py:24
+#, python-format
+msgid "Signup for %(site)s"
+msgstr "注册 %(site)s"
+
+#: june/tasks/mail.py:52
+#, python-format
+msgid "Find password for %(site)s"
+msgstr "找回 %(site)s 的密码"
+
+#: june/templates/index.html:19 june/templates/user/view.html:41
+msgid "Recent Topics"
+msgstr "最近的帖子"
+
+#: june/templates/index.html:30
+msgid "Recent Nodes"
+msgstr "最近的节点"
+
+#: june/templates/account/find.html:4 june/templates/account/find.html:8
+#: june/templates/email/find.html:9
+msgid "Find Password"
+msgstr "找回密码"
+
+#: june/templates/account/find.html:12
+msgid "Send"
+msgstr "发送"
+
+#: june/templates/account/reset.html:4 june/templates/account/reset.html:8
+msgid "Reset Password"
+msgstr "重置密码"
+
+#: june/templates/account/reset.html:12 june/templates/node/edit.html:19
+msgid "Save"
+msgstr "保存"
+
+#: june/templates/account/setting.html:4
+#: june/templates/snippet/nav-dropmenu.html:20
+msgid "Settings"
+msgstr "设置"
+
+#: june/templates/account/setting.html:9
+msgid "Edit Profile"
+msgstr "编辑个人信息"
+
+#: june/templates/account/setting.html:18
+#: june/templates/admin/dashboard.html:14 june/templates/admin/user.html:21
+#: june/templates/topic/edit.html:25 june/templates/topic/topics.html:18
+msgid "Update"
+msgstr "更新"
+
+#: june/templates/account/signin.html:4
+msgid "Signin"
+msgstr "登入"
+
+#: june/templates/account/signin.html:18
+#: june/templates/snippet/nav-dropmenu.html:26
+#: june/templates/topic/view.html:79
+msgid "Sign In"
+msgstr "登入"
+
+#: june/templates/account/signin.html:19
+msgid "Forget Password?"
+msgstr "忘记密码？"
+
+#: june/templates/account/signup.html:4 june/templates/account/signup.html:15
+#: june/templates/snippet/nav-dropmenu.html:25
+msgid "Sign Up"
+msgstr "注册"
+
+#: june/templates/account/signup.html:16
+msgid "Already have an account?"
+msgstr "已有账户？"
+
+#: june/templates/admin/dashboard.html:3
+msgid "Dashboard"
+msgstr "后台"
+
+#: june/templates/admin/dashboard.html:10
+msgid "Sidebar"
+msgstr ""
+
+#: june/templates/admin/dashboard.html:19
+msgid "Members"
+msgstr "成员"
+
+#: june/templates/admin/dashboard.html:41 june/templates/topic/view.html:27
+msgid "Edit"
+msgstr "编辑"
+
+#: june/templates/email/signup.html:6
+msgid ""
+"Thanks for the registration. Follow the link below to activate your "
+"account."
+msgstr ""
+
+#: june/templates/email/signup.html:10
+msgid "Activate your account"
+msgstr "激活你的账户"
+
+#: june/templates/email/signup.html:13
+msgid "You can copy and paste the link to your browser address bar:"
+msgstr ""
+
+#: june/templates/email/signup.html:20
+msgid "This link will expire in 24 hours."
+msgstr ""
+
+#: june/templates/macro/ui.html:13
+msgid "Home"
+msgstr "首页"
+
+#: june/templates/macro/ui.html:14 june/templates/node/view.html:15
+#: june/templates/node/view.html:51 june/templates/topic/topics.html:3
+#: june/templates/user/topics.html:16
+msgid "Topics"
+msgstr "话题"
+
+#: june/templates/macro/ui.html:15 june/templates/node/nodes.html:3
+#: june/templates/node/nodes.html:15
+msgid "Nodes"
+msgstr "节点"
+
+#: june/templates/macro/ui.html:16 june/templates/user/users.html:3
+msgid "Users"
+msgstr "用户"
+
+#: june/templates/macro/ui.html:84
+msgid "New Topic"
+msgstr "新建话题"
+
+#: june/templates/node/create.html:4 june/templates/node/create.html:9
+#: june/templates/snippet/nav-dropmenu.html:16
+msgid "Create Node"
+msgstr "新建节点"
+
+#: june/templates/node/create.html:19 june/templates/topic/create.html:25
+msgid "Create"
+msgstr "新建"
+
+#: june/templates/node/edit.html:4 june/templates/node/edit.html:9
+msgid "Edit Node"
+msgstr "编辑节点"
+
+#: june/templates/node/view.html:37
+msgid "Create a topic"
+msgstr "新建话题"
+
+#: june/templates/node/view.html:39
+msgid "Edit this node"
+msgstr "编辑节点"
+
+#: june/templates/node/view.html:54
+msgid "Reputation"
+msgstr ""
+
+#: june/templates/snippet/nav-dropmenu.html:10
+msgid "View Profile"
+msgstr "查看个人主页"
+
+#: june/templates/snippet/nav-dropmenu.html:15
+msgid "Staff Power"
+msgstr "管理员权限"
+
+#: june/templates/snippet/nav-dropmenu.html:17
+msgid "Administration"
+msgstr "管理"
+
+#: june/templates/snippet/nav-dropmenu.html:21
+msgid "Sign Out"
+msgstr "登出"
+
+#: june/templates/topic/create.html:4 june/templates/topic/create.html:15
+msgid "Create Topic"
+msgstr "新建话题"
+
+#: june/templates/topic/edit.html:4 june/templates/topic/edit.html:15
+msgid "Edit Topic"
+msgstr "编辑话题"
+
+#: june/templates/topic/move.html:4
+msgid "Move Topic"
+msgstr "移动话题"
+
+#: june/templates/topic/move.html:18 june/templates/topic/view.html:29
+msgid "Move"
+msgstr "移动"
+
+#: june/templates/topic/topics.html:21
+msgid "Latest"
+msgstr "最新"
+
+#: june/templates/topic/topics.html:24
+msgid "Desert"
+msgstr "荒漠"
+
+#: june/templates/topic/view.html:55
+msgid "No replies yet."
+msgstr "还没有评论。"
+
+#: june/templates/topic/view.html:73
+msgid "Send a Reply"
+msgstr "评论"
+
+#: june/templates/topic/view.html:78
+msgid "Login is required."
+msgstr "登录后方可使用。"
+
+#: june/templates/topic/view.html:96
+msgid "Topics in this node"
+msgstr "该节点下的话题"
+
+#: june/templates/user/users.html:14
+msgid "Active Members"
+msgstr "活跃用户"
+
+#: june/templates/user/users.html:30
+msgid "Staffs"
+msgstr "管理员"
+
+#: june/templates/user/view.html:43
+msgid "More topics"
+msgstr "更多话题"
+
+#: june/views/account.py:29 june/views/account.py:121
+msgid "Invalid or expired token."
+msgstr "不合法或者过期的密钥。"
+
+#: june/views/account.py:34
+msgid "This account is verified."
+msgstr "账户已认证。"
+
+#: june/views/account.py:52
+msgid "We have sent you an activate email, check your inbox."
+msgstr "我们向你发出了一封激活邮件，请查收。"
+
+#: june/views/account.py:104
+msgid "We have sent you an email, check your inbox."
+msgstr "我们向你发出了一封邮件，请查收。"
+
+#: june/views/account.py:117
+msgid "Token is missing."
+msgstr "密钥丢失。"
+
+#: june/views/account.py:127
+msgid "Your password is updated."
+msgstr "密码已更新。"
+
+#: june/views/admin.py:31
+msgid "Role"
+msgstr "角色"
+
+#: june/views/admin.py:33
+msgid "Spam"
+msgstr "垃圾账户"
+
+#: june/views/topic.py:72 june/views/topic.py:76
+msgid "You have no permission in this node."
+msgstr "你没有该节点的权限。"
+
+#: june/views/topic.py:147
+msgid "Password is required to delete a topic"
+msgstr "删除一个话题需要密码"
+
+#: june/views/topic.py:150
+msgid "Password is wrong"
+msgstr "密码错误"
+
+#: june/views/topic.py:178
+msgid "Move topic success."
+msgstr "成功转移话题。"
+
+#: june/views/topic.py:180
+msgid "Node not found."
+msgstr "节点没找到。"
+
+#: june/views/topic.py:218
+msgid "Missing content"
+msgstr "缺少内容"

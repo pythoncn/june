@@ -20,8 +20,9 @@ database:
 babel-extract:
 	@pybabel extract -F etc/babel.cfg -o data/messages.pot .
 
+language = zh
 babel-init:
-	@pybabel init -i data/messages.pot -d june/translations -l zh
+	@pybabel init -i data/messages.pot -d june/translations -l ${language}
 
 babel-compile:
 	@pybabel compile -d june/translations

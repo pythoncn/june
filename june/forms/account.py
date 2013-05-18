@@ -106,7 +106,7 @@ class SettingForm(BaseForm):
 class FindForm(BaseForm):
     account = TextField(
         _('Account'), validators=[DataRequired(), Length(min=3, max=20)],
-        description=_('Username or email address')
+        description=_('Username or Email')
     )
 
     def validate_account(self, field):
