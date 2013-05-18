@@ -17,5 +17,5 @@
     Project: Bootstrap
     Website: http://twitter.github.io/bootstrap/
 
-    Translator:
-    Language: zh_CN
+    Translator: Hsiaoming Yang <me@lepture.com>
+    Language: zh

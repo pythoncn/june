@@ -45,40 +45,8 @@
           <div class="span4">
             {% block sidebar %}
             {% endblock %}
-
             {% block sitestatus %}
-            {% with site_sidebar = get_site_sidebar() %}
-            {% if site_sidebar %}
-            {{ site_sidebar|safe }}
-            {% endif %}
-            {% endwith %}
-            <div class="module">
-              <div class="module-header inner">
-                <strong>{{_('Site Status')}}</strong>
-              </div>
-              <div class="module-body inner">
-                {% with status = get_site_status() %}
-                <table class="site-status">
-                  <tr>
-                    <th>Member</th>
-                    <td>{{status.account}}</td>
-                  </tr>
-                  <tr>
-                    <th>Node</th>
-                    <td>{{status.node}}</td>
-                  </tr>
-                  <tr>
-                    <th>Topic</th>
-                    <td>{{status.topic}}</td>
-                  </tr>
-                  <tr>
-                    <th>Reply</th>
-                    <td>{{status.reply}}</td>
-                  </tr>
-                </table>
-                {% endwith %}
-              </div>
-            </div>
+            {% include "snippet/sidebar.html" %}
             {% endblock %}
           </div>
         </div>
@@ -86,18 +54,7 @@
       </div>
     </div>
     {% block footer %}
-    <footer id="footer">
-      <div class="container clearfix">
-        <div class="muted links pull-left">
-          <a href="https://github.com/pythoncn/june">Open Source</a>
-          <span class="sep">&middot;</span>
-          <a href="/humans.txt">Authors</a>
-        </div>
-        <p class="muted credit pull-right">
-        &copy;<time datetime="{{config.SITE_TIME}}">{{config.SITE_TIME.year}}</time> {{config.SITE_TITLE}}. All rights reserved.
-        </p>
-      </div>
-    </footer>
+    {% include "snippet/footer.html" %}
     {% endblock %}
     {% for url in config.SITE_SCRIPTS %}
     <script src="{{url}}"></script>
