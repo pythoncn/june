@@ -127,3 +127,10 @@ def reset():
         flash(_('Your password is updated.'), 'info')
         return redirect(url_for('.setting'))
     return render_template('account/reset.html', form=form, token=token)
+
+
+@bp.route('/delete', methods=['GET', 'POST'])
+def delete():
+    """Delete the account. This will not delete the data related to
+    the user, such as topics and replies."""
+    return 'not ready'

@@ -135,6 +135,25 @@ def edit(uid):
     return render_template('topic/edit.html', topic=topic, form=form)
 
 
+@bp.route('/<int:uid>/delete', methods=['POST'])
+@require_user
+def delete(uid):
+    """
+    Delete a topic by the topic author.
+    """
+    #TODO: should we delete the replies of the topic?
+    password = request.form.get('password')
+    if not password:
+        flash(_('Password is required to delete a topic'), 'info')
+        return redirect(url_for('.view', uid=uid))
+    if not g.user.check_password(password):
+        flash(_('Password is wrong'), 'error')
+        return redirect(url_for('.view', uid=uid))
+    topic = Topic.query.get_or_404(uid)
+    topic.delete()
+    return redirect(url_for('.topics'))
+
+
 @bp.route('/<int:uid>/move', methods=['GET', 'POST'])
 @require_user
 def move(uid):
