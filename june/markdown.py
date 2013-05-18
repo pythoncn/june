@@ -15,6 +15,8 @@ class JuneRenderer(m.HtmlRenderer, m.SmartyPants):
 
     def block_code(self, text, lang):
         if not lang:
+            if isinstance(text, unicode):
+                text = text.encode('utf-8')
             return '<pre><code>%s</code></pre>' % h.escape_html(text.strip())
         if self.use_pygments:
             lexer = get_lexer_by_name(lang, stripall=True)
