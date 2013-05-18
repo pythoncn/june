@@ -9,6 +9,7 @@ SITE_URL = '/'
 SITE_STYLES = [
     '/_static/css/bootstrap.css',
     '/_static/css/bootstrap-responsive.css',
+    '/_static/css/pygments.css',
     '/_static/css/site.css',
 ]
 SITE_SCRIPTS = [

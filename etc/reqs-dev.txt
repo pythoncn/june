@@ -2,6 +2,8 @@
 
 Flask
 misaka
+pygments
+houdini.py
 gevent==0.13.8
 
 # database

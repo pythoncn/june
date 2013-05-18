@@ -1,10 +1,29 @@
 # coding: utf-8
 
 import re
+import houdini as h
 import misaka as m
+from pygments import highlight
+from pygments.lexers import get_lexer_by_name
+from pygments.formatters import HtmlFormatter
 
 
 class JuneRenderer(m.HtmlRenderer, m.SmartyPants):
+    def __init__(self, *args, **kwargs):
+        self.use_pygments = True
+        super(JuneRenderer, self).__init__(*args, **kwargs)
+
+    def block_code(self, text, lang):
+        if not lang:
+            return '<pre><code>%s</code></pre>' % h.escape_html(text.strip())
+        if self.use_pygments:
+            lexer = get_lexer_by_name(lang, stripall=True)
+            formatter = HtmlFormatter()
+            return highlight(text, lexer, formatter)
+        return '<pre class="language-%s"><code>%s</code></pre>' % (
+            lang, h.escape_html(text.strip())
+        )
+
     def autolink(self, link, is_email):
         title = link.replace('http://', '').replace('https://', '')
 
@@ -74,10 +93,11 @@ class JuneRenderer(m.HtmlRenderer, m.SmartyPants):
         return '<p>%s</p>' % text
 
 
-def rich_markdown(text):
+def rich_markdown(text, use_pygments=True):
     if text is None:
         return ''
     renderer = JuneRenderer(flags=m.HTML_ESCAPE)
+    renderer.use_pygments = use_pygments
     ext = (
         m.EXT_NO_INTRA_EMPHASIS | m.EXT_FENCED_CODE | m.EXT_AUTOLINK |
         m.EXT_TABLES | m.EXT_STRIKETHROUGH
