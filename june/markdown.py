@@ -19,9 +19,13 @@ class JuneRenderer(m.HtmlRenderer, m.SmartyPants):
                 text = text.encode('utf-8')
             return '<pre><code>%s</code></pre>' % h.escape_html(text.strip())
         if self.use_pygments:
-            lexer = get_lexer_by_name(lang, stripall=True)
-            formatter = HtmlFormatter()
-            return highlight(text, lexer, formatter)
+            try:
+                # if the language can not be found, it will raise
+                lexer = get_lexer_by_name(lang.lower(), stripall=True)
+                formatter = HtmlFormatter()
+                return highlight(text, lexer, formatter)
+            except:
+                pass
         return '<pre class="language-%s"><code>%s</code></pre>' % (
             lang, h.escape_html(text.strip())
         )
