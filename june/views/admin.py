@@ -28,7 +28,7 @@ class UserForm(SettingForm):
         _('Email'), validators=[DataRequired(), Email()]
     )
     role = SelectField(
-        description=_('Role'),
+        _('Role'),
         choices=[
             ('spam', _('Spam')),
             ('user', _('User')),

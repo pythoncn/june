@@ -19,6 +19,7 @@ class NodeForm(BaseForm):
     )
     description = TextAreaField(_('Description'))
     role = SelectField(
+        _('Role'),
         description=_('Required role'),
         choices=[
             ('user', _('User')),

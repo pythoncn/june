@@ -160,7 +160,7 @@ msgstr "管理员"
 
 #: june/forms/node.py:26 june/views/admin.py:36
 msgid "Admin"
-msgstr "管理者"
+msgstr "超级管理员"
 
 #: june/forms/node.py:35
 msgid "The node exists"
