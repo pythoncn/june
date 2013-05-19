@@ -17,7 +17,7 @@ a img:hover {
   margin-right: 5px;
 }
 .meta {
-  font-family: 'Optima', 'Georgia', serif;
+  font-family: 'Optima', 'Georgia', 'Hiragino Sans GB', 'WenQuanYi Micro Hei', 'Microsoft YaHei', serif;
 }
 .nav .account-group {
   margin-left: 42px;
