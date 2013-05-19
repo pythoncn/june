@@ -196,6 +196,9 @@ textarea.input-block-level {
 .item-list .item:hover {
   background-color: #fff;
 }
+.item-list.reply-list .item:hover {
+    background: inherit;
+}
 .item-list .title {
   padding: 0;
   margin: 0 20px 3px 0;
