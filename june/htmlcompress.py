@@ -41,7 +41,7 @@ def _make_dict_from_listing(listing):
 
 class HTMLCompress(Extension):
     # isolated_elements = set(['script', 'style', 'noscript', 'textarea'])
-    isolated_elements = set(['textarea'])
+    isolated_elements = set(['title', 'textarea'])
     void_elements = set(['br', 'img', 'area', 'hr', 'param', 'input',
                          'embed', 'col'])
     block_elements = set(['div', 'p', 'form', 'ul', 'ol', 'li', 'table', 'tr',
