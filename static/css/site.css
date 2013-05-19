@@ -133,7 +133,7 @@ textarea.input-block-level {
 /* module */
 .module {
   position: relative;
-  background-color: #f9f9f7;
+  background-color: #f9f9f9;
   border: 1px solid #eee;
   border-color: rgba(0, 0, 0, .1);
   border-radius: 3px;
@@ -189,14 +189,17 @@ textarea.input-block-level {
 /* topics */
 .item-list .item {
   position: relative;
-  padding: 10px 20px;
-  border-top: 1px solid #ddd;
+  padding: 15px 20px;
+  border-top: 1px solid #ccc;
 }
 .item-list .item:first-of-type {
   border-top: none;
 }
 .item-list .item:hover {
   background-color: #fff;
+}
+.item-list.reply-list .item:hover {
+    background: inherit;
 }
 .item-list .title {
   padding: 0;
