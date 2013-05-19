@@ -132,7 +132,6 @@ textarea.input-block-level {
 .module {
   position: relative;
   background-color: #f9f9f7;
-  text-shadow: 0 1px 0 #fff;
   border: 1px solid #eee;
   border-color: rgba(0, 0, 0, .1);
   border-radius: 3px;
@@ -195,7 +194,7 @@ textarea.input-block-level {
   border-top: none;
 }
 .item-list .item:hover {
-  background-color: #ffe;
+  background-color: #fff;
 }
 .item-list .title {
   padding: 0;
@@ -204,6 +203,9 @@ textarea.input-block-level {
   line-height: 1.5;
   font-size: 1.2em;
   word-wrap: break-word;
+}
+.item-list .title a {
+  color: #007fbf ;
 }
 .item-list .entry-content {
   margin-right: 24px;
