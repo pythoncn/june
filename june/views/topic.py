@@ -127,6 +127,8 @@ def edit(uid):
     :param uid: the id of the topic
     """
     topic = Topic.query.get_or_404(uid)
+    if g.user.id != topic.account_id and not g.user.is_staff:
+        return abort(403)
     form = TopicForm(obj=topic)
     if form.validate_on_submit():
         form.populate_obj(topic)
