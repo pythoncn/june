@@ -275,7 +275,7 @@ msgstr "欢迎，"
 msgid ""
 "You have submitted a find password request, follow the link below to find"
 " your password. If you didn't make the request, ignore this email."
-msgstr "你提交了找回密码的请求，点击下面的链接就可以找回密码如果这不是你发起的请求，请忽略该邮件。"
+msgstr "你提交了找回密码的请求，点击下面的链接就可以找回密码。如果这不是你发起的请求，请忽略该邮件。"
 
 #: june/templates/email/find.html:14 june/templates/email/signup.html:13
 msgid "You can copy and paste the link to your browser address bar:"
