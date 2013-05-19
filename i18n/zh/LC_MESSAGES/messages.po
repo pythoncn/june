@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  0.1.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-05-19 11:54+0800\n"
+"POT-Creation-Date: 2013-05-19 20:55+0800\n"
 "PO-Revision-Date: 2013-05-18 23:01+0800\n"
 "Last-Translator: Hsiaoming Yang <me@lepture.com>\n"
 "Language-Team: zh <LL@li.org>\n"
@@ -314,6 +314,14 @@ msgstr "节点"
 msgid "Users"
 msgstr "用户"
 
+#: june/templates/macro/ui.html:46
+msgid "discuss"
+msgstr "讨论"
+
+#: june/templates/macro/ui.html:79
+msgid "topics"
+msgstr "话题"
+
 #: june/templates/macro/ui.html:84
 msgid "New Topic"
 msgstr "新建话题"
@@ -459,23 +467,23 @@ msgstr "垃圾账户"
 msgid "You have no permission in this node."
 msgstr "你没有该节点的权限。"
 
-#: june/views/topic.py:147
+#: june/views/topic.py:149
 msgid "Password is required to delete a topic"
 msgstr "删除一个话题需要密码"
 
-#: june/views/topic.py:150
+#: june/views/topic.py:152
 msgid "Password is wrong"
 msgstr "密码错误"
 
-#: june/views/topic.py:178
+#: june/views/topic.py:180
 msgid "Move topic success."
 msgstr "成功转移话题。"
 
-#: june/views/topic.py:180
+#: june/views/topic.py:182
 msgid "Node not found."
 msgstr "节点没找到。"
 
-#: june/views/topic.py:218
+#: june/views/topic.py:220
 msgid "Missing content"
 msgstr "缺少内容"
 
