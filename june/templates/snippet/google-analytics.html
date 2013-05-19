@@ -6,6 +6,8 @@ _gaq.push(['_trackPageview']);
 _gaq.push(['_trackPageLoadTime']);
 {% if g.user %}
 _gaq.push(['_setCustomVar', 1, 'UserType', 'Member', 2]);
+{% else %}
+_gaq.push(['_setCustomVar', 1, 'UserType', 'Guest', 2]);
 {% endif %}
 (function() {
 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
