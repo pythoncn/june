@@ -9,6 +9,14 @@ from .models import Account, cache
 
 
 class require_role(object):
+    roles = {
+        'spam': 0,
+        'new': 1,
+        'user': 2,
+        'staff': 3,
+        'admin': 4,
+    }
+
     def __init__(self, role):
         self.role = role
 
@@ -25,14 +33,12 @@ class require_role(object):
             if g.user.id == 1:
                 # this is superuser, have no limitation
                 return method(*args, **kwargs)
-            if g.user.role == 'admin':
-                return method(*args, **kwargs)
             if g.user.role == 'new':
                 flash(_('Please verify your email'), 'warn')
                 return redirect('/account/settings')
             if g.user.role == 'spam':
                 return redirect('/doc/guideline')
-            if g.user.role != self.role:
+            if self.roles[g.user.role] < self.roles[self.role]:
                 return abort(403)
             return method(*args, **kwargs)
         return wrapper
