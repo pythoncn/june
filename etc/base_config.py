@@ -1,3 +1,6 @@
+import os
+rootdir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+
 DEBUG = False
 TESTING = False
 VERIFY_EMAIL = True
@@ -53,3 +56,4 @@ GRAVATAR_EXTRA = ''
 # babel settings
 # BABEL_DEFAULT_LOCALE = 'zh'
 # BABEL_SUPPORTED_LOCALES = ['zh']
+BABEL_DIRNAME = os.path.join(rootdir, 'i18n')

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  0.1.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-05-18 23:55+0800\n"
+"POT-Creation-Date: 2013-05-19 11:54+0800\n"
 "PO-Revision-Date: 2013-05-18 23:01+0800\n"
 "Last-Translator: Hsiaoming Yang <me@lepture.com>\n"
 "Language-Team: zh <LL@li.org>\n"
@@ -281,7 +281,7 @@ msgstr "你提交了找回密码的请求，点击下面的链接就可以找回
 msgid "You can copy and paste the link to your browser address bar:"
 msgstr "你可以复制粘贴下面的链接到浏览器地址栏中："
 
-#: june/templates/email/find.html:18 june/templates/email/signup.html:20
+#: june/templates/email/find.html:21 june/templates/email/signup.html:20
 msgid "This link will expire in 24 hours."
 msgstr "该链接 24 小时内有效。"
 
@@ -366,6 +366,10 @@ msgstr "管理"
 #: june/templates/snippet/nav-dropmenu.html:21
 msgid "Sign Out"
 msgstr "登出"
+
+#: june/templates/snippet/sidebar.html:8
+msgid "Site Status"
+msgstr "站点统计"
 
 #: june/templates/topic/create.html:4 june/templates/topic/create.html:15
 msgid "Create Topic"

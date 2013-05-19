@@ -22,13 +22,13 @@ babel-extract:
 
 language = zh
 babel-init:
-	@pybabel init -i data/messages.pot -d june/translations -l ${language}
+	@pybabel init -i data/messages.pot -d i18n -l ${language}
 
 babel-compile:
-	@pybabel compile -d june/translations
+	@pybabel compile -d i18n
 
 babel-update: babel-extract
-	@pybabel update -i data/messages.pot -d june/translations
+	@pybabel update -i data/messages.pot -d i18n
 
 # Common Task
 clean: clean-build clean-pyc

@@ -14,7 +14,9 @@ Flask-Cache
 #python-memcached
 
 # i18n and l10n
-Flask-Babel
+# Flask Babel2 is modified my Hsiaoming Yang to support
+# customized dirname and domain
+Flask-Babel2
 
 # form support
 Flask-WTF
