@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  0.1.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-05-19 20:55+0800\n"
+"POT-Creation-Date: 2013-05-20 09:54+0800\n"
 "PO-Revision-Date: 2013-05-18 23:01+0800\n"
 "Last-Translator: Hsiaoming Yang <me@lepture.com>\n"
 "Language-Team: zh <LL@li.org>\n"
@@ -46,11 +46,11 @@ msgstr "%(num)i 分钟前"
 msgid "just now"
 msgstr "刚刚"
 
-#: june/helpers.py:31
+#: june/helpers.py:37
 msgid "Please verify your email"
 msgstr "请验证你的邮箱"
 
-#: june/helpers.py:85
+#: june/helpers.py:91
 msgid "Too many requests in a time"
 msgstr "多次重复请求"
 
@@ -130,6 +130,18 @@ msgstr "该账户不存在。"
 msgid "Remember your password"
 msgstr "请记住自己的密码"
 
+#: june/forms/account.py:129
+msgid "Confirm"
+msgstr "确认"
+
+#: june/forms/account.py:130
+msgid "Confirm your password"
+msgstr "请确认自己的密码"
+
+#: june/forms/account.py:135
+msgid "Passwords don't match."
+msgstr "密码不匹配。"
+
 #: june/forms/node.py:13 june/forms/topic.py:12
 msgid "Title"
 msgstr "标题"
@@ -146,23 +158,27 @@ msgstr "链接"
 msgid "The url name of the node"
 msgstr "节点的链接名"
 
-#: june/forms/node.py:22
+#: june/forms/node.py:22 june/views/admin.py:31
+msgid "Role"
+msgstr "角色"
+
+#: june/forms/node.py:23
 msgid "Required role"
 msgstr "权限控制"
 
-#: june/forms/node.py:24 june/views/admin.py:34
+#: june/forms/node.py:25 june/views/admin.py:34
 msgid "User"
 msgstr "用户"
 
-#: june/forms/node.py:25 june/views/admin.py:35
+#: june/forms/node.py:26 june/views/admin.py:35
 msgid "Staff"
 msgstr "管理员"
 
-#: june/forms/node.py:26 june/views/admin.py:36
+#: june/forms/node.py:27 june/views/admin.py:36
 msgid "Admin"
 msgstr "超级管理员"
 
-#: june/forms/node.py:35
+#: june/forms/node.py:36
 msgid "The node exists"
 msgstr "节点已存在"
 
@@ -209,7 +225,7 @@ msgstr "发送"
 msgid "Reset Password"
 msgstr "重置密码"
 
-#: june/templates/account/reset.html:12 june/templates/node/edit.html:19
+#: june/templates/account/reset.html:13 june/templates/node/edit.html:19
 msgid "Save"
 msgstr "保存"
 
@@ -454,10 +470,6 @@ msgstr "密钥丢失。"
 #: june/views/account.py:127
 msgid "Your password is updated."
 msgstr "密码已更新。"
-
-#: june/views/admin.py:31
-msgid "Role"
-msgstr "角色"
 
 #: june/views/admin.py:33
 msgid "Spam"

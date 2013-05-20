@@ -8,6 +8,7 @@
   <h2>{{_('Reset Password')}}</h2>
   {{ form.csrf_token }}
   {{ vertical_field(form.password, 'input-block-level') }}
+  {{ vertical_field(form.confirm, 'input-block-level') }}
   <div class="form-submit">
     <button class="btn btn-success">{{_('Save')}}</button>
   </div>

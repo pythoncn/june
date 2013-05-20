@@ -125,3 +125,11 @@ class ResetForm(BaseForm):
         _('Password'), validators=[DataRequired()],
         description=_('Remember your password')
     )
+    confirm = PasswordField(
+        _('Confirm'), validators=[DataRequired()],
+        description=_('Confirm your password')
+    )
+
+    def validate_confirm(self, field):
+        if field.data != self.password.data:
+            raise ValueError(_("Passwords don't match."))
