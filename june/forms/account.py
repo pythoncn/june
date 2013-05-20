@@ -70,7 +70,7 @@ class SignupForm(BaseForm):
 class SigninForm(BaseForm):
     account = TextField(
         _('Account'),
-        validators=[DataRequired(), Length(min=3, max=20)],
+        validators=[DataRequired(), Length(min=3, max=200)],
         description=_('Username or Email')
     )
     password = PasswordField(
