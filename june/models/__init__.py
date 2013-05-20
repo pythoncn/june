@@ -23,7 +23,7 @@ def fill_topics(items, user=None, node=None):
 def fill_with_users(items):
     uids = set(map(lambda o: o.account_id, items))
     users = get_by_ids(Account, uids)
-    items = map(lambda o: _attach_user(o, users[o.account_id]), items)
+    items = map(lambda o: _attach_user(o, users.get(o.account_id)), items)
     return items
 
 
@@ -74,7 +74,10 @@ def get_site_status():
 
 
 def _attach_user(item, user):
-    item.user = user
+    if not user:
+        item.user = NonAccount()
+    else:
+        item.user = user
     return item
 
 
