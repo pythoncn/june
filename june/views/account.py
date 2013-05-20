@@ -130,7 +130,18 @@ def reset():
 
 
 @bp.route('/delete', methods=['GET', 'POST'])
+@require_login
 def delete():
     """Delete the account. This will not delete the data related to
     the user, such as topics and replies."""
+    return 'not ready'
+
+
+@bp.route('/notification')
+@require_login
+def notification():
+    """Show notifications of a user."""
+    # 1. read from cache, these notifications are unreaded
+    # 2. read from database, these notifications are readed
+    # 3. flush the notifications from cache to database
     return 'not ready'
