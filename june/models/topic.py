@@ -84,6 +84,7 @@ class Topic(db.Model):
         node1 = Node.query.get(self.node_id)
         node1.topic_count -= 1
         db.session.add(node1)
+
         ns1 = NodeStatus.query.filter_by(
             node_id=self.node_id, account_id=self.account_id
         ).first()
@@ -98,7 +99,7 @@ class Topic(db.Model):
         ).first()
         if not ns:
             ns = NodeStatus(
-                node_id=self.node_id,
+                node_id=node.id,
                 account_id=self.account_id,
                 topic_count=0,
             )
