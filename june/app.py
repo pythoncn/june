@@ -5,6 +5,7 @@ PROJDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 CONFDIR = os.path.join(PROJDIR, 'etc')
 
 import datetime
+import logging
 from flask import Flask
 from flask import request, g
 from flask.ext.babel import gettext as _
@@ -45,6 +46,7 @@ def create_app(config=None):
 
     register_babel(app)
     register_routes(app)
+    register_logger(app)
 
     if app.debug:
         register_static(app)
@@ -128,3 +130,12 @@ def register_babel(app):
         match = app.config['BABEL_SUPPORTED_LOCALES']
         default = app.config['BABEL_DEFAULT_LOCALE']
         return request.accept_languages.best_match(match, default)
+
+
+def register_logger(app):
+    """Track the logger for production mode."""
+    if app.debug:
+        return
+    handler = logging.StreamHandler()
+    handler.setLevel(logging.ERROR)
+    app.logger.addHandler(handler)
