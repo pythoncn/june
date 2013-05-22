@@ -28,6 +28,9 @@
       {% if user.is_staff %}
       <span class="label label-success">staff</span>
       {% endif %}
+      {% if user.role == 'spam' %}
+      <span class="label label-success">spammer</span>
+      {% endif %}
     </div>
   </div>
   {% if user.description %}
