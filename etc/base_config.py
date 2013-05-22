@@ -4,6 +4,7 @@ rootdir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 DEBUG = False
 TESTING = False
 VERIFY_EMAIL = True
+VERIFY_USER = True
 
 #: site
 SITE_TITLE = 'June Forum'

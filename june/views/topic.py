@@ -1,6 +1,7 @@
 # coding: utf-8
 
-from flask import Blueprint, g, request, flash
+import datetime
+from flask import Blueprint, g, request, flash, current_app
 from flask import render_template, redirect, abort, jsonify
 from flask import url_for
 from flask.ext.babel import gettext as _
@@ -66,6 +67,20 @@ def create(urlname):
 
     :param urlname: the urlname of the Node model
     """
+
+    now = datetime.datetime.utcnow()
+    delta = now - g.user.created
+    verify = current_app.config.get('VERIFY_USER')
+    if verify and not delta.days:
+        # only allow user who has been registered after a day
+        flash(_('New users can not create a topic'), 'warn')
+        return redirect(url_for('.topics'))
+
+    delta = now - g.user.active
+    if delta.total_seconds() < 300:
+        flash(_("Don't be a spammer, take your time"), 'warn')
+        return redirect(url_for('.topics'))
+
     node = Node.query.filter_by(urlname=urlname).first_or_404()
 
     if node.role == 'staff' and not g.user.is_staff:
