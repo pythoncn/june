@@ -37,7 +37,8 @@ class require_role(object):
                 flash(_('Please verify your email'), 'warn')
                 return redirect('/account/settings')
             if g.user.role == 'spam':
-                return redirect('/doc/guideline')
+                flash(_('You are a spammer'), 'error')
+                return redirect('/')
             if self.roles[g.user.role] < self.roles[self.role]:
                 return abort(403)
             return method(*args, **kwargs)
