@@ -71,14 +71,16 @@ def create(urlname):
     now = datetime.datetime.utcnow()
     delta = now - g.user.created
     verify = current_app.config.get('VERIFY_USER')
-    if verify and not delta.days:
+    if verify and not delta.days and not g.user.is_admin:
         # only allow user who has been registered after a day
         flash(_('New users can not create a topic'), 'warn')
         return redirect(url_for('.topics'))
 
     delta = now - g.user.active
-    if delta.total_seconds() < 300:
-        flash(_("Don't be a spammer, take your time"), 'warn')
+    if delta.total_seconds() < 300 and g.user.is_staff:
+        # you cannot create a topic
+        flash(_("Don't be a spammer, take a rest for %(time) seconds.",
+                time=delta.total_seconds()), 'warn')
         return redirect(url_for('.topics'))
 
     node = Node.query.filter_by(urlname=urlname).first_or_404()
