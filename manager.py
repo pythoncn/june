@@ -4,6 +4,7 @@ import gevent.monkey
 gevent.monkey.patch_all()
 
 import os
+import sys
 from flask.ext.script import Manager
 from june.app import create_app
 
@@ -36,7 +37,10 @@ def runserver(port=5000, with_profile=False):
         http_server = WSGIServer(('', port), wsgi)
         http_server.serve_forever()
 
-    run_server()
+    try:
+        run_server()
+    except (KeyboardInterrupt, TypeError):
+        sys.exit()
 
 
 @manager.command
