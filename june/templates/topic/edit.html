@@ -26,6 +26,12 @@
         </div>
       </form>
     </div>
+    <div class="module">
+      <form class="form inner" action="{{url_for('topic.delete', uid=topic.id)}}" method="post">
+        <input type="password" name="password" placeholder="{{_('Password')}}" />
+        <button class="btn btn-danger">{{_('Delete')}}</button>
+      </form>
+    </div>
   </div>
   <div class="span6">
     <div class="module">
