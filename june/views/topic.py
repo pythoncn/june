@@ -76,7 +76,11 @@ def create(urlname):
         flash(_('New users can not create a topic'), 'warn')
         return redirect(url_for('.topics'))
 
-    delta = now - g.user.active
+    if g.user.active:
+        # if use has no active information
+        delta = now - g.user.active
+    else:
+        delta = 1000
     if delta.total_seconds() < 300 and g.user.is_staff:
         # you cannot create a topic
         flash(_("Don't be a spammer, take a rest for %(time) seconds.",
