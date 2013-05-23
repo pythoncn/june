@@ -16,6 +16,12 @@ a img:hover {
   margin-left: 5px;
   margin-right: 5px;
 }
+.text-right {
+  text-align: right;
+}
+.text-right button {
+  margin-left: 1em;
+}
 .meta {
   font-family: 'Optima', 'Georgia', 'Hiragino Sans GB', 'WenQuanYi Micro Hei', 'Microsoft YaHei', serif;
 }
@@ -127,6 +133,9 @@ textarea.input-block-level {
 .topic-form textarea {
   min-height: 350px;
   max-width: 100%;
+}
+.preview-area {
+  display: none;
 }
 
 

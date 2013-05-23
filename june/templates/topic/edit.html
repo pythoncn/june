@@ -21,14 +21,15 @@
           {{ render_field(form.title, 'input-block-level') }}
           {{ render_field(form.content, 'input-block-level') }}
         </div>
-        <div class="module-footer inner clearfix">
-          <button class="btn btn-success pull-right">{{_('Update')}}</button>
+        <div class="module-footer inner text-right">
+          <button data-target="#content" class="btn preview-button">{{_('Preview')}}</button>
+          <button class="btn btn-success">{{_('Update')}}</button>
         </div>
       </form>
     </div>
     <div class="module">
-      <form class="form inner" action="{{url_for('topic.delete', uid=topic.id)}}" method="post">
-        <input type="password" name="password" placeholder="{{_('Password')}}" />
+      <form class="form-inline inner" action="{{url_for('topic.delete', uid=topic.id)}}" method="post">
+        <input type="password" class="sep" name="password" placeholder="{{_('Password')}}" />
         <button class="btn btn-danger">{{_('Delete')}}</button>
       </form>
     </div>

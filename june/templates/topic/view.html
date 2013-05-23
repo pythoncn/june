@@ -69,8 +69,9 @@
   <form class="reply-form inner" action="{{url_for('topic.reply', uid=topic.id)}}" method="post">
     {{ form.csrf_token }}
     {{ render_field(form.content, 'input-block-level') }}
-    <div class="form-submit clearfix">
-      <button class="btn btn-success pull-right">{{_('Send a Reply')}}</button>
+    <div class="form-submit text-right">
+      <button data-target="#content" class="btn preview-button">{{_('Preview')}}</button>
+      <button class="btn btn-success">{{_('Send a Reply')}}</button>
     </div>
   </form>
   {% else %}

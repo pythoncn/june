@@ -21,8 +21,9 @@
           {{ render_field(form.title, 'input-block-level') }}
           {{ render_field(form.content, 'input-block-level') }}
         </div>
-        <div class="module-footer inner clearfix">
-          <button class="btn btn-success pull-right">{{_('Create')}}</button>
+        <div class="module-footer inner text-right">
+          <button data-target="#content" class="btn preview-button">{{_('Preview')}}</button>
+          <button class="btn btn-success">{{_('Create')}}</button>
         </div>
       </form>
     </div>
