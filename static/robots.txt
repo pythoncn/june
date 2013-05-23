@@ -1,1 +1,7 @@
 User-agent: *
+Disallow: /topic/create/*
+Disallow: /account/signin
+Disallow: /account/signup
+Disallow: /topic/*/edit
+Disallow: /topic/*/move
+Disallow: /topic/*/reply
