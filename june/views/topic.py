@@ -81,10 +81,11 @@ def create(urlname):
         delta = now - g.user.active
     else:
         delta = 1000
-    if delta.total_seconds() < 300 and g.user.is_staff:
+    if delta.total_seconds() < 300 and not g.user.is_staff:
         # you cannot create a topic
+        left = 300 - delta.total_seconds()
         flash(_("Don't be a spammer, take a rest for %(time) seconds.",
-                time=delta.total_seconds()), 'warn')
+                time=left), 'warn')
         return redirect(url_for('.topics'))
 
     node = Node.query.filter_by(urlname=urlname).first_or_404()
