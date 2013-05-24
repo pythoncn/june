@@ -82,9 +82,12 @@ def register_jinja(app):
     from .views.admin import load_sidebar
     from werkzeug.datastructures import ImmutableDict
 
-    app.jinja_options = ImmutableDict(
-        extensions=['jinja2.ext.autoescape', 'jinja2.ext.with_', HTMLCompress]
-    )
+    if not app.testing:
+        app.jinja_options = ImmutableDict(
+            extensions=[
+                'jinja2.ext.autoescape', 'jinja2.ext.with_', HTMLCompress
+            ]
+        )
 
     app.jinja_env.filters['markdown'] = plain_markdown
 

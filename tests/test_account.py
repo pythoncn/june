@@ -41,3 +41,39 @@ class TestSignin(BaseSuite):
     def test_get(self):
         rv = self.client.get('/account/signin')
         assert '</form>' in rv.data
+
+    def test_invalid_password(self):
+        self.prepare_account()
+        rv = self.client.post('/account/signin', data={
+            'account': 'foo',
+            'password': '2'
+        })
+        assert 'text-error' in rv.data
+
+    def test_invalid_account(self):
+        rv = self.client.post('/account/signin', data={
+            'account': 'foo',
+            'password': '1'
+        })
+        assert 'text-error' in rv.data
+
+    def test_success(self):
+        self.prepare_account()
+        rv = self.client.post('/account/signin', data={
+            'account': 'foo',
+            'password': '1'
+        })
+        assert rv.status_code == 302
+
+
+class TestFind(BaseSuite):
+    def test_get(self):
+        rv = self.client.get('/account/find')
+        assert '</form>' in rv.data
+
+    def test_post(self):
+        self.prepare_account()
+        rv = self.client.post('/account/find', data={
+            'account': 'foo',
+        })
+        assert '</table>' in rv.data

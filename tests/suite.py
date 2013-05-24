@@ -3,7 +3,7 @@
 import os
 import tempfile
 from june.app import create_app
-from june.models import db
+from june.models import db, Account
 
 
 class BaseSuite(object):
@@ -23,6 +23,20 @@ class BaseSuite(object):
 
         if hasattr(self, 'prehook'):
             self.prehook()
+
+    def prepare_account(self):
+        with self.app.test_request_context():
+            foo = Account(username='foo', email='foo@email.com', password='1')
+            foo.role = 'user'
+
+            bar = Account(username='bar', email='bar@email.com', password='1')
+            bar.role = 'staff'
+
+            baz = Account(username='baz', email='baz@email.com', password='1')
+            db.session.add(foo)
+            db.session.add(bar)
+            db.session.add(baz)
+            db.session.commit()
 
     def tearDown(self):
         os.close(self.db_fd)

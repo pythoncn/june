@@ -99,7 +99,7 @@ def find():
     form = FindForm()
     if form.validate_on_submit():
         msg = find_mail(form.user)
-        if current_app.debug:
+        if current_app.debug or current_app.testing:
             return msg.html
         flash(_('We have sent you an email, check your inbox.'), 'info')
         return redirect(url_for('.find'))
