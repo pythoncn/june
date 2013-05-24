@@ -122,33 +122,3 @@ class HTMLCompress(Extension):
             ctx.token = token
             value = self.normalize(ctx)
             yield Token(token.lineno, 'data', value)
-
-
-class SelectiveHTMLCompress(HTMLCompress):
-
-    def filter_stream(self, stream):
-        ctx = StreamProcessContext(stream)
-        strip_depth = 0
-        while 1:
-            if stream.current.type == 'block_begin':
-                if stream.look().test('name:strip') or \
-                   stream.look().test('name:endstrip'):
-                    stream.skip()
-                    if stream.current.value == 'strip':
-                        strip_depth += 1
-                    else:
-                        strip_depth -= 1
-                        if strip_depth < 0:
-                            ctx.fail('Unexpected tag endstrip')
-                    stream.skip()
-                    if stream.current.type != 'block_end':
-                        ctx.fail('expected end of block, got %s' %
-                                 describe_token(stream.current))
-                    stream.skip()
-            if strip_depth > 0 and stream.current.type == 'data':
-                ctx.token = stream.current
-                value = self.normalize(ctx)
-                yield Token(stream.current.lineno, 'data', value)
-            else:
-                yield stream.current
-            stream.next()
