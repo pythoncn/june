@@ -78,13 +78,13 @@ def create(urlname):
 
     if g.user.active:
         # if use has no active information
-        delta = now - g.user.active
+        delta = (now - g.user.active).total_seconds()
     else:
         delta = 1000
-    if delta.total_seconds() < 300 and not g.user.is_staff:
+    if delta < 300 and not g.user.is_staff:
         # you cannot create a topic
-        left = 300 - delta.total_seconds()
-        flash(_("Don't be a spammer, take a rest for %(time) seconds.",
+        left = int(300 - delta)
+        flash(_("Don't be a spammer, take a rest for %(time)i seconds.",
                 time=left), 'warn')
         return redirect(url_for('.topics'))
 
