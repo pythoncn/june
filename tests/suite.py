@@ -38,6 +38,13 @@ class BaseSuite(object):
             db.session.add(baz)
             db.session.commit()
 
+    def prepare_login(self):
+        self.prepare_account()
+        self.client.post('/account/signin', data={
+            'account': 'foo',
+            'password': '1'
+        }, follow_redirects=True)
+
     def tearDown(self):
         os.close(self.db_fd)
         os.unlink(self.db_file)
