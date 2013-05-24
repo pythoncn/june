@@ -20,6 +20,13 @@ class TestNode(BaseSuite):
         })
         assert '/node/june' in rv.location
 
+        # re create
+        rv = self.client.post('/node/create', data={
+            'title': 'june',
+            'urlname': 'june'
+        })
+        assert 'node exists' in rv.data
+
     def test_edit(self):
         self.prepare_login()
         with self.app.test_request_context():
@@ -28,6 +35,13 @@ class TestNode(BaseSuite):
 
         rv = self.client.get('/node/june/edit')
         assert '</form>' in rv.data
+
+        # re edit
+        rv = self.client.post('/node/june/edit', data={
+            'title': 'june',
+            'urlname': 'june'
+        })
+        assert '/node/june' in rv.location
 
         rv = self.client.post('/node/june/edit', data={
             'title': 'june',
