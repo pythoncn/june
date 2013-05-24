@@ -34,3 +34,24 @@ class TestNode(BaseSuite):
             'urlname': 'foo'
         })
         assert '/node/foo' in rv.location
+
+    def test_nodes(self):
+        rv = self.client.get('/node/')
+        assert '<title>Nodes' in rv.data
+
+    def test_view(self):
+        rv = self.client.get('/node/june')
+        assert rv.status_code == 404
+
+        with self.app.test_request_context():
+            node = Node(title='june', urlname='june')
+            node.save()
+        rv = self.client.get('/node/june')
+        assert rv.status_code == 200
+
+        rv = self.client.get('/node/june?page=s')
+        assert rv.status_code == 404
+
+        self.prepare_login()
+        rv = self.client.get('/node/june')
+        assert rv.status_code == 200
