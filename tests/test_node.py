@@ -46,6 +46,8 @@ class TestNode(BaseSuite):
         with self.app.test_request_context():
             node = Node(title='june', urlname='june')
             node.save()
+            assert repr(node) == '<Node: june>'
+
         rv = self.client.get('/node/june')
         assert rv.status_code == 200
 
@@ -53,5 +55,8 @@ class TestNode(BaseSuite):
         assert rv.status_code == 404
 
         self.prepare_login()
+        with self.app.test_request_context():
+            node.description = 'june'
+            node.save()
         rv = self.client.get('/node/june')
         assert rv.status_code == 200
