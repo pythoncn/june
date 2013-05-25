@@ -316,6 +316,7 @@ textarea.input-block-level {
   position: relative;
 }
 .profile .account-group .label {
+  text-transform: uppercase;
   position: absolute;
   top: 20px;
   right: 20px;
