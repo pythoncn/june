@@ -1,6 +1,10 @@
 <footer id="footer">
   <div class="container clearfix">
     <div class="muted links pull-left">
+      {% if config.SITE_ABOUT %}
+      <a href="{{config.SITE_ABOUT}}">{{ _('About') }}</a>
+      {% endif %}
+      <span class="sep">&middot;</span>
       <a href="https://github.com/pythoncn/june">{{ _('Open Source') }}</a>
       <span class="sep">&middot;</span>
       <a href="/humans.txt">{{ _('Authors') }}</a>

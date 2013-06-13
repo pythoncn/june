@@ -23,6 +23,8 @@ SITE_SCRIPTS = [
 ]
 #: sidebar is a absolute path
 # SITE_SIDEBAR = '/path/to/sidebar.html'
+#: about page url
+# SITE_ABOUT = '/node/about'
 # SITE_ANALYTICS = 'UA-xxx-xxx'
 
 #: session

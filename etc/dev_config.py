@@ -7,6 +7,7 @@ database = os.path.join(rootdir, 'data', 'development.sqlite')
 # site inform
 SITE_TITLE = 'Python China'
 SITE_SIDEBAR = os.path.join(rootdir, 'data', 'sidebar.html')
+SITE_ABOUT = '/node/about'
 # SITE_ANALYTICS = 'UA-xxx-xxx'
 
 SITE_SCRIPTS = [
