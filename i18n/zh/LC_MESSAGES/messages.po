@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  0.1.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-05-20 09:54+0800\n"
+"POT-Creation-Date: 2013-06-13 14:00+0800\n"
 "PO-Revision-Date: 2013-05-18 23:01+0800\n"
 "Last-Translator: Hsiaoming Yang <me@lepture.com>\n"
 "Language-Team: zh <LL@li.org>\n"
@@ -17,32 +17,32 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.6\n"
 
-#: june/app.py:101
+#: june/app.py:105
 #, python-format
 msgid "%(num)i years ago"
 msgstr "%(num)i 年前"
 
-#: june/app.py:103
+#: june/app.py:107
 #, python-format
 msgid "%(num)i months ago"
 msgstr "%(num)i 月前"
 
-#: june/app.py:105
+#: june/app.py:109
 #, python-format
 msgid "%(num)i days ago"
 msgstr "%(num)i 天前"
 
-#: june/app.py:107
+#: june/app.py:111
 #, python-format
 msgid "%(num)i hours ago"
 msgstr "%(num)i 小时前"
 
-#: june/app.py:109
+#: june/app.py:113
 #, python-format
 msgid "%(num)i minutes ago"
 msgstr "%(num)i 分钟前"
 
-#: june/app.py:110
+#: june/app.py:114
 msgid "just now"
 msgstr "刚刚"
 
@@ -50,7 +50,11 @@ msgstr "刚刚"
 msgid "Please verify your email"
 msgstr "请验证你的邮箱"
 
-#: june/helpers.py:91
+#: june/helpers.py:40
+msgid "You are a spammer"
+msgstr "你是一个垃圾账户"
+
+#: june/helpers.py:92
 msgid "Too many requests in a time"
 msgstr "多次重复请求"
 
@@ -67,6 +71,7 @@ msgid "Email"
 msgstr "邮箱"
 
 #: june/forms/account.py:46 june/forms/account.py:77 june/forms/account.py:125
+#: june/templates/topic/edit.html:32
 msgid "Password"
 msgstr "密码"
 
@@ -204,7 +209,7 @@ msgstr "注册 %(site)s"
 msgid "Find password for %(site)s"
 msgstr "找回 %(site)s 的密码"
 
-#: june/templates/index.html:19 june/templates/user/view.html:41
+#: june/templates/index.html:19 june/templates/user/view.html:44
 msgid "Recent Topics"
 msgstr "最近的帖子"
 
@@ -240,7 +245,7 @@ msgstr "编辑个人信息"
 
 #: june/templates/account/setting.html:18
 #: june/templates/admin/dashboard.html:14 june/templates/admin/user.html:21
-#: june/templates/topic/edit.html:25 june/templates/topic/topics.html:18
+#: june/templates/topic/edit.html:26 june/templates/topic/topics.html:18
 msgid "Update"
 msgstr "更新"
 
@@ -250,7 +255,7 @@ msgstr "登入"
 
 #: june/templates/account/signin.html:18
 #: june/templates/snippet/nav-dropmenu.html:26
-#: june/templates/topic/view.html:79
+#: june/templates/topic/view.html:80
 msgid "Sign In"
 msgstr "登入"
 
@@ -347,7 +352,7 @@ msgstr "新建话题"
 msgid "Create Node"
 msgstr "新建节点"
 
-#: june/templates/node/create.html:19 june/templates/topic/create.html:25
+#: june/templates/node/create.html:19 june/templates/topic/create.html:26
 msgid "Create"
 msgstr "新建"
 
@@ -367,11 +372,15 @@ msgstr "编辑节点"
 msgid "Reputation"
 msgstr "声望"
 
-#: june/templates/snippet/footer.html:4
+#: june/templates/snippet/footer.html:5
+msgid "About"
+msgstr "关于"
+
+#: june/templates/snippet/footer.html:8
 msgid "Open Source"
 msgstr "开源代码"
 
-#: june/templates/snippet/footer.html:6
+#: june/templates/snippet/footer.html:10
 msgid "Authors"
 msgstr "作者"
 
@@ -399,9 +408,18 @@ msgstr "站点统计"
 msgid "Create Topic"
 msgstr "新建话题"
 
+#: june/templates/topic/create.html:25 june/templates/topic/edit.html:25
+#: june/templates/topic/view.html:73
+msgid "Preview"
+msgstr "预览"
+
 #: june/templates/topic/edit.html:4 june/templates/topic/edit.html:15
 msgid "Edit Topic"
 msgstr "编辑话题"
+
+#: june/templates/topic/edit.html:33
+msgid "Delete"
+msgstr ""
 
 #: june/templates/topic/move.html:4
 msgid "Move Topic"
@@ -423,15 +441,15 @@ msgstr "荒漠"
 msgid "No replies yet."
 msgstr "还没有评论。"
 
-#: june/templates/topic/view.html:73
+#: june/templates/topic/view.html:74
 msgid "Send a Reply"
 msgstr "评论"
 
-#: june/templates/topic/view.html:78
+#: june/templates/topic/view.html:79
 msgid "Login is required."
 msgstr "登录后方可使用。"
 
-#: june/templates/topic/view.html:96
+#: june/templates/topic/view.html:97
 msgid "Topics in this node"
 msgstr "该节点下的话题"
 
@@ -443,7 +461,7 @@ msgstr "活跃用户"
 msgid "Staffs"
 msgstr "管理员"
 
-#: june/templates/user/view.html:43
+#: june/templates/user/view.html:46
 msgid "More topics"
 msgstr "更多话题"
 
@@ -475,27 +493,36 @@ msgstr "密码已更新。"
 msgid "Spam"
 msgstr "垃圾账户"
 
-#: june/views/topic.py:72 june/views/topic.py:76
+#: june/views/topic.py:76
+msgid "New users can not create a topic"
+msgstr "新用户暂时无法创建话题"
+
+#: june/views/topic.py:87
+#, python-format
+msgid "Don't be a spammer, take a rest for %(time)i seconds."
+msgstr "休息一下，再等 %(time)i 秒。"
+
+#: june/views/topic.py:94 june/views/topic.py:98
 msgid "You have no permission in this node."
 msgstr "你没有该节点的权限。"
 
-#: june/views/topic.py:149
+#: june/views/topic.py:171
 msgid "Password is required to delete a topic"
 msgstr "删除一个话题需要密码"
 
-#: june/views/topic.py:152
+#: june/views/topic.py:174
 msgid "Password is wrong"
 msgstr "密码错误"
 
-#: june/views/topic.py:180
+#: june/views/topic.py:202
 msgid "Move topic success."
 msgstr "成功转移话题。"
 
-#: june/views/topic.py:182
+#: june/views/topic.py:204
 msgid "Node not found."
 msgstr "节点没找到。"
 
-#: june/views/topic.py:220
+#: june/views/topic.py:242
 msgid "Missing content"
 msgstr "缺少内容"
 
