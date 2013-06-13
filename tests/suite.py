@@ -27,10 +27,10 @@ class BaseSuite(object):
     def prepare_account(self):
         with self.app.test_request_context():
             foo = Account(username='foo', email='foo@email.com', password='1')
-            foo.role = 'user'
+            foo.role = 'staff'
 
             bar = Account(username='bar', email='bar@email.com', password='1')
-            bar.role = 'staff'
+            bar.role = 'user'
 
             baz = Account(username='baz', email='baz@email.com', password='1')
             db.session.add(foo)
@@ -38,14 +38,17 @@ class BaseSuite(object):
             db.session.add(baz)
             db.session.commit()
 
-    def prepare_login(self):
+    def prepare_login(self, username='foo'):
         self.prepare_account()
         self.client.post('/account/signin', data={
-            'account': 'foo',
+            'account': username,
             'password': '1'
         }, follow_redirects=True)
 
     def tearDown(self):
+        db.session.remove()
+        db.drop_all()
+
         os.close(self.db_fd)
         os.unlink(self.db_file)
 
