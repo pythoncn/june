@@ -78,7 +78,8 @@ def create(urlname):
 
     if g.user.active:
         # if use has no active information
-        delta = (now - g.user.active).total_seconds()
+        d = now - g.user.active
+        delta = d.days * 86400 + d.seconds
     else:
         delta = 1000
     if delta < 300 and not g.user.is_staff:

@@ -9,16 +9,12 @@ from pygments.formatters import HtmlFormatter
 
 
 class JuneRenderer(m.HtmlRenderer, m.SmartyPants):
-    def __init__(self, *args, **kwargs):
-        self.use_pygments = True
-        super(JuneRenderer, self).__init__(*args, **kwargs)
-
     def block_code(self, text, lang):
         if not lang:
             if isinstance(text, unicode):
                 text = text.encode('utf-8')
             return '<pre><code>%s</code></pre>' % h.escape_html(text.strip())
-        if self.use_pygments:
+        if hasattr(self, 'use_pygments') and self.use_pygments:
             try:
                 # if the language can not be found, it will raise
                 lexer = get_lexer_by_name(lang.lower(), stripall=True)
