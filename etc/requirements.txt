@@ -26,4 +26,7 @@ Flask-Mail
 # command line tools
 Flask-Script
 
+# upload
+Flask-Storage
+
 gunicorn

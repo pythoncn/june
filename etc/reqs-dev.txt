@@ -28,6 +28,9 @@ Flask-Mail
 # command line tools
 Flask-Script
 
+# upload
+Flask-Storage
+
 # testing
 nose
 nose-cov
