@@ -51,12 +51,17 @@ GRAVATAR_EXTRA = ''
 # MAIL_PASSWORD = ''
 # MAIL_DEFAULT_SENDER = ('name', 'noreply@email.com')
 
-#: cache
+#: cache settings
 # find options on http://pythonhosted.org/Flask-Cache/
 # CACHE_TYPE = 'filesystem'
 # CACHE_DIR = os.path.join(rootdir, 'data', 'cache')
 
-# babel settings
+#: i18n settings
 # BABEL_DEFAULT_LOCALE = 'zh'
 # BABEL_SUPPORTED_LOCALES = ['zh']
 BABEL_DIRNAME = os.path.join(rootdir, 'i18n')
+
+#: storage settings
+STORAGE_TYPE = 'local'
+STORAGE_LOCAL_URL = '/images'
+STORAGE_LOCAL_ROOT = os.path.join(rootdir, 'data', 'images')

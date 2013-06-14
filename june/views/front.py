@@ -1,8 +1,10 @@
 # coding: utf-8
 
+import os
+import time
 import datetime
-from flask import Blueprint, request
-from flask import render_template, Response
+from flask import Blueprint, request, g, current_app
+from flask import render_template, Response, jsonify
 from ..markdown import rich_markdown
 from ..helpers import require_user
 from ..models import Node, Topic, fill_topics, cache
@@ -54,5 +56,8 @@ def markdown():
 @require_user
 def upload():
     """Upload images handler."""
-    #TODO
-    return ''
+    image = request.files.get('image')
+    _, ext = os.path.splitext(image.filename)
+    filename = '%d-%d%s' % (g.user.id, int(time.time()), ext.lower())
+    url = current_app.storage.save(image, filename)
+    return jsonify(url=url)
