@@ -59,5 +59,8 @@ def upload():
     image = request.files.get('image')
     _, ext = os.path.splitext(image.filename)
     filename = '%d-%d%s' % (g.user.id, int(time.time()), ext.lower())
-    url = current_app.storage.save(image, filename)
-    return jsonify(url=url)
+    try:
+        url = current_app.storage.save(image, filename)
+        return jsonify(url=url)
+    except:
+        return jsonify(error='upload failed')

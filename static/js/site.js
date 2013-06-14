@@ -75,6 +75,10 @@
     }).error(function(){
       alert('upload failed');
     }).success(function(data) {
+      if (data.error) {
+        alert(data.error)
+        return;
+      }
       var text = '![' + file.name + '](' + data.url + ')';
       dom.insertAtCaret(text)
     });
