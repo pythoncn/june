@@ -63,5 +63,5 @@ BABEL_DIRNAME = os.path.join(rootdir, 'i18n')
 
 #: storage settings
 STORAGE_TYPE = 'local'
-STORAGE_LOCAL_URL = '/images'
+STORAGE_LOCAL_URL = '/images/'
 STORAGE_LOCAL_ROOT = os.path.join(rootdir, 'data', 'images')
