@@ -107,11 +107,6 @@ def get_current_user():
         if user.token != session['token']:
             return None
         return user
-
-    auth = request.headers.get('Authorization', None)
-    if auth and auth.startswith('Yuan '):
-        code = auth.replace('Yuan ', '', 1)
-        return verify_auth_token(code)
     return None
 
 
