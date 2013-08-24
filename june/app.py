@@ -9,6 +9,7 @@ import logging
 from flask import Flask
 from flask import request, g
 from flask.ext.babel import gettext as _
+from flask_mail import Mail
 from .helpers import get_current_user
 from .models import db, cache, get_site_status
 
@@ -44,6 +45,7 @@ def create_app(config=None):
     def load_current_user():
         g.user = get_current_user()
 
+    Mail(app)
     register_babel(app)
     register_routes(app)
     register_logger(app)

@@ -1,21 +1,17 @@
 # coding: utf-8
 
-import gevent
 from flask import Flask
 from flask import current_app, url_for, render_template
 from flask.ext.babel import gettext as _
-from flask_mail import Mail, Message
+from flask_mail import Message
 from ..helpers import create_auth_token
 
 
-def send_mail(config, msg):
-    if not config.get('MAIL_DEFAULT_SENDER', None):
+def send_mail(app, msg):
+    mail = app.extensions['mail']
+    if not mail.default_sender:
         return
-    app = Flask('june')
-    app.config = config
-    with app.test_request_context():
-        mail = Mail(app)
-        mail.send(msg)
+    mail.send(msg)
 
 
 def signup_mail(user, path=None):
@@ -23,9 +19,6 @@ def signup_mail(user, path=None):
     msg = Message(
         _("Signup for %(site)s", site=config['SITE_TITLE']),
         recipients=[user.email],
-        extra_headers={
-            'Category': 'signup'
-        },
     )
     reply_to = config.get('MAIL_REPLY_TO', None)
     if reply_to:
@@ -42,7 +35,7 @@ def signup_mail(user, path=None):
     link = '%(host)s%(path)s?token=%(token)s' % dct
     html = render_template('email/signup.html', user=user, link=link)
     msg.html = html
-    gevent.spawn(send_mail, config, msg)
+    send_mail(current_app, msg)
     return msg
 
 
@@ -51,9 +44,6 @@ def find_mail(user):
     msg = Message(
         _("Find password for %(site)s", site=config['SITE_TITLE']),
         recipients=[user.email],
-        extra_headers={
-            'Category': 'signup'
-        },
     )
     reply_to = config.get('MAIL_REPLY_TO', None)
     if reply_to:
@@ -67,5 +57,5 @@ def find_mail(user):
     link = '%(host)s%(path)s?token=%(token)s' % dct
     html = render_template('email/find.html', user=user, link=link)
     msg.html = html
-    gevent.spawn(send_mail, config, msg)
+    send_mail(current_app, msg)
     return msg
