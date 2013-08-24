@@ -1,11 +1,11 @@
 # coding: utf-8
 
 from flask import current_app
-from flask.ext.wtf import TextField, PasswordField, BooleanField
-from flask.ext.wtf import TextAreaField
+from wtforms import TextField, PasswordField, BooleanField
+from wtforms import TextAreaField
 from flask.ext.wtf.html5 import EmailField, URLField
-from flask.ext.wtf import DataRequired, Email, Length, Regexp
-from flask.ext.wtf import Optional, URL
+from wtforms.validators import DataRequired, Email, Length, Regexp
+from wtforms.validators import Optional, URL
 from flask.ext.babel import lazy_gettext as _
 
 from ._base import BaseForm

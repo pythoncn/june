@@ -1,7 +1,7 @@
 # coding: utf-8
 
-from flask.ext.wtf import TextField, TextAreaField, SelectField
-from flask.ext.wtf import DataRequired
+from wtforms import TextField, TextAreaField, SelectField
+from wtforms.validators import DataRequired
 from flask.ext.babel import lazy_gettext as _
 
 from ._base import BaseForm
