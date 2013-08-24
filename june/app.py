@@ -46,7 +46,6 @@ def create_app(config=None):
 
     register_babel(app)
     register_routes(app)
-    register_storage(app)
     register_logger(app)
 
     if app.debug:
@@ -133,29 +132,6 @@ def register_babel(app):
         match = app.config['BABEL_SUPPORTED_LOCALES']
         default = app.config['BABEL_DEFAULT_LOCALE']
         return request.accept_languages.best_match(match, default)
-
-
-def register_storage(app):
-    type = app.config.get('STORAGE_TYPE')
-
-    if not type:
-        return app
-
-    from flask.ext.storage import Storage
-    backend = Storage.create_backend(type, 'june', None, app.config)
-    app.storage = backend
-
-    # for debug
-    if app.debug and type == 'local':
-        from flask import send_from_directory
-        url_path = app.config.get('STORAGE_LOCAL_URL')
-        root = app.config.get('STORAGE_LOCAL_ROOT')
-        app.add_url_rule(
-            url_path + '<path:filename>',
-            endpoint='image',
-            view_func=lambda filename: send_from_directory(root, filename)
-        )
-    return app
 
 
 def register_logger(app):
