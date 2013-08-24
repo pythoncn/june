@@ -3,9 +3,10 @@
 import os
 from flask import Blueprint, request, current_app, flash
 from flask import render_template, abort, redirect, url_for
-from flask.ext.wtf import TextField, SelectField
+from wtforms import TextField, SelectField
 from flask.ext.wtf.html5 import EmailField
-from flask.ext.wtf import DataRequired, Email, Length, Regexp
+from wtforms.validators import DataRequired, Email, Length, Regexp
+
 from flask.ext.babel import lazy_gettext as _
 from ..helpers import force_int, require_staff, require_admin
 from ..models import Account
