@@ -1,14 +1,11 @@
 #!/usr/bin/env python
 
 import os
-PROJDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-CONFDIR = os.path.join(PROJDIR, 'etc')
-
+import time
 import datetime
 import logging
 from flask import Flask
 from flask import request, g
-from flask.ext.babel import gettext as _
 from flask_mail import Mail
 from .helpers import get_current_user
 from .models import db, cache, get_site_status
@@ -17,11 +14,10 @@ from .models import db, cache, get_site_status
 def create_app(config=None):
     app = Flask(
         __name__,
-        static_url_path='/_static',
-        static_folder=os.path.join(PROJDIR, 'static'),
-        template_folder='templates'
+        template_folder='templates',
+        static_folder=None,
     )
-    app.config.from_pyfile(os.path.join(CONFDIR, 'base_config.py'))
+    app.config.from_pyfile('_settings.py')
 
     if 'JUNE_SETTINGS' in os.environ:
         app.config.from_envvar('JUNE_SETTINGS')
@@ -44,14 +40,21 @@ def create_app(config=None):
     @app.before_request
     def load_current_user():
         g.user = get_current_user()
+        if g.user and g.user.is_staff:
+            g._before_request_time = time.time()
+
+    @app.after_request
+    def rendering_time(response):
+        if hasattr(g, '_before_request_time'):
+            delta = time.time() - g._before_request_time
+            response.headers['X-Render-Time'] = delta
+
+        return response
 
     Mail(app)
     register_babel(app)
     register_routes(app)
     register_logger(app)
-
-    if app.debug:
-        register_static(app)
     return app
 
 
@@ -66,23 +69,12 @@ def register_routes(app):
     return app
 
 
-def register_static(app):
-    from flask import send_file
-
-    def _register(name):
-        func = lambda: send_file(os.path.join(PROJDIR, 'static', name))
-        return app.add_url_rule('/%s' % name, name, view_func=func)
-
-    _register('robots.txt')
-    _register('humans.txt')
-    return app
-
-
 def register_jinja(app):
     from .markdown import plain_markdown
     from .htmlcompress import HTMLCompress
     from .views.admin import load_sidebar
     from werkzeug.datastructures import ImmutableDict
+    from flask.ext.babel import gettext as _
 
     app.jinja_options = ImmutableDict(
         extensions=[
