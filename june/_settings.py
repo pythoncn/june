@@ -47,7 +47,7 @@ GRAVATAR_EXTRA = ''
 
 #: cache settings
 # find options on http://pythonhosted.org/Flask-Cache/
-CACHE_TYPE = 'simple'
+# CACHE_TYPE = 'simple'
 
 #: i18n settings
 # BABEL_DEFAULT_LOCALE = 'zh'

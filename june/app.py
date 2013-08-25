@@ -4,11 +4,28 @@ import os
 import time
 import datetime
 import logging
-from flask import Flask
+from speaklater import _LazyString
+from flask import Flask as _Flask
 from flask import request, g
+from flask.json import JSONEncoder as _JSONEncoder
 from flask_mail import Mail
 from .helpers import get_current_user
 from .models import db, cache, get_site_status
+
+
+class JSONEncoder(_JSONEncoder):
+    def default(self, o):
+        if hasattr(o, '__getitem__') and hasattr(o, 'keys'):
+            return dict(o)
+        if isinstance(o, datetime.datetime):
+            return o.strftime('%Y-%m-%d %H:%M:%S')
+        if isinstance(o, _LazyString):
+            return unicode(o)
+        return _JSONEncoder.default(self, o)
+
+
+class Flask(_Flask):
+    json_encoder = JSONEncoder
 
 
 def create_app(config=None):
