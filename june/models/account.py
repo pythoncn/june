@@ -100,3 +100,9 @@ class NonAccount(object):
 
     def __repr__(self):
         return '<NonAccount: none>' % self.username
+
+
+class Profile(db.Model):
+    # the same as Account.id
+    id = db.Column(db.Integer, primary_key=True)
+    company = db.Column(db.String(120))
