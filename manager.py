@@ -5,24 +5,37 @@ gevent.monkey.patch_all()
 
 import os
 import sys
-from flask.ext.script import Manager
+from flask_script import Manager
 from june.app import create_app
 
 CONFIG = os.path.abspath('./etc/dev_config.py')
 
-app = create_app(CONFIG)
+settings = os.path.abspath('./etc/settings.py')
+if not os.path.exists(settings):
+    settings = os.path.abspath('./etc/dev_config.py')
+
+if 'JUNE_SETTINGS' not in os.environ:
+    os.environ['JUNE_SETTINGS'] = settings
+
+app = create_app()
 manager = Manager(app)
 
 
 @manager.command
 def runserver(port=5000, with_profile=False):
     """Runs a development server."""
+    from flask import send_from_directory
     from gevent.wsgi import WSGIServer
     from werkzeug.serving import run_with_reloader
     from werkzeug.debug import DebuggedApplication
     from werkzeug.contrib.profiler import ProfilerMiddleware
 
     port = int(port)
+
+    @app.route('/static/<path:filename>')
+    def static_file(filename):
+        datadir = os.path.abspath('public/static')
+        return send_from_directory(datadir, filename)
 
     if with_profile:
         f = open('./data/profile.log', 'w')

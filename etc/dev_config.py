@@ -11,9 +11,9 @@ SITE_ABOUT = '/node/about'
 # SITE_ANALYTICS = 'UA-xxx-xxx'
 
 SITE_SCRIPTS = [
-    '/_static/js/jquery.min.js',
-    '/_static/js/bootstrap.js',
-    '/_static/js/site.js',
+    '/static/js/jquery.min.js',
+    '/static/js/bootstrap.js',
+    '/static/js/site.js',
 ]
 
 

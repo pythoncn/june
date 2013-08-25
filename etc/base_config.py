@@ -11,15 +11,15 @@ SITE_TITLE = 'June Forum'
 SITE_URL = '/'
 # SITE_URL = 'http://python-china.org/'
 SITE_STYLES = [
-    '/_static/css/bootstrap.css',
-    '/_static/css/bootstrap-responsive.css',
-    '/_static/css/pygments.css',
-    '/_static/css/site.css',
+    '/static/css/bootstrap.css',
+    '/static/css/bootstrap-responsive.css',
+    '/static/css/pygments.css',
+    '/static/css/site.css',
 ]
 SITE_SCRIPTS = [
     'http://lib.sinaapp.com/js/jquery/1.9.1/jquery-1.9.1.min.js',
-    '/_static/js/bootstrap.js',
-    '/_static/js/site.js',
+    '/static/js/bootstrap.js',
+    '/static/js/site.js',
 ]
 #: sidebar is a absolute path
 # SITE_SIDEBAR = '/path/to/sidebar.html'
