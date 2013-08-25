@@ -13,7 +13,7 @@ server:
 
 
 database:
-	@python manager.py createdb
+	@python manager.py migrate upgrade head
 
 
 # translate

@@ -17,7 +17,7 @@ setup(
     zip_safe=False,
     include_package_data=True,
     install_requires=[
-        'Flask'
+        'Flask',
         'Flask-SQLAlchemy',
         'Flask-Cache',
         'Flask-Babel',
@@ -25,6 +25,7 @@ setup(
         'Flask-Mail',
         'Flask-Script==0.5',
 
+        'alembic',
         'misaka',
         'pygments',
         'houdini.py',

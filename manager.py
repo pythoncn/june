@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # coding: utf-8
 
 import gevent.monkey
@@ -5,10 +6,27 @@ gevent.monkey.patch_all()
 
 import os
 import sys
-from flask_script import Manager
+import argparse
+from flask_script import Manager, Command
+from alembic.config import CommandLine
 from june.app import create_app
 
-CONFIG = os.path.abspath('./etc/dev_config.py')
+
+class CatchAllParser(object):
+    def parse_known_args(self, app_args):
+        return argparse.Namespace(), app_args
+
+
+class AlembicCommand(Command):
+    capture_all_args = True
+
+    def create_parser(self, prog):
+        return CatchAllParser()
+
+    def run(self, args):
+        prog = '%s %s' % (os.path.basename(sys.argv[0]), sys.argv[1])
+        return CommandLine(prog=prog).main(argv=args)
+
 
 settings = os.path.abspath('./etc/settings.py')
 if not os.path.exists(settings):
@@ -18,7 +36,11 @@ if 'JUNE_SETTINGS' not in os.environ:
     os.environ['JUNE_SETTINGS'] = settings
 
 app = create_app()
+from june.models import db
+app.db = db
+
 manager = Manager(app)
+manager.add_command('migrate', AlembicCommand())
 
 
 @manager.command
@@ -54,13 +76,6 @@ def runserver(port=5000, with_profile=False):
         run_server()
     except (KeyboardInterrupt, TypeError):
         sys.exit()
-
-
-@manager.command
-def createdb():
-    """Create a database."""
-    from june.models import db
-    db.create_all()
 
 
 if __name__ == '__main__':
