@@ -5,8 +5,13 @@
     Twitter: @lepture
     From: Hangzhou, China
 
+    Maintainer: Menglong Tan
+    Email: tanmenglong [at] gmail.com
+    Twitter: @crackcell
+    From: Beijing, China
+
     Web Design: Hsiaoming Yang
-    Software: Hsiaoming Yang
+    Software: Hsiaoming Yang, Menglong Tan
 
 
 # THANKS
