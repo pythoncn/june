@@ -1,8 +1,11 @@
 from __future__ import with_statement
+import os
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 from logging.config import fileConfig
 from alembic.config import Config
+from june.app import create_app
+from june.models import db
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -14,15 +17,21 @@ fileConfig(config.config_file_name)
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-from flask import current_app
+cwd = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+settings = os.path.join(cwd, 'etc/settings.py')
+if not os.path.exists(settings):
+    settings = os.path.join(cwd, 'etc/dev_config.py')
 
-with current_app.app_context():
-    # set the database url
-    config.set_main_option(
-        'sqlalchemy.url',
-        current_app.config.get('SQLALCHEMY_DATABASE_URI')
-    )
-    target_metadata = current_app.db.metadata
+if 'JUNE_SETTINGS' not in os.environ:
+    os.environ['JUNE_SETTINGS'] = settings
+
+app = create_app()
+# set the database url
+config.set_main_option(
+    'sqlalchemy.url',
+    app.config.get('SQLALCHEMY_DATABASE_URI')
+)
+target_metadata = db.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:

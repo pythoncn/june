@@ -13,7 +13,7 @@ server:
 
 
 database:
-	@python manager.py migrate upgrade head
+	@alembic upgrade head
 
 
 # translate
