@@ -1,0 +1,14 @@
+Flask
+Flask-Babel
+Flask-Cache
+Flask-Mail
+Flask-SQLAlchemy
+Flask-Script
+Flask-WTF
+
+Pygments
+alembic
+gevent
+gunicorn
+houdini.py
+misaka

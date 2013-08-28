@@ -23,7 +23,7 @@ setup(
         'Flask-Babel',
         'Flask-WTF',
         'Flask-Mail',
-        'Flask-Script==0.5',
+        'Flask-Script',
 
         'alembic',
         'misaka',
