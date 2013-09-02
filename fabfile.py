@@ -17,6 +17,7 @@ def virtualenv():
 
 def tarball():
     """Create tarball for june."""
+    local('make static')
     local('python setup.py sdist --formats=gztar', capture=False)
 
 

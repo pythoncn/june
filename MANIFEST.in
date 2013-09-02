@@ -1,0 +1,10 @@
+recursive-include june/templates *.*
+recursive-include june/translations *.*
+recursive-include etc *.*
+recursive-include alembic *.*
+recursive-include public *.*
+include alembic.ini
+include Makefile
+include wsgi.py
+include manage.py
+include requirements.txt
