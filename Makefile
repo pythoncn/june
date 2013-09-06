@@ -13,8 +13,23 @@ server:
 
 
 database:
-	@python manager.py migrate upgrade head
+	@alembic upgrade head
 
+
+staticdir = public/static
+
+static-js:
+	@cat ${staticdir}/js/bootstrap.js > ${staticdir}/app.min.js
+	@cat ${staticdir}/js/site.js >> ${staticdir}/app.min.js
+	@uglifyjs ${staticdir}/app.min.js -m -o ${staticdir}/app.min.js
+
+static-css:
+	@cat ${staticdir}/css/bootstrap.css > ${staticdir}/app.min.css
+	@cat ${staticdir}/css/bootstrap-responsive.css >> ${staticdir}/app.min.css
+	@cat ${staticdir}/css/pygments.css >> ${staticdir}/app.min.css
+	@cat ${staticdir}/css/site.css >> ${staticdir}/app.min.css
+
+static: static-js static-css
 
 # translate
 babel-extract:

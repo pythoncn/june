@@ -7,9 +7,6 @@ python:
 before_install:
     - sudo apt-get install python-dev libevent-dev
 
-install:
-    - pip install -r etc/reqs-dev.txt
-
 script:
     - nosetests -s
 

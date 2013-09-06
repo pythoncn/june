@@ -24,8 +24,8 @@ To start development server::
     $ cd june
     $ virtualenv --distribute venv
     $ source venv/bin/activate
-    (venv)$ pip install -r etc/reqs-dev.txt
-    (venv)$ python manager.py createdb
+    (venv)$ pip install -r requirements.txt
+    (venv)$ alembic upgrade head
     (venv)$ python manager.py runserver
 
 It should be running at localhost:5000.
