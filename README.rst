@@ -26,6 +26,7 @@ To start development server::
     $ source venv/bin/activate
     (venv)$ pip install -r requirements.txt
     (venv)$ alembic upgrade head
+    (venv)$ make static
     (venv)$ python manager.py runserver
 
 It should be running at localhost:5000.

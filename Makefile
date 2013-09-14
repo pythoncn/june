@@ -1,27 +1,17 @@
 # Makefile for project June
 .PHONY: clean-pyc clean-build docs
 
-# Development
-all:
-	@pip install -r etc/reqs-dev.txt
-	@cp etc/githooks/* .git/hooks/
-	@chmod -R +x .git/hooks/
-
-
 server:
 	@python manager.py runserver
 
-
 database:
 	@alembic upgrade head
-
 
 staticdir = public/static
 
 static-js:
 	@cat ${staticdir}/js/bootstrap.js > ${staticdir}/app.min.js
 	@cat ${staticdir}/js/site.js >> ${staticdir}/app.min.js
-	@uglifyjs ${staticdir}/app.min.js -m -o ${staticdir}/app.min.js
 
 static-css:
 	@cat ${staticdir}/css/bootstrap.css > ${staticdir}/app.min.css
@@ -29,21 +19,25 @@ static-css:
 	@cat ${staticdir}/css/pygments.css >> ${staticdir}/app.min.css
 	@cat ${staticdir}/css/site.css >> ${staticdir}/app.min.css
 
+static-compile:
+	@uglifyjs ${staticdir}/app.min.js -m -o ${staticdir}/app.min.js
+
 static: static-js static-css
 
 # translate
 babel-extract:
-	@pybabel extract -F etc/babel.cfg -o data/messages.pot .
+	@python setup.py extract_messages -o messages.pot
 
 language = zh
+i18n = june/translations
 babel-init:
-	@pybabel init -i data/messages.pot -d i18n -l ${language}
+	@python setup.py init_catalog -i messages.pot -d ${i18n} -l ${language}
 
 babel-compile:
-	@pybabel compile -d i18n
+	@python setup.py compile_catalog -d ${i18n}
 
 babel-update: babel-extract
-	@pybabel update -i data/messages.pot -d i18n
+	@python setup.py update_catalog -i messages.pot -d ${i18n}
 
 # Common Task
 clean: clean-build clean-pyc
