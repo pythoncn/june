@@ -88,14 +88,16 @@ def register_routes(app):
 
 def register_jinja(app):
     from .markdown import plain_markdown
-    from .htmlcompress import HTMLCompress
+    # from .htmlcompress import HTMLCompress
     from .views.admin import load_sidebar
     from werkzeug.datastructures import ImmutableDict
     from flask.ext.babel import gettext as _
 
     app.jinja_options = ImmutableDict(
         extensions=[
-            'jinja2.ext.autoescape', 'jinja2.ext.with_', HTMLCompress
+            'jinja2.ext.autoescape',
+            'jinja2.ext.with_',
+            'jinja2.ext.do',
         ]
     )
 

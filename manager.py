@@ -19,9 +19,6 @@ if 'JUNE_SETTINGS' not in os.environ:
     os.environ['JUNE_SETTINGS'] = settings
 
 app = create_app()
-from june.models import db
-app.db = db
-
 manager = Manager(app)
 
 
