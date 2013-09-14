@@ -59,7 +59,7 @@ def configure():
     run('cp %s/manager.py ~/apps/june/' % tmpdir)
 
     run('cp %s/alembic.ini ~/apps/june/' % tmpdir)
-    run('cp -r %s/migration ~/apps/june/' % tmpdir)
+    run('cp -r %s/alembic ~/apps/june/' % tmpdir)
 
     run('cp %s/etc/supervisord.conf ~/etc/supervisord/june.conf' % tmpdir)
     run('cp %s/etc/nginx.conf ~/etc/nginx/june.conf' % tmpdir)
@@ -71,4 +71,4 @@ def configure():
 
 def upgrade_database():
     with cd('~/apps/june'):
-        run('~/venv/june/bin/python manager.py migrate upgrade head')
+        run('~/venv/june/bin/alembic upgrade head')
