@@ -5,7 +5,7 @@ from datetime import datetime
 from werkzeug import security
 from ._base import db, JuneQuery, SessionMixin
 
-__all__ = ('Account', 'NonAccount')
+__all__ = ('Account', 'NonAccount', 'Profile')
 
 
 class Account(db.Model, SessionMixin):
@@ -106,3 +106,4 @@ class Profile(db.Model):
     # the same as Account.id
     id = db.Column(db.Integer, primary_key=True)
     company = db.Column(db.String(120))
+    title = db.Column(db.String(20))

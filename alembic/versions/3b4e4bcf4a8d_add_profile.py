@@ -19,6 +19,7 @@ def upgrade():
         'profile',
         sa.Column('id', sa.Integer, primary_key=True),
         sa.Column('company', sa.String(120)),
+        sa.Column('title', sa.String(20)),
     )
 
 
