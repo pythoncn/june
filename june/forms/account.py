@@ -101,6 +101,8 @@ class SettingForm(BaseForm):
         _('Description'), validators=[Optional(), Length(max=400)],
         description=_('Markdown is supported.')
     )
+    title = TextField(_('Job Title'))
+    company = TextField(_('Company'))
 
 
 class FindForm(BaseForm):
