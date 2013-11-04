@@ -2,7 +2,7 @@
 
 import re
 import houdini as h
-import misaka as m
+import hoedown as m
 from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
