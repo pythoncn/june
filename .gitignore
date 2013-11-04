@@ -21,4 +21,5 @@ docs/_build
 data/
 venv/
 cover/
-*.min.*
+assets/components
+public/static
