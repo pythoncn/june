@@ -3,7 +3,7 @@
 from datetime import datetime
 from werkzeug import cached_property
 from ._base import db, JuneQuery
-from ..markdown import rich_markdown
+from ..utils.markdown import rich_markdown
 from .account import Account
 from .node import Node, NodeStatus
 

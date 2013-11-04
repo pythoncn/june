@@ -87,8 +87,7 @@ def register_routes(app):
 
 
 def register_jinja(app):
-    from .markdown import plain_markdown
-    # from .htmlcompress import HTMLCompress
+    from .utils.markdown import plain_markdown
     from .handlers.admin import load_sidebar
     from werkzeug.datastructures import ImmutableDict
     from flask.ext.babel import gettext as _

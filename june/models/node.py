@@ -3,7 +3,7 @@
 from datetime import datetime
 from werkzeug import cached_property
 from ._base import db, JuneQuery, SessionMixin
-from ..markdown import rich_markdown
+from ..utils.markdown import rich_markdown
 
 __all__ = ['Node', 'NodeStatus']
 
