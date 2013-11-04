@@ -22,7 +22,7 @@ static-css:
 static-compile:
 	@uglifyjs ${staticdir}/app.min.js -m -o ${staticdir}/app.min.js
 
-static: static-js static-css
+static: static-js static-css static-compile
 
 # translate
 babel-extract:

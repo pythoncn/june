@@ -5,8 +5,8 @@ from fabric.api import env, local, cd, run, sudo
 from fabric.operations import put
 
 env.user = 'www'
+env.hosts = ['python-china.org']
 # env.password
-# env.hosts
 
 
 def virtualenv():
@@ -17,8 +17,26 @@ def virtualenv():
 
 def tarball():
     """Create tarball for june."""
+    local('rm -fr etc-bak')
+    local('mv etc etc-bak')
+    local('mkdir etc')
+    files = os.listdir('etc-bak')
+
+    for name in files:
+        filepath = os.path.join('etc-bak', name)
+        if not os.path.isfile(filepath):
+            continue
+        with open(filepath) as f:
+            content = f.read()
+            content = content.replace('{{user}}', env.user)
+
+            with open(os.path.join('etc', name), 'wb') as f:
+                f.write(content)
+
     local('make static')
     local('python setup.py sdist --formats=gztar', capture=False)
+    local('rm -fr etc')
+    local('mv etc-bak etc')
 
 
 def upload():
@@ -69,6 +87,12 @@ def configure():
         run('mv online_config.py settings.py')
 
 
-def upgrade_database():
+def upgrade():
+    """Upgrade database"""
+    dist = local('python setup.py --fullname', capture=True).strip()
+    tmpdir = '~/tmp/june/%s' % dist
+    run('cp %s/alembic.ini ~/apps/yuehu/' % tmpdir)
+    run('rm -fr ~/apps/yuehu/alembic')
+    run('cp -r %s/alembic ~/apps/yuehu/' % tmpdir)
     with cd('~/apps/june'):
         run('~/venv/june/bin/alembic upgrade head')

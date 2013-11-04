@@ -21,5 +21,4 @@ docs/_build
 data/
 venv/
 cover/
-static/.webassets-cache/
 *.min.*
