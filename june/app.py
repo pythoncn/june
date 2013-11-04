@@ -76,7 +76,7 @@ def create_app(config=None):
 
 
 def register_routes(app):
-    from .views import front, account, node, topic, user, admin
+    from .handlers import front, account, node, topic, user, admin
     app.register_blueprint(account.bp, url_prefix='/account')
     app.register_blueprint(node.bp, url_prefix='/node')
     app.register_blueprint(topic.bp, url_prefix='/topic')
@@ -89,7 +89,7 @@ def register_routes(app):
 def register_jinja(app):
     from .markdown import plain_markdown
     # from .htmlcompress import HTMLCompress
-    from .views.admin import load_sidebar
+    from .handlers.admin import load_sidebar
     from werkzeug.datastructures import ImmutableDict
     from flask.ext.babel import gettext as _
 
