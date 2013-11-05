@@ -14,7 +14,7 @@ cache = Cache()
 
 
 class JuneQuery(BaseQuery):
-    def filter_in(self, key, ids):
+    def filter_in(self, ids, key='id'):
         ids = set(ids)
         if len(ids) == 0:
             return {}
@@ -24,7 +24,8 @@ class JuneQuery(BaseQuery):
             if not rv:
                 return {}
             return {ident: rv}
-        items = self.filter(key.in_(ids))
+        query = getattr(self, key)
+        items = self.filter(query.in_(ids))
         dct = {}
         for u in items:
             dct[u.id] = u

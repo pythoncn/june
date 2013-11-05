@@ -22,14 +22,14 @@ def fill_topics(items, user=None, node=None):
 
 def fill_with_users(items):
     uids = set(map(lambda o: o.account_id, items))
-    users = get_by_ids(Account, uids)
+    users = Account.query.filter_in(uids)
     items = map(lambda o: _attach_user(o, users.get(o.account_id)), items)
     return items
 
 
 def fill_with_nodes(items):
     uids = set(map(lambda o: o.node_id, items))
-    nodes = get_by_ids(Node, uids)
+    nodes = Node.query.filter_in(uids)
     items = map(lambda o: _attach_node(o, nodes[o.node_id]), items)
     return items
 
