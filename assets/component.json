@@ -6,7 +6,7 @@
   "keywords": [],
   "dependencies": {
     "component/jquery": "*",
-    "lepture/semantic-ui": "*",
+    "lepture/bootstrap": "*",
     "lepture/yue.css": "*"
   },
   "scripts": [

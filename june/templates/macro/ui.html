@@ -9,7 +9,7 @@
 {% endmacro %}
 
 {%- macro nav(current='home') %}
-<ul class="nav">
+<ul class="nav navbar-nav">
   <li {% if current == 'home' %}class="active"{% endif %}><a href="/">{{_('Home')}}</a></li>
   <li {% if current == 'topic' %}class="active"{% endif %}><a href="{{url_for('topic.topics')}}">{{_('Topics')}}</a></li>
   <li {% if current == 'node' %}class="active"{% endif %}><a href="{{url_for('node.nodes')}}">{{_('Nodes')}}</a></li>

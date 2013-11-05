@@ -22,21 +22,21 @@
 {% set classes = classes + ' required' %}
 {% endif %}
 {% if field.errors %}
-{% set classes = classes + ' error' %}
+{% set classes = classes + ' has-error' %}
 {% endif %}
 {{ classes }}
 {% endmacro %}
 
 {%- macro vertical_field(field, class='') %}
-<fieldset class="{{ field_class('form', field) }}">
-  {{field.label}}
-  {{ render_field(field, class) }}
-</fieldset>
+<div class="{{ field_class('form-group', field) }}">
+  {{ field.label(class_='control-label') }}
+  {{ render_field(field, 'form-control') }}
+</div>
 {%- endmacro %}
 
 
 {%- macro horizontal_field(field, class='') %}
-<div class="{{ field_class('control-group', field) }}">
+<div class="{{ field_class('form-group', field) }}">
   {{field.label(class_='control-label')}}
   <div class="controls">
     {{ render_field(field, class) }}
