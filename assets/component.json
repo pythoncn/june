@@ -5,7 +5,13 @@
   "version": "0.0.1",
   "keywords": [],
   "dependencies": {
-    "component/jquery": "*"
+    "component/jquery": "*",
+    "lepture/semantic-ui": "*",
+    "lepture/yue.css": "*"
   },
+  "scripts": [
+    "index.js",
+    "boot.js"
+  ],
   "development": {}
 }

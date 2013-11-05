@@ -4,28 +4,16 @@ import os
 import time
 import datetime
 import logging
-from speaklater import _LazyString
-from flask import Flask as _Flask
-from flask import request, g
-from flask.json import JSONEncoder as _JSONEncoder
+import hashlib
+from flask import request, g, url_for
 from flask_mail import Mail
+from ._flask import Flask
 from .helpers import get_current_user
 from .models import db, cache, get_site_status
-
-
-class JSONEncoder(_JSONEncoder):
-    def default(self, o):
-        if hasattr(o, '__getitem__') and hasattr(o, 'keys'):
-            return dict(o)
-        if isinstance(o, datetime.datetime):
-            return o.strftime('%Y-%m-%d %H:%M:%S')
-        if isinstance(o, _LazyString):
-            return unicode(o)
-        return _JSONEncoder.default(self, o)
-
-
-class Flask(_Flask):
-    json_encoder = JSONEncoder
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+STATIC_DIR = os.path.abspath(
+    os.path.join(ROOT_DIR, '..', 'public', 'static')
+)
 
 
 def create_app(config=None):
@@ -45,6 +33,11 @@ def create_app(config=None):
         app.config.from_pyfile(config)
 
     app.config.update({'SITE_TIME': datetime.datetime.utcnow()})
+    app.config.update({
+        'SITE_STYLE': static_url(app, 'app.css'),
+        'SITE_SCRIPT': static_url(app, 'app.js'),
+    })
+
     register_jinja(app)
 
     #: prepare for database
@@ -153,3 +146,12 @@ def register_logger(app):
     handler = logging.StreamHandler()
     handler.setLevel(logging.ERROR)
     app.logger.addHandler(handler)
+
+
+def static_url(app, filename):
+    with open(os.path.join(STATIC_DIR, filename), 'r') as f:
+        content = f.read()
+        hsh = hashlib.md5(content).hexdigest()
+
+    prefix = app.config.get('SITE_STATIC_PREFIX', '/static/')
+    return '%s%s?v=%s' % (prefix, filename, hsh)

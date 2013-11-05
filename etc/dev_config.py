@@ -10,19 +10,6 @@ SITE_SIDEBAR = os.path.join(rootdir, 'data', 'sidebar.html')
 SITE_ABOUT = '/node/about'
 # SITE_ANALYTICS = 'UA-xxx-xxx'
 
-SITE_STYLES = [
-    '/static/css/bootstrap.css',
-    '/static/css/bootstrap-responsive.css',
-    '/static/css/pygments.css',
-    '/static/css/site.css',
-]
-
-SITE_SCRIPTS = [
-    '/static/js/jquery.min.js',
-    '/static/js/bootstrap.js',
-    '/static/js/site.js',
-]
-
 
 # This is a config file for development
 DEBUG = True

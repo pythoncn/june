@@ -3,11 +3,10 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% block subtitle %}{% endblock %} &middot; {{ config.SITE_TITLE }}{% endblock %}</title>
+    <title>{% block title %}{% block subtitle %}{% endblock %} — {{ config.SITE_TITLE }}{% endblock %}</title>
     {% include "snippet/google-analytics.html" %}
-    {% for url in config.SITE_STYLES %}
-    <link rel="stylesheet" href="{{url}}" />
-    {% endfor %}
+    <link rel="stylesheet" href="{{ config.SITE_STYLE }}">
+    <script src="{{ config.SITE_SCRIPT }}"></script>
     {% block afterstyle %}{% endblock %}
   </head>
   <body>
@@ -56,9 +55,6 @@
     {% block footer %}
     {% include "snippet/footer.html" %}
     {% endblock %}
-    {% for url in config.SITE_SCRIPTS %}
-    <script src="{{url}}"></script>
-    {% endfor %}
     {% block afterscript %}{% endblock %}
   </body>
 </html>
