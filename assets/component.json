@@ -13,5 +13,8 @@
     "index.js",
     "boot.js"
   ],
+  "styles": [
+    "index.css"
+  ],
   "development": {}
 }

@@ -33,20 +33,29 @@ def create_app(config=None):
         app.config.from_pyfile(config)
 
     app.config.update({'SITE_TIME': datetime.datetime.utcnow()})
-    app.config.update({
-        'SITE_STYLE': static_url(app, 'app.css'),
-        'SITE_SCRIPT': static_url(app, 'app.js'),
-    })
 
+    register_hooks(app)
     register_jinja(app)
+    register_database(app)
 
+    Mail(app)
+    register_babel(app)
+    register_routes(app)
+    register_logger(app)
+    return app
+
+
+def register_database(app):
+    """Database related configuration."""
     #: prepare for database
     db.init_app(app)
     db.app = app
-
     #: prepare for cache
     cache.init_app(app)
 
+
+def register_hooks(app):
+    """Hooks for request."""
     @app.before_request
     def load_current_user():
         g.user = get_current_user()
@@ -58,14 +67,7 @@ def create_app(config=None):
         if hasattr(g, '_before_request_time'):
             delta = time.time() - g._before_request_time
             response.headers['X-Render-Time'] = delta
-
         return response
-
-    Mail(app)
-    register_babel(app)
-    register_routes(app)
-    register_logger(app)
-    return app
 
 
 def register_routes(app):
@@ -82,25 +84,34 @@ def register_routes(app):
 def register_jinja(app):
     from .utils.markdown import plain_markdown
     from .handlers.admin import load_sidebar
-    from werkzeug.datastructures import ImmutableDict
     from flask.ext.babel import gettext as _
 
-    app.jinja_options = ImmutableDict(
-        extensions=[
-            'jinja2.ext.autoescape',
-            'jinja2.ext.with_',
-            'jinja2.ext.do',
-        ]
-    )
+    if not hasattr(app, '_static_hash'):
+        app._static_hash = {}
 
-    app.jinja_env.filters['markdown'] = plain_markdown
+    def static_url(filename):
+        if filename in app._static_hash:
+            return app._static_hash[filename]
+
+        with open(os.path.join(STATIC_DIR, filename), 'r') as f:
+            content = f.read()
+            hsh = hashlib.md5(content).hexdigest()
+
+        app.logger.info('Generate %s md5sum: %s' % (filename, hsh))
+        prefix = app.config.get('SITE_STATIC_PREFIX', '/static/')
+        value = '%s%s?v=%s' % (prefix, filename, hsh[:5])
+        app._static_hash[filename] = value
+        return value
 
     @app.context_processor
     def register_context():
         return dict(
             get_site_status=get_site_status,
             get_site_sidebar=load_sidebar,
+            static_url=static_url,
         )
+
+    app.jinja_env.filters['markdown'] = plain_markdown
 
     @app.template_filter('timesince')
     def timesince(value):
@@ -126,6 +137,7 @@ def register_jinja(app):
 
 
 def register_babel(app):
+    """Configure Babel for internationality."""
     from flask.ext.babel import Babel
 
     babel = Babel(app)
@@ -146,12 +158,3 @@ def register_logger(app):
     handler = logging.StreamHandler()
     handler.setLevel(logging.ERROR)
     app.logger.addHandler(handler)
-
-
-def static_url(app, filename):
-    with open(os.path.join(STATIC_DIR, filename), 'r') as f:
-        content = f.read()
-        hsh = hashlib.md5(content).hexdigest()
-
-    prefix = app.config.get('SITE_STATIC_PREFIX', '/static/')
-    return '%s%s?v=%s' % (prefix, filename, hsh)

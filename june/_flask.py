@@ -11,6 +11,7 @@
 import datetime
 from flask import Flask as _Flask
 from flask.json import JSONEncoder as _JSONEncoder
+from werkzeug.datastructures import ImmutableDict
 
 
 class JSONEncoder(_JSONEncoder):
@@ -25,3 +26,10 @@ class JSONEncoder(_JSONEncoder):
 class Flask(_Flask):
     json_encoder = JSONEncoder
 
+    jinja_options = ImmutableDict(
+        extensions=[
+            'jinja2.ext.autoescape',
+            'jinja2.ext.with_',
+            'jinja2.ext.do',
+        ]
+    )

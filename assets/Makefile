@@ -1,14 +1,16 @@
+.PHONY: build compile components clean stylus
 
-build: components
+build: components stylus
 	@component build --dev -o ../public/static -n app
 
 components: component.json
 	@component install --dev
 
-compile:
-	@component-runtime -o ../public/static -n app
+compile: components stylus
+	@component-build -o ../public/static -n app -p .
 
 clean:
-	rm -fr build components template.js
+	rm -fr build components node_modules
 
-.PHONY: clean
+stylus:
+	@stylus index.styl -I stylus -I node_modules

@@ -5,12 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% block subtitle %}{% endblock %} — {{ config.SITE_TITLE }}{% endblock %}</title>
     {% include "snippet/google-analytics.html" %}
-    <link rel="stylesheet" href="{{ config.SITE_STYLE }}">
-    <script src="{{ config.SITE_SCRIPT }}"></script>
+    <link rel="stylesheet" href="{{ static_url('app.css') }}">
+    <script src="{{ static_url('app.js') }}"></script>
     {% block afterstyle %}{% endblock %}
   </head>
   <body>
     {% from "macro/ui.html" import nav, alerts %}
+    <nav class="ui menu">
+    <h3 class="header item">Title</h3>
+    <a class="active item" href="#">Home</a>
+    </nav>
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">

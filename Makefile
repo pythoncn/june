@@ -8,12 +8,12 @@ upgrade:
 	@alembic upgrade head
 
 staticdir = public/static
-
-components:
+assets:
 	@$(MAKE) -C assets build
 
 static:
-	@uglifyjs ${staticdir}/app.js -m -o ${staticdir}/app.min.js
+	@$(MAKE) -C assets compile
+	@uglifyjs ${staticdir}/app.js -m -o ${staticdir}/app.js
 
 # translate
 babel-extract:

@@ -1,17 +1,12 @@
-import os
-rootdir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-
 DEBUG = False
 TESTING = False
 VERIFY_EMAIL = True
 VERIFY_USER = True
 
 #: site
-SITE_TITLE = 'June Forum'
+SITE_TITLE = 'Python China'
 SITE_URL = '/'
 # SITE_URL = 'http://python-china.org/'
-SITE_STYLES = []
-SITE_SCRIPTS = []
 
 #: sidebar is a absolute path
 # SITE_SIDEBAR = '/path/to/sidebar.html'
