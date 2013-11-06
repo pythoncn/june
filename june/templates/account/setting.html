@@ -4,11 +4,11 @@
 {% block subtitle %}{{_('Settings')}}{% endblock %}
 
 {% block content %}
-<div class="module">
-  <div class="module-header inner">
-    <strong>{{_('Edit Profile')}}</strong>
+<div class="panel panel-default">
+<div class="panel-heading">
+    <h3 class="panel-title">{{_('Edit Profile')}}</h3>
   </div>
-  <form class="form-horizontal inner" method="post" action="">
+  <form class="form-horizontal panel-body" method="post" action="">
     {{ form.csrf_token }}
     {{ horizontal_field(form.screen_name, 'input-block-level') }}
     {{ horizontal_field(form.website, 'input-block-level') }}

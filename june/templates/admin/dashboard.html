@@ -1,53 +1,57 @@
 {% extends "layout.html" %}
 
-{% block subtitle %}{{_('Dashboard')}}{% endblock %}
+{% block subtitle %}{{ _('Dashboard') }}{% endblock %}
 
 {% from "macro/ui.html" import nav, pagination %}
 
 {% block content %}
-<div class="module">
-  <div class="module-header inner">
-    <strong>{{_('Sidebar')}}</strong>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">{{ _('Sidebar') }}</h3>
+    </div>
+    <form class="form panel-body" action="" method="post">
+      <div class="form-group">
+        <textarea class="form-control" rows="3" name="content" placeholder="sidebar html">{{ sidebar or '' }}</textarea>
+      </div>
+      <button class="btn-success btn">{{ _('Update') }}</button>
+    </form>
   </div>
-  <form class="form inner" action="" method="post">
-    <textarea name="content" placeholder="sidebar html" class="input-block-level" rows="15">{% if sidebar %}{{ sidebar }}{% endif %}</textarea>
-    <button class="btn-success btn">{{_('Update')}}</button>
-  </form>
-</div>
-<div class="module">
-  <div class="module-header inner">
-    <strong>{{_('Members')}}</strong>
-  </div>
-  <div class="module-body">
-    <div class="item-list user-list">
-      {% for user in paginator.items %}
-      <div class="item">
-        <div class="account-group">
-          <img src="{{ user.avatar(48)}}" alt="{{user}}" />
-          <a href="{{url_for('user.view', username=user.username)}}"><strong>{{user}}</strong></a>
-          <div class="meta">
-            <time>{{ user.created.strftime('%Y-%m-%d') }}</time>
-            {% if user.city %}
-            <span class="sep">&middot;</span>
-            <a href="{{ url_for('user.city', city=user.city) }}">{{user.city}}</a>
-            {% endif %}
-            {% if user.is_staff %}
-            <span class="sep">&middot;</span>
-            <span>staff</span>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">{{ _('Members') }}</h3>
+    </div>
+    <div class="panel-body">
+      <div class="item-list user-list">
+        {% for user in paginator.items %}
+          <div class="item">
+            <div class="account-group">
+              <img src="{{ user.avatar(48) }}" alt="{{ user }}"/>
+              <a href="{{ url_for('user.view', username=user.username) }}"><strong>{{ user }}</strong></a>
+
+              <div class="meta">
+                <time>{{ user.created.strftime('%Y-%m-%d') }}</time>
+                {% if user.city %}
+                  <span class="sep">&middot;</span>
+                  <a href="{{ url_for('user.city', city=user.city) }}">{{ user.city }}</a>
+                {% endif %}
+                {% if user.is_staff %}
+                  <span class="sep">&middot;</span>
+                  <span>staff</span>
+                {% endif %}
+              </div>
+            </div>
+            {% if g.user.is_admin %}
+              <a class="label label-success" href="{{ url_for('admin.user', uid=user.id) }}">{{ _('Edit') }}</a>
             {% endif %}
           </div>
-        </div>
-        {% if g.user.is_admin %}
-        <a class="label label-success" href="{{ url_for('admin.user', uid=user.id) }}">{{_('Edit')}}</a>
-        {% endif %}
+        {% endfor %}
       </div>
-      {% endfor %}
     </div>
+    {% if paginator.pages > 1 %}
+      <div class="pannel-footer">
+        {{ pagination(paginator, url_for('admin.dashboard')) }}
+      </div>
+    {% endif %}
   </div>
-  {% if paginator.pages > 1 %}
-  <div class="module-footer inner">
-    {{ pagination(paginator, url_for('admin.dashboard')) }}
-  </div>
-  {% endif %}
-</div>
 {% endblock %}

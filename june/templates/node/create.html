@@ -1,22 +1,22 @@
 {% extends "layout.html" %}
 {% from "macro/form.html" import horizontal_field, horizontal_form_button %}
 
-{% block subtitle %}{{_('Create Node')}}{% endblock %}
+{% block subtitle %}{{ _('Create Node') }}{% endblock %}
 
 {% block content %}
-<div class="module">
-  <div class="module-header inner">
-    <strong>{{_('Create Node')}}</strong>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">{{ _('Create Node') }}</h3>
+    </div>
+    <form class="form-horizontal panel-body" method="post" action="">
+      {{ form.csrf_token }}
+
+      {{ horizontal_field(form.title) }}
+      {{ horizontal_field(form.urlname) }}
+      {{ horizontal_field(form.description) }}
+      {{ horizontal_field(form.role) }}
+
+      {{ horizontal_form_button(_('Create'), 'btn-success') }}
+    </form>
   </div>
-  <form class="form-horizontal inner" method="post" action="">
-    {{ form.csrf_token }}
-
-    {{ horizontal_field(form.title, 'input-block-level') }}
-    {{ horizontal_field(form.urlname, 'input-block-level') }}
-    {{ horizontal_field(form.description, 'input-block-level') }}
-    {{ horizontal_field(form.role) }}
-
-    {{ horizontal_form_button(_('Create'), 'btn-success') }}
-  </form>
-</div>
 {% endblock %}

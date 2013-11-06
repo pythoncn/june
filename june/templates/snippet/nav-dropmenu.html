@@ -12,7 +12,7 @@
     </a></li>
     <li class="divider"></li>
     {% if g.user.is_staff %}
-    <li class="nav-header">{{_('Staff Power')}}</li>
+    <li class="dropdown-header">{{_('Staff Power')}}</li>
     <li><a href="{{url_for('node.create')}}">{{_('Create Node')}}</a></li>
     <li><a href="/admin/">{{_('Administration')}}</a></li>
     <li class="divider"></li>

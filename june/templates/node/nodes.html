@@ -1,21 +1,21 @@
 {% extends "layout.html" %}
 
-{% block subtitle %}{{_('Nodes')}}{% endblock %}
+{% block subtitle %}{{ _('Nodes') }}{% endblock %}
 
 {% from "macro/ui.html" import nav %}
 
 {% block nav %}
-{{ nav('node') }}
+  {{ nav('node') }}
 {% endblock %}
 
 {% block content %}
-{% from "macro/ui.html" import node_list %}
-<div class="module">
-  <div class="module-header inner">
-    <strong>{{_('Nodes')}}</strong>
+  {% from "macro/ui.html" import node_list %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">{{ _('Nodes') }}</h3>
+    </div>
+    <div class="panel-body">
+      {{ node_list(nodes) }}
+    </div>
   </div>
-  <div class="module-body">
-    {{ node_list(nodes) }}
-  </div>
-</div>
 {% endblock %}

@@ -4,20 +4,19 @@
 {% block subtitle %}{{user}}{% endblock %}
 
 {% block content %}
-<div class="module">
-  <div class="module-header inner">
-    <strong>{{user}}</strong>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">{{ user }}</h3>
   </div>
-  <form class="form-horizontal inner" method="post" action="">
+  <form class="form-horizontal panel-body" method="post" action="">
     {{ form.csrf_token }}
-    {{ horizontal_field(form.username, 'input-block-level') }}
-    {{ horizontal_field(form.email, 'input-block-level') }}
-    {{ horizontal_field(form.screen_name, 'input-block-level') }}
-    {{ horizontal_field(form.website, 'input-block-level') }}
-    {{ horizontal_field(form.city, 'input-block-level') }}
-    {{ horizontal_field(form.description, 'input-block-level') }}
+    {{ horizontal_field(form.username) }}
+    {{ horizontal_field(form.email) }}
+    {{ horizontal_field(form.screen_name) }}
+    {{ horizontal_field(form.website) }}
+    {{ horizontal_field(form.city) }}
+    {{ horizontal_field(form.description) }}
     {{ horizontal_field(form.role) }}
-
     {{ horizontal_form_button(_('Update'), 'btn-success') }}
   </form>
 </div>
