@@ -3,7 +3,7 @@
 from datetime import datetime
 from werkzeug import cached_property
 from ._base import db, JuneQuery
-from ..utils.markdown import rich_markdown
+from ..utils.markdown import markdown
 from .account import Account
 from .node import Node, NodeStatus
 
@@ -41,7 +41,7 @@ class Topic(db.Model):
     def html(self):
         if self.content is None:
             return ''
-        return rich_markdown(self.content)
+        return markdown(self.content)
 
     def save(self, user=None, node=None):
         if self.id:
@@ -152,7 +152,7 @@ class Reply(db.Model):
     def html(self):
         if self.content is None:
             return ''
-        return rich_markdown(self.content)
+        return markdown(self.content)
 
     def save(self, user=None, topic=None):
         if self.id:

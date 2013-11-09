@@ -1,32 +1,25 @@
 # coding: utf-8
+"""
+    june.markdown
+    ~~~~~~~~~~~~~
+
+    Markdown parser for June.
+
+    :copyright: (c) 2013 by Hsiaoming Yang
+"""
 
 import re
-import houdini as h
-import hoedown as m
+import misaka as m
+from markupsafe import escape
 from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 
 
-class JuneRenderer(m.HtmlRenderer, m.SmartyPants):
-    def block_code(self, text, lang):
-        if not lang:
-            if isinstance(text, unicode):
-                text = text.encode('utf-8')
-            return '<pre><code>%s</code></pre>' % h.escape_html(text.strip())
-        if hasattr(self, 'use_pygments') and self.use_pygments:
-            try:
-                # if the language can not be found, it will raise
-                lexer = get_lexer_by_name(lang.lower(), stripall=True)
-                formatter = HtmlFormatter()
-                return highlight(text, lexer, formatter)
-            except:
-                pass
-        return '<pre class="language-%s"><code>%s</code></pre>' % (
-            lang, h.escape_html(text.strip())
-        )
-
+class AutolinkRenderer(m.HtmlRenderer):
     def autolink(self, link, is_email):
+        if is_email:
+            return '<a href="mailto:%(link)s">%(link)s</a>' % {'link': link}
         title = link.replace('http://', '').replace('https://', '')
 
         #: youtube.com
@@ -82,35 +75,51 @@ class JuneRenderer(m.HtmlRenderer, m.SmartyPants):
             ) % {'url': match.group(1), 'link': link, 'title': title}
             return value
 
-        if is_email:
-            return '<a href="mailto:%(link)s">%(link)s</a>' % {'link': link}
 
-        return '<a href="%s" rel="nofollow">%s</a>' % (link, title)
+class HighlightRenderer(AutolinkRenderer):
+    def block_code(self, text, lang):
+        if not lang:
+            return u'<pre><code>%s</code></pre>' % escape(text)
 
-    def paragraph(self, text):
-        pattern = re.compile(r'\s@(\w+)')
-        text = pattern.sub(r' @<a href="/user/\1">\1</a>', text)
-        pattern = re.compile(r'^@(\w+)')
-        text = pattern.sub(r'@<a href="/user/\1">\1</a>', text)
-        return '<p>%s</p>' % text
+        inlinestyles = False
+        linenos = False
+        if hasattr(self, '_inlinestyles'):
+            inlinestyles = self._inlinestyles
+        if hasattr(self, '_linenos'):
+            linenos = self._linenos
+
+        try:
+            lexer = get_lexer_by_name(lang, stripall=True)
+            formatter = HtmlFormatter(
+                noclasses=inlinestyles, linenos=linenos
+            )
+            return highlight(text, lexer, formatter)
+        except:
+            return '<pre class="%s"><code>%s</code></pre>' % (
+                lang, escape(text)
+            )
 
 
-def rich_markdown(text, use_pygments=True):
-    if text is None:
-        return ''
-    renderer = JuneRenderer(flags=m.HTML_ESCAPE)
-    renderer.use_pygments = use_pygments
-    ext = (
+def markdown(text, highlight=True, inlinestyles=False, linenos=False):
+    """Markdown filter for writeup.
+
+    :param text: the content to be markdownify
+    :param highlight: highlight the code block or not
+    :param inlinestyles: highlight the code with inline styles
+    :param linenos: show linenos of the highlighted code
+    """
+    if not text:
+        return u''
+    if highlight:
+        renderer = HighlightRenderer()
+        renderer._inlinestyles = inlinestyles
+        renderer._linenos = linenos
+    else:
+        renderer = AutolinkRenderer()
+
+    extensions = (
         m.EXT_NO_INTRA_EMPHASIS | m.EXT_FENCED_CODE | m.EXT_AUTOLINK |
-        m.EXT_TABLES | m.EXT_STRIKETHROUGH
+        m.EXT_TABLES | m.EXT_STRIKETHROUGH | m.EXT_SUPERSCRIPT
     )
-    md = m.Markdown(renderer, extensions=ext)
-    return md.render(text)
-
-
-def plain_markdown(text):
-    if text is None:
-        return ''
-    renderer = m.HtmlRenderer(flags=m.HTML_ESCAPE)
-    md = m.Markdown(renderer)
+    md = m.Markdown(renderer, extensions=extensions)
     return md.render(text)

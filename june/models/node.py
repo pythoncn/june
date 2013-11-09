@@ -3,7 +3,7 @@
 from datetime import datetime
 from werkzeug import cached_property
 from ._base import db, JuneQuery, SessionMixin
-from ..utils.markdown import rich_markdown
+from ..utils.markdown import markdown
 
 __all__ = ['Node', 'NodeStatus']
 
@@ -37,7 +37,7 @@ class Node(db.Model, SessionMixin):
     def html(self):
         if self.description is None:
             return ''
-        return rich_markdown(self.description)
+        return markdown(self.description)
 
 
 class NodeStatus(db.Model, SessionMixin):

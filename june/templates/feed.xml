@@ -18,7 +18,7 @@
         <id>{{topic.id}}</id>
         <category scheme="{{url_for('node.view', urlname=topic.node.urlname, _external=True)}}" term="{{topic.node.urlname}}" label="{{ topic.node }}" />
         <content type="html" xml:base="{{ config.SITE_URL }}" xml:lang="en">
-            <![CDATA[ {{ topic.content|markdown|safe }} ]]>
+            <![CDATA[ {{ topic.content|markdown(False)|safe }} ]]>
         </content>
     </entry>
     {% endfor %}

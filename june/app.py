@@ -82,9 +82,9 @@ def register_routes(app):
 
 
 def register_jinja(app):
-    from .utils.markdown import plain_markdown
+    from .utils.markdown import markdown
     from .handlers.admin import load_sidebar
-    from flask.ext.babel import gettext as _
+    from flask_babel import gettext as _
 
     if not hasattr(app, '_static_hash'):
         app._static_hash = {}
@@ -111,7 +111,7 @@ def register_jinja(app):
             static_url=static_url,
         )
 
-    app.jinja_env.filters['markdown'] = plain_markdown
+    app.jinja_env.filters['markdown'] = markdown
 
     @app.template_filter('timesince')
     def timesince(value):
@@ -138,17 +138,15 @@ def register_jinja(app):
 
 def register_babel(app):
     """Configure Babel for internationality."""
-    from flask.ext.babel import Babel
+    from flask_babel import Babel
 
     babel = Babel(app)
+    supported = app.config.get('BABEL_SUPPORTED_LOCALES', ['en', 'zh'])
+    default = app.config.get('BABEL_DEFAULT_LOCALE', 'en')
 
     @babel.localeselector
     def get_locale():
-        app.config.setdefault('BABEL_SUPPORTED_LOCALES', ['en', 'zh'])
-        app.config.setdefault('BABEL_DEFAULT_LOCALE', 'en')
-        match = app.config['BABEL_SUPPORTED_LOCALES']
-        default = app.config['BABEL_DEFAULT_LOCALE']
-        return request.accept_languages.best_match(match, default)
+        return request.accept_languages.best_match(supported, default)
 
 
 def register_logger(app):

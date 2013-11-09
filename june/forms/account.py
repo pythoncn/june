@@ -3,10 +3,10 @@
 from flask import current_app
 from wtforms import TextField, PasswordField, BooleanField
 from wtforms import TextAreaField
-from flask.ext.wtf.html5 import EmailField, URLField
+from wtforms.fields.html5 import EmailField, URLField
 from wtforms.validators import DataRequired, Email, Length, Regexp
 from wtforms.validators import Optional, URL
-from flask.ext.babel import lazy_gettext as _
+from flask_babel import lazy_gettext as _
 
 from ._base import BaseForm
 from ..models import Account

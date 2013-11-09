@@ -5,7 +5,7 @@ import time
 import datetime
 from flask import Blueprint, request, g, current_app
 from flask import render_template, Response, jsonify
-from ..utils.markdown import rich_markdown
+from ..utils.markdown import markdown
 from ..helpers import require_user
 from ..models import Node, Topic, fill_topics, cache
 
@@ -49,7 +49,7 @@ def feed():
 @bp.route('/markdown', methods=['POST'])
 def markdown():
     content = request.form.get('content', '')
-    return rich_markdown(content)
+    return markdown(content)
 
 
 @bp.route('/upload', methods=['POST'])
