@@ -2,7 +2,7 @@
 
 from datetime import datetime
 from werkzeug import cached_property
-from ._base import db, JuneQuery
+from ._base import db
 from ..utils.markdown import markdown
 from .account import Account
 from .node import Node, NodeStatus
@@ -12,8 +12,6 @@ __all__ = ['Topic', 'Reply']
 
 
 class Topic(db.Model):
-    query_class = JuneQuery
-
     id = db.Column(db.Integer, primary_key=True)
     account_id = db.Column(db.Integer, nullable=False, index=True)
     node_id = db.Column(db.Integer, nullable=False, index=True)
@@ -135,8 +133,6 @@ class Topic(db.Model):
 
 
 class Reply(db.Model):
-    query_class = JuneQuery
-
     id = db.Column(db.Integer, primary_key=True)
     account_id = db.Column(db.Integer, nullable=False)
     topic_id = db.Column(db.Integer, index=True, nullable=False)

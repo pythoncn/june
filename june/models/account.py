@@ -3,14 +3,12 @@
 import hashlib
 from datetime import datetime
 from werkzeug import security
-from ._base import db, JuneQuery, SessionMixin
+from ._base import db, SessionMixin
 
 __all__ = ('Account', 'NonAccount', 'Profile')
 
 
 class Account(db.Model, SessionMixin):
-    query_class = JuneQuery
-
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(40), unique=True, index=True,
                          nullable=False)

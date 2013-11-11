@@ -2,15 +2,13 @@
 
 from datetime import datetime
 from werkzeug import cached_property
-from ._base import db, JuneQuery, SessionMixin
+from ._base import db, SessionMixin
 from ..utils.markdown import markdown
 
 __all__ = ['Node', 'NodeStatus']
 
 
 class Node(db.Model, SessionMixin):
-    query_class = JuneQuery
-
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     urlname = db.Column(db.String(40), unique=True, index=True)
@@ -44,9 +42,6 @@ class NodeStatus(db.Model, SessionMixin):
     """
     People's status in a Node
     """
-
-    query_class = JuneQuery
-
     node_id = db.Column(db.Integer, primary_key=True)
     account_id = db.Column(db.Integer, primary_key=True)
 

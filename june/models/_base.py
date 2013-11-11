@@ -9,10 +9,6 @@ __all__ = [
 ]
 
 
-db = SQLAlchemy()
-cache = Cache()
-
-
 class JuneQuery(BaseQuery):
     def filter_in(self, ids, key='id'):
         ids = set(ids)
@@ -55,3 +51,8 @@ class SessionMixin(object):
         db.session.delete(self)
         db.session.commit()
         return self
+
+
+db = SQLAlchemy()
+cache = Cache()
+db.Model.query_class = JuneQuery

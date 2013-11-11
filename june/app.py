@@ -149,6 +149,17 @@ def register_babel(app):
         return request.accept_languages.best_match(supported, default)
 
 
+def register_login(app):
+    from flask_login import LoginManager
+
+    login = LoginManager()
+    login.init_app(app)
+
+    @login.user_loader
+    def load_user(userid):
+        return Account.query.get(userid)
+
+
 def register_logger(app):
     """Track the logger for production mode."""
     if app.debug:
