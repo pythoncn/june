@@ -16,5 +16,8 @@
   "styles": [
     "index.css"
   ],
+  "images": [
+    "images/bg.png"
+  ],
   "development": {}
 }

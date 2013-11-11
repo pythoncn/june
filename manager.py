@@ -1,13 +1,8 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-import gevent.monkey
-gevent.monkey.patch_all()
-
 import os
-import sys
-import argparse
-from flask_script import Manager, Command
+from flask_script import Manager
 from june.app import create_app
 
 
@@ -23,13 +18,9 @@ manager = Manager(app)
 
 
 @manager.command
-def runserver(port=5000, with_profile=False):
+def runserver(port=5000):
     """Runs a development server."""
     from flask import send_from_directory
-    from gevent.wsgi import WSGIServer
-    from werkzeug.serving import run_with_reloader
-    from werkzeug.debug import DebuggedApplication
-    from werkzeug.contrib.profiler import ProfilerMiddleware
 
     port = int(port)
 
@@ -38,23 +29,7 @@ def runserver(port=5000, with_profile=False):
         datadir = os.path.abspath('public/static')
         return send_from_directory(datadir, filename)
 
-    if with_profile:
-        f = open('./data/profile.log', 'w')
-        wsgi = ProfilerMiddleware(app, f)
-    else:
-        wsgi = DebuggedApplication(app)
-
-    @run_with_reloader
-    def run_server():
-        print('start server at: 127.0.0.1:%s' % port)
-
-        http_server = WSGIServer(('', port), wsgi)
-        http_server.serve_forever()
-
-    try:
-        run_server()
-    except (KeyboardInterrupt, TypeError):
-        sys.exit()
+    app.run(port=port)
 
 
 if __name__ == '__main__':

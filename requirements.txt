@@ -4,11 +4,9 @@ Flask-Cache
 Flask-Mail
 Flask-SQLAlchemy
 Flask-Script
-Flask-WTF>=0.9.2
+Flask-WTF>=0.9.3
 
 Pygments
 alembic
-gevent
 gunicorn
-houdini.py
 misaka
