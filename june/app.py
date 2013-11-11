@@ -5,7 +5,7 @@ import time
 import datetime
 import logging
 import hashlib
-from flask import request, g, url_for
+from flask import request, g
 from flask_mail import Mail
 from ._flask import Flask
 from .helpers import get_current_user
@@ -147,17 +147,6 @@ def register_babel(app):
     @babel.localeselector
     def get_locale():
         return request.accept_languages.best_match(supported, default)
-
-
-def register_login(app):
-    from flask_login import LoginManager
-
-    login = LoginManager()
-    login.init_app(app)
-
-    @login.user_loader
-    def load_user(userid):
-        return Account.query.get(userid)
 
 
 def register_logger(app):

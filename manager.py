@@ -32,5 +32,12 @@ def runserver(port=5000):
     app.run(port=port)
 
 
+@manager.command
+def createdb():
+    """Create database for june."""
+    from june.models import db
+    db.create_all()
+
+
 if __name__ == '__main__':
     manager.run()

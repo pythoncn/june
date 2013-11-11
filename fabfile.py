@@ -9,30 +9,16 @@ env.hosts = ['python-china.org']
 # env.password
 
 
-def virtualenv():
-    """Setup virtualenv for june."""
+def prepare():
+    """Prepare server for installation."""
     run('mkdir -p ~/venv')
     run('virtualenv ~/venv/june')
+    run('mkdir -p ~/apps/june/public/static')
+    run('mkdir -p ~/apps/june/public/data')
 
 
 def tarball():
     """Create tarball for june."""
-    local('rm -fr etc-bak')
-    local('mv etc etc-bak')
-    local('mkdir etc')
-    files = os.listdir('etc-bak')
-
-    for name in files:
-        filepath = os.path.join('etc-bak', name)
-        if not os.path.isfile(filepath):
-            continue
-        with open(filepath) as f:
-            content = f.read()
-            content = content.replace('{{user}}', env.user)
-
-            with open(os.path.join('etc', name), 'wb') as f:
-                f.write(content)
-
     local('make static')
     local('python setup.py sdist --formats=gztar', capture=False)
     local('rm -fr etc')
@@ -62,29 +48,16 @@ def clean():
     run('rm -f ~/tmp/june.tar.gz')
 
 
-def mkdirs():
-    """Prepare directories."""
-    # for june site
-    run('mkdir -p ~/apps/june/public/static')
-    run('mkdir -p ~/apps/june/public/data')
-
 
 def configure():
     """Prepare configuration files."""
     dist = local('python setup.py --fullname', capture=True).strip()
     tmpdir = '~/tmp/june/%s' % dist
+
     run('cp %s/wsgi.py ~/apps/june/' % tmpdir)
     run('cp %s/manager.py ~/apps/june/' % tmpdir)
-
     run('cp %s/alembic.ini ~/apps/june/' % tmpdir)
     run('cp -r %s/alembic ~/apps/june/' % tmpdir)
-
-    run('cp %s/etc/supervisord.conf ~/etc/supervisord/june.conf' % tmpdir)
-    run('cp %s/etc/nginx.conf ~/etc/nginx/june.conf' % tmpdir)
-
-    run('cp -r %s/etc ~/apps/june/' % tmpdir)
-    with cd('~/apps/june/etc'):
-        run('mv online_config.py settings.py')
 
 
 def upgrade():

@@ -47,7 +47,7 @@ def feed():
 
 
 @bp.route('/markdown', methods=['POST'])
-def markdown():
+def preview():
     content = request.form.get('content', '')
     return markdown(content)
 
