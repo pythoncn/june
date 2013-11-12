@@ -24,3 +24,60 @@
     </div>
   </div>
 {% endmacro %}
+
+{% macro render_topic(item) %}
+  <div class="item">
+    {% if item.user %}
+      <a class="avatar" href="{{ url_for('user.view', username=item.user.username) }}"
+         title="{{ item.user }}"><img src="{{ item.user.avatar(48) }}"/></a>
+    {% endif %}
+    <div class="main">
+      <h3 class="title">
+        <a href="{{ url_for('topic.view', uid=item.id) }}">{{ item }}</a>
+      </h3>
+
+      <div class="meta">
+        {% if item.node %}
+          <a class="label label-default" href="{{ url_for('node.view', urlname=item.node.urlname) }}">
+            {{ item.node }}
+          </a>
+          <span class="sep">&middot;</span>
+          {{ item.hits }}
+          <span class="sep">&middot;</span>
+        {% endif %}
+        <time datetime="{{ item.created|xmldatetime }}" pubdate>
+          {{ item.created|timesince }}
+        </time>
+      </div>
+      <a class="badge" href="{{ url_for('topic.view', uid=item.id) }}">{{ item.reply_count }}</a>
+    </div>
+  </div>
+{% endmacro %}
+
+{% macro pagination(paginator, url) %}
+  <ul class="pagination pagination-centered">
+    {% for page in paginator.iter_pages() %}
+      {% if page %}
+        {% if page == paginator.page %}
+          <li class="active"><span>{{ page }}</span></li>
+        {% else %}
+          <li><a href="{{ url }}?page={{ page }}">{{ page }}</a></li>
+        {% endif %}
+      {% else %}
+        <li class="disabled"><span class="ellipsis">…</span></li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+{% endmacro %}
+
+{%- macro navigation(current='home') %}
+  <ul class="nav navbar-nav">
+    <li {% if current == 'home' %}class="active"{% endif %}><a href="/">{{ _('Home') }}</a></li>
+    <li {% if current == 'topic' %}class="active"{% endif %}><a
+        href="{{ url_for('topic.topics') }}">{{ _('Topics') }}</a></li>
+    <li {% if current == 'node' %}class="active"{% endif %}><a href="{{ url_for('node.nodes') }}">{{ _('Nodes') }}</a>
+    </li>
+    <li {% if current == 'user' %}class="active"{% endif %}><a href="{{ url_for('user.users') }}">{{ _('Users') }}</a>
+    </li>
+  </ul>
+{%- endmacro %}

@@ -2,6 +2,7 @@
 
 {% block title %}{{ config.SITE_TITLE }}{% endblock %}
 {% from "macro/ui.html" import topic_list, node_list %}
+{% from "snippet/macro.html" import render_topic %}
 
 {% block content %}
   {% if blogs %}
@@ -14,12 +15,18 @@
       </div>
     </div>
   {% endif %}
+
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 class="panel-title">{{ _('Recent Topics') }}</h3>
     </div>
-    <div class="panel-body">
-      {{ topic_list(topics) }}
+    <div class="panel-columns">
+      {% if topics %}
+        {% for item in topics %}
+          {{ render_topic(item) }}
+        {% endfor %}
+      {% else %}
+      {% endif %}
     </div>
   </div>
 {% endblock %}
