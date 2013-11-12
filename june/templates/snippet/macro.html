@@ -1,0 +1,26 @@
+{% macro form_field(field) %}
+  <div class="form-group {% if field.errors %}has-error{% endif %}">
+    {{ field.label() }}
+    {% if field.description %}
+      {{ field(class_='form-control', placeholder=field.description) }}
+    {% else %}
+      {{ field(class_='form-control') }}
+    {% endif %}
+    {% if field.errors %}
+      <p class="help-block">{{ field.errors[0] }}</p>
+    {% endif %}
+  </div>
+{% endmacro %}
+
+{% macro horizontal_field(field) %}
+  <div class="form-group {% if field.errors %}has-error{% endif %}">
+    {{ field.label(class_='col-sm-2 control-label') }}
+    <div class="col-sm-10">
+      {% if field.description %}
+        {{ field(class_='form-control', placeholder=field.description) }}
+      {% else %}
+        {{ field(class_='form-control') }}
+      {% endif %}
+    </div>
+  </div>
+{% endmacro %}
