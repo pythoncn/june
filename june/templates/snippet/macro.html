@@ -1,6 +1,10 @@
-{% macro form_field(field) %}
+{% macro form_field(field, display_label=True) %}
   <div class="form-group {% if field.errors %}has-error{% endif %}">
-    {{ field.label() }}
+    {% if display_label %}
+      {{ field.label() }}
+    {% else %}
+      {{ field.label(class_=('sr-only')) }}
+    {% endif %}
     {% if field.description %}
       {{ field(class_='form-control', placeholder=field.description) }}
     {% else %}

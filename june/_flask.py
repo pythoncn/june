@@ -9,6 +9,7 @@
 """
 
 import datetime
+from speaklater import _LazyString
 from flask import Flask as _Flask
 from flask.json import JSONEncoder as _JSONEncoder
 from werkzeug.datastructures import ImmutableDict
@@ -20,6 +21,9 @@ class JSONEncoder(_JSONEncoder):
             return dict(o)
         if isinstance(o, datetime.datetime):
             return o.strftime('%Y-%m-%d %H:%M:%S')
+        if isinstance(o, _LazyString):
+            # TODO
+            return unicode(o)
         return _JSONEncoder.default(self, o)
 
 
