@@ -60,6 +60,17 @@
   </div>
 {% endmacro %}
 
+{% macro topic_columns(topics) %}
+    <div class="panel-columns">
+      {% if topics %}
+        {% for item in topics %}
+          {{ render_topic(item) }}
+        {% endfor %}
+      {% else %}
+      {% endif %}
+    </div>
+{% endmacro %}
+
 {% macro pagination(paginator, url) %}
   <ul class="pagination pagination-centered">
     {% for page in paginator.iter_pages() %}

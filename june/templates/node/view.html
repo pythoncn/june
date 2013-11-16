@@ -2,21 +2,21 @@
 
 {% block subtitle %}{{ node }}{% endblock %}
 
-{% from "macro/ui.html" import nav %}
+{% from "snippet/macro.html" import nav, topic_columns, pagination %}
 
 {% block nav %}
   {{ nav('node') }}
 {% endblock %}
 
 {% block content %}
-  {% from "macro/ui.html" import topic_list, pagination %}
   <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">{{ _('Topics') }}</h3>
-    </div>
-    <div class="panel-body">
-      {{ topic_list(paginator.items) }}
-    </div>
+    <ol class="breadcrumb">
+      <li><a href="/">{{ _('Home') }}</a></li>
+      <li><a href="{{ url_for('node.nodes') }}">{{ _('Nodes') }}</a></li>
+      <li class="active">{{ node }}</li>
+    </ol>
+    {{ topic_columns(paginator.items) }}
+
     {% if paginator.pages > 1 %}
       <div class="panel-footer">
         {{ pagination(paginator, url_for('node.view', urlname=node.urlname)) }}
