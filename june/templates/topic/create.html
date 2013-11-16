@@ -1,47 +1,20 @@
 {% extends "layout.html" %}
 {% from "macro/form.html" import render_field %}
 
-{% block subtitle %}{{_('Create Topic')}}{% endblock %}
+{% block subtitle %}{{ _('Create Topic') }}{% endblock %}
 
-{% block afterstyle %}
-<style type="text/css">#wrap .container{max-width: 1100px}</style>
-{% endblock %}
-
-{% block main %}
-<div class="row-fluid">
-  <div class="span6">
-    <div class="module">
-      <div class="module-header inner">
-        <strong>{{_('Create Topic')}}</strong>
-      </div>
-      <form class="form topic-form" method="post" action="">
-        <div class="inner">
-          {{ form.csrf_token }}
-
-          {{ render_field(form.title, 'input-block-level') }}
-          {{ render_field(form.content, 'input-block-level') }}
-        </div>
-        <div class="module-footer inner text-right">
-          <button data-target="#content" class="btn preview-button">{{_('Preview')}}</button>
-          <button class="btn btn-success">{{_('Create')}}</button>
-        </div>
-      </form>
+{% block wrap %}
+  <form class="form topic-form" method="post" action="">
+    {{ form.csrf_token }}
+    {{ form.title(placeholder=form.title.description) }}
+    {{ form.content(placeholder=form.content.description) }}
+    <div class="text-right">
+      <button data-target="#content" class="btn btn-default preview-button">{{ _('Preview') }}</button>
+      <button class="btn btn-success">{{ _('Create') }}</button>
     </div>
-    <div class="module">
-      <div class="module-header inner">
-        <strong>{{node}}</strong>
-      </div>
-      <div class="module-body inner">
-        {{node.html|safe}}
-      </div>
+    <div class="markdown-help">
+      <h3>Markdown Syntax</h3>
+      {% include "snippet/markdown-help.html" %}
     </div>
-  </div>
-  <div class="span6">
-    <div class="module">
-      <div class="inner">
-        {% include "snippet/markdown-help.html" %}
-      </div>
-    </div>
-  </div>
-</div>
+  </form>
 {% endblock %}

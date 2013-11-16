@@ -1,42 +1,43 @@
 <!DOCTYPE HTML>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% block subtitle %}{% endblock %} — {{ config.SITE_TITLE }}{% endblock %}</title>
-    {% include "snippet/google-analytics.html" %}
-    <link rel="stylesheet" href="{{ static_url('app.css') }}">
-    <script src="{{ static_url('app.js') }}"></script>
-    {% block afterstyle %}{% endblock %}
-  </head>
-  <body>
-    {% from "macro/ui.html" import nav, alerts %}
-    <div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-        </div>
-        <div class="navbar-collapse collapse">
-          {% block nav %}
-          {{ nav() }}
-          {% endblock %}
-          {% include "snippet/nav-dropmenu.html" %}
-        </div>
-      </div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{% block subtitle %}{% endblock %} — {{ config.SITE_TITLE }}{% endblock %}</title>
+  {% include "snippet/google-analytics.html" %}
+  <link rel="stylesheet" href="{{ static_url('app.css') }}">
+  <script src="{{ static_url('app.js') }}"></script>
+  {% block afterstyle %}{% endblock %}
+</head>
+<body>
+{% from "macro/ui.html" import nav, alerts %}
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
     </div>
+    <div class="navbar-collapse collapse">
+      {% block nav %}
+        {{ nav() }}
+      {% endblock %}
+      {% include "snippet/nav-dropmenu.html" %}
+    </div>
+  </div>
+</div>
 
-    <div id="wrap">
-      <div class="main container">
-        {% with messages = get_flashed_messages(with_categories=true) %}
+{% block wrap %}
+  <div id="wrap">
+    <div class="main container">
+      {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
-        {{ alerts(messages) }}
+          {{ alerts(messages) }}
         {% endif %}
-        {% endwith %}
-        {% block main %}
+      {% endwith %}
+      {% block main %}
         <div class="row">
           <div class="col-md-8">
             {% block content %}{% endblock %}
@@ -45,17 +46,19 @@
             {% block sidebar %}
             {% endblock %}
             {% block sitestatus %}
-            {% include "snippet/sidebar.html" %}
+              {% include "snippet/sidebar.html" %}
             {% endblock %}
           </div>
         </div>
-        {% endblock %}
-      </div>
+      {% endblock %}
     </div>
-    {% block footer %}
-    {% include "snippet/footer.html" %}
-    {% endblock %}
-    <script>require('june')</script>
-    {% block afterscript %}{% endblock %}
-  </body>
+  </div>
+{% endblock %}
+
+{% block footer %}
+  {% include "snippet/footer.html" %}
+{% endblock %}
+<script>require('june')</script>
+{% block afterscript %}{% endblock %}
+</body>
 </html>

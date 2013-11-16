@@ -1,45 +1,26 @@
 {% extends "layout.html" %}
 {% from "macro/form.html" import render_field %}
 
-{% block subtitle %}{{_('Edit Topic')}}{% endblock %}
+{% block subtitle %}{{ _('Edit Topic') }}{% endblock %}
 
-{% block afterstyle %}
-<style type="text/css">#wrap .container{max-width: 1100px}</style>
-{% endblock %}
-
-{% block main %}
-<div class="row-fluid">
-  <div class="span6">
-    <div class="module">
-      <div class="module-header inner">
-        <strong>{{_('Edit Topic')}}</strong>
+{% block wrap %}
+  <div class="topic-form">
+    <form class="form" method="post" action="">
+      {{ form.csrf_token }}
+      {{ form.title(placeholder=form.title.description) }}
+      {{ form.content(placeholder=form.content.description) }}
+      <div class="text-right">
+        <button data-target="#content" class="btn btn-default preview-button">{{ _('Preview') }}</button>
+        <button class="btn btn-success">{{ _('Update') }}</button>
       </div>
-      <form class="form topic-form" method="post" action="">
-        <div class="inner">
-          {{ form.csrf_token }}
-
-          {{ render_field(form.title, 'input-block-level') }}
-          {{ render_field(form.content, 'input-block-level') }}
-        </div>
-        <div class="module-footer inner text-right">
-          <button data-target="#content" class="btn preview-button">{{_('Preview')}}</button>
-          <button class="btn btn-success">{{_('Update')}}</button>
-        </div>
-      </form>
-    </div>
-    <div class="module">
-      <form class="form-inline inner" action="{{url_for('topic.delete', uid=topic.id)}}" method="post">
-        <input type="password" class="sep" name="password" placeholder="{{_('Password')}}" />
-        <button class="btn btn-danger">{{_('Delete')}}</button>
-      </form>
+    </form>
+    <form class="danger-area" action="{{ url_for('topic.delete', uid=topic.id) }}" method="post">
+      <input type="password" class="sep" name="password" placeholder="{{ _('Password') }}"/>
+      <button class="btn btn-danger pull-right">{{ _('Delete') }}</button>
+    </form>
+    <div class="markdown-help">
+      <h3>Markdown Syntax</h3>
+      {% include "snippet/markdown-help.html" %}
     </div>
   </div>
-  <div class="span6">
-    <div class="module">
-      <div class="inner">
-        {% include "snippet/markdown-help.html" %}
-      </div>
-    </div>
-  </div>
-</div>
 {% endblock %}
