@@ -33,7 +33,9 @@
   <div class="item">
     {% if item.user %}
       <a class="avatar" href="{{ url_for('user.view', username=item.user.username) }}"
-         title="{{ item.user }}"><img src="{{ item.user.avatar(48) }}"/></a>
+         title="{{ item.user }}">
+        <img src="{{ item.user.avatar(48) }}" width="48" height="48" />
+      </a>
     {% endif %}
     <div class="main">
       <h3 class="title">
@@ -45,9 +47,9 @@
           <a class="label label-default" href="{{ url_for('node.view', urlname=item.node.urlname) }}">
             {{ item.node }}
           </a>
-          <span class="sep">&middot;</span>
+          <span class="sep">•</span>
           {{ item.hits }}
-          <span class="sep">&middot;</span>
+          <span class="sep">•</span>
         {% endif %}
         <time datetime="{{ item.created|xmldatetime }}" pubdate>
           {{ item.created|timesince }}

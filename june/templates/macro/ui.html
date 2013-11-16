@@ -51,10 +51,10 @@
             {% if show_node %}
               <span class="sep">/</span>
               {{ item.hits }}
-              <span class="sep">&middot;</span>
+              <span class="sep">•</span>
               <a href="{{ url_for('node.view', urlname=item.node.urlname) }}">{{ item.node }}</a>
             {% endif %}
-            <span class="sep">&middot;</span>
+            <span class="sep">•</span>
             <time datetime="{{ item.created|xmldatetime }}" pubdate>{{ item.created|timesince }}</time>
           </div>
           {% if show_user %}
@@ -106,7 +106,7 @@
           <div class="meta">
             <time>{{ user.created.strftime('%Y-%m-%d') }}</time>
             {% if user.city %}
-              <span class="sep">&middot;</span>
+              <span class="sep">•</span>
               <a href="{{ url_for('user.city', city=user.city) }}">{{ user.city }}</a>
             {% endif %}
           </div>

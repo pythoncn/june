@@ -32,11 +32,11 @@
               <div class="meta">
                 <time>{{ user.created.strftime('%Y-%m-%d') }}</time>
                 {% if user.city %}
-                  <span class="sep">&middot;</span>
+                  <span class="sep">•</span>
                   <a href="{{ url_for('user.city', city=user.city) }}">{{ user.city }}</a>
                 {% endif %}
                 {% if user.is_staff %}
-                  <span class="sep">&middot;</span>
+                  <span class="sep">•</span>
                   <span>staff</span>
                 {% endif %}
               </div>

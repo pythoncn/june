@@ -22,14 +22,14 @@
     </div>
     <div class="panel-footer text-muted clearfix">
       {{ topic.hits }}
-      <span class="sep">&middot;</span>
+      <span class="sep">•</span>
       <time datetime="{{ topic.created|xmldatetime }}" pubdate>{{ topic.created|timesince }}</time>
-      <span class="sep">&middot;</span>
+      <span class="sep">•</span>
       <a href="{{ url_for('node.view', urlname=node.urlname) }}">{{ node }}</a>
       {% if g.user and (g.user.is_staff or g.user.id == topic.account_id) %}
         <span class="pull-right">
       <a href="{{ url_for('topic.edit', uid=topic.id) }}">{{ _('Edit') }}</a>
-      <span class="sep">&middot;</span>
+      <span class="sep">•</span>
       <a href="{{ url_for('topic.move', uid=topic.id) }}">{{ _('Move') }}</a>
     </span>
       {% endif %}
@@ -37,6 +37,9 @@
   </div>
 
   <div class="panel panel-default">
+    <div class="panel-heading">
+      {{ paginator.total }} comments
+    </div>
     <div class="panel-columns comments">
       {% if paginator.items %}
         {% for item in paginator.items %}
@@ -52,10 +55,12 @@
               </div>
               <div class="content">{{ item.content|markdown|safe }}</div>
               <div class="action clearfix">
-                <a href="#{{ item.user.username }}">{{ _('Reply') }}</a>
                 {% if g.user and (g.user.is_staff or g.user.id == item.account_id) %}
-                  <a class="delete" href="#{{ item.id }}">{{ _('Delete') }}</a>
+                  <a class="delete" href="#{{ item.id }}" title="{{ _('Delete') }}">
+                    <i class="glyphicon glyphicon-trash"></i>
+                  </a>
                 {% endif %}
+                <a href="#{{ item.user.username }}">{{ _('Reply') }}</a>
               </div>
             </div>
           </div>
