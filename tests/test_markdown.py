@@ -1,9 +1,8 @@
-from june.markdown import rich_markdown, plain_markdown
+from june.utils.markdown import markdown
 
 
 def test_none():
-    assert rich_markdown(None) == ''
-    assert plain_markdown(None) == ''
+    assert markdown(None) == ''
 
 
 def test_block_code():
@@ -16,13 +15,10 @@ def test_block_code():
         '```',
         ''
     ])
-    assert 'language-py' in rich_markdown(s, False)
-    assert 'highlight' in rich_markdown(s)
-
-    assert 'language-py' not in plain_markdown(s)
-    assert 'highlight' not in plain_markdown(s)
+    assert 'py' in markdown(s, False)
+    assert 'highlight' in markdown(s)
 
 
 def test_gist():
     gist = 'https://gist.github.com/lepture/5167275'
-    assert '</script>' in rich_markdown(gist)
+    assert '</script>' in markdown(gist)

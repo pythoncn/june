@@ -48,14 +48,14 @@ class TestSignin(BaseSuite):
             'account': 'foo',
             'password': '2'
         })
-        assert 'text-error' in rv.data
+        assert b'error' in rv.data
 
     def test_invalid_account(self):
         rv = self.client.post('/account/signin', data={
             'account': 'foo',
             'password': '1'
         })
-        assert 'text-error' in rv.data
+        assert b'error' in rv.data
 
     def test_success(self):
         self.prepare_account()
