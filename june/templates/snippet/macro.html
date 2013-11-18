@@ -25,6 +25,9 @@
       {% else %}
         {{ field(class_='form-control') }}
       {% endif %}
+      {% if field.errors %}
+        <p class="help-block">{{ field.errors[0] }}</p>
+      {% endif %}
     </div>
   </div>
 {% endmacro %}
