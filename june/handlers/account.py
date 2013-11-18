@@ -5,11 +5,11 @@ from flask import g, request, flash, current_app
 from flask import render_template, redirect, url_for
 from flask.ext.babel import gettext as _
 from ..models import db, Account, Profile
-from ..helpers import login_user, logout_user, require_login
-from ..helpers import verify_auth_token
 from ..forms import SignupForm, SigninForm, SettingForm
 from ..forms import FindForm, ResetForm
-from ..tasks import signup_mail, find_mail
+from ..utils.mail import signup_mail, find_mail
+from ..utils.user import login_user, logout_user
+from ..utils.user import require_login, verify_auth_token
 
 __all__ = ['bp']
 

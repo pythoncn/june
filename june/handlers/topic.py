@@ -5,10 +5,11 @@ from flask import Blueprint, g, request, flash, current_app
 from flask import render_template, redirect, abort, jsonify
 from flask import url_for
 from flask.ext.babel import gettext as _
-from ..helpers import require_user, force_int, limit_request
+from ..helpers import force_int, limit_request
 from ..models import Node, Topic, Reply, Account
 from ..models import fill_topics, fill_with_users
 from ..forms import TopicForm, ReplyForm
+from ..utils.user import require_user
 
 
 __all__ = ['bp']

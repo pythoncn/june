@@ -6,7 +6,7 @@ import datetime
 from flask import Blueprint, request, g, current_app
 from flask import render_template, Response, jsonify
 from ..utils.markdown import markdown
-from ..helpers import require_user
+from ..utils.user import require_user
 from ..models import Node, Topic, fill_topics, cache
 
 

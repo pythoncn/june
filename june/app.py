@@ -8,7 +8,6 @@ import hashlib
 from flask import request, g
 from flask_mail import Mail
 from ._flask import Flask
-from .helpers import get_current_user
 from .models import db, cache, get_site_status
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_DIR = os.path.abspath(
@@ -56,6 +55,8 @@ def register_database(app):
 
 def register_hooks(app):
     """Hooks for request."""
+    from .utils.user import get_current_user
+
     @app.before_request
     def load_current_user():
         g.user = get_current_user()

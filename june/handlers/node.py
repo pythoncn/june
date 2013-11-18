@@ -4,7 +4,8 @@ from flask import Blueprint, request, g
 from flask import render_template, redirect, url_for, abort
 from ..models import Node, NodeStatus, Topic, fill_topics
 from ..forms import NodeForm
-from ..helpers import require_staff, force_int
+from ..helpers import force_int
+from ..utils.user import require_staff
 
 
 __all__ = ['bp']

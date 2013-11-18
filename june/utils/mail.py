@@ -3,7 +3,7 @@
 from flask import current_app, url_for, render_template
 from flask.ext.babel import gettext as _
 from flask_mail import Message
-from ..helpers import create_auth_token
+from .user import create_auth_token
 
 
 def send_mail(app, msg):
@@ -22,7 +22,8 @@ def signup_mail(user, path=None):
     reply_to = config.get('MAIL_REPLY_TO', None)
     if reply_to:
         msg.reply_to = reply_to
-    host = config.get('SITE_SECURE_URL', '') or config.get('SITE_URL', '')
+
+    host = config.get('SITE_URL', '')
     dct = {
         'host': host.rstrip('/'),
         'token': create_auth_token(user)
@@ -47,7 +48,7 @@ def find_mail(user):
     reply_to = config.get('MAIL_REPLY_TO', None)
     if reply_to:
         msg.reply_to = reply_to
-    host = config.get('SITE_SECURE_URL', '') or config.get('SITE_URL', '')
+    host = config.get('SITE_URL', '')
     dct = {
         'host': host.rstrip('/'),
         'path': url_for('account.reset'),
