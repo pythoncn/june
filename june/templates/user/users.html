@@ -2,35 +2,26 @@
 
 {% block subtitle %}{{_('Users')}}{% endblock %}
 
-{% from "macro/ui.html" import nav, user_list, pagination %}
+{% from "snippet/macro.html" import nav %}
 
 {% block nav %}
 {{ nav('user') }}
 {% endblock %}
 
 {% block content %}
-<div class="module">
-  <div class="module-header inner">
-    <strong>{{_('Active Members')}}</strong>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">{{_('Active Members')}}</h3>
   </div>
-  <div class="module-body">
-    {{ user_list(paginator.items) }}
+  <div class="panel-body">
+    {% for item in paginator.items %}
+      <a class="avatar" href="{{ url_for('user.view', username=item.username) }}" title="{{ item }}">
+        <img src="{{ item.avatar(36) }}" alt="{{ item }}"/>
+      </a>
+    {% endfor %}
   </div>
-  {% if paginator.pages > 1 %}
-  <div class="module-footer inner">
-    {{ pagination(paginator, url_for('user.users')) }}
-  </div>
-  {% endif %}
-</div>
-{% endblock %}
-
-{% block sidebar %}
-<div class="module">
-  <div class="module-header inner">
-    <strong>{{_('Staffs')}}</strong>
-  </div>
-  <div class="module-body">
-    {{ user_list(staffs, False) }}
+  <div class="panel-footer">
+    {{ paginator.total }} {{ _('members joined') }} {{ config.SITE_TITLE }}
   </div>
 </div>
 {% endblock %}

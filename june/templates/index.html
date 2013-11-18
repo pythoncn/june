@@ -1,7 +1,6 @@
 {% extends "layout.html" %}
 
 {% block title %}{{ config.SITE_TITLE }}{% endblock %}
-{% from "macro/ui.html" import topic_list, node_list %}
 {% from "snippet/macro.html" import topic_columns %}
 
 {% block content %}
@@ -11,7 +10,7 @@
         <h3 class="panel-title">{{ blog }}</h3>
       </div>
       <div class="panel-body">
-        {{ topic_list(blogs, False, False) }}
+        {{ topic_columns(blogs) }}
       </div>
     </div>
   {% endif %}
@@ -30,7 +29,9 @@
       <h3 class="panel-title">{{ _('Recent Nodes') }}</h3>
     </div>
     <div class="panel-body">
-      {{ node_list(nodes, False) }}
+      {% for node in nodes %}
+        <a class="label label-node" href="{{ url_for('node.view', urlname=node.urlname) }}">{{ node }}</a>
+      {% endfor %}
     </div>
   </div>
 {% endblock %}

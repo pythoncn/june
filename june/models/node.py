@@ -1,9 +1,7 @@
 # coding: utf-8
 
 from datetime import datetime
-from werkzeug import cached_property
 from ._base import db, SessionMixin
-from ..utils.markdown import markdown
 
 __all__ = ['Node', 'NodeStatus']
 
@@ -30,12 +28,6 @@ class Node(db.Model, SessionMixin):
 
     def __repr__(self):
         return '<Node: %s>' % self.urlname
-
-    @cached_property
-    def html(self):
-        if self.description is None:
-            return ''
-        return markdown(self.description)
 
 
 class NodeStatus(db.Model, SessionMixin):

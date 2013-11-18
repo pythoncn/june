@@ -3,7 +3,6 @@
 from datetime import datetime
 from werkzeug import cached_property
 from ._base import db
-from ..utils.markdown import markdown
 from .account import Account
 from .node import Node, NodeStatus
 
@@ -34,12 +33,6 @@ class Topic(db.Model):
 
     def __repr__(self):
         return '<Topic: %s>' % self.id
-
-    @cached_property
-    def html(self):
-        if self.content is None:
-            return ''
-        return markdown(self.content)
 
     def save(self, user=None, node=None):
         if self.id:
@@ -143,12 +136,6 @@ class Reply(db.Model):
 
     def __str__(self):
         return self.content
-
-    @cached_property
-    def html(self):
-        if self.content is None:
-            return ''
-        return markdown(self.content)
 
     def save(self, user=None, topic=None):
         if self.id:
