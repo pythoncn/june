@@ -102,7 +102,6 @@ class SettingForm(BaseForm):
         description=_('Markdown is supported.')
     )
     title = TextField(_('Job Title'))
-    company = TextField(_('Company'))
 
 
 class FindForm(BaseForm):

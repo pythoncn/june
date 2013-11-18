@@ -5,7 +5,7 @@ from datetime import datetime
 from werkzeug import security
 from ._base import db, SessionMixin
 
-__all__ = ('Account', 'NonAccount', 'Profile')
+__all__ = ('Account', 'NonAccount')
 
 
 class Account(db.Model, SessionMixin):
@@ -98,19 +98,3 @@ class NonAccount(object):
 
     def __repr__(self):
         return '<NonAccount: none>' % self.username
-
-
-class Profile(db.Model, SessionMixin):
-    # the same as Account.id
-    id = db.Column(db.Integer, primary_key=True)
-    company = db.Column(db.String(120))
-    title = db.Column(db.String(20))
-
-    @classmethod
-    def get_or_create(cls, user_id):
-        item = cls.query.get(user_id)
-        if item:
-            return item
-        item = cls(id=user_id)
-        db.session.add(item)
-        return item
