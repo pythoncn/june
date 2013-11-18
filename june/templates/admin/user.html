@@ -1,23 +1,28 @@
 {% extends "layout.html" %}
-{% from "macro/form.html" import horizontal_field, horizontal_form_button %}
+{% from "snippet/macro.html" import horizontal_field %}
 
-{% block subtitle %}{{user}}{% endblock %}
+{% block subtitle %}{{ user }}{% endblock %}
 
 {% block content %}
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title">{{ user }}</h3>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">{{ user }}</h3>
+    </div>
+    <form class="form-horizontal panel-body" method="post" action="">
+      {{ form.csrf_token }}
+      {{ horizontal_field(form.username) }}
+      {{ horizontal_field(form.email) }}
+      {{ horizontal_field(form.screen_name) }}
+      {{ horizontal_field(form.website) }}
+      {{ horizontal_field(form.city) }}
+      {{ horizontal_field(form.description) }}
+      {{ horizontal_field(form.role) }}
+
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button type="submit" class="btn-primary btn">{{ _('Update') }}</button>
+        </div>
+      </div>
+    </form>
   </div>
-  <form class="form-horizontal panel-body" method="post" action="">
-    {{ form.csrf_token }}
-    {{ horizontal_field(form.username) }}
-    {{ horizontal_field(form.email) }}
-    {{ horizontal_field(form.screen_name) }}
-    {{ horizontal_field(form.website) }}
-    {{ horizontal_field(form.city) }}
-    {{ horizontal_field(form.description) }}
-    {{ horizontal_field(form.role) }}
-    {{ horizontal_form_button(_('Update'), 'btn-success') }}
-  </form>
-</div>
 {% endblock %}

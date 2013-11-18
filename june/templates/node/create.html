@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% from "macro/form.html" import horizontal_field, horizontal_form_button %}
+{% from "snippet/macro.html" import horizontal_field %}
 
 {% block subtitle %}{{ _('Create Node') }}{% endblock %}
 
@@ -15,8 +15,11 @@
       {{ horizontal_field(form.urlname) }}
       {{ horizontal_field(form.description) }}
       {{ horizontal_field(form.role) }}
-
-      {{ horizontal_form_button(_('Create'), 'btn-success') }}
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button type="submit" class="btn-primary btn">{{ _('Create') }}</button>
+        </div>
+      </div>
     </form>
   </div>
 {% endblock %}

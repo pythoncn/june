@@ -34,7 +34,7 @@
     {% if item.user %}
       <a class="avatar" href="{{ url_for('user.view', username=item.user.username) }}"
          title="{{ item.user }}">
-        <img src="{{ item.user.avatar(48) }}" width="48" height="48" />
+        <img src="{{ item.user.avatar(48) }}" width="48" height="48"/>
       </a>
     {% endif %}
     <div class="main">
@@ -61,14 +61,17 @@
 {% endmacro %}
 
 {% macro topic_columns(topics) %}
+  {% if topics %}
     <div class="panel-columns">
-      {% if topics %}
-        {% for item in topics %}
-          {{ render_topic(item) }}
-        {% endfor %}
-      {% else %}
-      {% endif %}
+      {% for item in topics %}
+        {{ render_topic(item) }}
+      {% endfor %}
     </div>
+  {% else %}
+    <div class="panel-body">
+      <p>{{ _('There is no topics yet.') }}</p>
+    </div>
+  {% endif %}
 {% endmacro %}
 
 {% macro pagination(paginator, url) %}
