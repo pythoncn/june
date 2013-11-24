@@ -6,8 +6,7 @@ gevent.monkey.patch_all()
 
 import os
 import sys
-import argparse
-from flask_script import Manager, Command
+from flask_script import Manager
 from june.app import create_app
 
 

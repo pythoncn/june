@@ -1,7 +1,6 @@
 # coding: utf-8
 
-import os
-from fabric.api import env, local, cd, run, sudo
+from fabric.api import env, local, cd, run
 from fabric.operations import put
 
 env.user = 'www'
