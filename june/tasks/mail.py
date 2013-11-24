@@ -1,6 +1,5 @@
 # coding: utf-8
 
-from flask import Flask
 from flask import current_app, url_for, render_template
 from flask.ext.babel import gettext as _
 from flask_mail import Message

@@ -11,7 +11,7 @@
 """
 import re
 from jinja2.ext import Extension
-from jinja2.lexer import Token, describe_token
+from jinja2.lexer import Token
 from jinja2 import TemplateSyntaxError
 
 
