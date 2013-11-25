@@ -1,7 +1,6 @@
 # coding: utf-8
 
 from datetime import datetime
-from werkzeug import cached_property
 from ._base import db
 from .account import Account
 from .node import Node, NodeStatus

@@ -4,7 +4,7 @@ from flask import Blueprint
 from flask import g, request, flash, current_app
 from flask import render_template, redirect, url_for
 from flask.ext.babel import gettext as _
-from ..models import db, Account
+from ..models import Account
 from ..forms import SignupForm, SigninForm, SettingForm
 from ..forms import FindForm, ResetForm
 from ..utils.mail import signup_mail, find_mail
