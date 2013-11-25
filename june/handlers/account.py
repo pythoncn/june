@@ -4,7 +4,7 @@ from flask import Blueprint
 from flask import g, request, flash, current_app
 from flask import render_template, redirect, url_for
 from flask.ext.babel import gettext as _
-from ..models import db, Account, Profile
+from ..models import db, Account
 from ..forms import SignupForm, SigninForm, SettingForm
 from ..forms import FindForm, ResetForm
 from ..utils.mail import signup_mail, find_mail
@@ -81,17 +81,11 @@ def signout():
 def setting():
     """Settings page of current user."""
     user = g.user
-    profile = Profile.get_or_create(g.user.id)
-    user.company = profile.company
-    user.title = profile.title
-
     form = SettingForm(obj=user)
     next_url = request.args.get('next', url_for('.setting'))
     if form.validate_on_submit():
         user = Account.query.get(g.user.id)
         form.populate_obj(user)
-        form.populate_obj(profile)
-        db.session.add(profile)
         user.save()
         return redirect(next_url)
     return render_template('account/setting.html', form=form)
