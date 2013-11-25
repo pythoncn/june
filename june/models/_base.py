@@ -23,8 +23,8 @@ class JuneQuery(BaseQuery):
         query = getattr(self, key)
         items = self.filter(query.in_(ids))
         dct = {}
-        for u in items:
-            dct[u.id] = u
+        for item in items:
+            dct[getattr(item, key)] = item
         return dct
 
     def as_list(self, *columns):
