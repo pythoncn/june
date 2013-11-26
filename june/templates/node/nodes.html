@@ -2,20 +2,21 @@
 
 {% block subtitle %}{{ _('Nodes') }}{% endblock %}
 
-{% from "macro/ui.html" import nav %}
+{% from "snippet/macro.html" import nav %}
 
 {% block nav %}
   {{ nav('node') }}
 {% endblock %}
 
 {% block content %}
-  {% from "macro/ui.html" import node_list %}
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 class="panel-title">{{ _('Nodes') }}</h3>
     </div>
     <div class="panel-body">
-      {{ node_list(nodes) }}
+      {% for node in nodes %}
+        <a class="label label-node" href="{{ url_for('node.view', urlname=node.urlname) }}">{{ node }}</a>
+      {% endfor %}
     </div>
   </div>
 {% endblock %}
