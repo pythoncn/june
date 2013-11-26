@@ -9,16 +9,18 @@
       <li><a href="{{ url_for('node.view', urlname=node.urlname) }}">{{ node }}</a></li>
       <li class="active">{{ _('Create Topic') }}</li>
     </ol>
-    <form class="form topic-form" method="post" action="">
-      {{ form.csrf_token }}
-      {{ form.title(class_='form-control', placeholder=form.title.description) }}
-      {{ form.content(class_='form-control', placeholder=form.content.description) }}
-    </form>
-    <div class="panel-footer">
-      <div class="text-right">
-        <button data-target="#content" class="btn btn-default preview-button">{{ _('Preview') }}</button>
-        <button class="btn btn-success">{{ _('Create') }}</button>
+    <form class="form" method="post" action="">
+      <div class="topic-form">
+        {{ form.csrf_token }}
+        {{ form.title(class_='form-control', placeholder=form.title.description) }}
+        {{ form.content(class_='form-control', placeholder=form.content.description) }}
       </div>
-    </div>
+      <div class="panel-footer">
+        <div class="text-right">
+          <button data-target="#content" class="btn btn-default preview-button">{{ _('Preview') }}</button>
+          <button class="btn btn-success">{{ _('Create') }}</button>
+        </div>
+      </div>
+    </form>
   </div>
 {% endblock %}

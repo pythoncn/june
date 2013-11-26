@@ -128,6 +128,8 @@ def view(uid):
     topic = Topic.query.get_or_404(uid)
     node = Node.query.get_or_404(topic.node_id)
     author = Account.query.get_or_404(topic.account_id)
+    topic.author = author
+    topic.node = node
 
     paginator = Reply.query.filter_by(topic_id=uid).paginate(page)
     paginator.items = fill_with_users(paginator.items)

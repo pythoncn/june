@@ -8,28 +8,35 @@
 {% endblock %}
 
 {% block content %}
-  <div class="panel panel-default">
-    <div class="panel-body">
-      <div class="hentry yue">
-        <h1 class="entry-title">{{ topic.title }}</h1>
+  <div class="panel panel-default hentry">
+    <div class="panel-heading">
+      <div class="vcard">
+        <a href="{{ url_for('user.view', username=author.username) }}">
+          <img src="{{ author.avatar(48) }}" width="48" height="48" alt=""/>
+        </a>
+      </div>
+      <div class="entry-meta-wrapper">
+        <h1 class="panel-title entry-title">{{ topic.title }}</h1>
 
-        <div class="entry-content">
-          {{ topic.content|markdown|safe }}
+        <div class="entry-meta text-muted">
+          <time datetime="{{ topic.created|xmldatetime }}" pubdate>{{ topic.created|timesince }}</time>
+          <span class="sep">•</span>
+          <a class="label label-node" href="{{ url_for('node.view', urlname=node.urlname) }}">{{ node }}</a>
+          <span class="sep">•</span>
+          {{ topic.hits }} {{ _('Hits') }}
         </div>
       </div>
     </div>
+    <div class="panel-body entry-content">
+      {{ topic.content|markdown|safe }}
+    </div>
     <div class="panel-footer text-muted clearfix">
-      {{ topic.hits }}
-      <span class="sep">•</span>
-      <time datetime="{{ topic.created|xmldatetime }}" pubdate>{{ topic.created|timesince }}</time>
-      <span class="sep">•</span>
-      <a href="{{ url_for('node.view', urlname=node.urlname) }}">{{ node }}</a>
       {% if g.user and (g.user.is_staff or g.user.id == topic.account_id) %}
-        <span class="pull-right">
-      <a href="{{ url_for('topic.edit', uid=topic.id) }}">{{ _('Edit') }}</a>
-      <span class="sep">•</span>
-      <a href="{{ url_for('topic.move', uid=topic.id) }}">{{ _('Move') }}</a>
-    </span>
+        <div class="pull-right">
+          <a href="{{ url_for('topic.edit', uid=topic.id) }}">{{ _('Edit') }}</a>
+          <span class="sep">•</span>
+          <a href="{{ url_for('topic.move', uid=topic.id) }}">{{ _('Move') }}</a>
+        </div>
       {% endif %}
     </div>
   </div>
