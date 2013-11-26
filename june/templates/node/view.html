@@ -2,10 +2,10 @@
 
 {% block subtitle %}{{ node }}{% endblock %}
 
-{% from "snippet/macro.html" import nav, topic_columns, pagination %}
+{% from "snippet/macro.html" import navigation, topic_columns, pagination %}
 
 {% block nav %}
-  {{ nav('node') }}
+  {{ navigation('node') }}
 {% endblock %}
 
 {% block content %}

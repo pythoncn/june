@@ -93,7 +93,7 @@
   </ul>
 {% endmacro %}
 
-{%- macro navigation(current='home') %}
+{% macro navigation(current='home') %}
   <ul class="nav navbar-nav">
     <li {% if current == 'home' %}class="active"{% endif %}><a href="/">{{ _('Home') }}</a></li>
     <li {% if current == 'topic' %}class="active"{% endif %}><a
@@ -103,4 +103,4 @@
     <li {% if current == 'user' %}class="active"{% endif %}><a href="{{ url_for('user.users') }}">{{ _('Users') }}</a>
     </li>
   </ul>
-{%- endmacro %}
+{% endmacro %}

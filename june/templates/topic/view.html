@@ -1,11 +1,10 @@
 {% extends "layout.html" %}
 
 {% block subtitle %}{{ topic }}{% endblock %}
-{% from "macro/ui.html" import user_module %}
-{% from "snippet/macro.html" import nav, pagination, form_field %}
+{% from "snippet/macro.html" import navigation, pagination, form_field %}
 
 {% block nav %}
-  {{ nav('topic') }}
+  {{ navigation('topic') }}
 {% endblock %}
 
 {% block content %}
@@ -99,7 +98,6 @@
 
 
 {% block sidebar %}
-  {{ user_module(author) }}
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 class="panel-title">{{ node }}</h3>

@@ -1,31 +1,26 @@
 {% extends "layout.html" %}
 
-{% block subtitle %}{{user}}{% endblock %}
+{% block subtitle %}{{ user }}{% endblock %}
 
-{% from "macro/ui.html" import nav, topic_list, pagination, user_module %}
+{% from "snippet/macro.html" import navigation, topic_columns, pagination %}
 
 {% block nav %}
-{{ nav('user') }}
+  {{ navigation('user') }}
 {% endblock %}
 
 
 {% block content %}
-{% from "macro/ui.html" import topic_list, pagination %}
-<div class="module">
-  <div class="module-header inner">
-    <strong>{{_('Topics')}}</strong>
-  </div>
-  <div class="module-body">
-    {{ topic_list(paginator.items, False) }}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">{{ _('Topics') }}</h3>
+    </div>
+    <div class="panel-columns">
+      {{ topic_columns(paginator.items) }}
+    </div>
   </div>
   {% if paginator.pages > 1 %}
-  <div class="module-footer inner">
-    {{ pagination(paginator, url_for('topic.topics')) }}
-  </div>
+    <div class="panel-footer">
+      {{ pagination(paginator, url_for('topic.topics')) }}
+    </div>
   {% endif %}
-</div>
-{% endblock %}
-
-{% block sidebar %}
-{{ user_module(user) }}
 {% endblock %}

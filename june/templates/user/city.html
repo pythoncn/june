@@ -2,10 +2,10 @@
 
 {% block subtitle %}{{city}}{% endblock %}
 
-{% from "macro/ui.html" import nav, user_list, pagination %}
+{% from "snippet/macro.html" import navigation, pagination %}
 
 {% block nav %}
-{{ nav('user') }}
+{{ navigation('user') }}
 {% endblock %}
 
 {% block content %}

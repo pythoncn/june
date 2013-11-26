@@ -2,10 +2,10 @@
 
 {% block subtitle %}{{ user }}{% endblock %}
 
-{% from "snippet/macro.html" import nav, render_topic %}
+{% from "snippet/macro.html" import navigation, topic_columns %}
 
 {% block nav %}
-  {{ nav('user') }}
+  {{ navigation('user') }}
 {% endblock %}
 
 {% block content %}
@@ -51,10 +51,7 @@
     </div>
     <div class="panel-columns">
       {% if topics %}
-        {% for item in topics %}
-          {{ render_topic(item) }}
-        {% endfor %}
-      {% else %}
+        {{ topic_columns(topics) }}
       {% endif %}
     </div>
   </div>
