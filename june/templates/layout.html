@@ -29,31 +29,29 @@
   </div>
 </div>
 
-{% block wrap %}
-  <div id="wrap">
-    <div class="main container">
-      {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-          {{ alerts(messages) }}
-        {% endif %}
-      {% endwith %}
-      {% block main %}
-        <div class="row">
-          <div class="col-md-8">
-            {% block content %}{% endblock %}
-          </div>
-          <div class="col-md-4">
-            {% block sidebar %}
-            {% endblock %}
-            {% block sitestatus %}
-              {% include "snippet/sidebar.html" %}
-            {% endblock %}
-          </div>
+<div id="wrap">
+  <div class="main container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {{ alerts(messages) }}
+      {% endif %}
+    {% endwith %}
+    {% block main %}
+      <div class="row">
+        <div class="col-md-8">
+          {% block content %}{% endblock %}
         </div>
-      {% endblock %}
-    </div>
+        <div class="col-md-4">
+          {% block sidebar %}
+          {% endblock %}
+          {% block sitestatus %}
+            {% include "snippet/sidebar.html" %}
+          {% endblock %}
+        </div>
+      </div>
+    {% endblock %}
   </div>
-{% endblock %}
+</div>
 
 {% block footer %}
   {% include "snippet/footer.html" %}

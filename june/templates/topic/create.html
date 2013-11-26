@@ -2,18 +2,23 @@
 
 {% block subtitle %}{{ _('Create Topic') }}{% endblock %}
 
-{% block wrap %}
-  <form class="form topic-form" method="post" action="">
-    {{ form.csrf_token }}
-    {{ form.title(placeholder=form.title.description) }}
-    {{ form.content(placeholder=form.content.description) }}
-    <div class="text-right">
-      <button data-target="#content" class="btn btn-default preview-button">{{ _('Preview') }}</button>
-      <button class="btn btn-success">{{ _('Create') }}</button>
+{% block content %}
+  <div class="panel panel-default">
+    <ol class="breadcrumb">
+      <li><a href="/">{{ _('Home') }}</a></li>
+      <li><a href="{{ url_for('node.view', urlname=node.urlname) }}">{{ node }}</a></li>
+      <li class="active">{{ _('Create Topic') }}</li>
+    </ol>
+    <form class="form topic-form" method="post" action="">
+      {{ form.csrf_token }}
+      {{ form.title(class_='form-control', placeholder=form.title.description) }}
+      {{ form.content(class_='form-control', placeholder=form.content.description) }}
+    </form>
+    <div class="panel-footer">
+      <div class="text-right">
+        <button data-target="#content" class="btn btn-default preview-button">{{ _('Preview') }}</button>
+        <button class="btn btn-success">{{ _('Create') }}</button>
+      </div>
     </div>
-    <div class="markdown-help">
-      <h3>Markdown Syntax</h3>
-      {% include "snippet/markdown-help.html" %}
-    </div>
-  </form>
+  </div>
 {% endblock %}
