@@ -10,21 +10,20 @@ __all__ = [
 
 
 class JuneQuery(BaseQuery):
-    def filter_in(self, ids, key='id'):
-        ids = set(ids)
-        if len(ids) == 0:
+    def filter_in(self, model, values):
+        values = set(values)
+        if len(values) == 0:
             return {}
-        if len(ids) == 1:
-            ident = ids.pop()
+        if len(values) == 1:
+            ident = values.pop()
             rv = self.get(ident)
             if not rv:
                 return {}
             return {ident: rv}
-        query = getattr(self, key)
-        items = self.filter(query.in_(ids))
+        items = self.filter(model.in_(values))
         dct = {}
         for item in items:
-            dct[getattr(item, key)] = item
+            dct[getattr(item, model.key)] = item
         return dct
 
     def as_list(self, *columns):
