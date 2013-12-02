@@ -107,9 +107,11 @@ def register_jinja(app):
     @app.context_processor
     def register_context():
         return dict(
-            get_site_status=get_site_status,
-            get_site_sidebar=load_sidebar,
             static_url=static_url,
+            db=dict(
+                site_status=get_site_status,
+                site_sidebar=load_sidebar,
+            ),
         )
 
     app.jinja_env.filters['markdown'] = markdown

@@ -1,4 +1,4 @@
-{% with site_sidebar = get_site_sidebar() %}
+{% with site_sidebar = db.site_sidebar() %}
   {% if site_sidebar %}
     {{ site_sidebar|safe }}
   {% endif %}
@@ -8,7 +8,7 @@
     <h3 class="panel-title">{{ _('Site Status') }}</h3>
   </div>
   <div class="panel-body">
-    {% with status = get_site_status() %}
+    {% with status = db.site_status() %}
       <table class="site-status">
         <tr>
           <th>Member</th>
