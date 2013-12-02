@@ -65,7 +65,7 @@
                     <i class="glyphicon glyphicon-trash"></i>
                   </a>
                 {% endif %}
-                <a href="#{{ item.user.username }}">{{ _('Reply') }}</a>
+                <a class="reply" href="#{{ item.user.username }}">{{ _('Reply') }}</a>
               </div>
             </div>
           </div>
@@ -86,7 +86,7 @@
 
   <div class="panel panel-default">
     {% if form %}
-      <form class="form panel-body" action="{{ url_for('topic.reply', uid=topic.id) }}" method="post">
+      <form class="form panel-body comment-form" action="{{ url_for('topic.reply', uid=topic.id) }}" method="post">
         {{ form.csrf_token }}
         {{ form_field(form.content, False) }}
         <div class="form-submit text-right">
@@ -95,7 +95,7 @@
         </div>
       </form>
     {% else %}
-      <div class="inner">
+      <div class="panel-body">
         <div class="alert alert-info">{{ _('Login is required.') }}</div>
         <a href="{{ url_for('account.signin') }}" class="btn btn-success">{{ _('Sign In') }}</a>
       </div>
