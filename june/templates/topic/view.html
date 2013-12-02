@@ -58,7 +58,7 @@
                    title="{{ item.user }}">{{ item.user.username }}</a>
                 <time datetime="{{ item.created|xmldatetime }}" pubdate>{{ item.created|timesince }}</time>
               </div>
-              <div class="content">{{ item.content|markdown|safe }}</div>
+              <div class="content">{{ item.content|markdown('plain')|safe }}</div>
               <div class="action clearfix">
                 {% if g.user and (g.user.is_staff or g.user.id == item.account_id) %}
                   <a class="delete" href="#{{ item.id }}" title="{{ _('Delete') }}">
