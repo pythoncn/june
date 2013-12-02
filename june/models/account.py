@@ -97,4 +97,4 @@ class NonAccount(object):
         return 'none'
 
     def __repr__(self):
-        return '<NonAccount: none>' % self.username
+        return '<NonAccount: none>'
