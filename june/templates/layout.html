@@ -31,13 +31,19 @@
 
 <div id="wrap">
   <div class="main container">
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-      {% endif %}
-    {% endwith %}
     {% block main %}
       <div class="row">
         <div class="col-md-8">
+          {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              {% for cat, msg in messages %}
+                <div class="alert alert-{{ cat }} alert-dismissable">
+                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                  {{ msg }}
+                </div>
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
           {% block content %}{% endblock %}
         </div>
         <div class="col-md-4">

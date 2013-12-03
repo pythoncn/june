@@ -14,7 +14,8 @@
     "boot.js"
   ],
   "styles": [
-    "index.css"
+    "index.css",
+    "pygments-manni.css"
   ],
   "images": [
     "images/bg.png"

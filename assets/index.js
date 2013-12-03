@@ -27,3 +27,25 @@ $('.comment .reply').on('click', function() {
   form.focus();
   return false;
 });
+
+$('.preview-button').on('click', function() {
+  var target = $($(this).data('target'));
+  var preview = $('#preview-area');
+
+  if (target.hasClass('hide')) {
+    target.removeClass('hide');
+    preview.hide();
+    return false;
+  }
+
+  if (!preview.length) {
+    preview = $('<div>').attr('id', 'preview-area');
+    target.after(preview);
+  }
+  $.post('/markdown', {content: target.val()}, function(html) {
+    preview.html(html);
+    preview.show();
+    target.addClass('hide');
+  });
+  return false;
+});
