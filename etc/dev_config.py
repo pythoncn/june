@@ -2,7 +2,6 @@
 
 import os
 rootdir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-database = os.path.join(rootdir, 'data', 'development.sqlite')
 
 # site inform
 SITE_TITLE = 'Python China'
@@ -14,8 +13,6 @@ SITE_ABOUT = '/node/about'
 # This is a config file for development
 DEBUG = True
 SECRET_KEY = 'secret-key-for-development'
-
-SQLALCHEMY_DATABASE_URI = 'sqlite:///%s' % database
 
 # cache
 CACHE_TYPE = 'filesystem'
