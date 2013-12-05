@@ -78,7 +78,7 @@ def create(urlname):
         return redirect(url_for('.topics'))
 
     if g.user.active:
-        # if use has no active information
+        # if user has no active information
         d = now - g.user.active
         delta = d.days * 86400 + d.seconds
     else:

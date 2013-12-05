@@ -15,6 +15,9 @@ class Node(db.Model, SessionMixin):
     topic_count = db.Column(db.Integer, default=0)
     role = db.Column(db.String(10), default=u'user')
 
+    # if not public, topics will not show in homepage
+    # public = db.Column(db.Boolean, default=True)
+
     created = db.Column(db.DateTime, default=datetime.utcnow)
     updated = db.Column(
         db.DateTime,
