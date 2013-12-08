@@ -13,23 +13,20 @@ def prepare():
     run('mkdir -p ~/venv')
     run('virtualenv ~/venv/june')
     run('mkdir -p ~/apps/june/public/static')
-    run('mkdir -p ~/apps/june/public/data')
 
 
 def tarball():
     """Create tarball for june."""
     local('make static')
     local('python setup.py sdist --formats=gztar', capture=False)
-    local('rm -fr etc')
-    local('mv etc-bak etc')
 
 
 def upload():
     """Upload tarball to the server."""
     dist = local('python setup.py --fullname', capture=True).strip()
-    put('dist/%s.tar.gz' % dist, '~/tmp/june.tar.gz')
-
     run('mkdir -p ~/tmp/june')
+
+    put('dist/%s.tar.gz' % dist, '~/tmp/june.tar.gz')
     with cd('~/tmp/june'):
         run('tar xzf ~/tmp/june.tar.gz')
 
@@ -56,6 +53,7 @@ def configure():
     run('cp %s/manager.py ~/apps/june/' % tmpdir)
     run('cp %s/alembic.ini ~/apps/june/' % tmpdir)
     run('cp -r %s/alembic ~/apps/june/' % tmpdir)
+    run('cp -r %s/public ~/apps/yuehu/' % tmpdir)
 
 
 def upgrade():

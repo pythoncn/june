@@ -9,17 +9,12 @@ from flask import request, g
 from flask_mail import Mail
 from ._flask import Flask
 from .models import db, cache, get_site_status
-ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-STATIC_DIR = os.path.abspath(
-    os.path.join(ROOT_DIR, '..', 'public', 'static')
-)
 
 
 def create_app(config=None):
     app = Flask(
         __name__,
         template_folder='templates',
-        static_folder=None,
     )
     app.config.from_pyfile('_settings.py')
 
@@ -29,8 +24,9 @@ def create_app(config=None):
     if isinstance(config, dict):
         app.config.update(config)
     elif config:
-        app.config.from_pyfile(config)
+        app.config.from_pyfile(os.path.abspath(config))
 
+    app.static_folder = app.config.get('STATIC_FOLDER')
     app.config.update({'SITE_TIME': datetime.datetime.utcnow()})
 
     register_hooks(app)
@@ -97,7 +93,7 @@ def register_jinja(app):
         if filename in app._static_hash:
             return app._static_hash[filename]
 
-        with open(os.path.join(STATIC_DIR, filename), 'r') as f:
+        with open(os.path.join(app.static_folder, filename), 'r') as f:
             content = f.read()
             hsh = hashlib.md5(content).hexdigest()
 

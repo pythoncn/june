@@ -1,7 +1,15 @@
+import os
+
 DEBUG = False
 TESTING = False
 VERIFY_EMAIL = True
 VERIFY_USER = True
+
+ROOT_FOLDER = os.path.dirname(os.path.abspath(__file__))
+if os.path.exists('public/static'):
+    STATIC_FOLDER = os.path.join(os.getcwd(), 'public', 'static')
+else:
+    STATIC_FOLDER = os.path.join(ROOT_FOLDER, '..', 'public', 'static')
 
 #: site
 SITE_TITLE = 'Python China'
@@ -28,7 +36,9 @@ GRAVATAR_BASE_URL = 'http://www.gravatar.com/avatar/'
 GRAVATAR_EXTRA = ''
 
 #: sqlalchemy
-SQLALCHEMY_DATABASE_URI = 'sqlite:///db.sqlite'
+SQLALCHEMY_DATABASE_URI = 'sqlite:///%s' % os.path.join(
+    os.getcwd(), 'db.sqlite'
+)
 # SQLALCHEMY_POOL_SIZE = 100
 # SQLALCHEMY_POOL_TIMEOUT = 10
 # SQLALCHEMY_POOL_RECYCEL = 3600

@@ -40,7 +40,7 @@ flask_requires = [
 ]
 install_requires = [
     'Alembic',
-    'hoedown',
+    'misaka',
     'pygments',
     'houdini.py',
     'gevent',

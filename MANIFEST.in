@@ -6,5 +6,5 @@ recursive-include public *.*
 include alembic.ini
 include Makefile
 include wsgi.py
-include manage.py
+include manager.py
 include requirements.txt
