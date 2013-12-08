@@ -91,6 +91,9 @@ def register_jinja(app):
         app._static_hash = {}
 
     def static_url(filename):
+        if app.testing:
+            return filename
+
         if filename in app._static_hash:
             return app._static_hash[filename]
 
