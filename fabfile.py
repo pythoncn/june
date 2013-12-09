@@ -65,3 +65,8 @@ def upgrade():
     run('cp -r %s/alembic ~/apps/june/' % tmpdir)
     with cd('~/apps/june'):
         run('~/venv/june/bin/alembic upgrade head')
+
+
+def restart():
+    """Restart remote server"""
+    run('supervisorctl pid june | xargs kill -HUP')
