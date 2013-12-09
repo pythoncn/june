@@ -87,6 +87,7 @@ def setting():
         user = Account.query.get(g.user.id)
         form.populate_obj(user)
         user.save()
+        flash(_('Your profile is updated.', 'info'))
         return redirect(next_url)
     return render_template('account/setting.html', form=form)
 
