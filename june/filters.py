@@ -135,6 +135,11 @@ class BaseRenderer(m.HtmlRenderer):
         pattern = r'^<img[^>]+>$'
         if re.match(pattern, content):
             return '<figure>%s</figure>' % content
+
+        pattern = re.compile(r'\s@(\w+)')
+        content = pattern.sub(r' @<a href="/user/\1">\1</a>', content)
+        pattern = re.compile(r'^@(\w+)')
+        content = pattern.sub(r'@<a href="/user/\1">\1</a>', content)
         return '<p>%s</p>' % content
 
     def block_quote(self, content):
