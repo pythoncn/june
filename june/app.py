@@ -79,9 +79,8 @@ def register_routes(app):
 
 
 def register_jinja(app):
-    from .utils.markdown import markdown
+    from . import filters
     from .handlers.admin import load_sidebar
-    from flask_babel import gettext as _
 
     if not hasattr(app, '_static_hash'):
         app._static_hash = {}
@@ -113,29 +112,9 @@ def register_jinja(app):
             ),
         )
 
-    app.jinja_env.filters['markdown'] = markdown
-
-    @app.template_filter('timesince')
-    def timesince(value):
-        now = datetime.datetime.utcnow()
-        delta = now - value
-        if delta.days > 365:
-            return _('%(num)i years ago', num=delta.days / 365)
-        if delta.days > 30:
-            return _('%(num)i months ago', num=delta.days / 30)
-        if delta.days > 0:
-            return _('%(num)i days ago', num=delta.days)
-        if delta.seconds > 3600:
-            return _('%(num)i hours ago', num=delta.seconds / 3600)
-        if delta.seconds > 60:
-            return _('%(num)i minutes ago', num=delta.seconds / 60)
-        return _('just now')
-
-    @app.template_filter('xmldatetime')
-    def xmldatetime(value):
-        if not isinstance(value, datetime.datetime):
-            return value
-        return value.strftime('%Y-%m-%dT%H:%M:%SZ')
+    app.jinja_env.filters['markdown'] = filters.markdown
+    app.jinja_env.filters['timesince'] = filters.timesince
+    app.jinja_env.filters['xmldatetime'] = filters.xmldatetime
 
 
 def register_babel(app):
