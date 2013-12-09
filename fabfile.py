@@ -53,15 +53,15 @@ def configure():
     run('cp %s/manager.py ~/apps/june/' % tmpdir)
     run('cp %s/alembic.ini ~/apps/june/' % tmpdir)
     run('cp -r %s/alembic ~/apps/june/' % tmpdir)
-    run('cp -r %s/public ~/apps/yuehu/' % tmpdir)
+    run('cp -r %s/public ~/apps/june/' % tmpdir)
 
 
 def upgrade():
     """Upgrade database"""
     dist = local('python setup.py --fullname', capture=True).strip()
     tmpdir = '~/tmp/june/%s' % dist
-    run('cp %s/alembic.ini ~/apps/yuehu/' % tmpdir)
-    run('rm -fr ~/apps/yuehu/alembic')
-    run('cp -r %s/alembic ~/apps/yuehu/' % tmpdir)
+    run('cp %s/alembic.ini ~/apps/june/' % tmpdir)
+    run('rm -fr ~/apps/june/alembic')
+    run('cp -r %s/alembic ~/apps/june/' % tmpdir)
     with cd('~/apps/june'):
         run('~/venv/june/bin/alembic upgrade head')
