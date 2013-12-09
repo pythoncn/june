@@ -32,6 +32,12 @@
   </div>
 {% endmacro %}
 
+{% macro checkbox_field(field) %}
+  <div class="checkbox">
+    {{ field() }} {{ field.label() }}
+  </div>
+{% endmacro %}
+
 {% macro render_topic(item) %}
   <div class="item">
     {% if item.user %}

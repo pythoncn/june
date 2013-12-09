@@ -15,8 +15,10 @@ class Node(db.Model, SessionMixin):
     topic_count = db.Column(db.Integer, default=0)
     role = db.Column(db.String(10), default=u'user')
 
-    # if not public, topics will not show in homepage
-    # public = db.Column(db.Boolean, default=True)
+    # topics will show on homepage ?
+    on_home = db.Column(db.Boolean, default=True)
+    # a mayor can delete a topic in this node, can change description
+    mayor = db.Column(db.Integer, default=0)
 
     created = db.Column(db.DateTime, default=datetime.utcnow)
     updated = db.Column(

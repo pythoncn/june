@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% from "snippet/macro.html" import horizontal_field %}
+{% from "snippet/macro.html" import horizontal_field, checkbox_field %}
 
 {% block subtitle %}{{ _('Edit Node') }}{% endblock %}
 
@@ -14,6 +14,11 @@
       {{ horizontal_field(form.title) }}
       {{ horizontal_field(form.urlname) }}
       {{ horizontal_field(form.description) }}
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          {{ checkbox_field(form.on_home) }}
+        </div>
+      </div>
       {{ horizontal_field(form.role) }}
 
       <div class="form-group">

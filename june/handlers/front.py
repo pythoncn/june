@@ -16,9 +16,14 @@ bp = Blueprint('front', __name__)
 @bp.route('/')
 def home():
     """The homepage of the site."""
-    topics = Topic.query.order_by(Topic.id.desc()).limit(16)
+    nodes = Node.query.order_by(Node.id.desc()).all()
+
+    home_nodes = filter(lambda o: o.on_home, nodes)
+    home_node_ids = map(lambda o: o.id, home_nodes)
+    topics = Topic.query.filter(
+        Topic.node_id.in_(home_node_ids)
+    ).order_by(Topic.id.desc()).limit(16)
     topics = fill_topics(topics)
-    nodes = Node.query.order_by(Node.id.desc()).limit(10)
 
     # blog is a special node, get the latest posts from blog
     blog = Node.query.filter_by(urlname='blog').first()
@@ -29,7 +34,8 @@ def home():
         blogs = None
 
     return render_template(
-        'index.html', topics=topics, nodes=nodes, blog=blog, blogs=blogs
+        'index.html', topics=topics, nodes=nodes[:16],
+        blog=blog, blogs=blogs
     )
 
 
