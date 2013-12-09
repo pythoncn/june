@@ -63,7 +63,7 @@ def register_hooks(app):
     def rendering_time(response):
         if hasattr(g, '_before_request_time'):
             delta = time.time() - g._before_request_time
-            response.headers['X-Render-Time'] = delta
+            response.headers['X-Render-Time'] = delta * 1000
         return response
 
 
