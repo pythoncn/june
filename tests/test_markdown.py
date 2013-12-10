@@ -1,4 +1,4 @@
-from june.utils.markdown import markdown
+from june.filters import markdown
 
 
 def test_none():
