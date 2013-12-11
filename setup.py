@@ -42,7 +42,6 @@ install_requires = [
     'Alembic',
     'misaka',
     'pygments',
-    'houdini.py',
     'gevent',
     'gunicorn',
 ]
