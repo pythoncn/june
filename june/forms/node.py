@@ -1,6 +1,6 @@
 # coding: utf-8
 
-from wtforms import TextField, TextAreaField, SelectField
+from wtforms import TextField, TextAreaField, SelectField, BooleanField
 from wtforms.validators import DataRequired
 from flask.ext.babel import lazy_gettext as _
 
@@ -28,6 +28,7 @@ class NodeForm(BaseForm):
         ],
         default='user',
     )
+    on_home = BooleanField(_('Show on home page'), default=True)
 
     def validate_urlname(self, field):
         if self._obj and self._obj.urlname == field.data:

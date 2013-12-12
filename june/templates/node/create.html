@@ -1,22 +1,30 @@
 {% extends "layout.html" %}
-{% from "macro/form.html" import horizontal_field, horizontal_form_button %}
+{% from "snippet/macro.html" import horizontal_field, checkbox_field %}
 
-{% block subtitle %}{{_('Create Node')}}{% endblock %}
+{% block subtitle %}{{ _('Create Node') }}{% endblock %}
 
 {% block content %}
-<div class="module">
-  <div class="module-header inner">
-    <strong>{{_('Create Node')}}</strong>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">{{ _('Create Node') }}</h3>
+    </div>
+    <form class="form-horizontal panel-body" method="post" action="">
+      {{ form.csrf_token }}
+
+      {{ horizontal_field(form.title) }}
+      {{ horizontal_field(form.urlname) }}
+      {{ horizontal_field(form.description) }}
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          {{ checkbox_field(form.on_home) }}
+        </div>
+      </div>
+      {{ horizontal_field(form.role) }}
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button type="submit" class="btn-primary btn">{{ _('Create') }}</button>
+        </div>
+      </div>
+    </form>
   </div>
-  <form class="form-horizontal inner" method="post" action="">
-    {{ form.csrf_token }}
-
-    {{ horizontal_field(form.title, 'input-block-level') }}
-    {{ horizontal_field(form.urlname, 'input-block-level') }}
-    {{ horizontal_field(form.description, 'input-block-level') }}
-    {{ horizontal_field(form.role) }}
-
-    {{ horizontal_form_button(_('Create'), 'btn-success') }}
-  </form>
-</div>
 {% endblock %}

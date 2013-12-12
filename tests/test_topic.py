@@ -35,13 +35,13 @@ class TestTopic(BaseSuite):
         assert '/topic/1' in rv.location
 
         rv = self.client.get('/topic/1')
-        assert '<h1>june</h1>' in rv.data
+        assert b'june</h1>' in rv.data
 
         rv = self.client.get('/topic/1?page=s')
         assert rv.status_code == 404
 
         rv = self.client.post('/topic/1')
-        assert 'hits' in rv.data
+        assert b'hits' in rv.data
 
     def test_fail_create_and_edit(self):
         with self.app.test_request_context():
@@ -51,7 +51,7 @@ class TestTopic(BaseSuite):
             assert rv.status_code == 403
 
             rv = self.client.get('/topic/create/june', follow_redirects=True)
-            assert 'New users' in rv.data
+            assert b'New users' in rv.data
 
     def test_edit_topic(self):
         with self.app.test_request_context():
@@ -67,7 +67,7 @@ class TestTopic(BaseSuite):
                 'title': 'flask',
                 'content': 'june'
             }, follow_redirects=True)
-            assert '<h1>flask</h1>' in rv.data
+            assert b'flask</h1>' in rv.data
 
     def test_reply(self):
         with self.app.test_request_context():

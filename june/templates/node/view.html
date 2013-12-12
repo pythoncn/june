@@ -1,62 +1,63 @@
 {% extends "layout.html" %}
 
-{% block subtitle %}{{node}}{% endblock %}
+{% block subtitle %}{{ node }}{% endblock %}
 
-{% from "macro/ui.html" import nav %}
+{% from "snippet/macro.html" import navigation, topic_columns, pagination %}
 
 {% block nav %}
-{{ nav('node') }}
+  {{ navigation('node') }}
 {% endblock %}
 
 {% block content %}
-{% from "macro/ui.html" import topic_list, pagination %}
-<div class="module">
-  <div class="module-header inner">
-    <strong>{{_('Topics')}}</strong>
+  <div class="panel panel-default">
+    <ol class="breadcrumb">
+      <li><a href="/">{{ _('Home') }}</a></li>
+      <li><a href="{{ url_for('node.nodes') }}">{{ _('Nodes') }}</a></li>
+      <li class="active">{{ node }}</li>
+    </ol>
+    {{ topic_columns(paginator.items) }}
+
+    {% if paginator.pages > 1 %}
+      <div class="panel-footer">
+        {{ pagination(paginator, url_for('node.view', urlname=node.urlname)) }}
+      </div>
+    {% endif %}
   </div>
-  <div class="module-body">
-    {{ topic_list(paginator.items) }}
-  </div>
-  {% if paginator.pages > 1 %}
-  <div class="module-footer inner">
-    {{ pagination(paginator, url_for('node.view', urlname=node.urlname)) }}
-  </div>
-  {% endif %}
-</div>
 {% endblock %}
 
 {% block sidebar %}
-<div class="module">
-  <div class="module-header inner">
-    <strong>{{node}}</strong>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">{{ node }}</h3>
+    </div>
+    <div class="panel-body">
+      {{ node.description|markdown|safe }}
+    </div>
+    <div class="panel-footer clearfix">
+      <a class="btn btn-success pull-left"
+         href="{{ url_for('topic.create', urlname=node.urlname) }}">{{ _('Create a topic') }}</a>
+      {%- if g.user and g.user.is_staff %}
+        <a class="btn pull-right" href="{{ url_for('node.edit', urlname=node.urlname) }}">{{ _('Edit this node') }}</a>
+      {%- endif %}
+    </div>
   </div>
-  <div class="module-body inner">
-    {{node.html|safe}}
-  </div>
-  <div class="inner clearfix">
-    <a class="btn btn-success pull-left" href="{{url_for('topic.create', urlname=node.urlname)}}">{{_('Create a topic')}}</a>
-    {%- if g.user and g.user.is_staff %}
-    <a class="btn pull-right" href="{{url_for('node.edit', urlname=node.urlname)}}">{{_('Edit this node')}}</a>
-    {%- endif %}
-  </div>
-</div>
 
-{% if status %}
-<div class="module">
-  <div class="module-header inner">
-    <strong>{{'Activities'}}</strong>
-  </div>
-  <div class="module-body status-list clearfix">
-    <div class="status-item first">
-      <div class="wrap"><strong>{{status.topic_count}}</strong> {{_('Topics')}}</div>
+  {% if status %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">{{ 'Activities' }}</h3>
+      </div>
+      <div class="panel-body status-list clearfix">
+        <div class="status-item first">
+          <div class="wrap"><strong>{{ status.topic_count }}</strong> {{ _('Topics') }}</div>
+        </div>
+        <div class="status-item">
+          <div class="wrap"><strong>{{ status.reputation }}</strong> {{ _('Reputation') }}</div>
+        </div>
+      </div>
+      <div class="panel-footer">
+        {{ status.updated|timesince }}
+      </div>
     </div>
-    <div class="status-item">
-      <div class="wrap"><strong>{{status.reputation}}</strong> {{_('Reputation')}}</div>
-    </div>
-  </div>
-  <div class="module-footer inner">
-    {{ status.updated|timesince }}
-  </div>
-</div>
-{% endif %}
+  {% endif %}
 {% endblock %}

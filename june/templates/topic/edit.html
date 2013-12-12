@@ -1,45 +1,35 @@
 {% extends "layout.html" %}
-{% from "macro/form.html" import render_field %}
 
-{% block subtitle %}{{_('Edit Topic')}}{% endblock %}
+{% block subtitle %}{{ _('Edit Topic') }}{% endblock %}
 
-{% block afterstyle %}
-<style type="text/css">#wrap .container{max-width: 1100px}</style>
-{% endblock %}
-
-{% block main %}
-<div class="row-fluid">
-  <div class="span6">
-    <div class="module">
-      <div class="module-header inner">
-        <strong>{{_('Edit Topic')}}</strong>
+{% block content %}
+  <div class="panel panel-default">
+    <ol class="breadcrumb">
+      <li><a href="/">{{ _('Home') }}</a></li>
+      <li><a href="{{ url_for('topic.view', uid=topic.id) }}">{{ _('Topic') }}</a></li>
+      <li class="active">{{ _('Edit Topic') }}</li>
+    </ol>
+    <form class="form" method="post" action="">
+      <div class="topic-form">
+        {{ form.csrf_token }}
+        {{ form.title(class_='form-control', placeholder=form.title.description) }}
+        {{ form.content(class_='form-control', placeholder=form.content.description) }}
       </div>
-      <form class="form topic-form" method="post" action="">
-        <div class="inner">
-          {{ form.csrf_token }}
-
-          {{ render_field(form.title, 'input-block-level') }}
-          {{ render_field(form.content, 'input-block-level') }}
+      <div class="panel-footer">
+        <div class="text-right">
+          <button data-target="#content" class="btn btn-default preview-button">{{ _('Preview') }}</button>
+          <button class="btn btn-success">{{ _('Update') }}</button>
         </div>
-        <div class="module-footer inner text-right">
-          <button data-target="#content" class="btn preview-button">{{_('Preview')}}</button>
-          <button class="btn btn-success">{{_('Update')}}</button>
-        </div>
-      </form>
-    </div>
-    <div class="module">
-      <form class="form-inline inner" action="{{url_for('topic.delete', uid=topic.id)}}" method="post">
-        <input type="password" class="sep" name="password" placeholder="{{_('Password')}}" />
-        <button class="btn btn-danger">{{_('Delete')}}</button>
-      </form>
-    </div>
-  </div>
-  <div class="span6">
-    <div class="module">
-      <div class="inner">
-        {% include "snippet/markdown-help.html" %}
       </div>
-    </div>
+    </form>
   </div>
-</div>
+
+  <div class="panel panel-default">
+    <form class="form-inline panel-body" action="{{ url_for('topic.delete', uid=topic.id) }}" method="post">
+      <div class="form-group">
+        <input type="password" class="form-control" name="password" placeholder="{{ _('Password') }}"/>
+      </div>
+      <button class="btn btn-danger">{{ _('Delete') }}</button>
+    </form>
+  </div>
 {% endblock %}

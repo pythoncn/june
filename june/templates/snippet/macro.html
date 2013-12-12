@@ -1,0 +1,112 @@
+{% macro form_field(field, display_label=True) %}
+  <div class="form-group {% if field.errors %}has-error{% endif %}">
+    {% if display_label %}
+      {{ field.label() }}
+    {% else %}
+      {{ field.label(class_=('sr-only')) }}
+    {% endif %}
+    {% if field.description %}
+      {{ field(class_='form-control', placeholder=field.description) }}
+    {% else %}
+      {{ field(class_='form-control') }}
+    {% endif %}
+    {% if field.errors %}
+      <p class="help-block">{{ field.errors[0] }}</p>
+    {% endif %}
+  </div>
+{% endmacro %}
+
+{% macro horizontal_field(field) %}
+  <div class="form-group {% if field.errors %}has-error{% endif %}">
+    {{ field.label(class_='col-sm-2 control-label') }}
+    <div class="col-sm-10">
+      {% if field.description %}
+        {{ field(class_='form-control', placeholder=field.description) }}
+      {% else %}
+        {{ field(class_='form-control') }}
+      {% endif %}
+      {% if field.errors %}
+        <p class="help-block">{{ field.errors[0] }}</p>
+      {% endif %}
+    </div>
+  </div>
+{% endmacro %}
+
+{% macro checkbox_field(field) %}
+  <div class="checkbox">
+    {{ field() }} {{ field.label() }}
+  </div>
+{% endmacro %}
+
+{% macro render_topic(item) %}
+  <div class="item">
+    {% if item.user %}
+      <a class="avatar" href="{{ url_for('user.view', username=item.user.username) }}"
+         title="{{ item.user }}">
+        <img src="{{ item.user.avatar(48) }}" width="48" height="48"/>
+      </a>
+    {% endif %}
+    <div class="main">
+      <h3 class="title">
+        <a href="{{ url_for('topic.view', uid=item.id) }}">{{ item }}</a>
+      </h3>
+
+      <div class="meta">
+        {% if item.node %}
+          <a class="label label-default" href="{{ url_for('node.view', urlname=item.node.urlname) }}">
+            {{ item.node }}
+          </a>
+          <span class="sep">•</span>
+          {{ item.hits }}
+          <span class="sep">•</span>
+        {% endif %}
+        <time datetime="{{ item.created|xmldatetime }}" pubdate>
+          {{ item.created|timesince }}
+        </time>
+      </div>
+      <a class="badge" href="{{ url_for('topic.view', uid=item.id) }}">{{ item.reply_count }}</a>
+    </div>
+  </div>
+{% endmacro %}
+
+{% macro topic_columns(topics) %}
+  {% if topics %}
+    <div class="panel-columns">
+      {% for item in topics %}
+        {{ render_topic(item) }}
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="panel-body">
+      <p>{{ _('There is no topics yet.') }}</p>
+    </div>
+  {% endif %}
+{% endmacro %}
+
+{% macro pagination(paginator, url) %}
+  <ul class="pagination pagination-centered">
+    {% for page in paginator.iter_pages() %}
+      {% if page %}
+        {% if page == paginator.page %}
+          <li class="active"><span>{{ page }}</span></li>
+        {% else %}
+          <li><a href="{{ url }}?page={{ page }}">{{ page }}</a></li>
+        {% endif %}
+      {% else %}
+        <li class="disabled"><span class="ellipsis">…</span></li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+{% endmacro %}
+
+{% macro navigation(current='home') %}
+  <ul class="nav navbar-nav">
+    <li {% if current == 'home' %}class="active"{% endif %}><a href="/">{{ _('Home') }}</a></li>
+    <li {% if current == 'topic' %}class="active"{% endif %}><a
+        href="{{ url_for('topic.topics') }}">{{ _('Topics') }}</a></li>
+    <li {% if current == 'node' %}class="active"{% endif %}><a href="{{ url_for('node.nodes') }}">{{ _('Nodes') }}</a>
+    </li>
+    <li {% if current == 'user' %}class="active"{% endif %}><a href="{{ url_for('user.users') }}">{{ _('Users') }}</a>
+    </li>
+  </ul>
+{% endmacro %}

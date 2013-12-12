@@ -1,17 +1,20 @@
 import os
-rootdir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
 DEBUG = False
 TESTING = False
 VERIFY_EMAIL = True
 VERIFY_USER = True
 
+ROOT_FOLDER = os.path.dirname(os.path.abspath(__file__))
+if os.path.exists('public/static'):
+    STATIC_FOLDER = os.path.join(os.getcwd(), 'public', 'static')
+else:
+    STATIC_FOLDER = os.path.join(ROOT_FOLDER, 'public', 'static')
+
 #: site
-SITE_TITLE = 'June Forum'
+SITE_TITLE = 'Python China'
 SITE_URL = '/'
 # SITE_URL = 'http://python-china.org/'
-SITE_STYLES = []
-SITE_SCRIPTS = []
 
 #: sidebar is a absolute path
 # SITE_SIDEBAR = '/path/to/sidebar.html'
@@ -22,7 +25,7 @@ SITE_SCRIPTS = []
 # SITE_ANALYTICS = 'UA-xxx-xxx'
 
 #: session
-SESSION_COOKIE_NAME = '_sess'
+SESSION_COOKIE_NAME = '_s'
 #SESSION_COOKIE_SECURE = True
 PERMANENT_SESSION_LIFETIME = 3600 * 24 * 30
 
@@ -33,7 +36,9 @@ GRAVATAR_BASE_URL = 'http://www.gravatar.com/avatar/'
 GRAVATAR_EXTRA = ''
 
 #: sqlalchemy
-# SQLALCHEMY_DATABASE_URI = 'mysql://user@localhost/dbname'
+SQLALCHEMY_DATABASE_URI = 'sqlite:///%s' % os.path.join(
+    os.getcwd(), 'db.sqlite'
+)
 # SQLALCHEMY_POOL_SIZE = 100
 # SQLALCHEMY_POOL_TIMEOUT = 10
 # SQLALCHEMY_POOL_RECYCEL = 3600

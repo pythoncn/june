@@ -1,0 +1,24 @@
+{
+  "name": "june",
+  "repo": "pythoncn/june",
+  "description": "Assets for june forum.",
+  "version": "0.0.1",
+  "keywords": [],
+  "dependencies": {
+    "component/jquery": "*",
+    "lepture/bootstrap": "*",
+    "lepture/yue.css": "*"
+  },
+  "scripts": [
+    "index.js",
+    "boot.js"
+  ],
+  "styles": [
+    "index.css",
+    "pygments-manni.css"
+  ],
+  "images": [
+    "images/bg.png"
+  ],
+  "development": {}
+}

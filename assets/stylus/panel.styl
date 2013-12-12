@@ -1,0 +1,112 @@
+@import "nib";
+
+.panel .breadcrumb {
+  margin-bottom: 0;
+  border-bottom: 1px solid #dddddd;
+  border-radius: 3px 3px 0 0;
+}
+
+.panel-body > h1, .panel-body > h2, .panel-body > h3 {
+  margin-top: 0;
+}
+
+.panel-body .avatar {
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+.panel-columns .item {
+  position: relative;
+  border-bottom: 1px solid #ddd;
+  padding: 8px 10px 6px;
+  clearfix();
+
+  &:hover {
+    background: #f7f5fa;
+  }
+
+  &:last-of-type {
+    border-bottom: none;
+  }
+
+  .main {
+    overflow: hidden;
+  }
+  .avatar {
+    float: left;
+    margin-right: 14px;
+  }
+  .avatar img {
+    border-radius: 3px;
+  }
+  .title {
+    margin: 0;
+    font: normal 16px/21px Helvetica, arial, freesans, sans-serif;
+    a {
+      color: #555;
+    }
+  }
+  .meta {
+    margin-top: 4px;
+    color: #aaa;
+    font-size: 12px;
+  }
+  .meta .label {
+    margin-right: 4px;
+  }
+  .badge, .account-label {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+  }
+  .account-label {
+    text-transform: uppercase;
+  }
+}
+
+.panel-footer .pagination {
+  margin: 0;
+}
+
+.hentry .panel-heading {
+  clearfix();
+}
+.hentry .entry-content {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+.hentry .vcard {
+  float: left;
+  margin-right: 10px;
+}
+.hentry .entry-meta-wrapper {
+  float: left;
+  .entry-meta {
+    font-size: 12px;
+    margin-top: 12px;
+  }
+}
+.comment {
+  line-height: 1;
+}
+.comment .author {
+  margin-bottom: 6px;
+}
+.comment .content {
+  color: #555;
+  line-height: 1.4;
+}
+.comment time {
+  font-size: 13px;
+  color: rgba(0,0,0,.4);
+}
+.comment .action {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.comment .action a {
+  margin-right: 4px;
+  font-size: 12px;
+  color: rgba(0,0,0,.3);
+}

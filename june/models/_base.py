@@ -9,25 +9,21 @@ __all__ = [
 ]
 
 
-db = SQLAlchemy()
-cache = Cache()
-
-
 class JuneQuery(BaseQuery):
-    def filter_in(self, key, ids):
-        ids = set(ids)
-        if len(ids) == 0:
+    def filter_in(self, model, values):
+        values = set(values)
+        if len(values) == 0:
             return {}
-        if len(ids) == 1:
-            ident = ids.pop()
+        if len(values) == 1:
+            ident = values.pop()
             rv = self.get(ident)
             if not rv:
                 return {}
             return {ident: rv}
-        items = self.filter(key.in_(ids))
+        items = self.filter(model.in_(values))
         dct = {}
-        for u in items:
-            dct[u.id] = u
+        for item in items:
+            dct[getattr(item, model.key)] = item
         return dct
 
     def as_list(self, *columns):
@@ -54,3 +50,8 @@ class SessionMixin(object):
         db.session.delete(self)
         db.session.commit()
         return self
+
+
+db = SQLAlchemy()
+cache = Cache()
+db.Model.query_class = JuneQuery

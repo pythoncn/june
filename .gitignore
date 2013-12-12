@@ -21,5 +21,7 @@ docs/_build
 data/
 venv/
 cover/
-static/.webassets-cache/
-*.min.*
+assets/components
+assets/node_modules
+assets/index.css
+june/public/static

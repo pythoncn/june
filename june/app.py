@@ -4,35 +4,17 @@ import os
 import time
 import datetime
 import logging
-from speaklater import _LazyString
-from flask import Flask as _Flask
+import hashlib
 from flask import request, g
-from flask.json import JSONEncoder as _JSONEncoder
 from flask_mail import Mail
-from .helpers import get_current_user
+from ._flask import Flask
 from .models import db, cache, get_site_status
-
-
-class JSONEncoder(_JSONEncoder):
-    def default(self, o):
-        if hasattr(o, '__getitem__') and hasattr(o, 'keys'):
-            return dict(o)
-        if isinstance(o, datetime.datetime):
-            return o.strftime('%Y-%m-%d %H:%M:%S')
-        if isinstance(o, _LazyString):
-            return unicode(o)
-        return _JSONEncoder.default(self, o)
-
-
-class Flask(_Flask):
-    json_encoder = JSONEncoder
 
 
 def create_app(config=None):
     app = Flask(
         __name__,
         template_folder='templates',
-        static_folder=None,
     )
     app.config.from_pyfile('_settings.py')
 
@@ -42,17 +24,34 @@ def create_app(config=None):
     if isinstance(config, dict):
         app.config.update(config)
     elif config:
-        app.config.from_pyfile(config)
+        app.config.from_pyfile(os.path.abspath(config))
 
+    app.static_folder = app.config.get('STATIC_FOLDER')
     app.config.update({'SITE_TIME': datetime.datetime.utcnow()})
-    register_jinja(app)
 
+    register_hooks(app)
+    register_jinja(app)
+    register_database(app)
+
+    Mail(app)
+    register_babel(app)
+    register_routes(app)
+    register_logger(app)
+    return app
+
+
+def register_database(app):
+    """Database related configuration."""
     #: prepare for database
     db.init_app(app)
     db.app = app
-
     #: prepare for cache
     cache.init_app(app)
+
+
+def register_hooks(app):
+    """Hooks for request."""
+    from .utils.user import get_current_user
 
     @app.before_request
     def load_current_user():
@@ -64,19 +63,12 @@ def create_app(config=None):
     def rendering_time(response):
         if hasattr(g, '_before_request_time'):
             delta = time.time() - g._before_request_time
-            response.headers['X-Render-Time'] = delta
-
+            response.headers['X-Render-Time'] = delta * 1000
         return response
-
-    Mail(app)
-    register_babel(app)
-    register_routes(app)
-    register_logger(app)
-    return app
 
 
 def register_routes(app):
-    from .views import front, account, node, topic, user, admin
+    from .handlers import front, account, node, topic, user, admin
     app.register_blueprint(account.bp, url_prefix='/account')
     app.register_blueprint(node.bp, url_prefix='/node')
     app.register_blueprint(topic.bp, url_prefix='/topic')
@@ -87,64 +79,55 @@ def register_routes(app):
 
 
 def register_jinja(app):
-    from .markdown import plain_markdown
-    # from .htmlcompress import HTMLCompress
-    from .views.admin import load_sidebar
-    from werkzeug.datastructures import ImmutableDict
-    from flask.ext.babel import gettext as _
+    from . import filters
+    from .handlers.admin import load_sidebar
 
-    app.jinja_options = ImmutableDict(
-        extensions=[
-            'jinja2.ext.autoescape',
-            'jinja2.ext.with_',
-            'jinja2.ext.do',
-        ]
-    )
+    if not hasattr(app, '_static_hash'):
+        app._static_hash = {}
 
-    app.jinja_env.filters['markdown'] = plain_markdown
+    def static_url(filename):
+        if app.testing:
+            return filename
+
+        if filename in app._static_hash:
+            return app._static_hash[filename]
+
+        with open(os.path.join(app.static_folder, filename), 'r') as f:
+            content = f.read()
+            hsh = hashlib.md5(content).hexdigest()
+
+        app.logger.info('Generate %s md5sum: %s' % (filename, hsh))
+        prefix = app.config.get('SITE_STATIC_PREFIX', '/static/')
+        value = '%s%s?v=%s' % (prefix, filename, hsh[:5])
+        app._static_hash[filename] = value
+        return value
 
     @app.context_processor
     def register_context():
         return dict(
-            get_site_status=get_site_status,
-            get_site_sidebar=load_sidebar,
+            static_url=static_url,
+            db=dict(
+                site_status=get_site_status,
+                site_sidebar=load_sidebar,
+            ),
         )
 
-    @app.template_filter('timesince')
-    def timesince(value):
-        now = datetime.datetime.utcnow()
-        delta = now - value
-        if delta.days > 365:
-            return _('%(num)i years ago', num=delta.days / 365)
-        if delta.days > 30:
-            return _('%(num)i months ago', num=delta.days / 30)
-        if delta.days > 0:
-            return _('%(num)i days ago', num=delta.days)
-        if delta.seconds > 3600:
-            return _('%(num)i hours ago', num=delta.seconds / 3600)
-        if delta.seconds > 60:
-            return _('%(num)i minutes ago', num=delta.seconds / 60)
-        return _('just now')
-
-    @app.template_filter('xmldatetime')
-    def xmldatetime(value):
-        if not isinstance(value, datetime.datetime):
-            return value
-        return value.strftime('%Y-%m-%dT%H:%M:%SZ')
+    app.jinja_env.filters['markdown'] = filters.markdown
+    app.jinja_env.filters['timesince'] = filters.timesince
+    app.jinja_env.filters['xmldatetime'] = filters.xmldatetime
 
 
 def register_babel(app):
-    from flask.ext.babel import Babel
+    """Configure Babel for internationality."""
+    from flask_babel import Babel
 
     babel = Babel(app)
+    supported = app.config.get('BABEL_SUPPORTED_LOCALES', ['en', 'zh'])
+    default = app.config.get('BABEL_DEFAULT_LOCALE', 'en')
 
     @babel.localeselector
     def get_locale():
-        app.config.setdefault('BABEL_SUPPORTED_LOCALES', ['en', 'zh'])
-        app.config.setdefault('BABEL_DEFAULT_LOCALE', 'en')
-        match = app.config['BABEL_SUPPORTED_LOCALES']
-        default = app.config['BABEL_DEFAULT_LOCALE']
-        return request.accept_languages.best_match(match, default)
+        return request.accept_languages.best_match(supported, default)
 
 
 def register_logger(app):

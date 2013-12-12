@@ -1,23 +1,24 @@
 {% extends "layout.html" %}
-{% from "macro/form.html" import horizontal_field, horizontal_form_button %}
+{% from "snippet/macro.html" import horizontal_field %}
 
-{% block subtitle %}{{_('Settings')}}{% endblock %}
+{% block subtitle %}{{ _('Settings') }}{% endblock %}
 
 {% block content %}
-<div class="module">
-  <div class="module-header inner">
-    <strong>{{_('Edit Profile')}}</strong>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">{{ _('Edit Profile') }}</h3>
+    </div>
+    <form class="form-horizontal panel-body" method="post" action="">
+      {{ form.csrf_token }}
+      {{ horizontal_field(form.screen_name) }}
+      {{ horizontal_field(form.website) }}
+      {{ horizontal_field(form.city) }}
+      {{ horizontal_field(form.description) }}
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button class="btn btn-primary">{{ _('Update') }}</button>
+        </div>
+      </div>
+    </form>
   </div>
-  <form class="form-horizontal inner" method="post" action="">
-    {{ form.csrf_token }}
-    {{ horizontal_field(form.screen_name, 'input-block-level') }}
-    {{ horizontal_field(form.website, 'input-block-level') }}
-    {{ horizontal_field(form.city, 'input-block-level') }}
-    {{ horizontal_field(form.description, 'input-block-level') }}
-    {{ horizontal_field(form.company, 'input-block-level') }}
-    {{ horizontal_field(form.title, 'input-block-level') }}
-
-    {{ horizontal_form_button(_('Update'), 'btn-success') }}
-  </form>
-</div>
 {% endblock %}

@@ -18,16 +18,8 @@ fileConfig(config.config_file_name)
 # for 'autogenerate' support
 cwd = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(cwd)
-settings = os.path.join(cwd, 'etc/settings.py')
-if not os.path.exists(settings):
-    settings = os.path.join(cwd, 'etc/dev_config.py')
-
-if 'JUNE_SETTINGS' not in os.environ:
-    os.environ['JUNE_SETTINGS'] = settings
-
-from june.app import create_app
 from june.models import db
-app = create_app()
+from wsgi import application as app
 # set the database url
 config.set_main_option(
     'sqlalchemy.url',

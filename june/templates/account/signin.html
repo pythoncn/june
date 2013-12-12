@@ -1,22 +1,24 @@
 {% extends "layout.html" %}
-{% from "macro/form.html" import vertical_field %}
+{% from "snippet/macro.html" import form_field %}
 
-{% block subtitle %}{{_('Signin')}}{% endblock %}
+{% block subtitle %}{{ _('Sign In') }}{% endblock %}
 
 {% block main %}
-<form class="form-single" method="post" action="">
-  <h2>{{ config.SITE_TITLE}}</h2>
-  {{ form.csrf_token }}
-  {{ vertical_field(form.account, 'input-block-level') }}
-  {{ vertical_field(form.password, 'input-block-level') }}
+  <div class="panel panel-default single">
+    <form class="panel-body" role="form" method="post" action="">
+      <h2>{{ _('Sign In') }}</h2>
+      {{ form.csrf_token }}
+      {{ form_field(form.account) }}
+      {{ form_field(form.password) }}
 
-  <div class="checkbox-form">
-    {{form.permanent()}} {{form.permanent.label()}}
-  </div>
+      <div class="form-group">
+        {{ form.permanent() }} {{ form.permanent.label() }}
+      </div>
 
-  <div class="form-submit">
-    <button class="btn btn-success">{{_('Sign In')}}</button>
-    <a href="{{url_for('.find')}}">{{_('Forget Password?')}}</a>
+      <div class="form-group">
+        <button class="btn btn-primary">{{ _('Sign In') }}</button>
+        <a class="btn btn-link" href="{{ url_for('.find') }}">{{ _('Forget Password?') }}</a>
+      </div>
+    </form>
   </div>
-</form>
 {% endblock %}

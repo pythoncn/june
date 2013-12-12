@@ -4,25 +4,16 @@
 server:
 	@python manager.py runserver
 
-database:
+upgrade:
 	@alembic upgrade head
 
 staticdir = public/static
+assets:
+	@$(MAKE) -C assets build
 
-static-js:
-	@cat ${staticdir}/js/bootstrap.js > ${staticdir}/app.min.js
-	@cat ${staticdir}/js/site.js >> ${staticdir}/app.min.js
-
-static-css:
-	@cat ${staticdir}/css/bootstrap.css > ${staticdir}/app.min.css
-	@cat ${staticdir}/css/bootstrap-responsive.css >> ${staticdir}/app.min.css
-	@cat ${staticdir}/css/pygments.css >> ${staticdir}/app.min.css
-	@cat ${staticdir}/css/site.css >> ${staticdir}/app.min.css
-
-static-compile:
-	@uglifyjs ${staticdir}/app.min.js -m -o ${staticdir}/app.min.js
-
-static: static-js static-css
+static:
+	@$(MAKE) -C assets compile
+	@uglifyjs ${staticdir}/app.js -m -o ${staticdir}/app.js
 
 # translate
 babel-extract:
@@ -43,6 +34,7 @@ babel-update: babel-extract
 clean: clean-build clean-pyc
 	@rm -fr cover/
 
+
 clean-build:
 	@rm -fr build/
 	@rm -fr dist/
@@ -55,11 +47,9 @@ clean-pyc:
 	@find . -name '*~' -exec rm -f {} +
 
 
-june_files := $(shell find june -name '*.py' ! -path "*__init__.py")
-test_files := $(shell find tests -name '*.py' ! -path "*__init__.py")
 lint:
-	@flake8 ${june_files}
-	@flake8 ${test_files}
+	@flake8 june
+	@flake8 tests
 
 test:
 	@nosetests -s

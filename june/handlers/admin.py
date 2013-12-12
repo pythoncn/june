@@ -8,9 +8,10 @@ from flask.ext.wtf.html5 import EmailField
 from wtforms.validators import DataRequired, Email, Length, Regexp
 
 from flask.ext.babel import lazy_gettext as _
-from ..helpers import force_int, require_staff, require_admin
+from ..helpers import force_int
 from ..models import Account
 from ..forms import SettingForm
+from ..utils.user import require_staff, require_admin
 
 
 __all__ = ['bp', 'load_sidebar']

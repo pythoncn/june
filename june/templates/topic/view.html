@@ -1,104 +1,129 @@
 {% extends "layout.html" %}
 
-{% block subtitle %}{{topic}}{% endblock %}
-{% from "macro/form.html" import render_field %}
-{% from "macro/ui.html" import topic_list, pagination, user_module, nav %}
+{% block subtitle %}{{ topic }}{% endblock %}
+{% from "snippet/macro.html" import navigation, pagination, form_field %}
 
 {% block nav %}
-{{ nav('topic') }}
+  {{ navigation('topic') }}
 {% endblock %}
 
 {% block content %}
-<div class="module hentry">
-  <div class="module-header inner">
-    <h1>{{topic}}</h1>
-  </div>
-  <div class="module-body inner entry-content">
-    {{topic.html|safe}}
-  </div>
-  <div class="module-footer inner muted clearfix">
-    {{ topic.hits }}
-    <span class="sep">&middot;</span>
-    <time datetime="{{topic.created|xmldatetime}}" pubdate>{{topic.created|timesince}}</time>
-    <span class="sep">&middot;</span>
-    <a href="{{url_for('node.view', urlname=node.urlname)}}">{{node}}</a>
-    {% if g.user and (g.user.is_staff or g.user.id == topic.account_id) %}
-    <span class="pull-right">
-      <a href="{{url_for('topic.edit', uid=topic.id)}}">{{_('Edit')}}</a>
-      <span class="sep">&middot;</span>
-      <a href="{{url_for('topic.move', uid=topic.id)}}">{{_('Move')}}</a>
-    </span>
-    {% endif %}
-  </div>
-</div>
-
-<div class="module">
-  <div class="module-body item-list reply-list">
-    {% if paginator.items %}
-    {% for item in paginator.items %}
-    <div class="item hentry">
-      <div class="entry-content">{{item.html|safe}}</div>
-      <div class="meta clearfix">
-        <a href="{{url_for('user.view', username=item.user.username)}}" title="{{item.user}}">{{item.user.username}}</a>
-        <span class="sep">@</span>
-        <time datetime="{{item.created|xmldatetime}}" pubdate>{{item.created|timesince}}</time>
-
-        {% if g.user and (g.user.is_staff or g.user.id == item.account_id) %}
-        <a class="pull-right delete" href="#{{item.id}}">delete</a>
-        {% endif %}
+  <div class="panel panel-default hentry">
+    <div class="panel-heading">
+      <div class="vcard">
+        <a href="{{ url_for('user.view', username=author.username) }}">
+          <img src="{{ author.avatar(48) }}" width="48" height="48" alt=""/>
+        </a>
       </div>
-      <a class="avatar" href="{{ url_for('user.view', username=item.user.username) }}" title="{{item.user}}"><img src="{{item.user.avatar(24)}}" /></a>
+      <div class="entry-meta-wrapper">
+        <h1 class="panel-title entry-title">{{ topic.title }}</h1>
+
+        <div class="entry-meta text-muted">
+          <time datetime="{{ topic.created|xmldatetime }}" pubdate>{{ topic.created|timesince }}</time>
+          <span class="sep">•</span>
+          <a class="label label-node" href="{{ url_for('node.view', urlname=node.urlname) }}">{{ node }}</a>
+          <span class="sep">•</span>
+          {{ topic.hits }} {{ _('Hits') }}
+        </div>
+      </div>
     </div>
-    {% endfor %}
-    {% else %}
-    <div class="inner">
-      <div class="alert alert-info">{{_('No replies yet.')}}</div>
+    <div class="panel-body entry-content">
+      {{ topic.content|markdown|safe }}
     </div>
+    <div class="panel-footer text-muted clearfix">
+      {% if g.user and (g.user.is_staff or g.user.id == topic.account_id) %}
+        <div class="pull-right">
+          <a href="{{ url_for('topic.edit', uid=topic.id) }}">{{ _('Edit') }}</a>
+          <span class="sep">•</span>
+          <a href="{{ url_for('topic.move', uid=topic.id) }}">{{ _('Move') }}</a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      {{ paginator.total }} comments
+    </div>
+    <div class="panel-columns comments">
+      {% if paginator.items %}
+        {% for item in paginator.items %}
+          <div class="item comment">
+            <a class="avatar" href="{{ url_for('user.view', username=item.user.username) }}"
+               title="{{ item.user }}"><img src="{{ item.user.avatar(42) }}"/></a>
+
+            <div class="main">
+              <div class="author">
+                <a href="{{ url_for('user.view', username=item.user.username) }}"
+                   title="{{ item.user }}">{{ item.user.username }}</a>
+                <time datetime="{{ item.created|xmldatetime }}" pubdate>{{ item.created|timesince }}</time>
+              </div>
+              <div class="content">{{ item.content|markdown('plain')|safe }}</div>
+              <div class="action clearfix">
+                {% if g.user and (g.user.is_staff or g.user.id == item.account_id) %}
+                  <a class="delete" href="#{{ item.id }}" title="{{ _('Delete') }}">
+                    <i class="glyphicon glyphicon-trash"></i>
+                  </a>
+                {% endif %}
+                <a class="reply" href="#{{ item.user.username }}">{{ _('Reply') }}</a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="panel-body">
+          <div class="alert alert-info">{{ _('No replies yet.') }}</div>
+        </div>
+      {% endif %}
+    </div>
+
+    {% if paginator.pages > 1 %}
+      <div class="panel-footer">
+        {{ pagination(paginator, url_for('topic.view', uid=topic.id)) }}
+      </div>
     {% endif %}
   </div>
 
-  {% if paginator.pages > 1 %}
-  <div class="module-footer inner">
-    {{ pagination(paginator, url_for('topic.view', uid=topic.id)) }}
+  <div class="panel panel-default">
+    {% if form %}
+      <form class="form panel-body comment-form" action="{{ url_for('topic.reply', uid=topic.id) }}" method="post">
+        {{ form.csrf_token }}
+        {{ form_field(form.content, False) }}
+        <div class="form-submit text-right">
+          <button data-target="#content" class="btn btn-default preview-button">{{ _('Preview') }}</button>
+          <button class="btn btn-success">{{ _('Send a Reply') }}</button>
+        </div>
+      </form>
+    {% else %}
+      <div class="panel-body">
+        <div class="alert alert-info">{{ _('Login is required.') }}</div>
+        <a href="{{ url_for('account.signin') }}" class="btn btn-success">{{ _('Sign In') }}</a>
+      </div>
+    {% endif %}
   </div>
-  {% endif %}
-</div>
-
-<div class="module">
-  {% if form %}
-  <form class="reply-form inner" action="{{url_for('topic.reply', uid=topic.id)}}" method="post">
-    {{ form.csrf_token }}
-    {{ render_field(form.content, 'input-block-level') }}
-    <div class="form-submit text-right">
-      <button data-target="#content" class="btn preview-button">{{_('Preview')}}</button>
-      <button class="btn btn-success">{{_('Send a Reply')}}</button>
-    </div>
-  </form>
-  {% else %}
-  <div class="inner">
-    <div class="alert alert-info">{{_('Login is required.')}}</div>
-    <a href="{{url_for('account.signin')}}" class="btn btn-success">{{_('Sign In')}}</a>
-  </div>
-  {% endif %}
-</div>
 {% endblock %}
 
 
 {% block sidebar %}
-{{ user_module(author) }}
-<div class="module">
-  <div class="module-header inner">
-    <strong>{{node}}</strong>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">{{ node }}</h3>
+    </div>
+    <div class="panel-body">
+      {{ node.description|markdown|safe }}
+    </div>
+    <div class="panel-footer">
+      <a class="btn btn-info" href="{{ url_for('node.view', urlname=node.urlname) }}">
+        {{ _('Topics in this node') }}
+      </a>
+    </div>
   </div>
-  <div class="module-body inner">
-    {{node.html|safe}}
-  </div>
-  <div class="module-footer inner">
-    <a class="btn btn-info" href="{{url_for('node.view', urlname=node.urlname)}}">{{_('Topics in this node')}}</a>
-  </div>
-</div>
 {% endblock %}
 
 {% block afterscript %}
-<script>$.post('')</script>
+  <script>
+    (function() {
+      require('june').jQuery.post('');
+    })();
+  </script>
 {% endblock %}

@@ -1,9 +1,7 @@
 # coding: utf-8
 
 from datetime import datetime
-from werkzeug import cached_property
-from ._base import db, JuneQuery
-from ..markdown import rich_markdown
+from ._base import db
 from .account import Account
 from .node import Node, NodeStatus
 
@@ -12,8 +10,6 @@ __all__ = ['Topic', 'Reply']
 
 
 class Topic(db.Model):
-    query_class = JuneQuery
-
     id = db.Column(db.Integer, primary_key=True)
     account_id = db.Column(db.Integer, nullable=False, index=True)
     node_id = db.Column(db.Integer, nullable=False, index=True)
@@ -36,12 +32,6 @@ class Topic(db.Model):
 
     def __repr__(self):
         return '<Topic: %s>' % self.id
-
-    @cached_property
-    def html(self):
-        if self.content is None:
-            return ''
-        return rich_markdown(self.content)
 
     def save(self, user=None, node=None):
         if self.id:
@@ -135,8 +125,6 @@ class Topic(db.Model):
 
 
 class Reply(db.Model):
-    query_class = JuneQuery
-
     id = db.Column(db.Integer, primary_key=True)
     account_id = db.Column(db.Integer, nullable=False)
     topic_id = db.Column(db.Integer, index=True, nullable=False)
@@ -147,12 +135,6 @@ class Reply(db.Model):
 
     def __str__(self):
         return self.content
-
-    @cached_property
-    def html(self):
-        if self.content is None:
-            return ''
-        return rich_markdown(self.content)
 
     def save(self, user=None, topic=None):
         if self.id:

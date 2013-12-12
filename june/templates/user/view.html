@@ -1,53 +1,58 @@
 {% extends "layout.html" %}
 
-{% block subtitle %}{{user}}{% endblock %}
+{% block subtitle %}{{ user }}{% endblock %}
 
-{% from "macro/ui.html" import nav, topic_list %}
+{% from "snippet/macro.html" import navigation, topic_columns %}
 
 {% block nav %}
-{{ nav('user') }}
+  {{ navigation('user') }}
 {% endblock %}
 
 {% block content %}
-<div class="module profile">
-  <div class="account-group inner clearfix">
-    <img class="pull-left" src="{{user.avatar(86)}}" alt="{{user}}" width="86" height="86" />
-    <div class="account-inner pull-left">
-      <strong>{{user}}</strong>
-      <div class="meta muted">
-        <small>#{{user.id}}</small>
-        <span class="sep">@</span>
-        <time>{{user.created.strftime('%Y-%m-%d')}}</time>
+  <div class="panel panel-default">
+    <div class="panel-columns">
+      <div class="item">
+        <a class="avatar" href="{{ url_for('user.view', username=user.username) }}">
+          <img src="{{ user.avatar(80) }}" alt="{{ user }}" width="80" height="80"/>
+        </a>
+        <div class="main">
+          <strong>{{ user }}</strong>
+          <div class="meta muted">
+            <small>#{{ user.id }}</small>
+            <span class="sep">@</span>
+            <time>{{ user.created.strftime('%Y-%m-%d') }}</time>
+          </div>
+          {% if user.city %}
+            <div><a href="{{ url_for('user.city', city=user.city) }}">@{{ user.city }}</a></div>
+          {% endif %}
+          {% if user.website %}
+            <div><a href="{{ user.website }}">{{ user.website }}</a></div>
+          {% endif %}
+          {% if user.is_staff %}
+            <span class="label label-info account-label">staff</span>
+          {% endif %}
+          {% if user.role == 'spam' %}
+            <span class="label label-info account-label">spammer</span>
+          {% endif %}
+        </div>
       </div>
-      {% if user.city %}
-      <div><a href="{{ url_for('user.city', city=user.city) }}">@{{user.city}}</a></div>
-      {% endif %}
-      {% if user.website %}
-      <div><a href="{{user.website}}">{{user.website}}</a></div>
-      {% endif %}
-      {% if user.is_staff %}
-      <span class="label label-success">staff</span>
-      {% endif %}
-      {% if user.role == 'spam' %}
-      <span class="label label-success">spammer</span>
+
+    </div>
+    {% if user.description %}
+      <div class="panel-footer">
+        {{ user.description|markdown|safe }}
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">{{ _('Recent Topics') }}</h3>
+    </div>
+    <div class="panel-columns">
+      {% if topics %}
+        {{ topic_columns(topics) }}
       {% endif %}
     </div>
   </div>
-  {% if user.description %}
-  <div class="inner" style="border-top:1px solid #ddd">
-    {{user.description|markdown|safe}}
-  </div>
-  {% endif %}
-</div>
-<div class="module">
-  <div class="module-header inner clearfix">
-    <strong>{{_('Recent Topics')}}</strong>
-    {% if topics %}
-    <a class="pull-right muted" href="{{url_for('user.topics', username=user.username)}}"><small>{{_('More topics')}}</small></a>
-    {% endif %}
-  </div>
-  <div class="module-body">
-    {{ topic_list(topics, False) }}
-  </div>
-</div>
 {% endblock %}

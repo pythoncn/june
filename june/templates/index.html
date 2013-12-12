@@ -1,36 +1,35 @@
 {% extends "layout.html" %}
 
-{% block title %}{{config.SITE_TITLE}}{% endblock %}
-{% from "macro/ui.html" import topic_list, node_list %}
+{% block title %}{{ config.SITE_TITLE }}{% endblock %}
+{% from "snippet/macro.html" import topic_columns %}
 
 {% block content %}
-{% if blogs %}
-<div class="module">
-  <div class="module-header inner">
-    <strong>{{blog}}</strong>
+  {% if blogs %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">{{ blog }}</h3>
+      </div>
+      {{ topic_columns(blogs) }}
+    </div>
+  {% endif %}
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">{{ _('Recent Topics') }}</h3>
+    </div>
+    {{ topic_columns(topics) }}
   </div>
-  <div class="module-body">
-    {{ topic_list(blogs, False, False) }}
-  </div>
-</div>
-{% endif %}
-<div class="module">
-  <div class="module-header inner">
-    <strong>{{_('Recent Topics')}}</strong>
-  </div>
-  <div class="module-body">
-    {{ topic_list(topics) }}
-  </div>
-</div>
 {% endblock %}
 
 {% block sidebar %}
-<div class="module">
-  <div class="module-header inner">
-    <strong>{{_('Recent Nodes')}}</strong>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">{{ _('Recent Nodes') }}</h3>
+    </div>
+    <div class="panel-body">
+      {% for node in nodes %}
+        <a class="label label-node" href="{{ url_for('node.view', urlname=node.urlname) }}">{{ node }}</a>
+      {% endfor %}
+    </div>
   </div>
-  <div class="module-body">
-    {{ node_list(nodes, False) }}
-  </div>
-</div>
 {% endblock %}

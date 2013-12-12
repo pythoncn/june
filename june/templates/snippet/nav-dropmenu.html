@@ -1,28 +1,28 @@
-<ul class="nav pull-right">
-  {%- if g.user %}
-  <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Me <b class="caret"></b></a>
-  <ul class="dropdown-menu" role="menu">
-    <li><a href="{{url_for('user.view', username=g.user.username)}}">
-      <div class="account-group">
-        <img src="{{g.user.avatar(48)}}" alt="{{g.user}}" />
-        <strong>{{g.user}}</strong>
-        <small class="meta">{{_('View Profile')}}</small>
-      </div>
-    </a></li>
-    <li class="divider"></li>
-    {% if g.user.is_staff %}
-    <li class="nav-header">{{_('Staff Power')}}</li>
-    <li><a href="{{url_for('node.create')}}">{{_('Create Node')}}</a></li>
-    <li><a href="/admin/">{{_('Administration')}}</a></li>
-    <li class="divider"></li>
-    {% endif %}
-    <li><a href="{{url_for('account.setting')}}">{{_('Settings')}}</a></li>
-    <li><a href="{{url_for('account.signout')}}">{{_('Sign Out')}}</a></li>
-  </ul>
-  </li>
-  {%- else %}
-  <li><a href="{{url_for('account.signup')}}">{{_('Sign Up')}}</a></li>
-  <li><a href="{{url_for('account.signin')}}">{{_('Sign In')}}</a></li>
-  {%- endif %}
+<ul class="nav navbar-nav navbar-right">
+  {% if g.user %}
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown">Me <b class="caret"></b></a>
+      <ul class="dropdown-menu" role="menu">
+        <li><a href="{{ url_for('user.view', username=g.user.username) }}">
+          <div class="menu-account">
+            <img src="{{ g.user.avatar(48) }}" alt="{{ g.user }}"/>
+            <strong>{{ g.user }}</strong>
+            <small class="meta">{{ _('View Profile') }}</small>
+          </div>
+        </a></li>
+        <li class="divider"></li>
+        {% if g.user.is_staff %}
+          <li class="dropdown-header">{{ _('Staff Power') }}</li>
+          <li><a href="{{ url_for('node.create') }}">{{ _('Create Node') }}</a></li>
+          <li><a href="{{ url_for('admin.dashboard') }}">{{ _('Administration') }}</a></li>
+          <li class="divider"></li>
+        {% endif %}
+        <li><a href="{{ url_for('account.setting') }}">{{ _('Settings') }}</a></li>
+        <li><a href="{{ url_for('account.signout') }}">{{ _('Sign Out') }}</a></li>
+      </ul>
+    </li>
+  {% else %}
+    <li><a href="{{ url_for('account.signup') }}">{{ _('Sign Up') }}</a></li>
+    <li><a href="{{ url_for('account.signin') }}">{{ _('Sign In') }}</a></li>
+  {% endif %}
 </ul>

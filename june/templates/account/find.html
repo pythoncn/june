@@ -1,15 +1,20 @@
 {% extends "layout.html" %}
-{% from "macro/form.html" import vertical_field %}
+{% from "snippet/macro.html" import form_field %}
 
-{% block subtitle %}{{_('Find Password')}}{% endblock %}
+{% block subtitle %}{{ _('Find Password') }}{% endblock %}
 
 {% block main %}
-<form class="form-single" method="post" action="">
-  <h2>{{_('Find Password')}}</h2>
-  {{ form.csrf_token }}
-  {{ vertical_field(form.account, 'input-block-level') }}
-  <div class="form-submit">
-    <button class="btn btn-success">{{_('Send')}}</button>
+  <div class="panel panel-default single">
+    <form class="panel-body" role="form" method="post" action="">
+      <h2>{{ _('Find Password') }}</h2>
+
+      {{ form.csrf_token }}
+      {{ form_field(form.account) }}
+
+      <div class="form-group">
+        <button class="btn btn-primary">{{ _('Send') }}</button>
+
+      </div>
+    </form>
   </div>
-</form>
 {% endblock %}

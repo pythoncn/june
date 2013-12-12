@@ -1,21 +1,22 @@
 {% extends "layout.html" %}
 
-{% block subtitle %}{{_('Nodes')}}{% endblock %}
+{% block subtitle %}{{ _('Nodes') }}{% endblock %}
 
-{% from "macro/ui.html" import nav %}
+{% from "snippet/macro.html" import navigation %}
 
 {% block nav %}
-{{ nav('node') }}
+  {{ navigation('node') }}
 {% endblock %}
 
 {% block content %}
-{% from "macro/ui.html" import node_list %}
-<div class="module">
-  <div class="module-header inner">
-    <strong>{{_('Nodes')}}</strong>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">{{ _('Nodes') }}</h3>
+    </div>
+    <div class="panel-body">
+      {% for node in nodes %}
+        <a class="label label-node" href="{{ url_for('node.view', urlname=node.urlname) }}">{{ node }}</a>
+      {% endfor %}
+    </div>
   </div>
-  <div class="module-body">
-    {{ node_list(nodes) }}
-  </div>
-</div>
 {% endblock %}

@@ -1,19 +1,20 @@
 {% extends "layout.html" %}
-{% from "macro/form.html" import vertical_field %}
+{% from "snippet/macro.html" import form_field %}
 
-{% block subtitle%}{{_('Sign Up')}}{% endblock %}
+{% block subtitle %}{{ _('Sign Up') }}{% endblock %}
 
 {% block main %}
-<form class="form-single" method="post" action="">
-  <h2>{{ config.SITE_TITLE}}</h2>
-  {{ form.csrf_token }}
-  {{ vertical_field(form.username, 'input-block-level') }}
-  {{ vertical_field(form.email, 'input-block-level') }}
-  {{ vertical_field(form.password, 'input-block-level') }}
-
-  <div class="form-submit">
-    <button class="btn btn-success">{{_('Sign Up')}}</button>
-    <a href="{{url_for('.signin')}}">{{_('Already have an account?')}}</a>
+  <div class="panel panel-default single">
+    <form class="panel-body" role="form" method="post" action="">
+      <h2>{{ _('Sign Up') }}</h2>
+      {{ form.csrf_token }}
+      {{ form_field(form.username) }}
+      {{ form_field(form.email) }}
+      {{ form_field(form.password) }}
+      <div class="form-group">
+        <button class="btn btn-primary">{{ _('Sign Up') }}</button>
+        <a class="btn btn-link" href="{{ url_for('.signin') }}">{{ _('Already have an account?') }}</a>
+      </div>
+    </form>
   </div>
-</form>
 {% endblock %}
