@@ -49,3 +49,21 @@ $('.preview-button').on('click', function() {
   });
   return false;
 });
+
+$('.like-topic').on('click', function() {
+  var item = $(this);
+  var url = location.pathname + '/like';
+  item.find('.glyphicon').toggleClass('glyphicon-heart').toggleClass('glyphicon-heart-empty');
+  $.ajax({
+    url: url,
+    method: 'POST',
+    success: function(data) {
+      if (data.action === 'cancel') {
+        item.find('.glyphicon').removeClass('glyphicon-heart').addClass('glyphicon-heart-empty');
+      } else {
+        item.find('.glyphicon').removeClass('glyphicon-heart-empty').addClass('glyphicon-heart');
+      }
+    }
+  });
+  return false;
+});

@@ -6,7 +6,7 @@ from .account import Account
 from .node import Node, NodeStatus
 
 
-__all__ = ['Topic', 'Reply']
+__all__ = ['Topic', 'Reply', 'LikeTopic']
 
 
 class Topic(db.Model):
@@ -166,3 +166,16 @@ class Reply(db.Model):
         db.session.delete(self)
         db.session.commit()
         return self
+
+
+class LikeTopic(db.Model):
+    __table_args__ = (
+        db.UniqueConstraint(
+            'account_id', 'topic_id', name='uc_account_like_topic'
+        ),
+    )
+
+    id = db.Column(db.Integer, primary_key=True)
+    account_id = db.Column(db.Integer, nullable=False)
+    topic_id = db.Column(db.Integer, index=True, nullable=False)
+    created = db.Column(db.DateTime, default=datetime.utcnow)
