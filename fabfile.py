@@ -44,16 +44,11 @@ def clean():
     run('rm -f ~/tmp/june.tar.gz')
 
 
-def configure():
-    """Prepare configuration files."""
+def update():
+    """Update assets"""
     dist = local('python setup.py --fullname', capture=True).strip()
     tmpdir = '~/tmp/june/%s' % dist
-
-    run('cp %s/wsgi.py ~/apps/june/' % tmpdir)
-    run('cp %s/manager.py ~/apps/june/' % tmpdir)
-    run('cp %s/alembic.ini ~/apps/june/' % tmpdir)
-    run('cp -r %s/alembic ~/apps/june/' % tmpdir)
-    run('cp -r %s/public ~/apps/june/' % tmpdir)
+    run('cp -r %s/june/public ~/apps/june/' % tmpdir)
 
 
 def upgrade():
