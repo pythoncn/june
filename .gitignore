@@ -1,3 +1,4 @@
+db.sqlite
 *.pyc
 *.pyo
 *.egg-info
