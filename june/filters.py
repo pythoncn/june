@@ -223,7 +223,8 @@ def markdown(text, renderer='highlight', inlinestyles=False, linenos=False):
 
     extensions = (
         m.EXT_NO_INTRA_EMPHASIS | m.EXT_FENCED_CODE | m.EXT_AUTOLINK |
-        m.EXT_TABLES | m.EXT_STRIKETHROUGH | m.EXT_SUPERSCRIPT
+        m.EXT_TABLES | m.EXT_STRIKETHROUGH | m.EXT_SUPERSCRIPT |
+        m.HTML_SKIP_HTML
     )
     md = m.Markdown(r, extensions=extensions)
     return md.render(text)
