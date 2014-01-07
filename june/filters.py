@@ -212,19 +212,19 @@ def markdown(text, renderer='highlight', inlinestyles=False, linenos=False):
     if not text:
         return u''
 
+    flags = m.HTML_ESCAPE
     if renderer == 'highlight':
-        r = HighlightRenderer()
+        r = HighlightRenderer(flags=flags)
         r._inlinestyles = inlinestyles
         r._linenos = linenos
     elif renderer == 'plain':
-        r = PlainRenderer()
+        r = PlainRenderer(flags=flags)
     else:
-        r = BaseRenderer()
+        r = BaseRenderer(flags=flags)
 
     extensions = (
         m.EXT_NO_INTRA_EMPHASIS | m.EXT_FENCED_CODE | m.EXT_AUTOLINK |
-        m.EXT_TABLES | m.EXT_STRIKETHROUGH | m.EXT_SUPERSCRIPT |
-        m.HTML_SKIP_HTML
+        m.EXT_TABLES | m.EXT_STRIKETHROUGH | m.EXT_SUPERSCRIPT
     )
     md = m.Markdown(r, extensions=extensions)
     return md.render(text)
