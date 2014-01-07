@@ -27,7 +27,6 @@ class JuneQuery(BaseQuery):
         return dct
 
     def as_list(self, *columns):
-        columns = map(db.defer, columns)
         return self.options(map(db.defer, columns))
 
 
