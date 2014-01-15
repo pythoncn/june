@@ -7,7 +7,7 @@ server:
 upgrade:
 	@alembic upgrade head
 
-staticdir = public/static
+staticdir = june/public/static
 assets:
 	@$(MAKE) -C assets build
 

@@ -25,5 +25,15 @@ def createdb():
     db.create_all()
 
 
+@manager.command
+def live(port=5000):
+    from livereload import Server
+    server = Server(manager.create_app())
+    server.watch('assets/*.js', 'make -C assets build')
+    server.watch('assets/page/*.js', 'make -C assets build')
+    server.watch('assets/stylus', 'make -C assets stylus')
+    server.serve(port)
+
+
 if __name__ == '__main__':
     manager.run()
