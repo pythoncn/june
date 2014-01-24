@@ -35,7 +35,7 @@ class require_role(object):
                 return method(*args, **kwargs)
             if g.user.role == 'new':
                 flash(_('Please verify your email'), 'warn')
-                return redirect('/account/settings')
+                return redirect(url_for('account.setting'))
             if g.user.role == 'spam':
                 flash(_('You are a spammer'), 'error')
                 return redirect('/')
