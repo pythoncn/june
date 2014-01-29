@@ -4,9 +4,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
     <!-- Facebook sharing information tags -->
-    <meta property="og:title" content="{{config.SITE_TITLE}}" />
+    <meta property="og:title" content="{{ config.SITE_TITLE }}" />
 
-    <title>{{config.SITE_TITLE}}</title>
+    <title>{{ config.SITE_TITLE }}</title>
     <style type="text/css">
       /* Client-specific Styles */
       #outlook a{padding:0;} /* Force Outlook to provide a "view in browser" button. */
@@ -164,10 +164,10 @@
                           <tr mc:repeatable>
                             <td valign="top">
                               <div mc:edit="postcard_heading00">
-                                <h1 id="brand" class="h1">{{config.SITE_TITLE}}</h1>
+                                <h1 id="brand" class="h1">{{ config.SITE_TITLE }}</h1>
                               </div>
                               <div mc:edit="std_content00">
-                                <blockquote class="blockquote">{{config.SITE_DESCRIPTION}}</blockquote>
+                                <blockquote class="blockquote">{{ config.SITE_DESCRIPTION }}</blockquote>
                                 {% block content %}
                                 <strong>Getting started:</strong> Customize your template by clicking on the style editor tabs up above. Set your fonts, colors, and styles. After setting your styling is all done you can click here in this area, delete the text, and start adding your own awesome content!
                                 <br />
@@ -200,7 +200,7 @@
                           <tr>
                             <td valign="top" width="350">
                               <div mc:edit="std_footer">
-                                  <em>Copyright &copy; {{config.SITE_TIME.year}} {{config.SITE_TITLE}}, All rights reserved.</em>
+                                  <em>Copyright &copy; {{ config.SITE_TIME.year }} {{ config.SITE_TITLE }}, All rights reserved.</em>
                               </div>
                             </td>
                           </tr>

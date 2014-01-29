@@ -1,7 +1,7 @@
 {% if config.SITE_ANALYTICS %}
 <script type="text/javascript">
 var _gaq = _gaq || [];
-_gaq.push(['_setAccount', '{{config.SITE_ANALYTICS}}']);
+_gaq.push(['_setAccount', '{{ config.SITE_ANALYTICS }}']);
 _gaq.push(['_trackPageview']);
 _gaq.push(['_trackPageLoadTime']);
 {% if g.user %}

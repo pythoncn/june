@@ -1,8 +1,7 @@
 {% extends "layout.html" %}
+{% from "snippet/macro.html" import navigation %}
 
 {% block subtitle %}{{ _('Nodes') }}{% endblock %}
-
-{% from "snippet/macro.html" import navigation %}
 
 {% block nav %}
   {{ navigation('node') }}

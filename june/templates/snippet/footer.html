@@ -2,7 +2,7 @@
   <div class="container clearfix">
     <div class="text-muted pull-left">
       {% if config.SITE_ABOUT %}
-      <a href="{{config.SITE_ABOUT}}">{{ _('About') }}</a>
+      <a href="{{ config.SITE_ABOUT }}">{{ _('About') }}</a>
       {% endif %}
       <span class="sep">•</span>
       <a href="https://github.com/pythoncn/june">{{ _('Open Source') }}</a>
@@ -10,7 +10,7 @@
       <a href="/humans.txt">{{ _('Authors') }}</a>
     </div>
     <p class="muted credit pull-right">
-    &copy;<time datetime="{{config.SITE_TIME}}">{{config.SITE_TIME.year}}</time> {{config.SITE_TITLE}}. All rights reserved.
+    &copy;<time datetime="{{ config.SITE_TIME }}">{{ config.SITE_TIME.year }}</time> {{ config.SITE_TITLE }}. All rights reserved.
     </p>
   </div>
 </footer>
