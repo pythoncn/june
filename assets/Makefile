@@ -13,4 +13,4 @@ clean:
 	rm -fr build components node_modules
 
 stylus:
-	@stylus index.styl -I stylus -I node_modules
+	@stylus -u nib index.styl -I stylus -I node_modules
