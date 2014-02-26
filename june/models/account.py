@@ -25,6 +25,7 @@ class Account(db.Model, SessionMixin):
 
     created = db.Column(db.DateTime, default=datetime.utcnow)
     token = db.Column(db.String(20))
+    notify_count = db.Column(db.Integer, default=0)
 
     def __init__(self, **kwargs):
         self.token = self.create_token(16)

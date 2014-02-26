@@ -5,6 +5,7 @@ from ._base import *
 from .account import *
 from .node import *
 from .topic import *
+from .notify import *
 from flask.ext.sqlalchemy import models_committed
 
 
@@ -31,6 +32,13 @@ def fill_with_nodes(items):
     uids = set(map(lambda o: o.node_id, items))
     nodes = Node.query.filter_in(Node.id, uids)
     items = map(lambda o: _attach_node(o, nodes[o.node_id]), items)
+    return items
+
+
+def fill_with_topics(items):
+    tids = set(map(lambda o: o.topic_id, items))
+    topics = Topic.query.filter_in(Topic.id, tids)
+    items = map(lambda o: _attach_topic(o, topics.get(o.topic_id)), items)
     return items
 
 
@@ -83,6 +91,11 @@ def _attach_user(item, user):
 
 def _attach_node(item, node):
     item.node = node
+    return item
+
+
+def _attach_topic(item, topic):
+    item.topic = topic
     return item
 
 

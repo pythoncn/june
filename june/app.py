@@ -68,7 +68,8 @@ def register_hooks(app):
 
 
 def register_routes(app):
-    from .handlers import front, account, node, topic, user, admin
+    from .handlers import front, account, node, topic, user, admin, notify
+    app.register_blueprint(notify.bp, url_prefix='/notify')
     app.register_blueprint(account.bp, url_prefix='/account')
     app.register_blueprint(node.bp, url_prefix='/node')
     app.register_blueprint(topic.bp, url_prefix='/topic')

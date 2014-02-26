@@ -6,7 +6,7 @@ from flask import render_template, redirect, abort, jsonify
 from flask import url_for
 from flask.ext.babel import gettext as _
 from ..helpers import force_int, limit_request
-from ..models import db, Node, Account
+from ..models import db, Node, Account, Notify
 from ..models import Topic, Reply, LikeTopic
 from ..models import fill_topics, fill_with_users
 from ..forms import TopicForm, ReplyForm
@@ -131,6 +131,18 @@ def view(uid):
     author = Account.query.get_or_404(topic.account_id)
     topic.author = author
     topic.node = node
+
+    if g.user.notify_count != 0:
+        args = {'account_id': g.user.id,
+                'topic_id': topic.id,
+                'is_viewed': 0}
+        notifies = Notify.query.filter_by(**args).all()
+        g.user.notify_count -= len(notifies)
+        db.session.add(g.user)
+        for i in notifies:
+            i.is_viewed = 1
+            db.session.add(i)
+        db.session.commit()
 
     if g.user:
         topic.like = LikeTopic.query.filter_by(
