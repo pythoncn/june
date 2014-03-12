@@ -19,6 +19,9 @@
         <h1 class="panel-title entry-title">{{ topic.title }}</h1>
 
         <div class="entry-meta text-muted">
+          <a href="{{ url_for('user.view', username=topic.author.username) }}"
+                   title="{{ topic.author }}">{{ topic.author.username }}</a>
+          <span class="sep">•</span>
           <time datetime="{{ topic.created|xmldatetime }}" pubdate>{{ topic.created|timesince }}</time>
           <span class="sep">•</span>
           <a class="label label-node" href="{{ url_for('node.view', urlname=topic.node.urlname) }}">{{ topic.node }}</a>
