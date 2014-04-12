@@ -1,7 +1,7 @@
 # TEAM
 
     Chef: Hsiaoming Yang
-    Concat: me [at] lepture.com
+    Contact: me [at] lepture.com
     Twitter: @lepture
     From: Hangzhou, China
 
