@@ -20,10 +20,13 @@ def home():
 
     home_nodes = filter(lambda o: o.on_home, nodes)
     home_node_ids = map(lambda o: o.id, home_nodes)
-    topics = Topic.query.filter(
-        Topic.node_id.in_(home_node_ids)
-    ).order_by(Topic.id.desc()).limit(16)
-    topics = fill_topics(topics)
+    if len(home_node_ids):
+        topics = Topic.query.filter(
+            Topic.node_id.in_(home_node_ids)
+            ).order_by(Topic.id.desc()).limit(16)
+        topics = fill_topics(topics)
+    else:
+        topics = None
 
     # blog is a special node, get the latest posts from blog
     blog = Node.query.filter_by(urlname='blog').first()
