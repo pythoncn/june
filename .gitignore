@@ -18,6 +18,7 @@ parts
 .installed.cfg
 docs/_build
 .tox
+.coverage
 
 data/
 venv/
