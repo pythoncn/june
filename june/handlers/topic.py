@@ -175,7 +175,7 @@ def delete(uid):
     """
     Delete a topic by the topic author.
     """
-    #TODO: should we delete the replies of the topic?
+    # TODO: should we delete the replies of the topic?
     password = request.form.get('password')
     if not password:
         flash(_('Password is required to delete a topic'), 'info')
