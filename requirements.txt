@@ -10,3 +10,13 @@ Pygments
 alembic
 gunicorn
 misaka
+
+# Tests and code coverage
+nose
+coverage
+
+# Documentation
+sphinx
+
+# Linter
+flake8
