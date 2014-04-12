@@ -20,7 +20,7 @@ A little hint to make things simple:
 
 ## Writing Patches / Sending Pull Requests
 
-Consider contributing patches back to June? That's great. Here are some basic principles that would help both maintainers / reviewers and your future self:
+Consider contributing patches back to June? That's great. Here are some basic principles that will help maintainers / reviewers and your future self:
 
 - break your changes to separate patches
 - a patch should include only one functional change / fix
