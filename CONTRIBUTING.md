@@ -20,7 +20,7 @@ A little hint to make things simple:
 
 ## Writing Patches / Sending Pull Requests
 
-Consider contributing patches back to June? That's great. Here are some basic principles that would help both maitainers / reviewers and your future self:
+Consider contributing patches back to June? That's great. Here are some basic principles that will help maintainers / reviewers and your future self:
 
 - break your changes to separate patches
 - a patch should include only one functional change / fix
@@ -33,7 +33,7 @@ Following the above principles, you should be able to:
 - run `git bisect` and easily find out which commit breaks things
 
 
-## Basic Git Wrokflow
+## Basic Git Workflow
 
 You should always create a dedicated branch for your need, whether it's for bug fix or new feature. Then you should rebase your changes on top of upstream master branch before sending pull request.
 
