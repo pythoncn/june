@@ -15,9 +15,7 @@ Make sure you have python2.7, pip and virtualenv installed.
 
 NodeJS is also required to compile static assets. After NodeJS is installed. You need to install::
 
-    $ npm install -g stylus component uglify-js
-    $ cd assets
-    $ npm install nib
+    $ npm install -g stylus component uglify-js nib
 
 Development
 -----------
