@@ -41,7 +41,7 @@ SQLALCHEMY_DATABASE_URI = 'sqlite:///%s' % os.path.join(
 )
 # SQLALCHEMY_POOL_SIZE = 100
 # SQLALCHEMY_POOL_TIMEOUT = 10
-# SQLALCHEMY_POOL_RECYCEL = 3600
+# SQLALCHEMY_POOL_RECYCLE = 3600
 
 #: email settings
 # MAIL_SERVER = 'smtp.gmail.com'
