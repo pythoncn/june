@@ -11,6 +11,8 @@ alembic
 gunicorn
 misaka
 
+livereload
+
 # Tests and code coverage
 nose
 coverage
