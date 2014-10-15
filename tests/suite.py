@@ -2,6 +2,7 @@
 
 import os
 import tempfile
+from flask import url_for
 from june.app import create_app
 from june.models import db, Account
 
@@ -24,6 +25,10 @@ class BaseSuite(object):
         if hasattr(self, 'prehook'):
             self.prehook()
 
+    def url_for(self, *args, **kwargs):
+        with self.app.test_request_context():
+            return url_for(*args, **kwargs)
+
     def prepare_account(self):
         with self.app.test_request_context():
             foo = Account(username='foo', email='foo@email.com', password='1')
@@ -40,7 +45,7 @@ class BaseSuite(object):
 
     def prepare_login(self, username='foo'):
         self.prepare_account()
-        self.client.post('/account/signin', data={
+        self.client.post(self.url_for('account.signin'), data={
             'account': username,
             'password': '1'
         }, follow_redirects=True)
