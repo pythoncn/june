@@ -15,7 +15,7 @@ A little hint to make things simple:
 
 - when you cloned this repo, run `make`, it will prepare everything for you
 - check the code style with `make lint`
-- check the test case with `make testing`
+- check the test case with `make test`
 
 
 ## Writing Patches / Sending Pull Requests
