@@ -5,7 +5,7 @@
   "version": "0.0.1",
   "keywords": [],
   "dependencies": {
-    "component/jquery": "*",
+    "components/jquery": "*",
     "lepture/bootstrap": "*",
     "lepture/yue.css": "*"
   },
