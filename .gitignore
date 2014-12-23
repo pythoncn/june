@@ -27,3 +27,4 @@ assets/components
 assets/node_modules
 assets/index.css
 june/public/static
+etc/settings.py
