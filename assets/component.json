@@ -18,7 +18,8 @@
     "pygments-manni.css"
   ],
   "images": [
-    "images/bg.png"
+    "images/bg.png",
+    "images/logo.png"
   ],
   "development": {}
 }
