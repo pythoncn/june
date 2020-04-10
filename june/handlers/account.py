@@ -19,7 +19,7 @@ bp = Blueprint('account', __name__)
 @bp.route('/signup', methods=['GET', 'POST'])
 def signup():
     """Sign up page. If the request has an token arguments, it is not
-    for registeration, it is for verifying the token.
+    for registration, it is for verifying the token.
     """
     next_url = request.args.get('next', url_for('.setting'))
     token = request.args.get('token')
