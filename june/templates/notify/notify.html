@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% from "snippet/macro.html" import notify_columns, pagination %}
+
+{% block subtitle %}{{ _('Notify') }}{% endblock %}
+
+{% block content %}
+  <div class="panel panel-default">
+    <div class="panel-heading clearfix">
+      <h3 class="panel-title">{{ _('Unread Message') }}</h3>
+    </div>
+    <div class="panel-columns">
+      {{ notify_columns(paginator.items) }}
+    </div>
+    {% if paginator.pages > 1 %}
+      <div class="panel-footer">
+        {{ pagination(paginator, url_for('notify.notifies')) }}
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

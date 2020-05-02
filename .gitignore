@@ -5,6 +5,9 @@ db.sqlite
 *.mo
 *.log
 *.tmp.*
+*.swp
+*~
+\#.*\#
 *.iml
 .idea/
 __pycache__

@@ -83,6 +83,26 @@
   {% endif %}
 {% endmacro %}
 
+{% macro render_notify(item) %}
+  <div class="item">
+    <p> user <a href="{{ url_for('user.view', username=item.user.username) }}"> {{item.user.username}}</a> {{item.reason}} you on topic <a href="{{ url_for('topic.view', uid=item.topic.id) }}"> {{item.topic.title}} </a> </p>
+  </div>
+{% endmacro %}
+
+{% macro notify_columns(notifies) %}
+  {% if notifies %}
+    <div class="panel-columns">
+      {% for item in notifies %}
+        {{ render_notify(item) }}
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="panel-body">
+      <p>{{ _('There is no notify yet.') }}</p>
+    </div>
+  {% endif %}
+{% endmacro %}
+
 {% macro pagination(paginator, url) %}
   <ul class="pagination pagination-centered">
     {% for page in paginator.iter_pages() %}
@@ -108,5 +128,12 @@
     </li>
     <li {% if current == 'user' %}class="active"{% endif %}><a href="{{ url_for('user.users') }}">{{ _('Users') }}</a>
     </li>
+    {% if g.user %}
+    <li {% if current == 'notify' %}class="active"{% endif %}><a href="{{ url_for('notify.notifies') }}">
+      {% if g.user.notify_count == 0 %}
+      {{ _('Notify') }} {% else %}
+      {{ _('Notify (%s)' % g.user.notify_count) }} {% endif %}
+    </a> </li>
+    {% endif %}
   </ul>
 {% endmacro %}

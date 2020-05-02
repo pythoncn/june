@@ -1,8 +1,10 @@
 # coding: utf-8
 
+import re
 from datetime import datetime
 from ._base import db
 from .account import Account
+from .notify import Notify
 from .node import Node, NodeStatus
 
 
@@ -152,6 +154,28 @@ class Reply(db.Model):
             topic.reply_count += 1
             topic.updated = datetime.utcnow()
             db.session.add(topic)
+
+        if topic.account_id != user.id:
+            args = {'account_id': topic.account_id,
+                    'topic_id': topic.id,
+                    'reason': 'reply'}
+            notify = Notify(**args)
+            db.session.add(notify)
+            creator = Account.query.get(topic.account_id)
+            creator.notify_count += 1
+            db.session.add(creator)
+
+        for user_ated in set(re.findall('@([0-9a-z]+)', self.content)):
+            u = Account.query.filter_by(username=user_ated).first()
+            if not u or u.id in [topic.account_id, user.id]:
+                continue
+            args = {'account_id': u.id,
+                    'topic_id': topic.id,
+                    'reason': 'at'}
+            notify = Notify(**args)
+            db.session.add(notify)
+            u.notify_count += 1
+            db.session.add(u)
 
         db.session.add(self)
         db.session.commit()
