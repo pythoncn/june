@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
+{% from "snippet/macro.html" import navigation, pagination, form_field %}
 
 {% block subtitle %}{{ topic }}{% endblock %}
-{% from "snippet/macro.html" import navigation, pagination, form_field %}
 
 {% block nav %}
   {{ navigation('topic') }}
@@ -114,7 +114,6 @@
     {% endif %}
   </div>
 {% endblock %}
-
 
 {% block sidebar %}
   <div class="panel panel-default">

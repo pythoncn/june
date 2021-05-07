@@ -1,13 +1,11 @@
 {% extends "layout.html" %}
+{% from "snippet/macro.html" import navigation, topic_columns, pagination %}
 
 {% block subtitle %}{{ user }}{% endblock %}
-
-{% from "snippet/macro.html" import navigation, topic_columns, pagination %}
 
 {% block nav %}
   {{ navigation('user') }}
 {% endblock %}
-
 
 {% block content %}
   <div class="panel panel-default">

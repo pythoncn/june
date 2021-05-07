@@ -1,8 +1,7 @@
 {% extends "layout.html" %}
+{% from "snippet/macro.html" import navigation, topic_columns, pagination %}
 
 {% block subtitle %}{{ node }}{% endblock %}
-
-{% from "snippet/macro.html" import navigation, topic_columns, pagination %}
 
 {% block nav %}
   {{ navigation('node') }}

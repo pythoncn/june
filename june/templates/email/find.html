@@ -1,21 +1,21 @@
 {% extends "email/layout.html" %}
 
 {% block content %}
-<h3>{{ _('Welcome,') }} {{user}}</h3>
+<h3>{{ _('Welcome,') }} {{ user }}</h3>
 
 <p>
 {% trans -%}
 You have submitted a find password request, follow the link below to find your password. If you didn't make the request, ignore this email.
 {%- endtrans %}
 </p>
-<p><a class="btn" href="{{link}}">{{_('Find Password')}}</a></p>
+<p><a class="btn" href="{{ link }}">{{ _('Find Password') }}</a></p>
 <br />
 <br />
 {% trans -%}
 You can copy and paste the link to your browser address bar:
 {%- endtrans %}
 <br />
-<p>{{link}}</p>
+<p>{{ link }}</p>
 <br />
 <br />
 <em>{% trans %}This link will expire in 24 hours.{% endtrans %}</em>
