@@ -104,7 +104,7 @@ class BaseRenderer(m.HtmlRenderer):
         width = 650
         height = 366
         if title:
-            # title can descibe height and width: 650 x 366
+            # title can describe height and width: 650 x 366
             pattern = r'(\d{3,4})[^\d]+(\d{3})'
             match = re.match(pattern, title)
             if match:
